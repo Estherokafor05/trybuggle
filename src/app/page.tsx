@@ -1,219 +1,201 @@
+import Image from "next/image";
 import Link from "next/link";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
-import { AgentFlow } from "@/components/diagrams/AgentFlow";
-import {
-  TestingAiDiagram,
-  UsingAiDiagram,
-} from "@/components/diagrams/TrackDiagrams";
 import { ModuleCard } from "@/components/ModuleCard";
-import { WaitlistForm } from "@/components/WaitlistForm";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { modules } from "@/content/modules";
+import { previewLessons } from "@/content/preview-lessons";
 
-const METHOD = [
+const foundationsPath = "/modules/ai-foundations";
+
+const learningMethods = [
   {
-    title: "Drawn, then explained",
-    body: "Every concept gets a diagram that shows the real mechanism, with the explanation next to it. The picture carries the structure; the words carry the detail.",
+    number: "01",
+    title: "See the idea",
+    body: "Diagrams make unfamiliar AI concepts easier to picture.",
+    accent: "bg-lavender",
   },
   {
-    title: "Built on your own work",
-    body: "Exercises use your tickets, your acceptance criteria, your flaky test. Nothing is practised on a toy app you'll never see again.",
+    number: "02",
+    title: "Listen or read",
+    body: "Choose a narrated walkthrough or a written guide.",
+    accent: "bg-peach",
   },
   {
-    title: "Read in any order, after module 1",
-    body: "Foundations come first because the rest depends on them. After that, take the module you need this week.",
+    number: "03",
+    title: "Check what you learned",
+    body: "Knowledge checks will give feedback and let you try again.",
+    accent: "bg-mint",
   },
 ];
+
+function Arrow() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      fill="none"
+      className="size-4 shrink-0"
+    >
+      <path
+        d="M3.5 10h12m-5-5 5 5-5 5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
+}
 
 export default function Home() {
   return (
     <>
       <SiteHeader />
-
-      <main>
-        {/* Hero */}
-        <section className="mx-auto max-w-[1120px] px-4 py-12 sm:px-6 sm:py-20">
-          <div className="grid items-center gap-9 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
-            <div className="flex min-w-0 flex-col gap-5">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-brand">
-                For testers and QA engineers
-              </p>
-              <h1 className="text-[clamp(2.1rem,5.4vw,3.6rem)] font-bold leading-[1.1]">
-                You don&apos;t need Python to build with{" "}
-                <span className="text-brand">AI</span>.
-              </h1>
-              <p className="max-w-[60ch] text-[clamp(1.02rem,1.5vw,1.17rem)] leading-relaxed text-muted">
-                Most AI courses start by asking you to open a terminal. This one
-                doesn&apos;t. You&apos;ll learn what these systems actually are,
-                then build agents that review acceptance criteria, draft test
-                cases and write bug reports — and learn how to tell when
-                they&apos;re wrong.
-              </p>
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  href="#join"
-                  className="rounded-[9px] bg-brand px-5 py-2.5 text-[0.92rem] font-semibold text-white transition-colors hover:bg-brand-deep"
-                >
-                  Get early access
-                </Link>
-                <Link
-                  href="/curriculum"
-                  className="rounded-[9px] border border-line px-5 py-2.5 text-[0.92rem] font-semibold text-ink transition-colors hover:border-brand-soft hover:bg-brand-soft hover:text-brand"
-                >
-                  See the curriculum
-                </Link>
-              </div>
-              <p className="text-[0.85rem] text-muted">
-                <b className="font-semibold text-ink">
-                  Open to Testers Connect members first.
-                </b>{" "}
-                Module 1 lands soon.
-              </p>
+      <main className="mx-auto max-w-[1232px] px-4 pb-12 pt-6 sm:px-7 sm:pb-16 sm:pt-8">
+        <section className="relative isolate grid overflow-hidden rounded-[2rem] bg-hero-lavender sm:rounded-[2.5rem] md:grid-cols-[1.15fr_0.85fr] md:items-center">
+          <div className="relative z-10 px-6 pt-7 sm:px-9 sm:pt-9 md:py-10 lg:px-12 lg:py-12">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3.5 py-2 text-xs font-semibold text-ink">
+              <span className="size-2 rounded-full bg-brand" aria-hidden="true" />
+              AI for curious beginners
+            </p>
+            <h1 className="mt-4 text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04] tracking-tight sm:mt-5">
+              <span className="block">Understand AI.</span>
+              <span className="block">Learn how to use it.</span>
+            </h1>
+            <p className="mt-4 max-w-[42ch] text-[0.975rem] leading-relaxed text-ink/85 sm:text-base">
+              See where AI shows up in work, study and everyday life. Learn how
+              it works and how to use it thoughtfully, with no coding required.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <Link
+                href={foundationsPath}
+                className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
+              >
+                Explore Module 1 <Arrow />
+              </Link>
+              <Link
+                href="/curriculum"
+                className="inline-flex min-h-11 items-center rounded-full px-1 text-sm font-semibold text-ink underline decoration-ink/35 underline-offset-4 hover:decoration-ink"
+              >
+                View the learning path
+              </Link>
             </div>
+          </div>
 
-            <AgentFlow />
+          <div className="relative isolate mx-auto flex w-full max-w-[24rem] items-end justify-center px-7 pb-5 pt-5 sm:max-w-[27rem] md:max-w-none md:self-stretch md:px-4 md:py-6 lg:items-center lg:px-8">
+            <div aria-hidden="true" className="absolute inset-x-[10%] top-[12%] -z-10 aspect-square rounded-full border border-ink/15 md:inset-x-[14%]" />
+            <div aria-hidden="true" className="absolute -right-[7%] -top-[21%] -z-10 aspect-square w-[77%] rounded-full border border-ink/15" />
+            <Image
+              src="/illustrations/ai-learning-hero.png"
+              alt=""
+              width={1448}
+              height={1086}
+              sizes="(min-width: 1232px) 430px, (min-width: 768px) 40vw, 90vw"
+              fetchPriority="high"
+              loading="eager"
+              className="h-auto w-full max-w-[28rem] object-contain"
+            />
           </div>
         </section>
 
-        {/* Two tracks */}
-        <section id="tracks" className="bg-deep-bg text-deep-ink">
-          <div className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-20">
-            <div className="mb-8 flex max-w-[64ch] flex-col gap-3">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-gold">
-                The distinction most courses skip
-              </p>
-              <h2 className="text-[clamp(1.6rem,3.4vw,2.35rem)] font-bold leading-[1.1]">
-                Using AI and testing AI are two different jobs.
+        <div className="mt-8 grid items-start gap-7 sm:mt-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <section id="learn" aria-labelledby="learning-path-title" className="scroll-mt-24">
+            <div className="mb-4 sm:mb-5">
+              <h2 id="learning-path-title" className="text-2xl font-bold sm:text-[1.85rem]">
+                Your learning path
               </h2>
-              <p className="text-[1.02rem] leading-relaxed text-deep-muted">
-                People mix these up constantly, and it costs them. Bring
-                deterministic testing habits to an AI feature and your assertions
-                break on every run. Trust an agent&apos;s output without knowing
-                how to grade it and you ship its mistakes as your own. We teach
-                both, and we keep them apart.
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                Start with the foundations. Modules 1 and 2 are free.
               </p>
             </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-              <article className="flex min-w-0 flex-col gap-3.5 rounded-[14px] border border-deep-line p-6">
-                <span className="self-start rounded-full bg-gold/15 px-2.5 py-1 font-mono text-[0.69rem] uppercase tracking-[0.1em] text-gold">
-                  Track A
-                </span>
-                <h3 className="text-[1.07rem] font-bold">
-                  AI as a tool for testing
-                </h3>
-                <UsingAiDiagram />
-                <p className="text-[0.95rem] text-deep-muted">
-                  The software under test behaves the same way every time. AI
-                  just makes you faster at testing it.
-                </p>
-                <ul className="flex list-disc flex-col gap-1.5 pl-[1.05em] text-[0.9rem] text-deep-muted">
-                  <li>Agents that review acceptance criteria</li>
-                  <li>Drafting cases and bug reports</li>
-                  <li>Triaging a failed run</li>
-                </ul>
-              </article>
-
-              <article className="flex min-w-0 flex-col gap-3.5 rounded-[14px] border border-deep-line p-6">
-                <span className="self-start rounded-full bg-gold/15 px-2.5 py-1 font-mono text-[0.69rem] uppercase tracking-[0.1em] text-gold">
-                  Track B
-                </span>
-                <h3 className="text-[1.07rem] font-bold">
-                  Testing AI-native products
-                </h3>
-                <TestingAiDiagram />
-                <p className="text-[0.95rem] text-deep-muted">
-                  Output varies run to run. You can&apos;t assert equality on it,
-                  so you grade it instead.
-                </p>
-                <ul className="flex list-disc flex-col gap-1.5 pl-[1.05em] text-[0.9rem] text-deep-muted">
-                  <li>Accuracy, hallucination, bias</li>
-                  <li>Building an eval set and a rubric</li>
-                  <li>Regression when the model changes under you</li>
-                </ul>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* Curriculum */}
-        <section id="curriculum">
-          <div className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-20">
-            <div className="mb-8 flex max-w-[64ch] flex-col gap-3">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-brand">
-                Curriculum
-              </p>
-              <h2 className="text-[clamp(1.6rem,3.4vw,2.35rem)] font-bold leading-[1.1]">
-                Foundations first, then you build.
-              </h2>
-              <p className="text-[1.02rem] leading-relaxed text-muted">
-                You can&apos;t judge a tool you don&apos;t understand the shape
-                of. So we start with what these systems are and how they&apos;re
-                built, and only then put one to work. Modules release in order.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3.5">
-              {modules.map((mod) => (
-                <ModuleCard key={mod.slug} module={mod} />
+            <div className="grid auto-rows-fr gap-3.5 sm:grid-cols-2">
+              {modules.map((module) => (
+                <ModuleCard key={module.slug} module={module} />
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Method */}
-        <section id="method" className="border-y border-line bg-surface">
-          <div className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-20">
-            <div className="mb-8 flex max-w-[64ch] flex-col gap-3">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-brand">
-                How it works
-              </p>
-              <h2 className="text-[clamp(1.6rem,3.4vw,2.35rem)] font-bold leading-[1.1]">
-                Diagrams and written docs. Not a video wall.
-              </h2>
-              <p className="text-[1.02rem] leading-relaxed text-muted">
-                You can&apos;t search a video, skim it on a lunch break, or copy a
-                line out of it. Everything here is written and drawn, so you can
-                read it at your own pace and come back to the one paragraph you
-                needed.
-              </p>
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {METHOD.map((item) => (
-                <div key={item.title} className="flex min-w-0 flex-col gap-2.5">
-                  <span className="h-[3px] w-[34px] rounded-sm bg-gold" />
-                  <h3 className="text-[1.07rem] font-bold text-ink">
-                    {item.title}
-                  </h3>
-                  <p className="text-[0.93rem] text-muted">{item.body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Join */}
-        <section id="join">
-          <div className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-20">
-            <div className="grid items-center gap-7 rounded-2xl border border-line bg-surface p-7 sm:p-10 md:grid-cols-2 md:gap-11">
-              <div className="flex min-w-0 flex-col gap-3">
-                <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-brand">
-                  Early access
-                </p>
-                <h2 className="text-[clamp(1.6rem,3.4vw,2.35rem)] font-bold leading-[1.1]">
-                  Testers Connect members go first.
+          <aside className="grid gap-7 sm:grid-cols-2 lg:grid-cols-1">
+            <section aria-labelledby="preview-title">
+              <div className="mb-4 sm:mb-5">
+                <h2 id="preview-title" className="text-2xl font-bold sm:text-[1.85rem]">
+                  Try a free lesson
                 </h2>
-                <p className="text-base leading-relaxed text-muted">
-                  Module 1 opens to the community before anyone else. Tell us
-                  where you&apos;re starting from and we&apos;ll pitch it at the
-                  right level.
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                  Open either preview without an account.
                 </p>
               </div>
-              <WaitlistForm />
-            </div>
+              <div className="rounded-[1.75rem] border border-line/70 bg-white px-4 py-2 shadow-sm sm:px-5">
+                <ol className="divide-y divide-line/80">
+                  {previewLessons.map((lesson, index) => (
+                    <li key={lesson.slug}>
+                      <Link
+                        href={foundationsPath + "/lessons/" + lesson.slug}
+                        className="group grid min-h-20 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-1.5 py-3 transition-colors hover:bg-canvas"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="grid size-10 place-items-center rounded-2xl bg-lavender font-display text-sm font-bold text-navy"
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span>
+                          <span className="block text-sm font-semibold leading-snug group-hover:underline">
+                            {lesson.title}
+                          </span>
+                          <span className="mt-1 block text-xs text-muted">{lesson.duration}</span>
+                        </span>
+                        <Arrow />
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </section>
+
+            <section id="how-it-works" aria-labelledby="learning-methods-title" className="scroll-mt-24">
+              <h2 id="learning-methods-title" className="mb-4 text-2xl font-bold">
+                How it works
+              </h2>
+              <ol className="grid gap-2.5">
+                {learningMethods.map((method) => (
+                  <li
+                    key={method.number}
+                    className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-2xl border border-line/70 bg-white p-3.5"
+                  >
+                    <span aria-hidden="true" className={"grid size-9 place-items-center rounded-xl font-display text-xs font-bold " + method.accent}>
+                      {method.number}
+                    </span>
+                    <div>
+                      <h3 className="text-base font-bold">{method.title}</h3>
+                      <p className="mt-0.5 text-sm leading-relaxed text-muted">{method.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </aside>
+        </div>
+
+        <section className="mt-9 flex flex-col items-start gap-5 rounded-[1.75rem] bg-navy p-6 text-white sm:mt-11 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div>
+            <p className="text-xs font-semibold text-teal-light">Practical learning</p>
+            <h2 className="mt-1 text-xl font-bold sm:text-2xl">
+              Build a workflow for a task you know
+            </h2>
+            <p className="mt-1.5 max-w-[55ch] text-sm leading-relaxed text-white/85">
+              The practical workflow creation experience is planned as a one-time $50 purchase.
+            </p>
           </div>
+          <Link
+            href="/curriculum"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-lavender"
+          >
+            Explore the modules <Arrow />
+          </Link>
         </section>
       </main>
-
       <SiteFooter />
     </>
   );

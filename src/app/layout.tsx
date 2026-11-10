@@ -26,7 +26,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Buggle Learn",
   description:
-    "AI for people who test software. Learn to build agents for QA work without writing Python, and how to test AI-native products.",
+    "Clear, practical AI education for curious beginners, students, and people across every kind of work. No technical background required.",
 };
 
 export default function RootLayout({

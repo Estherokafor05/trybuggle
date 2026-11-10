@@ -1,34 +1,30 @@
 @import "tailwindcss";
 
-/*
-  Buggle brand tokens.
-  Green #005C32 is the primary: buttons, links, the logo mark.
-  Gold #D3AF5E is the accent, used only on structural marks — module numbers,
-  track tags, section rules. It does not have enough contrast for body text
-  or button fills on a light background, so it is never used for either.
-  Change the two hex values here and the whole site follows.
-*/
-
 @theme {
-  --color-brand: #005c32;
-  --color-brand-deep: #00431f;
-  --color-brand-soft: #e0ede5;
-
-  --color-gold: #d3af5e;
-  --color-gold-ink: #8a6b23;
-  --color-gold-soft: #f7efdc;
-
-  --color-ink: #0e1e2b;
-  --color-muted: #586b77;
-  --color-line: #dce6e6;
+  --color-navy: #17243c;
+  --color-brand: #7155d9;
+  --color-brand-deep: #5a3fc3;
+  --color-brand-soft: #eae5fa;
+  --color-teal: #087f72;
+  --color-teal-light: #73d4c3;
+  --color-ivory: #f7f5ef;
+  --color-lavender: #eae5fa;
+  --color-hero-lavender: #d5c9f7;
+  --color-peach: #ffe1c3;
+  --color-blush: #f9d6ee;
+  --color-mint: #d8f4ec;
+  --color-ink: #17243c;
+  --color-muted: #526174;
+  --color-line: #d9dce4;
   --color-surface: #ffffff;
-  --color-canvas: #f6f9f8;
-
-  --color-deep-bg: #04281a;
-  --color-deep-ink: #ebf2ec;
-  --color-deep-muted: #9db4a5;
-  --color-deep-line: #12402b;
-
+  --color-canvas: #f6f5fb;
+  --color-white: #ffffff;
+  --color-deep-bg: #17243c;
+  --color-deep-ink: #ffffff;
+  --color-deep-muted: #c3ccda;
+  --color-deep-line: #3d4a61;
+  --color-gold: #087f72;
+  --color-gold-ink: #087f72;
   --font-display: var(--font-bricolage), "Segoe UI", system-ui, sans-serif;
   --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
@@ -51,6 +47,11 @@ h3 {
   font-family: var(--font-display);
   text-wrap: balance;
   letter-spacing: -0.015em;
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--color-brand-deep);
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

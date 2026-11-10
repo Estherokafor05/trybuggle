@@ -1,4 +1,4 @@
-export type Track = "foundations" | "using-ai" | "testing-ai";
+export type Track = "foundations" | "systems" | "practice";
 
 export type ModuleStatus = "open" | "next" | "planned";
 
@@ -9,227 +9,229 @@ export interface Lesson {
 }
 
 export interface Module {
-  /** Display number. Modules release in this order. */
   order: number;
   slug: string;
   title: string;
-  /** One or two sentences on what the module covers. */
   summary: string;
-  /** The single concrete thing someone has at the end. */
   outcome: string;
   track: Track;
   status: ModuleStatus;
-  /** Whether any part of the module asks you to build something. */
   handsOn: boolean;
   lessons: Lesson[];
 }
 
 export const TRACK_LABELS: Record<Track, string> = {
-  foundations: "Foundations",
-  "using-ai": "AI as a tool for testing",
-  "testing-ai": "Testing AI-native products",
+  foundations: "AI foundations",
+  systems: "How AI systems work",
+  practice: "Using AI in practice",
 };
 
 export const modules: Module[] = [
   {
     order: 1,
     slug: "ai-foundations",
-    title: "AI foundations",
+    title: "Foundations of Artificial Intelligence",
     summary:
-      "What AI actually is, the kinds of systems in use, and where each one fits. Plain language, no maths prerequisites.",
-    outcome: "Language to tell a real capability from a sales claim.",
+      "Understand what AI means, how it developed, and where it already appears in everyday life.",
+    outcome: "A clear starting point for making sense of AI.",
     track: "foundations",
     status: "open",
     handsOn: false,
     lessons: [
       {
-        slug: "what-ai-is",
-        title: "What we mean by AI",
+        slug: "what-counts-as-ai",
+        title: "So, What Counts as AI?",
         summary:
-          "The word covers several different things. Separating them is the first useful skill.",
+          "Meet the idea of artificial intelligence in plain language, and learn why the label covers many different things.",
       },
       {
-        slug: "types-of-systems",
-        title: "The types of AI systems",
+        slug: "ai-in-your-day",
+        title: "AI Is Already in Your Day",
         summary:
-          "Machine learning, natural language processing, computer vision, expert systems, generative models, robotics — what each one does and where you meet it.",
+          "Spot familiar examples of AI at home, at work, and while you study.",
       },
       {
-        slug: "where-each-fits",
-        title: "Which system fits which problem",
+        slug: "before-chatgpt",
+        title: "AI Did Not Start with ChatGPT",
         summary:
-          "Why a rules engine beats a model for some jobs, and why the reverse is true for others.",
+          "Take a short trip through the ideas and turning points that shaped today's AI.",
+      },
+      {
+        slug: "ai-or-software",
+        title: "AI or Ordinary Software?",
+        summary:
+          "See how systems that follow set instructions differ from systems that learn patterns.",
+      },
+      {
+        slug: "what-ai-can-do",
+        title: "What AI Can Do, and Where You Stay in Charge",
+        summary:
+          "Recognize useful capabilities, common mistakes, and the importance of human judgment.",
       },
     ],
   },
   {
     order: 2,
-    slug: "machine-learning-foundations",
-    title: "Machine learning foundations",
+    slug: "types-of-ai-systems",
+    title: "Understanding Different Types of AI Systems",
     summary:
-      "How these systems get built: training data, patterns, limits. Enough to understand why a model fails the way it does.",
-    outcome: "A working mental model of why output varies.",
+      "Explore rules-based, predictive, and generative systems, and how their capabilities differ.",
+    outcome: "A practical way to tell different AI systems apart.",
     track: "foundations",
     status: "next",
     handsOn: false,
     lessons: [
       {
-        slug: "learning-from-data",
-        title: "Learning from data instead of rules",
-        summary:
-          "What training is, in terms you can explain to a product manager.",
+        slug: "not-one-kind",
+        title: "AI Is Not Just One Thing",
+        summary: "Why one label can describe systems that work in very different ways.",
       },
       {
-        slug: "why-output-varies",
-        title: "Why the same input gives different output",
-        summary:
-          "The property that breaks every assertion you have ever written.",
+        slug: "rules-and-predictions",
+        title: "Rules, Patterns, and Predictions",
+        summary: "Compare systems that follow instructions with systems that learn from examples.",
       },
       {
-        slug: "where-bias-enters",
-        title: "Where bias enters",
-        summary:
-          "Bias is a property of the data and the design, not a mood the model is in.",
+        slug: "generating-new-things",
+        title: "When AI Makes Something New",
+        summary: "Meet generative systems and see how they differ from predictive tools.",
+      },
+      {
+        slug: "choose-the-right-tool",
+        title: "Which Kind Fits the Job?",
+        summary: "Match everyday tasks with the kinds of systems that may support them.",
       },
     ],
   },
   {
     order: 3,
-    slug: "build-your-first-agent",
-    title: "Build your first agent",
+    slug: "machine-learning-foundations",
+    title: "Understanding Machine Learning",
     summary:
-      "End to end, start to finish, without writing Python. Instructions, tools, context, and what to do when it goes sideways.",
-    outcome: "One agent running on your own work.",
-    track: "using-ai",
+      "Learn how computers find patterns in data, and why the examples they learn from matter.",
+    outcome: "A simple mental model of how machine learning works.",
+    track: "systems",
     status: "planned",
-    handsOn: true,
+    handsOn: false,
     lessons: [
       {
-        slug: "what-an-agent-is",
-        title: "What an agent is, and is not",
-        summary:
-          "An agent is instructions plus tools plus a loop. Nothing more mysterious than that.",
+        slug: "learning-from-examples",
+        title: "Learning from Examples",
+        summary: "How a computer can learn patterns instead of following only hand-written rules.",
       },
       {
-        slug: "writing-instructions",
-        title: "Writing instructions that hold up",
-        summary:
-          "The same precision you already use on acceptance criteria, pointed at a different reader.",
+        slug: "training-and-testing",
+        title: "Practice, Then a Fair Test",
+        summary: "What training and testing mean, using an everyday comparison.",
       },
       {
-        slug: "giving-it-tools",
-        title: "Giving it tools and context",
-        summary: "What the agent can see, and what it must never touch.",
+        slug: "data-quality",
+        title: "When the Examples Miss the Mark",
+        summary: "How gaps and bias in data can shape a system's results.",
       },
       {
-        slug: "when-it-goes-sideways",
-        title: "When it goes sideways",
-        summary: "Reading what went wrong and narrowing the instructions.",
+        slug: "supervised-unsupervised",
+        title: "Learning with and without Answer Keys",
+        summary: "A plain-language introduction to supervised and unsupervised learning.",
       },
     ],
   },
   {
     order: 4,
-    slug: "agent-workflows-for-qa",
-    title: "Agent workflows for QA",
+    slug: "generative-ai-and-llms",
+    title: "Understanding Generative AI and Large Language Models",
     summary:
-      "The ones worth having: acceptance criteria review, test case drafting, bug report writing, triage of a failing run.",
-    outcome: "Four workflows you can use on Monday.",
-    track: "using-ai",
+      "Make sense of tools such as ChatGPT and Claude, how they respond, and why they can get things wrong.",
+    outcome: "Confidence to use and check generative AI responses.",
+    track: "systems",
     status: "planned",
-    handsOn: true,
+    handsOn: false,
     lessons: [
       {
-        slug: "acceptance-criteria-review",
-        title: "An agent that reviews acceptance criteria",
-        summary:
-          "Catching the ambiguity before the ticket reaches a developer.",
+        slug: "what-generative-means",
+        title: "What Does Generative AI Generate?",
+        summary: "How tools create text, images, and other outputs from a request.",
       },
       {
-        slug: "test-case-drafting",
-        title: "An agent that drafts test cases",
-        summary: "Drafts you edit, not cases you accept.",
+        slug: "inside-a-language-model",
+        title: "A Language Model, in Everyday Terms",
+        summary: "A beginner-friendly picture of how a large language model produces a response.",
       },
       {
-        slug: "bug-reports",
-        title: "An agent that writes the bug report",
-        summary:
-          "Steps, expected, actual, environment — written once, consistently.",
+        slug: "context-matters",
+        title: "Give It Context, Get a Better Answer",
+        summary: "Why the information around a request can change the response.",
       },
       {
-        slug: "triage",
-        title: "An agent that triages a failing run",
-        summary: "Sorting the real failure from the flake.",
+        slug: "check-the-answer",
+        title: "Fluent Does Not Always Mean True",
+        summary: "Why generative tools can be wrong and how to check important information.",
       },
     ],
   },
   {
     order: 5,
-    slug: "testing-ai-native-products",
-    title: "Testing AI-native products",
+    slug: "ai-agents-and-workflows",
+    title: "Understanding AI Agents and Workflows",
     summary:
-      "Accuracy, hallucination and bias as testable properties. Building an eval set, writing a rubric, catching regression when the model changes.",
-    outcome: "An eval set for one real feature.",
-    track: "testing-ai",
+      "Tell an assistant, a configured workspace, an automated workflow, and an agent apart.",
+    outcome: "A clear picture of what agents can do and where oversight belongs.",
+    track: "practice",
     status: "planned",
     handsOn: true,
     lessons: [
       {
-        slug: "grading-not-asserting",
-        title: "Grading instead of asserting",
-        summary:
-          "Why equality assertions fail here, and what replaces them.",
+        slug: "assistant-workspace-workflow-agent",
+        title: "Assistant, Workspace, Workflow, or Agent?",
+        summary: "Compare four ideas that are often described with the same words.",
       },
       {
-        slug: "building-an-eval-set",
-        title: "Building an eval set",
-        summary: "Choosing cases that represent the problem, not the happy path.",
+        slug: "how-agents-work",
+        title: "How an Agent Gets from Request to Action",
+        summary: "See how instructions, context, tools, and actions can work together.",
       },
       {
-        slug: "writing-a-rubric",
-        title: "Writing a rubric someone else could apply",
-        summary: "Making a judgement call repeatable.",
-      },
-      {
-        slug: "model-regression",
-        title: "Regression when the model changes under you",
-        summary:
-          "Your code did not change and the behaviour did. What you do about it.",
+        slug: "keep-a-person-in-the-loop",
+        title: "Where You Stay in Control",
+        summary: "Recognize when an action needs a person's review or confirmation.",
       },
     ],
   },
   {
     order: 6,
-    slug: "when-the-agent-is-wrong",
-    title: "When the agent is wrong",
+    slug: "creating-ai-assisted-workflows",
+    title: "Creating Your First AI-Assisted Workflow",
     summary:
-      "Your agent drafted forty test cases. Are they any good? Grading your own agent's output, spotting where it quietly skipped the hard case, and knowing when to stop using it.",
-    outcome: "A review habit you trust more than the agent.",
-    track: "testing-ai",
+      "Use accessible no-code tools to make a reusable helper for a routine, low-risk task.",
+    outcome: "A simple workflow you can review and improve.",
+    track: "practice",
     status: "planned",
     handsOn: true,
     lessons: [
       {
-        slug: "reviewing-its-output",
-        title: "Reviewing what it gave you",
-        summary: "Reading forty generated cases without rubber-stamping them.",
+        slug: "choose-a-routine-task",
+        title: "Start with a Task You Know Well",
+        summary: "Choose a routine task that is suitable for a first workflow.",
       },
       {
-        slug: "the-skipped-case",
-        title: "The case it quietly skipped",
-        summary:
-          "Generated work is confident about the easy path and silent about the hard one.",
+        slug: "set-up-a-reusable-workspace",
+        title: "Give Your Helper a Clear Home",
+        summary: "Configure a project or workspace with a clear purpose.",
       },
       {
-        slug: "knowing-when-to-stop",
-        title: "Knowing when to stop using it",
-        summary:
-          "The call that matters most, and the one nobody teaches.",
+        slug: "write-useful-instructions",
+        title: "Instructions That Make Sense",
+        summary: "Write reusable guidance and provide safe, relevant context.",
+      },
+      {
+        slug: "review-and-improve",
+        title: "Check It, Then Make It Better",
+        summary: "Review the result, notice a limitation, and refine the workflow.",
       },
     ],
   },
 ];
 
 export function getModule(slug: string): Module | undefined {
-  return modules.find((m) => m.slug === slug);
+  return modules.find((module) => module.slug === slug);
 }

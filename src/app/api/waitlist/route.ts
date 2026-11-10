@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
  *
  * Nothing is stored yet. This route validates the request and returns a
  * `stored: false` response so the form can tell the truth to whoever fills
- * it in. Swap the marked section for a real write when you pick a store —
+ * it in. Swap the marked section for a real write when you pick a store:
  * Postgres, Supabase, Airtable, a Google Sheet, whatever you want to own.
  *
  * Keep the shape of the response: the form reads `stored` to decide what
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         stored: false,
-        message: "That email address looks incomplete — check it and try again.",
+        message: "That email address looks incomplete. Check it and try again.",
       },
       { status: 400 },
     );
@@ -80,6 +80,6 @@ export async function POST(request: Request) {
     ok: true,
     stored: false,
     message:
-      "Signups are not being stored yet — this form is not connected to anything.",
+      "Signups are not being stored yet. This form is not connected to anything.",
   });
 }

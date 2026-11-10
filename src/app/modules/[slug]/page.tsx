@@ -3,7 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
 import { TRACK_LABELS, getModule, modules } from "@/content/modules";
+import { auth } from "@/auth";
+import { googleAuthConfigured } from "@/lib/auth-configured";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return modules.map((mod) => ({ slug: mod.slug }));
@@ -16,9 +21,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const mod = getModule(slug);
-  if (!mod) return { title: "Module not found — Buggle Learn" };
+  if (!mod) return { title: "Module not found | Buggle Learn" };
   return {
-    title: `${mod.title} — Buggle Learn`,
+    title: `${mod.title} | Buggle Learn`,
     description: mod.summary,
   };
 }
@@ -32,81 +37,147 @@ export default async function ModulePage({
   const mod = getModule(slug);
   if (!mod) notFound();
 
+  const session = googleAuthConfigured ? await auth() : null;
   const next = modules.find((m) => m.order === mod.order + 1);
+  const isFoundations = mod.order === 1;
 
   return (
     <>
       <SiteHeader />
 
-      <main className="mx-auto max-w-[760px] px-4 py-12 sm:px-6 sm:py-16">
+      <main className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 sm:py-12">
         <Link
           href="/curriculum"
-          className="font-mono text-[0.75rem] uppercase tracking-[0.08em] text-muted hover:text-brand"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
         >
-          ← Curriculum
+          <span aria-hidden="true">←</span> Curriculum
         </Link>
 
-        <div className="mt-6 flex flex-col gap-4">
-          <p className="font-mono text-[0.72rem] uppercase tracking-[0.13em] text-gold-ink">
-            Module {String(mod.order).padStart(2, "0")} ·{" "}
-            {TRACK_LABELS[mod.track]}
-          </p>
-          <h1 className="text-[clamp(1.9rem,4.2vw,2.7rem)] font-bold leading-[1.1]">
-            {mod.title}
-          </h1>
-          <p className="text-[1.05rem] leading-relaxed text-muted">
-            {mod.summary}
-          </p>
-          <p className="rounded-[11px] border border-line bg-surface px-5 py-4 text-[0.95rem] text-ink">
-            <span className="mr-2 font-mono text-[0.75rem] uppercase tracking-[0.07em] font-medium text-muted">
-              You leave with
-            </span>
-            {mod.outcome}
-          </p>
+        <header
+          className={`mt-5 grid items-center gap-4 overflow-hidden rounded-[2rem] bg-hero-lavender px-6 py-8 sm:p-10 ${isFoundations ? "md:grid-cols-[minmax(0,1fr)_minmax(0,0.65fr)]" : ""}`}
+        >
+          <div>
+            <p className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-navy">
+              <span className="rounded-full bg-white/80 px-3 py-1.5">
+                Module {String(mod.order).padStart(2, "0")}
+              </span>
+              {TRACK_LABELS[mod.track]}
+            </p>
+            <h1 className="mt-5 max-w-[20ch] text-[clamp(2.1rem,5vw,3.5rem)] font-bold leading-[1.04]">
+              {mod.title}
+            </h1>
+            <p className="mt-4 max-w-[58ch] text-base leading-relaxed text-ink sm:text-lg">
+              {mod.summary}
+            </p>
+          </div>
+          {isFoundations && (
+            <div className="mx-auto w-full max-w-[16rem] md:max-w-none">
+              <FoundationsIllustration />
+            </div>
+          )}
+        </header>
+
+        <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.42fr)]">
+          <section aria-labelledby="module-lessons">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+              <h2 id="module-lessons" className="text-2xl font-bold text-ink">Lessons</h2>
+              <p className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-muted">
+                {mod.lessons.length} lessons
+              </p>
+            </div>
+            {session?.user && isFoundations && (
+              <p className="mb-4 rounded-2xl bg-mint p-4 text-sm leading-relaxed text-ink">
+                You are signed in with Google. The next Module 1 lesson is being
+                prepared. You can revisit the two free previews below.
+              </p>
+            )}
+            <ol className="grid gap-3 sm:grid-cols-2">
+              {mod.lessons.map((lesson, index) => {
+                const preview = isFoundations && index < 2;
+                const tone = index === 0 ? "bg-lavender" : "bg-peach";
+
+                return (
+                  <li
+                    key={lesson.slug}
+                    className={`relative flex min-w-0 flex-col items-start rounded-3xl border p-5 ${preview ? `border-transparent ${tone} hover:border-brand/35` : "border-line bg-white"}`}
+                  >
+                    <div className="flex w-full flex-wrap items-center justify-between gap-2">
+                      <span className="rounded-full bg-white/80 px-3 py-1.5 font-mono text-xs font-semibold tabular-nums text-navy">
+                        {mod.order}.{index + 1}
+                      </span>
+                      <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                        {preview
+                          ? "Free preview"
+                          : session?.user
+                            ? "In preparation"
+                            : "Sign in to continue"}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-lg font-bold text-ink">
+                      {preview ? (
+                        <Link
+                          href={`/modules/${slug}/lessons/${lesson.slug}`}
+                          className="after:absolute after:inset-0 after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
+                        >
+                          {lesson.title}
+                        </Link>
+                      ) : (
+                        lesson.title
+                      )}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">{lesson.summary}</p>
+                    {preview && (
+                      <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
+                        Open preview →
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+
+          <aside className="flex flex-col gap-3 self-start lg:mt-12">
+            <section className="rounded-3xl border border-line bg-white p-5 sm:p-6">
+              <h2 className="text-lg font-bold text-navy">You leave with</h2>
+              <p className="mt-2 leading-relaxed text-muted">{mod.outcome}</p>
+            </section>
+            {isFoundations && (
+              <section className="rounded-3xl bg-blush p-5 sm:p-6">
+                <h2 className="text-lg font-bold text-navy">Try the free previews</h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink">
+                  Each preview offers a visual explanation and a separate written
+                  guide. Knowledge checks and the remaining lessons are being prepared.
+                </p>
+                {!session?.user && (
+                  <Link
+                    href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`}
+                    className="mt-4 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                  >
+                    Continue with Google after the previews
+                  </Link>
+                )}
+              </section>
+            )}
+          </aside>
         </div>
 
-        <section className="mt-10 flex flex-col gap-4">
-          <h2 className="text-[1.25rem] font-bold text-ink">Lessons</h2>
-          <ol className="flex flex-col gap-3">
-            {mod.lessons.map((lesson, index) => (
-              <li
-                key={lesson.slug}
-                className="grid grid-cols-[auto_1fr] gap-4 rounded-[12px] border border-line bg-surface p-5"
-              >
-                <span className="pt-0.5 font-mono text-[0.78rem] tabular-nums text-gold-ink">
-                  {mod.order}.{index + 1}
-                </span>
-                <div className="flex min-w-0 flex-col gap-1">
-                  <h3 className="text-[1rem] font-bold text-ink">
-                    {lesson.title}
-                  </h3>
-                  <p className="text-[0.92rem] text-muted">{lesson.summary}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p className="text-[0.88rem] text-muted">
-            Lesson pages are not written yet. The outline is here so the shape of
-            the module is visible while it gets built.
-          </p>
-        </section>
-
-        <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-line pt-7">
+        <nav aria-label="Module navigation" className="mt-9 flex flex-wrap items-center gap-4 border-t border-line pt-6">
           <Link
-            href="/#join"
-            className="rounded-[9px] bg-brand px-5 py-2.5 text-[0.92rem] font-semibold text-white hover:bg-brand-deep"
+            href="/curriculum"
+            className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
           >
-            Get early access
+            Back to the learning path
           </Link>
           {next && (
             <Link
               href={`/modules/${next.slug}`}
-              className="text-[0.92rem] font-semibold text-brand hover:underline"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-deep hover:underline"
             >
-              Next: {next.title} →
+              Next module · {next.title} <span aria-hidden="true">→</span>
             </Link>
           )}
-        </div>
+        </nav>
       </main>
 
       <SiteFooter />

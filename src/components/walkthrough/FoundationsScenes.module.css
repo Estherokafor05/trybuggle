@@ -1,0 +1,15 @@
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal 320ms ease-out;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

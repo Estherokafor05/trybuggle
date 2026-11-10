@@ -1,75 +1,36 @@
 # Buggle Learn
 
-AI education for people who test software.
+AI literacy for people with no technical background, across everyday life and work.
 
-The premise: you don't need to write Python to understand AI or to build agents
-for your own workflows. The course teaches foundations first, then building, and
-keeps two things firmly apart that people usually blur together:
+## First version
 
-- **Using AI to test deterministic software.** The app behaves the same way
-  every time; AI makes you faster at testing it.
-- **Testing AI-native products.** Output varies run to run, so you grade it
-  against an eval set instead of asserting equality.
+This release is a learning preview with a curriculum, module overview, two preview lessons, Google sign-in, separate written guides, and an illustrated first lesson with manual slide controls and recorded narration.
 
-## Running it
+Assessments, saved learning progress, certificates and payments are not implemented. Lesson 2 still uses its earlier visual format and optional browser narration. Reference slide decks remain local source material and are not part of the deployment.
 
-```bash
-npm install
+## Run and check
+
+Use Node.js 24 or later.
+
+```sh
+npm ci
 npm run dev
+npm run lint
+npm run typecheck
+npm test
+npm run build
 ```
 
-Then open http://localhost:3000.
+## Google sign-in
 
-Other scripts:
+Copy the empty settings from `.env.example` into `.env.local` and configure your Google OAuth client. Never commit credentials.
 
-```bash
-npm run build       # production build
-npm run typecheck   # tsc --noEmit
-```
+Local redirect URI: `http://localhost:3000/api/auth/callback/google`.
 
-## Layout
+For Vercel, configure `AUTH_SECRET`, `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` as sensitive production environment variables. Set `AUTH_URL` to the stable production origin and add that origin followed by `/api/auth/callback/google` to the Google client's authorized redirect URIs. Preview deployments should not receive production secrets.
 
-```
-src/
-  app/
-    page.tsx                  landing page
-    curriculum/page.tsx       all modules, grouped by track
-    modules/[slug]/page.tsx   one module and its lesson outline
-    api/waitlist/route.ts     signup endpoint — not storing anything yet
-    globals.css               brand tokens live here
-  components/
-    diagrams/                 the SVG diagrams, reusable inside lessons
-  content/
-    modules.ts                the curriculum, as typed data
-```
+## Release and recovery
 
-## Adding or changing a module
+Run all checks above before deployment. Deploy the reviewed main branch to Vercel and verify the home page, both preview lessons, sign-in, illustrations and narration assets. The first release has no database migrations. If a later deployment fails, promote the previously verified deployment in Vercel. Review function logs for failures without logging credentials or learner data.
 
-Everything about the curriculum lives in `src/content/modules.ts`. Edit that
-file and the landing page, the curriculum page and the module pages all update.
-No CMS, no database — that stays true until lesson bodies need one.
-
-Each module has a `status` of `open`, `next` or `planned`, which drives the
-badge shown on the card.
-
-## Brand colours
-
-Two values in `src/app/globals.css`:
-
-- `--color-brand: #005c32` — the primary. Buttons, links, the logo mark.
-- `--color-gold: #d3af5e` — the accent. Module numbers, track tags, section
-  rules only.
-
-Gold doesn't have enough contrast against white for body text or button fills,
-so it's deliberately kept off both. Change those two hex values and the whole
-site follows.
-
-## What isn't built yet
-
-- **Waitlist storage.** `src/app/api/waitlist/route.ts` validates the signup and
-  returns `stored: false`. The form reads that and tells the visitor the truth
-  rather than pretending. Replace the marked block with a real write when you've
-  picked a store.
-- **Accounts and progress tracking.** Not needed until there are lessons to
-  track progress through.
-- **Lesson bodies.** The outlines are in `modules.ts`; the prose isn't written.
+Lesson content lives in `src/content/`. Visual lesson components live in `src/components/walkthrough/`; bundled illustrations and audio live in `public/`.
