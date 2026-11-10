@@ -177,7 +177,7 @@ Before deployment:
 - Check logs, monitoring, and error reporting.
 - Confirm rollback and recovery procedures.
 
-Require human approval for production release.
+The user has given standing approval to deploy approved, tested work to Vercel after it is merged. After each merge, verify the Vercel production deployment and share its live URL. Do not ask for repeat deployment permission. Separate approval requirements for credentials or unrelated changes still apply.
 
 ## 7. Engineering Quality Rules
 

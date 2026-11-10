@@ -5,230 +5,271 @@ export type FoundationSceneId =
   | "library"
   | "routes"
   | "recap";
-
-export interface FoundationCue {
-  at: number;
-  text: string;
-  visual: string;
-}
-
 export interface FoundationScene {
   id: FoundationSceneId;
   title: string;
   audioSrc: string;
   duration: number;
-  cues: FoundationCue[];
+  cues: { at: number; text: string; visual: string }[];
 }
-
-// Cue offsets are measured in seconds against the bundled narration.
-// Voice: bf_emma (British English), rendered locally with Kokoro-82M.
+// Recorded with Kokoro-82M, bf_emma. Cue offsets measured against the bundled recording.
 export const foundationScenes: FoundationScene[] = [
   {
     id: "intro",
-    title: "Four ways to look at AI",
-    audioSrc: "/lessons/four-ways/intro.m4a",
-    duration: 24.346,
+    title: "Four familiar situations",
+    audioSrc: "/lessons/four-ways/intro-v2.m4a",
+    duration: 23.108667,
     cues: [
       {
         at: 0,
-        text: "When you hear the word AI, you might think of something like ChatGPT. But AI isn't just about chatting.",
-        visual: "A question introduces four everyday situations. The examples appear one at a time."
+        text: "Think about putting a puzzle together,",
+        visual: "A person at the kitchen table selects a puzzle piece.",
       },
       {
-        at: 6.337,
-        text: "Some systems work through problems like people do, like when you're solving a puzzle.",
-        visual: "The puzzle comes into focus."
+        at: 2.276,
+        text: "checking a discount,",
+        visual: "The view moves to a shopper at a checkout.",
       },
       {
-        at: 10.957,
-        text: "Others follow logical rules, like applying a discount at a shop.",
-        visual: "The shop checkout comes into focus."
+        at: 3.986,
+        text: "asking someone for help,",
+        visual: "A visitor asks for help at the library.",
       },
       {
-        at: 14.96,
-        text: "Some hold a conversation, like when you ask for help.",
-        visual: "The library conversation comes into focus."
+        at: 5.905,
+        text: "or choosing your route to work.",
+        visual: "A map shows a journey to work.",
       },
       {
-        at: 18.111,
-        text: "Others help us choose what to do, like picking a route to work. Let's look at all four ways of understanding AI.",
-        visual: "The map comes into focus, completing the preview."
-      }
-    ]
+        at: 8.083,
+        text: "These familiar situations can help us explore four questions people ask about AI.",
+        visual: "The four situations are connected to four questions.",
+      },
+      {
+        at: 13.283,
+        text: "Are we looking at how a system works through a problem, or what it does?",
+        visual: "Two labelled paths appear: the process, and what it does.",
+      },
+      {
+        at: 17.006,
+        text: "And are we comparing it with people, or checking its reasoning and choices?",
+        visual:
+          "The paths connect to comparing with people or checking reasoning and choices.",
+      },
+      {
+        at: 21.175,
+        text: "Let's see what that means.",
+        visual: "The puzzle returns as the first example.",
+      },
+    ],
   },
   {
     id: "puzzle",
-    title: "Solving a jigsaw puzzle",
-    audioSrc: "/lessons/four-ways/puzzle.m4a",
-    duration: 22.539,
+    title: "How would you start this puzzle?",
+    audioSrc: "/lessons/four-ways/puzzle-v2.m4a",
+    duration: 25.361,
     cues: [
       {
         at: 0,
-        text: "Imagine you're putting together a jigsaw puzzle.",
-        visual: "Loose puzzle pieces sit beside an empty puzzle board."
+        text: "You've tipped a jigsaw puzzle onto the table. Where would you start?",
+        visual: "Loose puzzle pieces sit on a table.",
       },
       {
-        at: 2.834,
-        text: "You might start by finding the corners.",
-        visual: "The corner pieces move into place."
+        at: 3.749,
+        text: "You might find the corners, group similar colours, then try a piece.",
+        visual:
+          "Corner pieces are highlighted and blue pieces are grouped beside the board.",
       },
       {
-        at: 5.223,
-        text: "Then you group pieces with similar colours and try to fit a piece.",
-        visual: "Pieces of the same colour come together and a matching piece fits into the board."
+        at: 7.655,
+        text: "If it doesn't fit, you try another.",
+        visual:
+          "An attempted piece does not fit. A matching piece replaces it.",
       },
       {
-        at: 9,
-        text: "Now imagine a computer designed to solve the puzzle in a similar way. It starts with the corners and matches colours too.",
-        visual: "The model's board appears beside the person's board. The model starts with loose pieces, finds the corners, then groups colours and tries a fit."
+        at: 10.005,
+        text: "Imagine researchers watching how people solve that puzzle, then building a computer model to follow similar steps.",
+        visual:
+          "A computer model appears beside the person's board, with the observed steps connected.",
       },
       {
-        at: 15.85,
-        text: "That's thinking humanly. We're interested in whether a computer works through the problem in a way that resembles how people think.",
-        visual: "The phrase Thinking humanly appears alongside the comparison."
-      }
-    ]
+        at: 16.755,
+        text: "They compare the model with what people actually do.",
+        visual:
+          "Compare the steps replays the person's and model's sequences side by side.",
+      },
+      {
+        at: 19.714,
+        text: "This approach is called thinking humanly. The interest is in the process, not just finishing the puzzle.",
+        visual: "Thinking humanly appears below the two processes.",
+      },
+    ],
   },
   {
     id: "discount",
-    title: "A supermarket discount",
-    audioSrc: "/lessons/four-ways/discount.m4a",
-    duration: 23.544,
+    title: "Does the discount apply?",
+    audioSrc: "/lessons/four-ways/discount-v2.m4a",
+    duration: 26.369417,
     cues: [
       {
         at: 0,
-        text: "You're at the supermarket. The item you want costs twenty pounds.",
-        visual: "A supermarket checkout shows a starting price of £20."
+        text: "You're buying something for twenty pounds.",
+        visual: "A shopper and a receipt show an item priced at £20.",
       },
       {
-        at: 3.981,
-        text: "The shop has a rule. Members get ten percent off.",
-        visual: "The checkout displays the rule that members get 10% off."
+        at: 2.555,
+        text: "The sign says members get ten percent off, and you have a membership card.",
+        visual:
+          "The shop rule appears, followed by the shopper's membership card.",
       },
       {
-        at: 7.201,
-        text: "You're a member, so the rule applies to you.",
-        visual: "A membership check confirms that the shopper qualifies."
+        at: 6.806,
+        text: "The rule applies to you.",
+        visual: "An arrow connects the rule to the confirmed membership.",
       },
       {
-        at: 9.686,
-        text: "Ten percent of twenty pounds is two pounds. Take that off, and the total is eighteen pounds.",
-        visual: "The checkout subtracts £2 from £20 and shows a new total of £18."
+        at: 8.682,
+        text: "Ten percent of twenty pounds is two pounds, so the price becomes eighteen pounds.",
+        visual: "The receipt subtracts £2 and shows a total of £18.",
       },
       {
-        at: 15.245,
-        text: "That's an example of thinking rationally, using rules and facts to work out what follows. An ordinary checkout can follow this rule without being AI.",
-        visual: "The phrase Thinking rationally appears beside the rule, the membership check and the total."
-      }
-    ]
+        at: 13.581,
+        text: "We've used a rule and a fact to work out what follows. That illustrates thinking rationally, which focuses on logical reasoning.",
+        visual: "Thinking rationally appears below the rule, fact and result.",
+      },
+      {
+        at: 20.884,
+        text: "A normal checkout can do this without AI. We're using the discount to explain the idea.",
+        visual:
+          "A label explains that this is an ordinary software example. Compare member and non-member prices.",
+      },
+    ],
   },
   {
     id: "library",
-    title: "Asking for help at the library",
-    audioSrc: "/lessons/four-ways/library.m4a",
-    duration: 25.887,
+    title: "Asking for help",
+    audioSrc: "/lessons/four-ways/library-v2.m4a",
+    duration: 28.26675,
     cues: [
       {
         at: 0,
-        text: "Imagine you're at the library and you need to return a book.",
-        visual: "A library chat window is ready to receive a question about a book."
+        text: "You're at the library with a book to return.",
+        visual: "A visitor holds a book beside a library help screen.",
       },
       {
-        at: 3.343,
-        text: "You ask the chat assistant, 'Where do I drop this off?'",
-        visual: "The visitor's first question appears in the chat."
+        at: 2.503,
+        text: "You ask its chat assistant, 'Where do I drop this off?'",
+        visual: "The visitor's question appears in the chat.",
       },
       {
-        at: 6.444,
-        text: "It replies, 'There's a returns box beside the main entrance.'",
-        visual: "The assistant points the visitor to a returns box beside the entrance."
+        at: 5.639,
+        text: "'There's a returns box beside the main entrance.'",
+        visual: "The assistant's reply mentions a returns box.",
       },
       {
-        at: 9.921,
-        text: "Then you ask, 'Is it outside?'",
-        visual: "The visitor follows up with a question that uses the word it."
+        at: 8.528,
+        text: "'Is it outside?'",
+        visual: "The follow-up question appears. It refers to the returns box.",
       },
       {
-        at: 11.917,
-        text: "It says, 'Yes, the box is just outside the main doors.'",
-        visual: "The reply connects it to the same returns box."
+        at: 10.184,
+        text: "'Yes, just outside the main doors.'",
+        visual:
+          "The reply appears and the returns box outside the entrance is highlighted.",
       },
       {
-        at: 15.19,
-        text: "The reply sounds natural, and the assistant follows your question about the box. That's acting humanly. We're looking at how the system behaves and whether it resembles how a person might respond.",
-        visual: "The phrase Acting humanly appears alongside the conversation."
-      }
-    ]
+        at: 12.632,
+        text: "Notice how the reply connects your follow-up question to the same box. You're looking at whether the conversation resembles how a person might help.",
+        visual: "The word it and the earlier returns box are linked.",
+      },
+      {
+        at: 20.726,
+        text: "That's acting humanly. A natural-sounding reply doesn't prove the system thinks like a person, or that its directions are right.",
+        visual: "Acting humanly appears. The visitor checks the entrance sign.",
+      },
+    ],
   },
   {
     id: "routes",
-    title: "Choosing a route to work",
-    audioSrc: "/lessons/four-ways/routes.m4a",
-    duration: 26.57,
+    title: "The quicker route changes",
+    audioSrc: "/lessons/four-ways/routes-v2.m4a",
+    duration: 29.648292,
     cues: [
       {
         at: 0,
-        text: "You're running late for work, so you open your navigation app. Your goal is to get there as quickly as possible.",
-        visual: "A map shows the journey to work and the goal of arriving as quickly as possible."
+        text: "You're about to leave for work. You want the quickest safe route.",
+        visual:
+          "A map shows the destination and the goal: quickest safe route.",
       },
       {
-        at: 5.935,
-        text: "Route A is estimated at ten minutes, and Route B at twelve. The app recommends Route A.",
-        visual: "The map marks Route A as recommended, with estimated times of 10 minutes for A and 12 for B."
+        at: 3.558,
+        text: "Your map estimates ten minutes for one route and twelve for another. It recommends the ten-minute route.",
+        visual:
+          "Route A is estimated at 10 minutes and highlighted. Route B is estimated at 12 minutes.",
       },
       {
-        at: 11.147,
-        text: "Then heavy traffic pushes Route A's estimate up to eighteen minutes.",
-        visual: "A traffic alert appears on Route A and its estimate changes to 18 minutes."
+        at: 9.372,
+        text: "Then traffic builds up. That estimate changes to eighteen minutes, while the other stays at twelve.",
+        visual:
+          "Traffic appears on A and its estimate changes to 18 minutes. B remains at 12.",
       },
       {
-        at: 15.03,
-        text: "The app switches its recommendation to Route B. Its estimate is still twelve minutes.",
-        visual: "The recommended route changes to B. The goal stays the same."
+        at: 14.951,
+        text: "The recommendation switches.",
+        visual:
+          "Route B becomes the recommendation. The destination stays fixed.",
       },
       {
-        at: 20.041,
-        text: "That's acting rationally. The system uses the information it has and chooses an action that best helps it achieve its goal.",
-        visual: "The phrase Acting rationally appears beside the updated map."
-      }
-    ]
+        at: 17.037,
+        text: "This illustrates acting rationally: choosing an action expected to help achieve a goal, using the information available.",
+        visual: "Acting rationally appears below the updated map.",
+      },
+      {
+        at: 23.994,
+        text: "The estimate can still be wrong. You still need to follow road signs and check that the route is suitable.",
+        visual:
+          "A road sign and a check remind the learner to review the route before leaving.",
+      },
+    ],
   },
   {
     id: "recap",
-    title: "So what's the difference?",
-    audioSrc: "/lessons/four-ways/recap.m4a",
-    duration: 28.052,
+    title: "Four questions to take away",
+    audioSrc: "/lessons/four-ways/recap-v2.m4a",
+    duration: 31.430583,
     cues: [
       {
         at: 0,
-        text: "We've seen four ways of looking at AI.",
-        visual: "A grid brings back the puzzle, checkout, chat and map. The rows show thinking and acting, and the columns distinguish a human comparison from rules or goals."
+        text: "Let's bring the examples together.",
+        visual:
+          "A labelled two-by-two comparison brings back the four examples.",
       },
       {
-        at: 2.441,
-        text: "Solving a puzzle using steps a person might use is thinking humanly.",
-        visual: "The first cell links the puzzle to Thinking humanly."
+        at: 2.292,
+        text: "The puzzle asks whether the model follows a process like a person's: thinking humanly.",
+        visual: "The puzzle cell reveals Thinking humanly.",
       },
       {
-        at: 6.467,
-        text: "Using a rule and facts to work out the price is thinking rationally.",
-        visual: "The second cell links the discount to Thinking rationally."
+        at: 7.307,
+        text: "The discount asks whether the reasoning follows the rule and facts: thinking rationally.",
+        visual: "The checkout cell reveals Thinking rationally.",
       },
       {
-        at: 10.357,
-        text: "Having a natural conversation is acting humanly.",
-        visual: "The third cell links the conversation to Acting humanly."
+        at: 12.322,
+        text: "The conversation asks whether the response resembles a person's: acting humanly.",
+        visual: "The library cell reveals Acting humanly.",
       },
       {
-        at: 13.482,
-        text: "Choosing a route that serves your goal is acting rationally.",
-        visual: "The fourth cell links the map to Acting rationally."
+        at: 17.438,
+        text: "The map asks whether the choice serves the goal: acting rationally.",
+        visual: "The map cell reveals Acting rationally.",
       },
       {
-        at: 16.717,
-        text: "These are four ways to look at how a system thinks or acts. They're different from types of technology, such as machine learning or generative AI. You can ask more than one of these questions about the same system.",
-        visual: "All four cells remain visible. Each one can take you back to its example."
-      }
-    ]
-  }
+        at: 21.478,
+        text: "These are four approaches to studying AI. One system can be examined in more than one way. And an everyday example can illustrate an approach without being AI itself.",
+        visual:
+          "All four approaches remain visible. A reflection asks what else you need to know about two systems that finish the same puzzle.",
+      },
+    ],
+  },
 ];

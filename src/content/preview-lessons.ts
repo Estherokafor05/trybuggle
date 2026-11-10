@@ -8,23 +8,28 @@ interface PreviewLessonDetails {
   takeaway: string;
 }
 
-export type PreviewLesson = PreviewLessonDetails & (
-  | { visualFormat: "four-ways" }
-  | {
-      visualFormat: "cards";
-      narration: string;
-      visualSteps: { label: string; title: string; body: string }[];
-    }
-);
+export type PreviewLesson = PreviewLessonDetails & {
+  visualFormat: "four-ways" | "day";
+  sources: { label: string; url: string; claim: string }[];
+};
 
 export const previewLessons: PreviewLesson[] = [
   {
     slug: "what-counts-as-ai",
     title: "So, What Counts as AI?",
     duration: "4 minutes",
-    objective: "Use everyday examples to compare four ways of understanding AI.",
-    visualTitle: "Four ways to understand AI",
+    objective:
+      "Explain four approaches to AI using familiar situations, without mistaking them for four separate kinds of technology.",
+    visualTitle: "Four ways to look at AI",
     visualFormat: "four-ways",
+    sources: [
+      {
+        label: "Russell and Norvig: Introduction to AI",
+        url: "https://aima.cs.berkeley.edu/4th-ed/pdfs/newchap01.pdf",
+        claim:
+          "The four classical approaches compare thinking and acting, with human performance or rationality.",
+      },
+    ],
     guideSteps: [
       {
         title: "Start at a library kiosk",
@@ -58,45 +63,64 @@ export const previewLessons: PreviewLesson[] = [
     slug: "ai-in-your-day",
     title: "AI Is Already in Your Day",
     duration: "5 minutes",
-    objective: "Recognize familiar tasks where AI may be used and identify where a person should check the result.",
-    visualTitle: "One day, several AI tasks",
-    visualFormat: "cards",
-    narration:
-      "AI can support different tasks during an ordinary day. A service may suggest something you might like, flag a payment for review, translate a message, or create a draft image. These examples do different jobs, and a tool can combine more than one AI technique. A suggestion or flag is useful information to check, not a guarantee that the system is right.",
-    visualSteps: [
+    objective:
+      "Recognize familiar tasks where AI may be used and identify where a person should check the result.",
+    visualTitle: "AI in your day, one moment at a time",
+    visualFormat: "day",
+    sources: [
       {
-        label: "Morning",
-        title: "A message is sorted",
-        body: "A system may estimate whether an email looks like spam, then place it in a folder for you to review.",
+        label: "Apple: Designing Great ML Experiences",
+        url: "https://developer.apple.com/videos/play/wwdc2019/803/",
+        claim:
+          "Photo search can use machine learning to recognise image content, including dogs.",
       },
       {
-        label: "During the day",
-        title: "A suggestion appears",
-        body: "A service may recommend a film, article, or product based on patterns in activity or preferences.",
+        label: "Google DeepMind: Traffic prediction",
+        url: "https://deepmind.google/blog/traffic-prediction-with-advanced-graph-neural-networks/",
+        claim:
+          "Google Maps has used current and historical traffic information with machine learning to estimate journey times.",
       },
       {
-        label: "At work or study",
-        title: "A message is translated",
-        body: "A language tool can produce a draft translation. Important names, meaning, and tone may still need a human check.",
+        label: "AWS: Amazon Personalize",
+        url: "https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html",
+        claim:
+          "Machine learning recommendations can use item interactions such as product clicks.",
       },
       {
-        label: "When creating",
-        title: "A new draft is made",
-        body: "A generative tool can make an image or text draft from a request. Review it before using or sharing it.",
+        label: "Google: Gmail spam filters",
+        url: "https://workspace.google.com/blog/identity-and-security/an-overview-of-gmails-spam-filters",
+        claim:
+          "Spam filtering can use machine learning, sender information and user feedback.",
       },
     ],
     guideSteps: [
       {
-        title: "Name the job",
-        body: "Describe the task in ordinary words: sorting, suggesting, translating, recognizing, predicting, or creating.",
+        title: "Start with a job you recognise",
+        body: "Imagine you organise a community workshop. You use your phone and laptop to find a photo for a poster, plan your journey, choose supplies and read bookings. You do not need to know a product's technical name to begin. First ask: what am I trying to do?",
       },
       {
-        title: "Notice what the system gives back",
-        body: "It might provide a label, a score, a recommendation, or a new draft. Different outputs call for different kinds of review.",
+        title: "Trace the information and the result",
+        body: "For the poster, you search your photo library for a dog picture. The app receives a search word and works with the pictures in the library. It returns suggested matches. Recognition means identifying patterns, such as features in a picture. Some apps do this using machine learning, which learns patterns from examples. Check that the result shows the picture you intended to use.",
       },
       {
-        title: "Decide what needs a person",
-        body: "Check important or high-impact results. Be especially careful with private information and decisions that affect someone else.",
+        title: "Separate an estimate from a fact",
+        body: "You plan how early to leave for the workshop. A navigation service may combine traffic now with patterns from earlier journeys to estimate a travel time. This is prediction: estimating something not yet known. It does not guarantee when you will arrive. Review the route and leave room for uncertainty.",
+      },
+      {
+        title: "Test a suggestion against your needs",
+        body: "A shop suggests a bag for carrying workshop supplies. Recommendation means suggesting something you might find useful. Some services use patterns in clicks or purchases. Write down your actual needs first: budget, capacity and dimensions. Compare those with the product details before choosing.",
+      },
+      {
+        title: "Check how information was grouped",
+        body: "A booking email goes to Spam. Classification means putting something into a group, such as Inbox or Spam. Some email services use machine learning to estimate which messages are unwanted. Check expected messages against your own booking records. A message in the inbox can still be misleading.",
+      },
+      {
+        title: "Find evidence before calling it AI",
+        body: "Look for an explanation in the product's official help or technical documentation. A label such as smart, or a feature that works automatically, is not enough evidence. A basic alarm can ring at a time you set without AI. If you cannot find a reliable explanation, say you are not sure yet.",
+      },
+      {
+        title: "Try the three questions yourself",
+        body: "Choose one tool from your day. Name the job, the information it receives and the result it gives back. Then choose a check that fits the result. Use the activity below to make notes without entering personal or confidential information.",
       },
     ],
     takeaway:

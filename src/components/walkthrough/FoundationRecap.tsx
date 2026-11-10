@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ExampleIllustration } from "@/components/walkthrough/FoundationsScenes";
 
 type ExampleScene = "puzzle" | "discount" | "library" | "routes";
@@ -46,6 +47,7 @@ export function FoundationRecap({
   cue: number;
   onSelect: (scene: ExampleScene) => void;
 }) {
+  const [reflection, setReflection] = useState(false);
   return (
     <div className="space-y-4">
       <table className="w-full table-fixed border-collapse text-left text-navy">
@@ -55,10 +57,16 @@ export function FoundationRecap({
         <thead>
           <tr className="border-b border-line">
             <td className="w-[24%] sm:w-28" />
-            <th scope="col" className="p-1.5 align-bottom text-xs font-semibold sm:p-3 sm:text-sm">
+            <th
+              scope="col"
+              className="p-1.5 align-bottom text-xs font-semibold sm:p-3 sm:text-sm"
+            >
               Like a person
             </th>
-            <th scope="col" className="p-1.5 align-bottom text-xs font-semibold sm:p-3 sm:text-sm">
+            <th
+              scope="col"
+              className="p-1.5 align-bottom text-xs font-semibold sm:p-3 sm:text-sm"
+            >
               Using reason or goals
             </th>
           </tr>
@@ -66,7 +74,10 @@ export function FoundationRecap({
         <tbody className="divide-y divide-line">
           {comparison.map((row) => (
             <tr key={row.label}>
-              <th scope="row" className="break-words py-3 pr-1 text-xs font-semibold align-top sm:pr-3 sm:text-sm">
+              <th
+                scope="row"
+                className="break-words py-3 pr-1 text-xs font-semibold align-top sm:pr-3 sm:text-sm"
+              >
                 {row.label}
               </th>
               {row.examples.map((entry) => {
@@ -95,7 +106,9 @@ export function FoundationRecap({
                       </span>
                       <span className="block font-medium">{entry.example}</span>
                       {cue >= entry.cue && (
-                        <span className="mt-1 block font-bold">{entry.term}</span>
+                        <span className="mt-1 block font-bold">
+                          {entry.term}
+                        </span>
                       )}
                     </button>
                   </td>
@@ -106,9 +119,32 @@ export function FoundationRecap({
         </tbody>
       </table>
       {cue >= 5 && (
+        <section className="rounded-xl bg-mint p-4">
+          <h4 className="font-bold">Think about it</h4>
+          <p className="mt-2 text-sm">
+            Two systems finish the same puzzle. What else would you need to know
+            to compare how they solved it?
+          </p>
+          <button
+            className="mt-3 min-h-11 rounded-full border border-navy/30 bg-white px-4 py-2 text-sm font-semibold"
+            onClick={() => setReflection(!reflection)}
+          >
+            Explore an answer
+          </button>
+          {reflection && (
+            <p role="status" className="mt-3 text-sm">
+              You would need evidence about their steps, such as which pieces
+              they tried and in what order. The finished puzzle alone does not
+              reveal the process.
+            </p>
+          )}
+        </section>
+      )}
+      {cue >= 5 && (
         <p className="text-sm leading-relaxed text-muted">
           You can ask more than one of these questions about the same system.
-          Machine learning and generative AI describe kinds of technology.
+          These are approaches to studying AI. An everyday example can
+          illustrate one without itself being AI.
         </p>
       )}
     </div>

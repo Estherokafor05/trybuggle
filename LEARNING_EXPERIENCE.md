@@ -199,127 +199,181 @@ This is the only module that awards a certificate at initial launch.
 
 Detailed lesson titles require curriculum approval.
 
-#### Walkthrough storyboard: Four ways to understand AI
+#### Approved visual lesson storyboards
 
-The first Module 1 walkthrough uses this six-scene sequence. The recorded narration runs for about 2 minutes 31 seconds, with time for learners to pause or explore. Visual cues are timed against the recording.
+Approved on 10 November 2026. Both lessons use the same silent slide navigation and optional synchronised recorded narration. Technical terms follow the everyday example. No scene completion is treated as assessment success.
 
-**Learning objective:** Use everyday examples to explain the four classical approaches to understanding AI and distinguish them from types of AI technology.
+##### Lesson 1: Four ways to look at AI
 
-##### Scene 1. AI doesn't always work the same way
+**Scene 1. Four familiar situations**
 
-**Visual sequence:** Four familiar situations appear as they are named: solving a puzzle, following a rule at a shop, asking for help and choosing a route. The puzzle comes into focus for the next scene.
+- Visual: A person at a kitchen table introduces a puzzle, a checkout, a library and a map, one at a time.
+  Narration: Think about putting a puzzle together, checking a discount, asking someone for help, or choosing your route to work.
+- Visual: The four situations are connected to four questions.
+  Narration: These familiar situations can help us explore four questions people ask about AI.
+- Visual: Two labelled paths appear: the process, and what it does.
+  Narration: Are we looking at how a system works through a problem, or what it does?
+- Visual: The paths connect to comparing with people or checking reasoning and choices.
+  Narration: And are we comparing it with people, or checking its reasoning and choices?
+- Visual: The puzzle returns as the first example.
+  Narration: Let's see what that means.
 
-**Narration:**
+**Scene 2. How would you start this puzzle?**
 
-> When you hear the word AI, you might think of something like ChatGPT. But AI isn't just about chatting or answering questions.
->
-> Some systems are designed to work through problems like people do. Others follow logical rules, hold conversations or help us make decisions.
->
-> Let's look at four different ways of understanding AI, using things we see in everyday life.
+- Visual: Loose puzzle pieces sit on a table.
+  Narration: You've tipped a jigsaw puzzle onto the table. Where would you start?
+- Visual: Corner pieces are highlighted and blue pieces are grouped beside the board.
+  Narration: You might find the corners, group similar colours, then try a piece.
+- Visual: An attempted piece does not fit. A matching piece replaces it.
+  Narration: If it doesn't fit, you try another.
+- Visual: A computer model appears beside the person's board, with the observed steps connected.
+  Narration: Imagine researchers watching how people solve that puzzle, then building a computer model to follow similar steps.
+- Visual: Compare the steps replays the person's and model's sequences side by side.
+  Narration: They compare the model with what people actually do.
+- Visual: Thinking humanly appears below the two processes.
+  Narration: This approach is called thinking humanly. The interest is in the process, not just finishing the puzzle.
 
-##### Scene 2. Imagine solving a jigsaw puzzle
+**Scene 3. Does the discount apply?**
 
-**Visual sequence:** A person finds corner pieces, groups pieces by colour and tries a fit. A computer model follows a similar sequence alongside them. Highlight the matching steps as they happen, then reveal the label **Thinking humanly**.
+- Visual: A shopper and a receipt show an item priced at £20.
+  Narration: You're buying something for twenty pounds.
+- Visual: The shop rule appears, followed by the shopper's membership card.
+  Narration: The sign says members get ten percent off, and you have a membership card.
+- Visual: An arrow connects the rule to the confirmed membership.
+  Narration: The rule applies to you.
+- Visual: The receipt subtracts £2 and shows a total of £18.
+  Narration: Ten percent of twenty pounds is two pounds, so the price becomes eighteen pounds.
+- Visual: Thinking rationally appears below the rule, fact and result.
+  Narration: We've used a rule and a fact to work out what follows. That illustrates thinking rationally, which focuses on logical reasoning.
+- Visual: A label explains that this is an ordinary software example. Compare member and non-member prices.
+  Narration: A normal checkout can do this without AI. We're using the discount to explain the idea.
 
-**Narration:**
+**Scene 4. Asking for help**
 
-> Imagine you're putting together a jigsaw puzzle.
->
-> You probably wouldn't just pick up random pieces and hope they fit. You might start with the corners, group pieces with similar colours and slowly work your way through.
->
-> Now imagine a computer designed to solve the puzzle using a similar approach.
->
-> That's the idea behind thinking humanly. We're interested in whether a computer can work through a problem in a way that resembles how people think.
+- Visual: A visitor holds a book beside a library help screen.
+  Narration: You're at the library with a book to return.
+- Visual: The visitor's question appears in the chat.
+  Narration: You ask its chat assistant, 'Where do I drop this off?'
+- Visual: The assistant's reply mentions a returns box.
+  Narration: 'There's a returns box beside the main entrance.'
+- Visual: The follow-up question appears. It refers to the returns box.
+  Narration: 'Is it outside?'
+- Visual: The reply appears and the returns box outside the entrance is highlighted.
+  Narration: 'Yes, just outside the main doors.'
+- Visual: The word it and the earlier returns box are linked.
+  Narration: Notice how the reply connects your follow-up question to the same box. You're looking at whether the conversation resembles how a person might help.
+- Visual: Acting humanly appears. The visitor checks the entrance sign.
+  Narration: That's acting humanly. A natural-sounding reply doesn't prove the system thinks like a person, or that its directions are right.
 
-##### Scene 3. A simple supermarket discount
+**Scene 5. The quicker route changes**
 
-**Visual sequence:** Show an item priced at £20. Reveal the rule that members receive 10% off, then show that the shopper is a member. Connect the rule to the membership check, show the £2 discount and reveal the £18 total as the narrator says it. Then reveal **Thinking rationally**.
+- Visual: A map shows the destination and the goal: quickest safe route.
+  Narration: You're about to leave for work. You want the quickest safe route.
+- Visual: Route A is estimated at 10 minutes and highlighted. Route B is estimated at 12 minutes.
+  Narration: Your map estimates ten minutes for one route and twelve for another. It recommends the ten-minute route.
+- Visual: Traffic appears on A and its estimate changes to 18 minutes. B remains at 12.
+  Narration: Then traffic builds up. That estimate changes to eighteen minutes, while the other stays at twelve.
+- Visual: Route B becomes the recommendation. The destination stays fixed.
+  Narration: The recommendation switches.
+- Visual: Acting rationally appears below the updated map.
+  Narration: This illustrates acting rationally: choosing an action expected to help achieve a goal, using the information available.
+- Visual: A road sign and a check remind the learner to review the route before leaving.
+  Narration: The estimate can still be wrong. You still need to follow road signs and check that the route is suitable.
 
-**Narration:**
+**Scene 6. Four questions to take away**
 
-> Let's say you're shopping, and the supermarket has a rule. Members get ten percent off.
->
-> Your item costs twenty pounds, and you're a member.
->
-> The system checks the rule, checks that you're a member and works out that you should pay eighteen pounds.
->
-> It doesn't need to copy how a person thinks. It just needs to follow the information and rules correctly.
->
-> That's the idea behind thinking rationally. It means using logic to reach a conclusion.
+- Visual: A labelled two-by-two comparison brings back the four examples.
+  Narration: Let's bring the examples together.
+- Visual: The puzzle cell reveals Thinking humanly.
+  Narration: The puzzle asks whether the model follows a process like a person's: thinking humanly.
+- Visual: The checkout cell reveals Thinking rationally.
+  Narration: The discount asks whether the reasoning follows the rule and facts: thinking rationally.
+- Visual: The library cell reveals Acting humanly.
+  Narration: The conversation asks whether the response resembles a person's: acting humanly.
+- Visual: The map cell reveals Acting rationally.
+  Narration: The map asks whether the choice serves the goal: acting rationally.
+- Visual: All four approaches remain visible. A reflection asks what else you need to know about two systems that finish the same puzzle.
+  Narration: These are four approaches to studying AI. One system can be examined in more than one way. And an everyday example can illustrate an approach without being AI itself.
 
-**Teaching note:** The checkout illustrates how reasoning can follow from a rule and the facts of a situation. A normal discount calculator is ordinary software and the calculation alone does not make it AI.
+##### Lesson 2: AI in Your Day
 
-##### Scene 4. Asking for help at the library
+**Scene 1. A normal day**
 
-**Visual sequence:** Reveal the visitor's question and the chat assistant's reply in order. When the visitor asks whether it is outside, show the assistant answer about the same returns box. Highlight that connection, then reveal **Acting humanly**.
+- Visual: An illustrated adult at home begins a day with a phone, journey, shopping and messages.
+  Narration: You're getting ready for the day. You look for a photo, check your journey, browse for something you need and open your messages.
+- Visual: The day's timeline connects four familiar moments.
+  Narration: Some of these tools use AI behind the scenes. You don't have to open a chatbot to encounter it.
+- Visual: Three questions appear: information in, result out, what would you check?
+  Narration: Let's follow a few everyday moments and see what the tool receives, what it gives back, and where your judgement matters.
 
-**Narration:**
+**Scene 2. Finding a photo**
 
-> Imagine you're at the library and you need to return a book.
->
-> You ask the chat assistant, 'Where do I drop this off?'
->
-> It replies, 'There's a returns box beside the main entrance.'
->
-> You ask, 'Is it outside?' The assistant says, 'Yes, the box is just outside the main doors.'
->
-> That conversation feels quite natural, doesn't it?
->
-> This is what we mean by acting humanly. We're looking at how the system behaves and whether that resembles how a person might respond.
+- Visual: A mixed photo library appears. The search box fills with dog.
+  Narration: A friend asks for that photo of your dog. You have hundreds of pictures, so you search for 'dog'.
+- Visual: Likely dog pictures move forward, with one unrelated picture among the fictional results.
+  Narration: A photo app can use AI to recognise patterns in the pictures and bring back likely matches, even when you haven't named the files.
+- Visual: Photos and the search word lead to suggested matches. Machine learning appears.
+  Narration: Learning patterns from examples is called machine learning, one way of building AI.
+- Visual: Check the matches lets you identify the unrelated picture and open the intended photo.
+  Narration: Open the results and check them. The app might miss the photo you wanted or include something that doesn't belong.
 
-##### Scene 5. Choosing the best route to work
+**Scene 3. Getting to work**
 
-**Visual sequence:** A map shows two routes estimated at 10 and 12 minutes and highlights the quicker one. A traffic alert changes the first estimate to 18 minutes. The recommendation switches to the 12-minute route while the goal, **Arrive as quickly as possible**, stays visible. Then reveal **Acting rationally**.
+- Visual: At home, the learner sees traffic on a 30-minute route and a 20-minute alternative.
+  Narration: You're checking your journey before leaving for work. Traffic has built up on your usual road, and the map suggests another route.
+- Visual: Traffic now and patterns from earlier journeys feed into the route estimates.
+  Narration: Some navigation systems use AI to combine current traffic information with patterns from earlier journeys.
+- Visual: The estimates connect to the two roads, and the alternative is highlighted.
+  Narration: That helps estimate what the roads may be like when you reach them.
+- Visual: Prediction appears beside the estimated journey times.
+  Narration: This is prediction: estimating something we don't yet know.
+- Visual: Compare routes reveals journey details and reminds the learner to check before leaving.
+  Narration: It helps you plan, but the time is an estimate. Check the route and follow road signs.
 
-**Narration:**
+**Scene 4. Shopping for something useful**
 
-> You're running late for work, so you open your navigation app.
->
-> It shows two routes. One is estimated at ten minutes, and the other at twelve.
->
-> Naturally, you'd choose the ten-minute route.
->
-> But just as you're about to leave, there's heavy traffic. That route is now estimated at eighteen minutes.
->
-> The app changes its recommendation to the twelve-minute route.
->
-> Why? Because your goal is to arrive as quickly as possible.
->
-> That's what acting rationally means. The system looks at the information it has and chooses an action that best helps it achieve a goal.
+- Visual: Two viewed backpacks lead to a row of suggested bags.
+  Narration: You're looking for a backpack. After you browse a few, the shop suggests others.
+- Visual: Viewed items and activity patterns connect to suggestions.
+  Narration: Some shopping services use AI to find patterns in what people view or buy. Those patterns help them recommend products you might like.
+- Visual: Recommendation appears. One suggested bag opens for inspection.
+  Narration: That's a recommendation. It isn't a promise that something is right for you.
+- Visual: Check the fit compares a 32 cm laptop with a 28 cm compartment, showing the mismatch.
+  Narration: Check the price, size and features. A suggested bag might look appealing and still be too small for your laptop.
 
-##### Scene 6. So what's the difference?
+**Scene 5. A message goes to spam**
 
-**Visual sequence:** Bring back the four scenarios in a labelled 2×2 comparison. Show the everyday descriptions first, then place the technical terms underneath as they are spoken. Each cell can open its scene for replay.
+- Visual: A fictional booking message moves to Spam. Find the missing message opens the folder.
+  Narration: You're waiting for a booking confirmation. It isn't in your inbox, so you check the spam folder. There it is.
+- Visual: Message patterns, sender information and feedback feed into the sorting decision.
+  Narration: Some email services use AI to look for patterns in messages, information about senders and feedback from users.
+- Visual: A message is labelled Possibly unwanted, not definitely dangerous.
+  Narration: They estimate which messages may be unwanted.
+- Visual: Classification appears alongside Inbox and Spam.
+  Narration: Sorting something into a group is called classification.
+- Visual: The learner compares fictional booking details with their own plan. There are no live links or safe badges.
+  Narration: That can save you time, but mistakes happen. Check expected messages carefully. And a message reaching your inbox doesn't automatically make it trustworthy.
 
-| What we're looking at | Like a person | Using reason or goals |
-| --- | --- | --- |
-| **Thinking** | Solving a puzzle using steps a person might use.<br>**Thinking humanly** | Using a rule and the facts to work out the price.<br>**Thinking rationally** |
-| **Acting** | Having a natural conversation.<br>**Acting humanly** | Choosing a route that serves your goal.<br>**Acting rationally** |
+**Scene 6. What might AI be doing in your day?**
 
-**Narration:**
+- Visual: The day's four moments return on a timeline.
+  Narration: The photo app suggested matches. The map estimated a journey time. The shop recommended a product. The email service sorted a message.
+- Visual: Each result is paired with a human check.
+  Narration: Different jobs, with different things for you to check.
+- Visual: A clock set to 7:00 rings, showing a simple automatic action.
+  Narration: Not every automatic feature uses AI. A basic alarm can ring at the time you set without it.
+- Visual: A private practice activity offers prompts for one familiar tool.
+  Narration: Think of one tool you use. What information does it receive? What does it give back? What would you check?
+- Visual: The activity accepts uncertainty and suggests checking product documentation.
+  Narration: If you don't know whether it uses AI, 'I'm not sure yet' is a useful answer.
 
-> So, we've seen four ways of looking at AI.
->
-> A computer solving a puzzle like a person is about thinking humanly.
->
-> A system using rules to reach a conclusion is about thinking rationally.
->
-> A chatbot having a natural conversation is about acting humanly.
->
-> And a navigation app choosing the best route for your goal is about acting rationally.
->
-> These are four ways to look at how a system thinks or behaves. They're different from types of AI technology, such as machine learning or generative AI. You can ask more than one of these questions about the same system.
+**Interactions:** Compare puzzle-solving steps, compare membership prices, connect the library follow-up, compare routes, inspect photo matches, check backpack dimensions, find a misplaced message and replay recap examples. Reflection activities are unscored. Text notes are not submitted or persisted.
 
-**Separate written guide:** Use a worked example of a library self-service kiosk. Define the four approaches in plain language, show how to ask each question about the same tool, and give learners a short practice example they can revisit.
+**Independent guides:** Lesson 1 examines a library kiosk through the four approaches, with a comparison diagram and practice questions. Lesson 2 follows the organisation of a community workshop, tracing information, results and human checks, with definitions and a source-verification step.
 
-**Visual reference decisions:**
+**Illustration choices:** Reuse the supplied checkout image and generated library illustration. Add an original generated kitchen-table puzzle illustration to establish the human scenario. Keep prices, routes, comparisons and conversation text as accessible UI alongside artwork. Use simplified fictional photo, shopping and inbox diagrams to show the changing information without copying a product interface. Reuse the generated learner artwork for the beginning of the day.
 
-- The supplied four-quadrant illustration and the Session 1 slide deck informed the recap. Use a labelled 2×2 table so learners can compare the axes, read the terms and replay a scene.
-- Reuse the generated learner illustration beside the opening definition, linking the welcome page and first lesson.
-- Use the supplied checkout illustration in the shopping scene beside a receipt that builds up the £20 price, 10% membership rule, £2 discount and £18 total as they are explained.
-- The library photo informs a new generated illustration of a visitor using a help screen, with a returns box outside. This keeps the adult illustration style consistent and shows the physical setting. Reveal the actual chat messages alongside it so the learner can see how the reply connects “it” to the returns box.
-- The supplied GPS image informed the map. Draw two routes with readable estimates and update the recommendation when traffic changes.
-- Keep the supplied brain-puzzle and robot images as references rather than illustrations of what AI literally is. They can imply a human mind or make AI look limited to robots. The calendar/map/shopping assistant sequence is a reference for later workflow lessons, after the foundations.
+**Factual sources:** Russell and Norvig's introductory AI chapter; Apple WWDC19 Designing Great ML Experiences; Google DeepMind Traffic prediction with advanced Graph Neural Networks; AWS Amazon Personalize documentation; Google Workspace Understanding Gmail's spam filters. Links and supported claims appear in the lesson source lists. Situations, prices and travel times are illustrative, not reported product outcomes.
 
 ### Module 2 — Types of AI Systems
 

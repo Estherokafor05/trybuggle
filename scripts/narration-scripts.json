@@ -1,0 +1,350 @@
+{
+  "four-ways": [
+    {
+      "id": "intro",
+      "title": "Four familiar situations",
+      "lines": [
+        {
+          "text": "Think about putting a puzzle together,",
+          "visual": "A person at the kitchen table selects a puzzle piece."
+        },
+        {
+          "text": "checking a discount,",
+          "visual": "The view moves to a shopper at a checkout."
+        },
+        {
+          "text": "asking someone for help,",
+          "visual": "A visitor asks for help at the library."
+        },
+        {
+          "text": "or choosing your route to work.",
+          "visual": "A map shows a journey to work."
+        },
+        {
+          "text": "These familiar situations can help us explore four questions people ask about AI.",
+          "visual": "The four situations are connected to four questions."
+        },
+        {
+          "text": "Are we looking at how a system works through a problem, or what it does?",
+          "visual": "Two labelled paths appear: the process, and what it does."
+        },
+        {
+          "text": "And are we comparing it with people, or checking its reasoning and choices?",
+          "visual": "The paths connect to comparing with people or checking reasoning and choices."
+        },
+        {
+          "text": "Let's see what that means.",
+          "visual": "The puzzle returns as the first example."
+        }
+      ]
+    },
+    {
+      "id": "puzzle",
+      "title": "How would you start this puzzle?",
+      "lines": [
+        {
+          "text": "You've tipped a jigsaw puzzle onto the table. Where would you start?",
+          "visual": "Loose puzzle pieces sit on a table."
+        },
+        {
+          "text": "You might find the corners, group similar colours, then try a piece.",
+          "visual": "Corner pieces are highlighted and blue pieces are grouped beside the board."
+        },
+        {
+          "text": "If it doesn't fit, you try another.",
+          "visual": "An attempted piece does not fit. A matching piece replaces it."
+        },
+        {
+          "text": "Imagine researchers watching how people solve that puzzle, then building a computer model to follow similar steps.",
+          "visual": "A computer model appears beside the person's board, with the observed steps connected."
+        },
+        {
+          "text": "They compare the model with what people actually do.",
+          "visual": "Compare the steps replays the person's and model's sequences side by side."
+        },
+        {
+          "text": "This approach is called thinking humanly. The interest is in the process, not just finishing the puzzle.",
+          "visual": "Thinking humanly appears below the two processes."
+        }
+      ]
+    },
+    {
+      "id": "discount",
+      "title": "Does the discount apply?",
+      "lines": [
+        {
+          "text": "You're buying something for twenty pounds.",
+          "visual": "A shopper and a receipt show an item priced at £20."
+        },
+        {
+          "text": "The sign says members get ten percent off, and you have a membership card.",
+          "visual": "The shop rule appears, followed by the shopper's membership card."
+        },
+        {
+          "text": "The rule applies to you.",
+          "visual": "An arrow connects the rule to the confirmed membership."
+        },
+        {
+          "text": "Ten percent of twenty pounds is two pounds, so the price becomes eighteen pounds.",
+          "visual": "The receipt subtracts £2 and shows a total of £18."
+        },
+        {
+          "text": "We've used a rule and a fact to work out what follows. That illustrates thinking rationally, which focuses on logical reasoning.",
+          "visual": "Thinking rationally appears below the rule, fact and result."
+        },
+        {
+          "text": "A normal checkout can do this without AI. We're using the discount to explain the idea.",
+          "visual": "A label explains that this is an ordinary software example. Compare member and non-member prices."
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "title": "Asking for help",
+      "lines": [
+        {
+          "text": "You're at the library with a book to return.",
+          "visual": "A visitor holds a book beside a library help screen."
+        },
+        {
+          "text": "You ask its chat assistant, 'Where do I drop this off?'",
+          "visual": "The visitor's question appears in the chat."
+        },
+        {
+          "text": "'There's a returns box beside the main entrance.'",
+          "visual": "The assistant's reply mentions a returns box."
+        },
+        {
+          "text": "'Is it outside?'",
+          "visual": "The follow-up question appears. It refers to the returns box."
+        },
+        {
+          "text": "'Yes, just outside the main doors.'",
+          "visual": "The reply appears and the returns box outside the entrance is highlighted."
+        },
+        {
+          "text": "Notice how the reply connects your follow-up question to the same box. You're looking at whether the conversation resembles how a person might help.",
+          "visual": "The word it and the earlier returns box are linked."
+        },
+        {
+          "text": "That's acting humanly. A natural-sounding reply doesn't prove the system thinks like a person, or that its directions are right.",
+          "visual": "Acting humanly appears. The visitor checks the entrance sign."
+        }
+      ]
+    },
+    {
+      "id": "routes",
+      "title": "The quicker route changes",
+      "lines": [
+        {
+          "text": "You're about to leave for work. You want the quickest safe route.",
+          "visual": "A map shows the destination and the goal: quickest safe route."
+        },
+        {
+          "text": "Your map estimates ten minutes for one route and twelve for another. It recommends the ten-minute route.",
+          "visual": "Route A is estimated at 10 minutes and highlighted. Route B is estimated at 12 minutes."
+        },
+        {
+          "text": "Then traffic builds up. That estimate changes to eighteen minutes, while the other stays at twelve.",
+          "visual": "Traffic appears on A and its estimate changes to 18 minutes. B remains at 12."
+        },
+        {
+          "text": "The recommendation switches.",
+          "visual": "Route B becomes the recommendation. The destination stays fixed."
+        },
+        {
+          "text": "This illustrates acting rationally: choosing an action expected to help achieve a goal, using the information available.",
+          "visual": "Acting rationally appears below the updated map."
+        },
+        {
+          "text": "The estimate can still be wrong. You still need to follow road signs and check that the route is suitable.",
+          "visual": "A road sign and a check remind the learner to review the route before leaving."
+        }
+      ]
+    },
+    {
+      "id": "recap",
+      "title": "Four questions to take away",
+      "lines": [
+        {
+          "text": "Let's bring the examples together.",
+          "visual": "A labelled two-by-two comparison brings back the four examples."
+        },
+        {
+          "text": "The puzzle asks whether the model follows a process like a person's: thinking humanly.",
+          "visual": "The puzzle cell reveals Thinking humanly."
+        },
+        {
+          "text": "The discount asks whether the reasoning follows the rule and facts: thinking rationally.",
+          "visual": "The checkout cell reveals Thinking rationally."
+        },
+        {
+          "text": "The conversation asks whether the response resembles a person's: acting humanly.",
+          "visual": "The library cell reveals Acting humanly."
+        },
+        {
+          "text": "The map asks whether the choice serves the goal: acting rationally.",
+          "visual": "The map cell reveals Acting rationally."
+        },
+        {
+          "text": "These are four approaches to studying AI. One system can be examined in more than one way. And an everyday example can illustrate an approach without being AI itself.",
+          "visual": "All four approaches remain visible. A reflection asks what else you need to know about two systems that finish the same puzzle."
+        }
+      ]
+    }
+  ],
+  "ai-in-your-day": [
+    {
+      "id": "day-intro",
+      "title": "A normal day",
+      "lines": [
+        {
+          "text": "You're getting ready for the day. You look for a photo,",
+          "visual": "An illustrated adult at home opens a photo library."
+        },
+        {
+          "text": "check your journey,",
+          "visual": "The person checks a map before leaving home."
+        },
+        {
+          "text": "browse for something you need",
+          "visual": "The day continues with browsing for a backpack."
+        },
+        {
+          "text": "and open your messages.",
+          "visual": "The person opens an inbox."
+        },
+        {
+          "text": "Some of these tools use AI behind the scenes. You don't have to open a chatbot to encounter it.",
+          "visual": "The day's timeline connects four familiar moments."
+        },
+        {
+          "text": "Let's follow a few everyday moments and see what the tool receives, what it gives back, and where your judgement matters.",
+          "visual": "Three questions appear: information in, result out, what would you check?"
+        }
+      ]
+    },
+    {
+      "id": "photos",
+      "title": "Finding a photo",
+      "lines": [
+        {
+          "text": "A friend asks for that photo of your dog. You have hundreds of pictures, so you search for 'dog'.",
+          "visual": "A mixed photo library appears. The search box fills with dog."
+        },
+        {
+          "text": "A photo app can use AI to recognise patterns in the pictures and bring back likely matches, even when you haven't named the files.",
+          "visual": "Likely dog pictures move forward, with one unrelated picture among the fictional results."
+        },
+        {
+          "text": "Learning patterns from examples is called machine learning, one way of building AI.",
+          "visual": "Photos and the search word lead to suggested matches. Machine learning appears."
+        },
+        {
+          "text": "Open the results and check them. The app might miss the photo you wanted or include something that doesn't belong.",
+          "visual": "Check the matches lets you identify the unrelated picture and open the intended photo."
+        }
+      ]
+    },
+    {
+      "id": "journey",
+      "title": "Getting to work",
+      "lines": [
+        {
+          "text": "You're checking your journey before leaving for work. Traffic has built up on your usual road, and the map suggests another route.",
+          "visual": "At home, the learner sees traffic on a 30-minute route and a 20-minute alternative."
+        },
+        {
+          "text": "Some navigation systems use AI to combine current traffic information with patterns from earlier journeys.",
+          "visual": "Traffic now and patterns from earlier journeys feed into the route estimates."
+        },
+        {
+          "text": "That helps estimate what the roads may be like when you reach them.",
+          "visual": "The estimates connect to the two roads, and the alternative is highlighted."
+        },
+        {
+          "text": "This is prediction: estimating something we don't yet know.",
+          "visual": "Prediction appears beside the estimated journey times."
+        },
+        {
+          "text": "It helps you plan, but the time is an estimate. Check the route and follow road signs.",
+          "visual": "Compare routes reveals journey details and reminds the learner to check before leaving."
+        }
+      ]
+    },
+    {
+      "id": "shopping",
+      "title": "Shopping for something useful",
+      "lines": [
+        {
+          "text": "You're looking for a backpack. After you browse a few, the shop suggests others.",
+          "visual": "Two viewed backpacks lead to a row of suggested bags."
+        },
+        {
+          "text": "Some shopping services use AI to find patterns in what people view or buy. Those patterns help them recommend products you might like.",
+          "visual": "Viewed items and activity patterns connect to suggestions."
+        },
+        {
+          "text": "That's a recommendation. It isn't a promise that something is right for you.",
+          "visual": "Recommendation appears. One suggested bag opens for inspection."
+        },
+        {
+          "text": "Check the price, size and features. A suggested bag might look appealing and still be too small for your laptop.",
+          "visual": "Check the fit compares a 32 cm laptop with a 28 cm compartment, showing the mismatch."
+        }
+      ]
+    },
+    {
+      "id": "messages",
+      "title": "A message goes to spam",
+      "lines": [
+        {
+          "text": "You're waiting for a booking confirmation. It isn't in your inbox, so you check the spam folder. There it is.",
+          "visual": "A fictional booking message moves to Spam. Find the missing message opens the folder."
+        },
+        {
+          "text": "Some email services use AI to look for patterns in messages, information about senders and feedback from users.",
+          "visual": "Message patterns, sender information and feedback feed into the sorting decision."
+        },
+        {
+          "text": "They estimate which messages may be unwanted.",
+          "visual": "A message is labelled Possibly unwanted, not definitely dangerous."
+        },
+        {
+          "text": "Sorting something into a group is called classification.",
+          "visual": "Classification appears alongside Inbox and Spam."
+        },
+        {
+          "text": "That can save you time, but mistakes happen. Check expected messages carefully. And a message reaching your inbox doesn't automatically make it trustworthy.",
+          "visual": "The learner compares fictional booking details with their own plan. There are no live links or safe badges."
+        }
+      ]
+    },
+    {
+      "id": "day-recap",
+      "title": "What might AI be doing in your day?",
+      "lines": [
+        {
+          "text": "The photo app suggested matches. The map estimated a journey time. The shop recommended a product. The email service sorted a message.",
+          "visual": "The day's four moments return on a timeline."
+        },
+        {
+          "text": "Different jobs, with different things for you to check.",
+          "visual": "Each result is paired with a human check."
+        },
+        {
+          "text": "Not every automatic feature uses AI. A basic alarm can ring at the time you set without it.",
+          "visual": "A clock set to 7:00 rings, showing a simple automatic action."
+        },
+        {
+          "text": "Think of one tool you use. What information does it receive? What does it give back? What would you check?",
+          "visual": "A private practice activity offers prompts for one familiar tool."
+        },
+        {
+          "text": "If you don't know whether it uses AI, 'I'm not sure yet' is a useful answer.",
+          "visual": "The activity accepts uncertainty and suggests checking product documentation."
+        }
+      ]
+    }
+  ]
+}
