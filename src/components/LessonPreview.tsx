@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { JourneyStory } from "@/components/story/JourneyStory";
 import {
   LessonPractice,
   GuideDiagram,
@@ -14,7 +15,9 @@ const FORMAT_BUTTON =
   "min-h-11 rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
-  const [format, setFormat] = useState<"visual" | "guide">("visual");
+  const [format, setFormat] = useState<"visual" | "guide" | "story">(
+    lesson.visualFormat === "day" ? "story" : "visual",
+  );
   function openGuide() {
     setFormat("guide");
   }
@@ -60,6 +63,16 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
         role="group"
         aria-label="Choose a lesson format"
       >
+        {lesson.visualFormat === "day" && (
+          <button
+            type="button"
+            aria-pressed={format === "story"}
+            onClick={() => setFormat("story")}
+            className={`${FORMAT_BUTTON} ${format === "story" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
+          >
+            Animated story preview
+          </button>
+        )}
         <button
           type="button"
           aria-pressed={format === "visual"}
@@ -78,6 +91,11 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
         </button>
       </div>
 
+      {lesson.visualFormat === "day" && (
+        <div hidden={format !== "story"}>
+          <JourneyStory active={format === "story"} />
+        </div>
+      )}
       <div hidden={format !== "visual"}>
         <FoundationsWalkthrough
           active={format === "visual"}

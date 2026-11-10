@@ -1,0 +1,15 @@
+{
+  "hallway": {
+    "path": "public/lessons/maya-journey/hallway.png",
+    "provenance": "Original image generated with the built-in image generation tool, 10 November 2026.",
+    "prompt": "Original professional 2D educational animation background, landscape 16:9. Warm editorial illustration, restrained ivory #F7F5EF, sage, navy #17243C, teal #087F72, lavender #EAE5FA and peach. Modest apartment entry hallway in morning, window and console with plant on left, uncluttered centre stage, teal front door and beige coat on right. Soft sunlight, subtle paper texture. No people, animals, words, logos or UI."
+  },
+  "maya": {
+    "path": "animation/src/Maya.tsx",
+    "provenance": "Original layered vector character, brown skin, dark curly hair, teal cardigan and navy trousers. Frame-derived poses, blink, gaze, hand/phone movement and walking."
+  },
+  "reference": {
+    "url": "https://www.firstmedia.co.uk/animation-illustration/",
+    "use": "Educational storytelling approach only. No artwork or footage copied."
+  }
+}

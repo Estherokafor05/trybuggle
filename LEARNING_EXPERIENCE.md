@@ -64,13 +64,19 @@ Use generated image illustrations to establish familiar human situations. Reuse 
 
 The primary presentation should not depend on a person speaking directly to the camera.
 
-Open the walkthrough as a silent, self-paced presentation. Show one illustrated slide at a time, with a short explanation of what is happening and a visible slide count. Use one pair of Previous slide and Next slide buttons to move through the entire lesson, including between scenes. Each slide must make sense with the sound off and stay on screen until the learner moves on.
+Choose the visual format that best teaches the concept. Lessons may use continuous character-led animation, visual demonstrations, interactive simulations or self-paced illustrated sequences. Do not force every concept into one card or slide template. No media starts automatically.
 
-Offer Play narration as a separate action. It starts at the current slide and advances the visuals in sync through the rest of that scene. Learners can pause, resume or replay the scene. Pausing holds the narration and visual state together. Using the slide buttons stops narration and returns to self-paced browsing.
+Offer learner-controlled playback and a separate self-paced option. Continuous stories follow one character through believable situations, with purposeful character actions and visual changes timed to the narration. Learners can pause, seek, replay and move between meaningful moments. Switching to the written guide pauses playback.
 
-Recorded narration is the primary audio. Time each meaningful visual change and caption to the relevant part of the narration. Browser text-to-speech may be offered as an optional fallback, one scene cue at a time. Provide a descriptive transcript that includes the visual information needed to follow the explanation.
+Provide an equivalent reduced-motion experience using still keyframes, descriptions and optional narration. Pausing freezes both the visual story and audio. Captions, descriptive transcripts, keyboard controls and independently useful written guides remain required.
 
-Before implementing a walkthrough, review and approve its storyboard, visual sequence, interactions and narration.
+Use original generated artwork for settings and approved character references. Reuse a consistent character model, poses, props, palette and motion components. Do not regenerate the character independently for every shot. Every animation and example needs an educational accuracy review.
+
+The approved first proof of concept is the 57-second journey scene from Lesson 2, following Maya as she checks traffic before leaving for the community centre. Remotion is isolated production tooling; the application serves rendered video, captions and still images. A React/SVG exercise lets learners change fictional traffic conditions and compare estimates. It is not a live AI predictor. The rest of the six-scene continuous story remains future work, and the existing complete walkthrough and guide stay available.
+
+Recorded narration is the primary audio. Time meaningful movement and captions to the relevant words. Browser speech is not a replacement for produced narration. A descriptive transcript includes information needed to understand the visuals.
+
+Before implementing a new story, review and approve its storyboard, visual sequence, interactions and narration.
 
 ### 3.2 Step-by-Step Learning Guides
 
