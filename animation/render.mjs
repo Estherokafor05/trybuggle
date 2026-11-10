@@ -2,20 +2,23 @@ import { bundle } from "@remotion/bundler";
 import { getCompositions, renderMedia, renderStill } from "@remotion/renderer";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { mkdir } from "node:fs/promises";
+import narration from "../public/lessons/maya-day/narration.json" with { type: "json" };
 const here = path.dirname(fileURLToPath(import.meta.url));
-const out = path.resolve(here, "../public/lessons/maya-journey");
+const out = path.resolve(here, "../public/lessons/maya-day");
+const review = "/private/tmp/maya-day-review";
+await mkdir(review, { recursive: true });
 const serveUrl = await bundle({
   entryPoint: path.join(here, "src/index.ts"),
   publicDir: path.resolve(here, "../public"),
 });
 const compositions = await getCompositions(serveUrl);
 for (const mobile of [false, true]) {
-  const composition = compositions.find(
-    (c) => c.id === (mobile ? "MayaJourneyMobile" : "MayaJourney"),
-  );
+  const composition = compositions.find(c => c.id === (mobile ? "MayaDayMobile" : "MayaDay"));
+  if (!composition) throw new Error("Missing Remotion composition");
   const suffix = mobile ? "-mobile" : "";
-  console.log("Rendering " + composition.id);
   let last = -1;
+  console.log("Rendering " + composition.id);
   await renderMedia({
     composition,
     serveUrl,
@@ -25,29 +28,21 @@ for (const mobile of [false, true]) {
     crf: 23,
     onProgress: ({ progress }) => {
       const n = Math.floor(progress * 10);
-      if (n > last) {
-        console.log(composition.id + " " + n * 10 + "%");
-        last = n;
-      }
+      if (n > last) { console.log(composition.id + " " + n * 10 + "%"); last = n; }
     },
   });
-  const frames = [150, 570, 1000, 1200, 1380, 1620];
-  for (let i = 0; i < frames.length; i++)
-    await renderStill({
-      composition,
-      serveUrl,
-      output: path.join(out, `step-${i + 1}${suffix}.jpg`),
-      frame: frames[i],
-      imageFormat: "jpeg",
-      jpegQuality: 85,
-    });
   await renderStill({
-    composition,
-    serveUrl,
+    composition, serveUrl,
     output: path.join(out, "poster" + suffix + ".jpg"),
-    frame: 150,
-    imageFormat: "jpeg",
-    jpegQuality: 85,
+    frame: 3 * 24, imageFormat: "jpeg", jpegQuality: 85,
   });
+  for (const scene of narration.scenes) {
+    await renderStill({
+      composition, serveUrl,
+      output: path.join(review, scene.id + suffix + ".jpg"),
+      frame: Math.min(composition.durationInFrames - 1, Math.round((scene.end - 2) * 24)),
+      imageFormat: "jpeg", jpegQuality: 84,
+    });
+  }
 }
-console.log("Both videos and all keyframes are ready.");
+console.log("Both narrated films, posters and review frames are ready.");

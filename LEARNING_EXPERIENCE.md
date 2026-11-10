@@ -66,13 +66,13 @@ The primary presentation should not depend on a person speaking directly to the 
 
 Choose the visual format that best teaches the concept. Lessons may use continuous character-led animation, visual demonstrations, interactive simulations or self-paced illustrated sequences. Do not force every concept into one card or slide template. No media starts automatically.
 
-Offer learner-controlled playback and a separate self-paced option. Continuous stories follow one character through believable situations, with purposeful character actions and visual changes timed to the narration. Learners can pause, seek, replay and move between meaningful moments. Switching to the written guide pauses playback.
+Offer learner-controlled playback and an independent written guide. Continuous stories follow one character through believable situations, with purposeful character actions and visual changes timed to the narration. Learners can pause, seek, replay and move between meaningful moments. Switching to the written guide pauses playback.
 
-Provide an equivalent reduced-motion experience using still keyframes, descriptions and optional narration. Pausing freezes both the visual story and audio. Captions, descriptive transcripts, keyboard controls and independently useful written guides remain required.
+Do not autoplay. Learners who prefer reduced motion can choose the written guide or descriptive transcript. Pausing freezes both the visual story and audio. Captions, descriptive transcripts, keyboard controls and independently useful written guides remain required.
 
 Use original generated artwork for settings and approved character references. Reuse a consistent character model, poses, props, palette and motion components. Do not regenerate the character independently for every shot. Every animation and example needs an educational accuracy review.
 
-The approved first proof of concept is the 57-second journey scene from Lesson 2, following Maya as she checks traffic before leaving for the community centre. Remotion is isolated production tooling; the application serves rendered video, captions and still images. A React/SVG exercise lets learners change fictional traffic conditions and compare estimates. It is not a live AI predictor. The rest of the six-scene continuous story remains future work, and the existing complete walkthrough and guide stay available.
+Lesson 2 now follows Maya in one continuous illustrated film with spoken narration. Its six moments are her morning alarm, finding a dog photo for a club poster, checking traffic, browsing a camera bag, finding a booking message in Spam, and preparing the community centre for an evening photography club. The alarm illustrates simple automation. The four possible AI uses illustrate recognition, prediction, recommendation and classification, with a human check in each case. Remotion is isolated production tooling; the app serves the rendered desktop and phone films, captions, and a descriptive transcript. The former self-paced slides, traffic widget and separate visual walkthrough have been retired from Lesson 2. The independent written guide remains available.
 
 Recorded narration is the primary audio. Time meaningful movement and captions to the relevant words. Browser speech is not a replacement for produced narration. A descriptive transcript includes information needed to understand the visuals.
 
@@ -303,81 +303,20 @@ Approved on 10 November 2026. Both lessons use the same silent slide navigation 
 
 ##### Lesson 2: AI in Your Day
 
-**Scene 1. A normal day**
+Maya is an administrator at a community centre preparing an evening photography club. The visual lesson is one narrated film. The exact spoken script, scene descriptions and order live in `animation/day-script.json`, and the measured caption times live in `public/lessons/maya-day/narration.json`.
 
-- Visual: An illustrated adult at home begins a day with a phone, journey, shopping and messages.
-  Narration: You're getting ready for the day. You look for a photo, check your journey, browse for something you need and open your messages.
-- Visual: The day's timeline connects four familiar moments.
-  Narration: Some of these tools use AI behind the scenes. You don't have to open a chatbot to encounter it.
-- Visual: Three questions appear: information in, result out, what would you check?
-  Narration: Let's follow a few everyday moments and see what the tool receives, what it gives back, and where your judgement matters.
+1. **Morning:** Maya's alarm rings at the time she set. This simple automation does not require AI.
+2. **Photo:** She searches her own gallery for dog photos for the club poster. Some photo apps use AI to recognise image patterns. She opens a result to check it is the one she needs.
+3. **Journey:** Traffic builds on her usual road. Some navigation systems use AI to estimate travel times from current conditions and earlier patterns. Maya checks the suggested route.
+4. **Shopping:** At the centre, a shop suggests a camera bag. Some shops use AI to recommend items from browsing patterns. Maya compares dimensions and price and rejects the too-small bag.
+5. **Message:** The expected club booking appears in Spam. Some email services use AI to classify messages. Maya checks the booking details through her own records and uses a known contact if unsure.
+6. **Recap:** The four possible AI uses appear in the context of Maya's day. Each result is paired with a human check, and learners reflect on one tool in their own day.
 
-**Scene 2. Finding a photo**
+**Interactions:** Lesson 1 retains its approved comparison and reflection activities. Lesson 2 uses film playback, seeking, captions, transcript, and the independent guide reflection. Reflection notes are unscored and are not submitted or persisted.
 
-- Visual: A mixed photo library appears. The search box fills with dog.
-  Narration: A friend asks for that photo of your dog. You have hundreds of pictures, so you search for 'dog'.
-- Visual: Likely dog pictures move forward, with one unrelated picture among the fictional results.
-  Narration: A photo app can use AI to recognise patterns in the pictures and bring back likely matches, even when you haven't named the files.
-- Visual: Photos and the search word lead to suggested matches. Machine learning appears.
-  Narration: Learning patterns from examples is called machine learning, one way of building AI.
-- Visual: Check the matches lets you identify the unrelated picture and open the intended photo.
-  Narration: Open the results and check them. The app might miss the photo you wanted or include something that doesn't belong.
+**Independent guides:** Lesson 1 examines a library kiosk through the four approaches, with a comparison diagram and practice questions. Lesson 2 follows Maya preparing a photography club, tracing information, results and human checks, with definitions and a source-verification step.
 
-**Scene 3. Getting to work**
-
-- Visual: At home, the learner sees traffic on a 30-minute route and a 20-minute alternative.
-  Narration: You're checking your journey before leaving for work. Traffic has built up on your usual road, and the map suggests another route.
-- Visual: Traffic now and patterns from earlier journeys feed into the route estimates.
-  Narration: Some navigation systems use AI to combine current traffic information with patterns from earlier journeys.
-- Visual: The estimates connect to the two roads, and the alternative is highlighted.
-  Narration: That helps estimate what the roads may be like when you reach them.
-- Visual: Prediction appears beside the estimated journey times.
-  Narration: This is prediction: estimating something we don't yet know.
-- Visual: Compare routes reveals journey details and reminds the learner to check before leaving.
-  Narration: It helps you plan, but the time is an estimate. Check the route and follow road signs.
-
-**Scene 4. Shopping for something useful**
-
-- Visual: Two viewed backpacks lead to a row of suggested bags.
-  Narration: You're looking for a backpack. After you browse a few, the shop suggests others.
-- Visual: Viewed items and activity patterns connect to suggestions.
-  Narration: Some shopping services use AI to find patterns in what people view or buy. Those patterns help them recommend products you might like.
-- Visual: Recommendation appears. One suggested bag opens for inspection.
-  Narration: That's a recommendation. It isn't a promise that something is right for you.
-- Visual: Check the fit compares a 32 cm laptop with a 28 cm compartment, showing the mismatch.
-  Narration: Check the price, size and features. A suggested bag might look appealing and still be too small for your laptop.
-
-**Scene 5. A message goes to spam**
-
-- Visual: A fictional booking message moves to Spam. Find the missing message opens the folder.
-  Narration: You're waiting for a booking confirmation. It isn't in your inbox, so you check the spam folder. There it is.
-- Visual: Message patterns, sender information and feedback feed into the sorting decision.
-  Narration: Some email services use AI to look for patterns in messages, information about senders and feedback from users.
-- Visual: A message is labelled Possibly unwanted, not definitely dangerous.
-  Narration: They estimate which messages may be unwanted.
-- Visual: Classification appears alongside Inbox and Spam.
-  Narration: Sorting something into a group is called classification.
-- Visual: The learner compares fictional booking details with their own plan. There are no live links or safe badges.
-  Narration: That can save you time, but mistakes happen. Check expected messages carefully. And a message reaching your inbox doesn't automatically make it trustworthy.
-
-**Scene 6. What might AI be doing in your day?**
-
-- Visual: The day's four moments return on a timeline.
-  Narration: The photo app suggested matches. The map estimated a journey time. The shop recommended a product. The email service sorted a message.
-- Visual: Each result is paired with a human check.
-  Narration: Different jobs, with different things for you to check.
-- Visual: A clock set to 7:00 rings, showing a simple automatic action.
-  Narration: Not every automatic feature uses AI. A basic alarm can ring at the time you set without it.
-- Visual: A private practice activity offers prompts for one familiar tool.
-  Narration: Think of one tool you use. What information does it receive? What does it give back? What would you check?
-- Visual: The activity accepts uncertainty and suggests checking product documentation.
-  Narration: If you don't know whether it uses AI, 'I'm not sure yet' is a useful answer.
-
-**Interactions:** Compare puzzle-solving steps, compare membership prices, connect the library follow-up, compare routes, inspect photo matches, check backpack dimensions, find a misplaced message and replay recap examples. Reflection activities are unscored. Text notes are not submitted or persisted.
-
-**Independent guides:** Lesson 1 examines a library kiosk through the four approaches, with a comparison diagram and practice questions. Lesson 2 follows the organisation of a community workshop, tracing information, results and human checks, with definitions and a source-verification step.
-
-**Illustration choices:** Reuse the supplied checkout image and generated library illustration. Add an original generated kitchen-table puzzle illustration to establish the human scenario. Keep prices, routes, comparisons and conversation text as accessible UI alongside artwork. Use simplified fictional photo, shopping and inbox diagrams to show the changing information without copying a product interface. Reuse the generated learner artwork for the beginning of the day.
+**Illustration choices:** Reuse the supplied checkout image and generated library illustration. Add an original generated kitchen-table puzzle illustration to establish the human scenario. Keep prices, routes, comparisons and conversation text as accessible UI alongside artwork. Use original fictional photo, shopping and inbox illustrations to show changing information without copying a product interface. Reuse the same animated Maya model and original generated home and community-centre backgrounds throughout the day.
 
 **Factual sources:** Russell and Norvig's introductory AI chapter; Apple WWDC19 Designing Great ML Experiences; Google DeepMind Traffic prediction with advanced Graph Neural Networks; AWS Amazon Personalize documentation; Google Workspace Understanding Gmail's spam filters. Links and supported claims appear in the lesson source lists. Situations, prices and travel times are illustrative, not reported product outcomes.
 

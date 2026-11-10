@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "render": "node render.mjs",
-    "still": "remotion still src/index.ts MayaJourney --public-dir=../public",
+    "still": "remotion still src/index.ts MayaDay --public-dir=../public",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { DayActivity } from "./DayScenes";
+import { useId, useState } from "react";
 
 export function GuideDiagram({ kind }: { kind: "four-ways" | "day" }) {
   if (kind === "day")
@@ -116,6 +115,46 @@ export function LessonPractice({ kind }: { kind: "four-ways" | "day" }) {
       <p className="mt-3 text-sm text-muted">
         This is unscored practice. More than one approach can be useful if you
         explain the question you are asking.
+      </p>
+    </section>
+  );
+}
+
+export function DayActivity() {
+  const activityId = useId();
+  return (
+    <section
+      className="mt-5 rounded-2xl border border-line bg-white p-4"
+      aria-labelledby={activityId}
+    >
+      <h4 id={activityId} className="text-lg font-bold">
+        Try it with a tool you know
+      </h4>
+      <p className="mt-2 text-sm">
+        Use a fictional example or non-sensitive details. These notes stay on
+        this page and are not saved or submitted.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {[
+          "I use it to…",
+          "It receives…",
+          "It gives me…",
+          "I would check…",
+          "I know it uses AI because… / I’m not sure yet.",
+        ].map((label, index) => (
+          <label key={label} className="text-sm font-semibold">
+            {label}
+            <textarea
+              rows={2}
+              className="mt-1 block w-full rounded-lg border border-navy/30 bg-white p-2 font-normal"
+              name={"reflection-" + index}
+            />
+          </label>
+        ))}
+      </div>
+      <p className="mt-3 text-sm">
+        Look for an explanation in the product’s official documentation. “I’m
+        not sure yet” is a useful starting point.
       </p>
     </section>
   );

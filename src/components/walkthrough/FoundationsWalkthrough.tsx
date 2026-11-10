@@ -5,8 +5,6 @@ import { FoundationRecap } from "@/components/walkthrough/FoundationRecap";
 import { FoundationsScenes } from "@/components/walkthrough/FoundationsScenes";
 import { foundationScenes } from "@/content/foundations-walkthrough";
 
-import { dayScenes } from "@/content/day-walkthrough";
-import { DayScenes } from "./DayScenes";
 
 const secondaryButton =
   "min-h-11 rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-lavender aria-disabled:cursor-default aria-disabled:opacity-45 aria-disabled:hover:bg-white";
@@ -29,13 +27,11 @@ function formatTime(seconds: number) {
 export function FoundationsWalkthrough({
   active,
   title,
-  kind = "four-ways",
 }: {
   active: boolean;
   title: string;
-  kind?: "four-ways" | "day";
 }) {
-  const scenes = kind === "day" ? dayScenes : foundationScenes;
+  const scenes = foundationScenes;
   const slides = scenes.flatMap((scene, sceneIndex) =>
     scene.cues.map((_, cueIndex) => ({ sceneIndex, cueIndex })),
   );
@@ -263,14 +259,7 @@ export function FoundationsWalkthrough({
         className="mt-4 min-w-0"
         onClickCapture={() => audioRef.current?.pause()}
       >
-        {kind === "day" ? (
-          <DayScenes
-            key={scene.id + ":" + cueIndex}
-            scene={scene.id}
-            cue={cueIndex}
-            onSelect={openExample}
-          />
-        ) : scene.id === "recap" ? (
+        {scene.id === "recap" ? (
           <FoundationRecap cue={cueIndex} onSelect={openExample} />
         ) : (
           <FoundationsScenes

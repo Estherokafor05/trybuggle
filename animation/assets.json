@@ -1,15 +1,20 @@
 {
   "hallway": {
-    "path": "public/lessons/maya-journey/hallway.png",
-    "provenance": "Original image generated with the built-in image generation tool, 10 November 2026.",
-    "prompt": "Original professional 2D educational animation background, landscape 16:9. Warm editorial illustration, restrained ivory #F7F5EF, sage, navy #17243C, teal #087F72, lavender #EAE5FA and peach. Modest apartment entry hallway in morning, window and console with plant on left, uncluttered centre stage, teal front door and beige coat on right. Soft sunlight, subtle paper texture. No people, animals, words, logos or UI."
+    "path": "public/lessons/maya-day/hallway.png",
+    "provenance": "Original background generated with the built-in image generation tool, 10 November 2026.",
+    "prompt": "Original 2D educational animation background. Warm modest home hallway with window and plant on the left, clear centre, teal door on the right, ivory, sage, navy, teal, lavender and peach. No people or text."
+  },
+  "communityCentre": {
+    "path": "public/lessons/maya-day/community-centre.png",
+    "provenance": "Original background generated with the built-in image generation tool, 10 November 2026.",
+    "prompt": "Original polished editorial 2D background for an animated story: welcoming community centre prepared for evening photography club, plain table, empty chairs, unlabelled noticeboard, plants, sunset window, camera on shelf; foreground clear for separately animated character. Consistent ivory, sage, navy, teal, lavender and peach. No people, lettering, logos or watermarks."
   },
   "maya": {
     "path": "animation/src/Maya.tsx",
-    "provenance": "Original layered vector character, brown skin, dark curly hair, teal cardigan and navy trousers. Frame-derived poses, blink, gaze, hand/phone movement and walking."
+    "provenance": "Original layered vector character reused across every scene. Brown skin, dark curly hair, teal cardigan and navy trousers; timed phone, gaze and body movements."
   },
   "reference": {
     "url": "https://www.firstmedia.co.uk/animation-illustration/",
-    "use": "Educational storytelling approach only. No artwork or footage copied."
+    "use": "Educational storytelling quality reference only. No artwork or footage copied."
   }
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { JourneyStory } from "@/components/story/JourneyStory";
+import { MayaDayFilm } from "@/components/story/MayaDayFilm";
 import {
   LessonPractice,
   GuideDiagram,
@@ -70,17 +70,17 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
             onClick={() => setFormat("story")}
             className={`${FORMAT_BUTTON} ${format === "story" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
           >
-            Animated story preview
+            Watch the illustrated film
           </button>
         )}
-        <button
+        {lesson.visualFormat === "four-ways" && <button
           type="button"
           aria-pressed={format === "visual"}
           onClick={() => setFormat("visual")}
           className={`${FORMAT_BUTTON} ${format === "visual" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
         >
           Visual walkthrough
-        </button>
+        </button>}
         <button
           type="button"
           aria-pressed={format === "guide"}
@@ -93,22 +93,21 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
 
       {lesson.visualFormat === "day" && (
         <div hidden={format !== "story"}>
-          <JourneyStory active={format === "story"} />
+          <MayaDayFilm active={format === "story"} />
         </div>
       )}
-      <div hidden={format !== "visual"}>
+      {lesson.visualFormat === "four-ways" && <div hidden={format !== "visual"}>
         <FoundationsWalkthrough
           active={format === "visual"}
           title={lesson.visualTitle}
-          kind={lesson.visualFormat}
         />
-      </div>
+      </div>}
 
       {format === "guide" && (
         <section aria-labelledby="guide-title" className="mt-5">
           <div className="rounded-[2rem] border border-line bg-white p-5 shadow-sm sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-deep">
-              Step-by-step learning guide
+              Written learning guide
             </p>
             <h2 id="guide-title" className="mt-2 text-2xl font-bold">
               {lesson.title}

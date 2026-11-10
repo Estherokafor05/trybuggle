@@ -65,7 +65,7 @@ export const previewLessons: PreviewLesson[] = [
     duration: "5 minutes",
     objective:
       "Recognize familiar tasks where AI may be used and identify where a person should check the result.",
-    visualTitle: "AI in your day, one moment at a time",
+    visualTitle: "A day with Maya",
     visualFormat: "day",
     sources: [
       {
@@ -96,23 +96,23 @@ export const previewLessons: PreviewLesson[] = [
     guideSteps: [
       {
         title: "Start with a job you recognise",
-        body: "Imagine you organise a community workshop. You use your phone and laptop to find a photo for a poster, plan your journey, choose supplies and read bookings. You do not need to know a product's technical name to begin. First ask: what am I trying to do?",
+        body: "Maya is an administrator at a community centre. She is preparing for an evening photography club. Her phone rings at the time she set, which a basic alarm can do without AI. Later she finds a photo, plans her journey, browses a camera bag and checks a booking. Start by asking what she is trying to do in each moment.",
       },
       {
         title: "Trace the information and the result",
-        body: "For the poster, you search your photo library for a dog picture. The app receives a search word and works with the pictures in the library. It returns suggested matches. Recognition means identifying patterns, such as features in a picture. Some apps do this using machine learning, which learns patterns from examples. Check that the result shows the picture you intended to use.",
+        body: "For the club poster, Maya searches her photo library for a dog picture. The app receives a search word and works with the pictures in the library. It returns suggested matches. Recognition means identifying patterns, such as features in a picture. Some apps do this using machine learning, which learns patterns from examples. Maya opens a result and checks that it is the picture she wanted for the poster.",
       },
       {
         title: "Separate an estimate from a fact",
-        body: "You plan how early to leave for the workshop. A navigation service may combine traffic now with patterns from earlier journeys to estimate a travel time. This is prediction: estimating something not yet known. It does not guarantee when you will arrive. Review the route and leave room for uncertainty.",
+        body: "Maya plans how early to leave for the centre. A navigation service may combine traffic now with patterns from earlier journeys to estimate a travel time. This is prediction: estimating something not yet known. It does not guarantee when you will arrive. Review the route and leave room for uncertainty.",
       },
       {
         title: "Test a suggestion against your needs",
-        body: "A shop suggests a bag for carrying workshop supplies. Recommendation means suggesting something you might find useful. Some services use patterns in clicks or purchases. Write down your actual needs first: budget, capacity and dimensions. Compare those with the product details before choosing.",
+        body: "A shop suggests a bag for the club camera. Recommendation means suggesting something you might find useful. Some services use patterns in clicks or purchases. She checks the price and dimensions. In the fictional example, the camera is 28 cm long and the suggested bag compartment is only 25 cm. She keeps looking.",
       },
       {
         title: "Check how information was grouped",
-        body: "A booking email goes to Spam. Classification means putting something into a group, such as Inbox or Spam. Some email services use machine learning to estimate which messages are unwanted. Check expected messages against your own booking records. A message in the inbox can still be misleading.",
+        body: "A club booking confirmation goes to Spam. Classification means putting something into a group, such as Inbox or Spam. Some email services use machine learning to estimate which messages are unwanted. Maya checks the expected details against her booking record. A message in the inbox can still be misleading.",
       },
       {
         title: "Find evidence before calling it AI",

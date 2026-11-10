@@ -3,7 +3,6 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { safeReturnPath } from "../src/lib/paths.ts";
 import { foundationScenes } from "../src/content/foundations-walkthrough.ts";
-import { dayScenes } from "../src/content/day-walkthrough.ts";
 import {
   previewLessons,
   getPreviewLesson,
@@ -28,10 +27,9 @@ test("sign-in cannot redirect learners to a different site", () => {
   }
 });
 
-test("every narrated scene has bundled audio and ordered descriptive cues", () => {
+test("the remaining Lesson 1 scenes have bundled audio and ordered descriptive cues", () => {
   assert.equal(new Set(foundationScenes.map((scene) => scene.id)).size, 6);
-  assert.equal(new Set(dayScenes.map((scene) => scene.id)).size, 6);
-  for (const scene of [...foundationScenes, ...dayScenes]) {
+  for (const scene of foundationScenes) {
     assert.ok(
       existsSync(new URL(`../public${scene.audioSrc}`, import.meta.url)),
       scene.audioSrc,
@@ -61,10 +59,7 @@ const approvedScripts = JSON.parse(
   ),
 );
 test("published narration and descriptive transcripts match the approved scripts", () => {
-  for (const [key, scenes] of [
-    ["four-ways", foundationScenes],
-    ["ai-in-your-day", dayScenes],
-  ]) {
+  for (const [key, scenes] of [["four-ways", foundationScenes]]) {
     assert.ok(scenes.reduce((sum, scene) => sum + scene.duration, 0) < 8 * 60);
     for (const scene of scenes) {
       const approved = approvedScripts[key].find(
@@ -81,7 +76,7 @@ test("published narration and descriptive transcripts match the approved scripts
   }
 });
 
-test("both preview lessons provide a scene player, independent guide and evidence links", () => {
+test("both preview lessons provide an independent guide and evidence links", () => {
   for (const lesson of previewLessons) {
     assert.ok(["four-ways", "day"].includes(lesson.visualFormat));
     assert.ok(lesson.sources.length > 0);
