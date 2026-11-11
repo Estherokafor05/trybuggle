@@ -1,89 +1,151 @@
 WEBVTT
 
-1
-00:00:00.500 --> 00:00:06.684
-Meet Maya. She's an administrator at a community centre, and tonight she's preparing an evening photography club.
+00:00:00.000 --> 00:00:01.000
+Meet Maya.
 
-2
-00:00:07.164 --> 00:00:13.275
-Her alarm rings at seven. Maya set that time herself. A basic alarm can do this without AI.
+00:00:01.580 --> 00:00:04.700
+She works as an administrator at a community centre.
 
-3
-00:00:13.755 --> 00:00:18.658
-As she gets ready, a few other tools may use AI to help. Let's see what they show her.
+00:00:05.240 --> 00:00:10.680
+This evening, the centre is hosting a photography club and she has a few things to prepare.
 
-4
-00:00:20.438 --> 00:00:25.581
-First, Maya needs a dog photo for the club poster. Her phone has hundreds of pictures.
+00:00:11.360 --> 00:00:13.320
+At seven, her alarm rings.
 
-5
-00:00:26.061 --> 00:00:31.110
-She types dog into the photo search. Dog pictures appear, though she never named the files.
+00:00:14.020 --> 00:00:15.760
+Maya chose that time herself.
 
-6
-00:00:31.590 --> 00:00:37.240
+00:00:16.180 --> 00:00:18.320
+The phone simply follows her instruction.
+
+00:00:18.920 --> 00:00:21.160
+A basic alarm doesn't need AI.
+
+00:00:21.980 --> 00:00:26.180
+As Maya gets ready, she uses other tools that may use AI.
+
+00:00:26.580 --> 00:00:28.020
+Let's follow her day.
+
+00:00:28.360 --> 00:00:32.320
+Before leaving home, Maya needs a dog photo for the club poster.
+
+00:00:32.960 --> 00:00:37.560
+She has hundreds of pictures on her phone and can't remember what she called the file.
+
+00:00:38.120 --> 00:00:40.700
+She types "dog" into photo search.
+
+00:00:41.520 --> 00:00:45.680
+Pictures of dogs appear, even though she never named those files "dog".
+
+00:00:46.140 --> 00:00:51.940
 Some photo apps use AI to recognise patterns in pictures and suggest likely matches.
 
-7
-00:00:37.720 --> 00:00:42.800
-That's image recognition. Maya still opens a result to check it's the photo she wanted.
+00:00:52.580 --> 00:00:54.380
+This is called image recognition.
 
-8
-00:00:44.580 --> 00:00:49.311
-Later, Maya checks her journey to the centre. Traffic is building on her usual road.
+00:00:55.320 --> 00:00:58.680
+Maya opens a result to make sure it's the photo she wanted.
 
-9
-00:00:49.791 --> 00:00:53.570
-The map estimates thirty minutes that way, or twenty by another route.
+00:00:59.380 --> 00:01:02.380
+Later, Maya opens a map to plan her journey.
 
-10
-00:00:54.050 --> 00:01:01.014
-Some navigation services use AI with traffic now and patterns from earlier journeys to estimate travel time.
+00:01:03.140 --> 00:01:05.260
+Traffic is building on her usual road.
 
-11
-00:01:01.494 --> 00:01:06.755
-That's a prediction, a best guess about what may happen next. Maya checks the route before she goes.
+00:01:05.780 --> 00:01:10.360
+The map estimates thirty minutes that way or twenty minutes by another route.
 
-12
-00:01:08.535 --> 00:01:13.602
-At the centre, Maya looks for a bag for the club camera. She browses a few options online.
+00:01:11.020 --> 00:01:16.900
+Some navigation services use AI to combine current traffic with patterns from earlier journeys.
 
-13
-00:01:14.082 --> 00:01:20.393
-The shop suggests another bag. Some shops use AI to spot patterns in what people view and recommend items.
+00:01:17.460 --> 00:01:20.920
+They use that information to estimate what might happen next.
 
-14
-00:01:20.873 --> 00:01:26.497
-A recommendation is a suggestion, not a decision. Maya checks the size and price herself.
+00:01:21.440 --> 00:01:23.480
+That's a prediction, not a promise.
 
-15
-00:01:26.977 --> 00:01:30.346
-This one looks good, but the camera won't fit. She keeps looking.
+00:01:24.160 --> 00:01:26.380
+Maya checks the route before setting off.
 
-16
-00:01:32.126 --> 00:01:37.430
-A club booking confirmation is missing from Maya's inbox. She checks Spam and finds it there.
+00:01:26.780 --> 00:01:30.940
+At the centre, Maya looks online for a bag to carry the club camera.
 
-17
-00:01:37.910 --> 00:01:43.423
-Some email services use AI to sort messages by looking for patterns and other signals.
+00:01:31.560 --> 00:01:35.440
+After she views a few options, the shop suggests another one.
 
-18
-00:01:43.903 --> 00:01:49.855
-Sorting into groups is called classification. It can make mistakes, so Maya checks the booking details.
+00:01:35.820 --> 00:01:41.320
+Some shops use AI to find patterns in what people view and suggest products they might like.
 
-19
-00:01:50.335 --> 00:01:55.904
-Inbox or Spam doesn't prove a message is safe. If she's unsure, she checks through a known contact.
+00:01:41.680 --> 00:01:42.920
+That's a recommendation.
 
-20
-00:01:57.684 --> 00:02:03.943
-Now the room is ready. Maya found a photo, planned her journey, checked a suggestion and found a missing message.
+00:01:43.600 --> 00:01:46.840
+It may be useful, but Maya still has to decide.
 
-21
-00:02:04.423 --> 00:02:10.390
-AI may have helped recognise, predict, recommend and sort. Each result still needed Maya's judgement.
+00:01:47.480 --> 00:01:49.380
+She checks the price and size.
 
-22
-00:02:10.870 --> 00:02:15.480
-Think of one tool in your day. What does it receive, what does it give you, and what would you check?
+00:01:49.880 --> 00:01:56.160
+The camera is 28 centimetres long, but the bag has only 25 centimetres of space inside.
+
+00:01:56.480 --> 00:01:58.860
+It won't fit, so she keeps looking.
+
+00:01:59.460 --> 00:02:03.700
+Before the club starts, Maya can't find the booking confirmation email.
+
+00:02:04.240 --> 00:02:06.640
+She checks Spam, and there it is.
+
+00:02:07.000 --> 00:02:12.360
+Some email services use AI to look for patterns and other signals when sorting messages.
+
+00:02:13.000 --> 00:02:18.240
+Putting a message into a group, such as Inbox or Spam, is called classification.
+
+00:02:19.020 --> 00:02:20.540
+The sorting can be wrong.
+
+00:02:21.200 --> 00:02:23.600
+Maya compares the email with her booking record.
+
+00:02:24.100 --> 00:02:28.560
+If something still seems off, she checks through a contact she already knows.
+
+00:02:29.140 --> 00:02:32.280
+A message isn't safe just because it reached her Inbox.
+
+00:02:33.000 --> 00:02:35.140
+Now the photography room is ready.
+
+00:02:35.740 --> 00:02:41.740
+Maya found a photo, planned her journey, checked her bag suggestion and found a missing message.
+
+00:02:42.420 --> 00:02:48.900
+Across her day, some tools may have used AI to recognise, predict, recommend and classify.
+
+00:02:49.540 --> 00:02:51.200
+But Maya made the decisions.
+
+00:02:51.760 --> 00:02:55.020
+She checked each result against what she actually needed.
+
+00:02:55.300 --> 00:02:57.280
+Now think of a tool in your day.
+
+00:02:57.580 --> 00:03:02.960
+It could be a music app suggesting a song or a streaming service suggesting a film.
+
+00:03:03.620 --> 00:03:05.560
+What information does it receive?
+
+00:03:06.080 --> 00:03:07.420
+What does it give you?
+
+00:03:07.660 --> 00:03:08.740
+What would you check?
+
+00:03:09.540 --> 00:03:12.835
+Use those questions in the short activity after the film.

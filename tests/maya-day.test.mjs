@@ -14,6 +14,9 @@ test("one Maya story follows the six approved everyday moments", () => {
     assert.ok(scene.start < scene.end);
     assert.ok(scene.description.length > 50);
     assert.ok(story.cues.some(c => c.scene === scene.id));
+    for (const time of Object.values(story.beats[scene.id])) {
+      assert.ok(time >= scene.start && time < scene.end, "visual beats stay inside their scene");
+    }
   }
 });
 test("captions match every spoken line in time order", () => {
@@ -35,7 +38,8 @@ test("desktop and phone films contain audio and visual media", () => {
     const poster = readFileSync(new URL(`poster${suffix}.jpg`, root));
     assert.equal(poster.readUInt16BE(), 0xffd8);
   }
-  assert.ok(readFileSync(new URL("narration.m4a", root)).length > 100000);
+  assert.ok(readFileSync(new URL("narration.mp3", root)).length > 100000);
+  assert.ok(readFileSync(new URL("gallery-contact-sheet.png", root)).length > 100000);
   assert.ok(readFileSync(new URL("hallway.png", root)).length > 100000);
   assert.ok(readFileSync(new URL("community-centre.png", root)).length > 100000);
 });

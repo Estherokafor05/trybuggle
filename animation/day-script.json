@@ -1,68 +1,96 @@
 {
-  "voice": "Kokoro-82M / bf_emma",
+  "voice": "User-supplied ElevenLabs narration, 11 November 2026",
   "scenes": [
     {
       "id": "morning",
-      "title": "Meet Maya",
-      "description": "At home, Maya checks a seven o'clock alarm on her phone. She is preparing for an evening photography club at the community centre.",
+      "title": "Maya's morning",
+      "description": "Maya, an administrator at a community centre, wakes to her seven o'clock alarm and prepares for the evening photography club. The alarm is an example of ordinary automation.",
       "lines": [
-        "Meet Maya. She's an administrator at a community centre, and tonight she's preparing an evening photography club.",
-        "Her alarm rings at seven. Maya set that time herself. A basic alarm can do this without AI.",
-        "As she gets ready, a few other tools may use AI to help. Let's see what they show her."
+        "Meet Maya.",
+        "She works as an administrator at a community centre.",
+        "This evening, the centre is hosting a photography club and she has a few things to prepare.",
+        "At seven, her alarm rings.",
+        "Maya chose that time herself.",
+        "The phone simply follows her instruction.",
+        "A basic alarm doesn't need AI.",
+        "As Maya gets ready, she uses other tools that may use AI.",
+        "Let's follow her day."
       ]
     },
     {
       "id": "photos",
-      "title": "The right photo",
-      "description": "Maya searches her own photo gallery for dog. Dog pictures appear even though the files were not named dog. She opens a result to check that it is the one for the club poster.",
+      "title": "Finding the right photo",
+      "description": "Maya searches her own phone gallery for a dog photo for the club poster. Dog photos appear among unrelated pictures. She opens one to check it is the right photo.",
       "lines": [
-        "First, Maya needs a dog photo for the club poster. Her phone has hundreds of pictures.",
-        "She types dog into the photo search. Dog pictures appear, though she never named the files.",
+        "Before leaving home, Maya needs a dog photo for the club poster.",
+        "She has hundreds of pictures on her phone and can't remember what she called the file.",
+        "She types \"dog\" into photo search.",
+        "Pictures of dogs appear, even though she never named those files \"dog\".",
         "Some photo apps use AI to recognise patterns in pictures and suggest likely matches.",
-        "That's image recognition. Maya still opens a result to check it's the photo she wanted."
+        "This is called image recognition.",
+        "Maya opens a result to make sure it's the photo she wanted."
       ]
     },
     {
       "id": "journey",
       "title": "Getting to the centre",
-      "description": "Maya checks a map before leaving. Cars queue on her usual route, whose estimated time changes to 30 minutes. The alternative shows 20 minutes. She checks the route herself.",
+      "description": "Maya opens a map. Traffic builds on her usual route, changing its estimate to thirty minutes. Another route shows twenty minutes. She checks the route before leaving.",
       "lines": [
-        "Later, Maya checks her journey to the centre. Traffic is building on her usual road.",
-        "The map estimates thirty minutes that way, or twenty by another route.",
-        "Some navigation services use AI with traffic now and patterns from earlier journeys to estimate travel time.",
-        "That's a prediction, a best guess about what may happen next. Maya checks the route before she goes."
+        "Later, Maya opens a map to plan her journey.",
+        "Traffic is building on her usual road.",
+        "The map estimates thirty minutes that way or twenty minutes by another route.",
+        "Some navigation services use AI to combine current traffic with patterns from earlier journeys.",
+        "They use that information to estimate what might happen next.",
+        "That's a prediction, not a promise.",
+        "Maya checks the route before setting off."
       ]
     },
     {
       "id": "shopping",
       "title": "A useful suggestion?",
-      "description": "At the community centre, Maya browses camera bags for next week's club. An online shop suggests another bag. She checks the dimensions and finds that the suggested bag is too small for the club camera.",
+      "description": "At the community centre, Maya browses camera bags online. A shop suggests another bag. She checks its price and dimensions and sees that the camera will not fit.",
       "lines": [
-        "At the centre, Maya looks for a bag for the club camera. She browses a few options online.",
-        "The shop suggests another bag. Some shops use AI to spot patterns in what people view and recommend items.",
-        "A recommendation is a suggestion, not a decision. Maya checks the size and price herself.",
-        "This one looks good, but the camera won't fit. She keeps looking."
+        "At the centre, Maya looks online for a bag to carry the club camera.",
+        "After she views a few options, the shop suggests another one.",
+        "Some shops use AI to find patterns in what people view and suggest products they might like.",
+        "That's a recommendation.",
+        "It may be useful, but Maya still has to decide.",
+        "She checks the price and size.",
+        "The camera is 28 centimetres long, but the bag has only 25 centimetres of space inside.",
+        "It won't fit, so she keeps looking."
       ]
     },
     {
       "id": "messages",
       "title": "A missing message",
-      "description": "Maya expects a club booking confirmation. It is missing from Inbox, then appears in Spam. She compares the booking details with her records and uses a known contact if she needs to verify it.",
+      "description": "Before the club starts, Maya looks for a booking confirmation email. She finds it in Spam, compares it with her booking record and uses a known contact if she is unsure.",
       "lines": [
-        "A club booking confirmation is missing from Maya's inbox. She checks Spam and finds it there.",
-        "Some email services use AI to sort messages by looking for patterns and other signals.",
-        "Sorting into groups is called classification. It can make mistakes, so Maya checks the booking details.",
-        "Inbox or Spam doesn't prove a message is safe. If she's unsure, she checks through a known contact."
+        "Before the club starts, Maya can't find the booking confirmation email.",
+        "She checks Spam, and there it is.",
+        "Some email services use AI to look for patterns and other signals when sorting messages.",
+        "Putting a message into a group, such as Inbox or Spam, is called classification.",
+        "The sorting can be wrong.",
+        "Maya compares the email with her booking record.",
+        "If something still seems off, she checks through a contact she already knows.",
+        "A message isn't safe just because it reached her Inbox."
       ]
     },
     {
       "id": "recap",
       "title": "Ready for the club",
-      "description": "Maya stands in the prepared photography room. The photo, map, bag and message reappear briefly. Each tool's result is paired with Maya's check. The earlier alarm is shown as a simple non-AI contrast.",
+      "description": "Maya stands in the prepared photography room. The photo, map, bag and message return as a visual recap, each paired with Maya's check. Learners are invited to reflect on a familiar tool.",
       "lines": [
-        "Now the room is ready. Maya found a photo, planned her journey, checked a suggestion and found a missing message.",
-        "AI may have helped recognise, predict, recommend and sort. Each result still needed Maya's judgement.",
-        "Think of one tool in your day. What does it receive, what does it give you, and what would you check?"
+        "Now the photography room is ready.",
+        "Maya found a photo, planned her journey, checked her bag suggestion and found a missing message.",
+        "Across her day, some tools may have used AI to recognise, predict, recommend and classify.",
+        "But Maya made the decisions.",
+        "She checked each result against what she actually needed.",
+        "Now think of a tool in your day.",
+        "It could be a music app suggesting a song or a streaming service suggesting a film.",
+        "What information does it receive?",
+        "What does it give you?",
+        "What would you check?",
+        "Use those questions in the short activity after the film."
       ]
     }
   ]

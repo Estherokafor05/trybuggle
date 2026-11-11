@@ -1,204 +1,434 @@
 {
-  "voice": "Kokoro-82M / bf_emma",
-  "duration": 139,
+  "voice": "User-supplied ElevenLabs narration, 11 November 2026",
+  "duration": 193,
   "scenes": [
     {
       "id": "morning",
-      "title": "Meet Maya",
-      "description": "At home, Maya checks a seven o'clock alarm on her phone. She is preparing for an evening photography club at the community centre.",
-      "start": 0.5,
-      "end": 18.658
+      "title": "Maya's morning",
+      "description": "Maya, an administrator at a community centre, wakes to her seven o'clock alarm and prepares for the evening photography club. The alarm is an example of ordinary automation.",
+      "start": 0,
+      "end": 28.36
     },
     {
       "id": "photos",
-      "title": "The right photo",
-      "description": "Maya searches her own photo gallery for dog. Dog pictures appear even though the files were not named dog. She opens a result to check that it is the one for the club poster.",
-      "start": 20.438,
-      "end": 42.8
+      "title": "Finding the right photo",
+      "description": "Maya searches her own phone gallery for a dog photo for the club poster. Dog photos appear among unrelated pictures. She opens one to check it is the right photo.",
+      "start": 28.36,
+      "end": 59.38
     },
     {
       "id": "journey",
       "title": "Getting to the centre",
-      "description": "Maya checks a map before leaving. Cars queue on her usual route, whose estimated time changes to 30 minutes. The alternative shows 20 minutes. She checks the route herself.",
-      "start": 44.58,
-      "end": 66.755
+      "description": "Maya opens a map. Traffic builds on her usual route, changing its estimate to thirty minutes. Another route shows twenty minutes. She checks the route before leaving.",
+      "start": 59.38,
+      "end": 86.78
     },
     {
       "id": "shopping",
       "title": "A useful suggestion?",
-      "description": "At the community centre, Maya browses camera bags for next week's club. An online shop suggests another bag. She checks the dimensions and finds that the suggested bag is too small for the club camera.",
-      "start": 68.535,
-      "end": 90.346
+      "description": "At the community centre, Maya browses camera bags online. A shop suggests another bag. She checks its price and dimensions and sees that the camera will not fit.",
+      "start": 86.78,
+      "end": 119.46
     },
     {
       "id": "messages",
       "title": "A missing message",
-      "description": "Maya expects a club booking confirmation. It is missing from Inbox, then appears in Spam. She compares the booking details with her records and uses a known contact if she needs to verify it.",
-      "start": 92.126,
-      "end": 115.904
+      "description": "Before the club starts, Maya looks for a booking confirmation email. She finds it in Spam, compares it with her booking record and uses a known contact if she is unsure.",
+      "start": 119.46,
+      "end": 153
     },
     {
       "id": "recap",
       "title": "Ready for the club",
-      "description": "Maya stands in the prepared photography room. The photo, map, bag and message reappear briefly. Each tool's result is paired with Maya's check. The earlier alarm is shown as a simple non-AI contrast.",
-      "start": 117.684,
-      "end": 135.48
+      "description": "Maya stands in the prepared photography room. The photo, map, bag and message return as a visual recap, each paired with Maya's check. Learners are invited to reflect on a familiar tool.",
+      "start": 153,
+      "end": 193
     }
   ],
+  "beats": {
+    "morning": {
+      "alarm": 11.36,
+      "otherTools": 21.98
+    },
+    "photos": {
+      "search": 38.12,
+      "results": 41.52,
+      "ai": 46.14,
+      "check": 55.32
+    },
+    "journey": {
+      "traffic": 63.14,
+      "compare": 65.78,
+      "explain": 71.02,
+      "check": 84.16
+    },
+    "shopping": {
+      "suggest": 91.56,
+      "ai": 95.82,
+      "decide": 103.6,
+      "mismatch": 109.88
+    },
+    "messages": {
+      "find": 124.24,
+      "sorting": 127,
+      "checking": 141.2,
+      "verify": 144.1
+    },
+    "recap": {
+      "reveal": 162.42,
+      "reflect": 175.3
+    }
+  },
   "cues": [
     {
-      "start": 0.5,
-      "end": 6.684,
-      "text": "Meet Maya. She's an administrator at a community centre, and tonight she's preparing an evening photography club.",
+      "start": 0,
+      "end": 1,
+      "text": "Meet Maya.",
       "scene": "morning",
       "index": 0
     },
     {
-      "start": 7.164,
-      "end": 13.275,
-      "text": "Her alarm rings at seven. Maya set that time herself. A basic alarm can do this without AI.",
+      "start": 1.58,
+      "end": 4.7,
+      "text": "She works as an administrator at a community centre.",
       "scene": "morning",
       "index": 1
     },
     {
-      "start": 13.755,
-      "end": 18.658,
-      "text": "As she gets ready, a few other tools may use AI to help. Let's see what they show her.",
+      "start": 5.24,
+      "end": 10.68,
+      "text": "This evening, the centre is hosting a photography club and she has a few things to prepare.",
       "scene": "morning",
       "index": 2
     },
     {
-      "start": 20.438,
-      "end": 25.581,
-      "text": "First, Maya needs a dog photo for the club poster. Her phone has hundreds of pictures.",
+      "start": 11.36,
+      "end": 13.32,
+      "text": "At seven, her alarm rings.",
+      "scene": "morning",
+      "index": 3
+    },
+    {
+      "start": 14.02,
+      "end": 15.76,
+      "text": "Maya chose that time herself.",
+      "scene": "morning",
+      "index": 4
+    },
+    {
+      "start": 16.18,
+      "end": 18.32,
+      "text": "The phone simply follows her instruction.",
+      "scene": "morning",
+      "index": 5
+    },
+    {
+      "start": 18.92,
+      "end": 21.16,
+      "text": "A basic alarm doesn't need AI.",
+      "scene": "morning",
+      "index": 6
+    },
+    {
+      "start": 21.98,
+      "end": 26.18,
+      "text": "As Maya gets ready, she uses other tools that may use AI.",
+      "scene": "morning",
+      "index": 7
+    },
+    {
+      "start": 26.58,
+      "end": 28.02,
+      "text": "Let's follow her day.",
+      "scene": "morning",
+      "index": 8
+    },
+    {
+      "start": 28.36,
+      "end": 32.32,
+      "text": "Before leaving home, Maya needs a dog photo for the club poster.",
       "scene": "photos",
       "index": 0
     },
     {
-      "start": 26.061,
-      "end": 31.11,
-      "text": "She types dog into the photo search. Dog pictures appear, though she never named the files.",
+      "start": 32.96,
+      "end": 37.56,
+      "text": "She has hundreds of pictures on her phone and can't remember what she called the file.",
       "scene": "photos",
       "index": 1
     },
     {
-      "start": 31.59,
-      "end": 37.24,
+      "start": 38.12,
+      "end": 40.7,
+      "text": "She types \"dog\" into photo search.",
+      "scene": "photos",
+      "index": 2
+    },
+    {
+      "start": 41.52,
+      "end": 45.68,
+      "text": "Pictures of dogs appear, even though she never named those files \"dog\".",
+      "scene": "photos",
+      "index": 3
+    },
+    {
+      "start": 46.14,
+      "end": 51.94,
       "text": "Some photo apps use AI to recognise patterns in pictures and suggest likely matches.",
       "scene": "photos",
-      "index": 2
+      "index": 4
     },
     {
-      "start": 37.72,
-      "end": 42.8,
-      "text": "That's image recognition. Maya still opens a result to check it's the photo she wanted.",
+      "start": 52.58,
+      "end": 54.38,
+      "text": "This is called image recognition.",
       "scene": "photos",
-      "index": 3
+      "index": 5
     },
     {
-      "start": 44.58,
-      "end": 49.311,
-      "text": "Later, Maya checks her journey to the centre. Traffic is building on her usual road.",
+      "start": 55.32,
+      "end": 58.68,
+      "text": "Maya opens a result to make sure it's the photo she wanted.",
+      "scene": "photos",
+      "index": 6
+    },
+    {
+      "start": 59.38,
+      "end": 62.38,
+      "text": "Later, Maya opens a map to plan her journey.",
       "scene": "journey",
       "index": 0
     },
     {
-      "start": 49.791,
-      "end": 53.57,
-      "text": "The map estimates thirty minutes that way, or twenty by another route.",
+      "start": 63.14,
+      "end": 65.26,
+      "text": "Traffic is building on her usual road.",
       "scene": "journey",
       "index": 1
     },
     {
-      "start": 54.05,
-      "end": 61.014,
-      "text": "Some navigation services use AI with traffic now and patterns from earlier journeys to estimate travel time.",
+      "start": 65.78,
+      "end": 70.36,
+      "text": "The map estimates thirty minutes that way or twenty minutes by another route.",
       "scene": "journey",
       "index": 2
     },
     {
-      "start": 61.494,
-      "end": 66.755,
-      "text": "That's a prediction, a best guess about what may happen next. Maya checks the route before she goes.",
+      "start": 71.02,
+      "end": 76.9,
+      "text": "Some navigation services use AI to combine current traffic with patterns from earlier journeys.",
       "scene": "journey",
       "index": 3
     },
     {
-      "start": 68.535,
-      "end": 73.602,
-      "text": "At the centre, Maya looks for a bag for the club camera. She browses a few options online.",
+      "start": 77.46,
+      "end": 80.92,
+      "text": "They use that information to estimate what might happen next.",
+      "scene": "journey",
+      "index": 4
+    },
+    {
+      "start": 81.44,
+      "end": 83.48,
+      "text": "That's a prediction, not a promise.",
+      "scene": "journey",
+      "index": 5
+    },
+    {
+      "start": 84.16,
+      "end": 86.38,
+      "text": "Maya checks the route before setting off.",
+      "scene": "journey",
+      "index": 6
+    },
+    {
+      "start": 86.78,
+      "end": 90.94,
+      "text": "At the centre, Maya looks online for a bag to carry the club camera.",
       "scene": "shopping",
       "index": 0
     },
     {
-      "start": 74.082,
-      "end": 80.393,
-      "text": "The shop suggests another bag. Some shops use AI to spot patterns in what people view and recommend items.",
+      "start": 91.56,
+      "end": 95.44,
+      "text": "After she views a few options, the shop suggests another one.",
       "scene": "shopping",
       "index": 1
     },
     {
-      "start": 80.873,
-      "end": 86.497,
-      "text": "A recommendation is a suggestion, not a decision. Maya checks the size and price herself.",
+      "start": 95.82,
+      "end": 101.32,
+      "text": "Some shops use AI to find patterns in what people view and suggest products they might like.",
       "scene": "shopping",
       "index": 2
     },
     {
-      "start": 86.977,
-      "end": 90.346,
-      "text": "This one looks good, but the camera won't fit. She keeps looking.",
+      "start": 101.68,
+      "end": 102.92,
+      "text": "That's a recommendation.",
       "scene": "shopping",
       "index": 3
     },
     {
-      "start": 92.126,
-      "end": 97.43,
-      "text": "A club booking confirmation is missing from Maya's inbox. She checks Spam and finds it there.",
+      "start": 103.6,
+      "end": 106.84,
+      "text": "It may be useful, but Maya still has to decide.",
+      "scene": "shopping",
+      "index": 4
+    },
+    {
+      "start": 107.48,
+      "end": 109.38,
+      "text": "She checks the price and size.",
+      "scene": "shopping",
+      "index": 5
+    },
+    {
+      "start": 109.88,
+      "end": 116.16,
+      "text": "The camera is 28 centimetres long, but the bag has only 25 centimetres of space inside.",
+      "scene": "shopping",
+      "index": 6
+    },
+    {
+      "start": 116.48,
+      "end": 118.86,
+      "text": "It won't fit, so she keeps looking.",
+      "scene": "shopping",
+      "index": 7
+    },
+    {
+      "start": 119.46,
+      "end": 123.7,
+      "text": "Before the club starts, Maya can't find the booking confirmation email.",
       "scene": "messages",
       "index": 0
     },
     {
-      "start": 97.91,
-      "end": 103.423,
-      "text": "Some email services use AI to sort messages by looking for patterns and other signals.",
+      "start": 124.24,
+      "end": 126.64,
+      "text": "She checks Spam, and there it is.",
       "scene": "messages",
       "index": 1
     },
     {
-      "start": 103.903,
-      "end": 109.855,
-      "text": "Sorting into groups is called classification. It can make mistakes, so Maya checks the booking details.",
+      "start": 127,
+      "end": 132.36,
+      "text": "Some email services use AI to look for patterns and other signals when sorting messages.",
       "scene": "messages",
       "index": 2
     },
     {
-      "start": 110.335,
-      "end": 115.904,
-      "text": "Inbox or Spam doesn't prove a message is safe. If she's unsure, she checks through a known contact.",
+      "start": 133,
+      "end": 138.24,
+      "text": "Putting a message into a group, such as Inbox or Spam, is called classification.",
       "scene": "messages",
       "index": 3
     },
     {
-      "start": 117.684,
-      "end": 123.943,
-      "text": "Now the room is ready. Maya found a photo, planned her journey, checked a suggestion and found a missing message.",
+      "start": 139.02,
+      "end": 140.54,
+      "text": "The sorting can be wrong.",
+      "scene": "messages",
+      "index": 4
+    },
+    {
+      "start": 141.2,
+      "end": 143.6,
+      "text": "Maya compares the email with her booking record.",
+      "scene": "messages",
+      "index": 5
+    },
+    {
+      "start": 144.1,
+      "end": 148.56,
+      "text": "If something still seems off, she checks through a contact she already knows.",
+      "scene": "messages",
+      "index": 6
+    },
+    {
+      "start": 149.14,
+      "end": 152.28,
+      "text": "A message isn't safe just because it reached her Inbox.",
+      "scene": "messages",
+      "index": 7
+    },
+    {
+      "start": 153,
+      "end": 155.14,
+      "text": "Now the photography room is ready.",
       "scene": "recap",
       "index": 0
     },
     {
-      "start": 124.423,
-      "end": 130.39,
-      "text": "AI may have helped recognise, predict, recommend and sort. Each result still needed Maya's judgement.",
+      "start": 155.74,
+      "end": 161.74,
+      "text": "Maya found a photo, planned her journey, checked her bag suggestion and found a missing message.",
       "scene": "recap",
       "index": 1
     },
     {
-      "start": 130.87,
-      "end": 135.48,
-      "text": "Think of one tool in your day. What does it receive, what does it give you, and what would you check?",
+      "start": 162.42,
+      "end": 168.9,
+      "text": "Across her day, some tools may have used AI to recognise, predict, recommend and classify.",
       "scene": "recap",
       "index": 2
+    },
+    {
+      "start": 169.54,
+      "end": 171.2,
+      "text": "But Maya made the decisions.",
+      "scene": "recap",
+      "index": 3
+    },
+    {
+      "start": 171.76,
+      "end": 175.02,
+      "text": "She checked each result against what she actually needed.",
+      "scene": "recap",
+      "index": 4
+    },
+    {
+      "start": 175.3,
+      "end": 177.28,
+      "text": "Now think of a tool in your day.",
+      "scene": "recap",
+      "index": 5
+    },
+    {
+      "start": 177.58,
+      "end": 182.96,
+      "text": "It could be a music app suggesting a song or a streaming service suggesting a film.",
+      "scene": "recap",
+      "index": 6
+    },
+    {
+      "start": 183.62,
+      "end": 185.56,
+      "text": "What information does it receive?",
+      "scene": "recap",
+      "index": 7
+    },
+    {
+      "start": 186.08,
+      "end": 187.42,
+      "text": "What does it give you?",
+      "scene": "recap",
+      "index": 8
+    },
+    {
+      "start": 187.66,
+      "end": 188.74,
+      "text": "What would you check?",
+      "scene": "recap",
+      "index": 9
+    },
+    {
+      "start": 189.54,
+      "end": 192.835,
+      "text": "Use those questions in the short activity after the film.",
+      "scene": "recap",
+      "index": 10
     }
   ]
 }

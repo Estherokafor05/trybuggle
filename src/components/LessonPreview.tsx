@@ -6,6 +6,7 @@ import { MayaDayFilm } from "@/components/story/MayaDayFilm";
 import {
   LessonPractice,
   GuideDiagram,
+  DayActivity,
 } from "@/components/walkthrough/LessonPractice";
 import { FoundationsWalkthrough } from "@/components/walkthrough/FoundationsWalkthrough";
 import type { PreviewLesson } from "@/content/preview-lessons";
@@ -94,6 +95,7 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
       {lesson.visualFormat === "day" && (
         <div hidden={format !== "story"}>
           <MayaDayFilm active={format === "story"} />
+          <DayActivity />
         </div>
       )}
       {lesson.visualFormat === "four-ways" && <div hidden={format !== "visual"}>
@@ -140,30 +142,20 @@ export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
           </div>
         </section>
       )}
-      <details className="mt-5 rounded-2xl border border-line bg-white p-4 text-sm">
-        <summary className="cursor-pointer py-2 font-semibold">
-          Sources and example notes
-        </summary>
-        <p className="mt-3">
-          The situations, messages and journey times are fictional teaching
-          examples. A feature’s appearance alone does not prove it uses AI.
-        </p>
-        <ul className="mt-3 list-disc space-y-2 pl-5">
-          {lesson.sources.map((source) => (
-            <li key={source.url}>
-              <a
-                className="underline underline-offset-2"
-                href={source.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {source.label}
-              </a>
-              : {source.claim}
-            </li>
-          ))}
-        </ul>
-      </details>
+      {lesson.visualFormat === "four-ways" && (
+        <details className="mt-5 rounded-2xl border border-line bg-white p-4 text-sm">
+          <summary className="cursor-pointer py-2 font-semibold">Sources and example notes</summary>
+          <p className="mt-3">
+            The situations, messages and journey times are fictional teaching examples.
+            A feature’s appearance alone does not prove it uses AI.
+          </p>
+          <ul className="mt-3 list-disc space-y-2 pl-5">
+            {lesson.sources.map(source => <li key={source.url}>
+              <a className="underline underline-offset-2" href={source.url} target="_blank" rel="noreferrer">{source.label}</a>: {source.claim}
+            </li>)}
+          </ul>
+        </details>
+      )}
     </>
   );
 }

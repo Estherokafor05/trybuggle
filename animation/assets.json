@@ -13,6 +13,16 @@
     "path": "animation/src/Maya.tsx",
     "provenance": "Original layered vector character reused across every scene. Brown skin, dark curly hair, teal cardigan and navy trousers; timed phone, gaze and body movements."
   },
+  "gallery": {
+    "path": "public/lessons/maya-day/gallery-contact-sheet.png",
+    "provenance": "Original six-image gallery generated with the built-in image generation tool, 11 November 2026. Displayed as individual thumbnails and a selected photo in the animation.",
+    "prompt": "Six separate candid photographs in an exact three-column two-row contact sheet: golden-brown dog, sky, grey cat, the same dog wearing a teal collar, pink flowers, brown terrier. Consistent warm natural colour grading. No people, text, logos, borders or UI."
+  },
+  "narration": {
+    "path": "public/lessons/maya-day/narration.mp3",
+    "provenance": "User-supplied ElevenLabs recording, 11 November 2026. Original recording copied without modifying the voice or generating speech.",
+    "sha256": "a2cb24cf8aa7190c05c951fe6a1329e8c15ea15d26ce7f445f76675cb35a0fe3"
+  },
   "reference": {
     "url": "https://www.firstmedia.co.uk/animation-illustration/",
     "use": "Educational storytelling quality reference only. No artwork or footage copied."
