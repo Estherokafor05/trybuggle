@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { getBuiltLesson } from "@/content/preview-lessons";
+import { googleAuthConfigured } from "@/lib/auth-configured";
 import { exploreGuides } from "@/content/explore-guides";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -12,6 +15,14 @@ export default async function Reading({
   const { slug, lessonSlug } = await params;
   const guide = exploreGuides[lessonSlug];
   if (slug !== "ai-foundations" || !guide) notFound();
+  if (!getBuiltLesson(lessonSlug)?.preview) {
+    const session = googleAuthConfigured ? await auth() : null;
+    if (!session?.user) {
+      redirect(
+        `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}/reading`)}`,
+      );
+    }
+  }
   return (
     <>
       <SiteHeader />

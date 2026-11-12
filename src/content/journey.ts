@@ -3,7 +3,7 @@
 // Every page that is part of the path reads its position from here so the
 // "where am I / what's next" signposting stays consistent.
 import { getModule } from "./modules";
-import { getPreviewLesson } from "./preview-lessons";
+import { getBuiltLesson } from "./preview-lessons";
 
 export interface JourneyStep {
   id: string;
@@ -12,6 +12,8 @@ export interface JourneyStep {
   title: string;
   href: string;
   available: boolean;
+  /** Open without signing in (Lessons 1 and 2). */
+  free: boolean;
   duration?: string;
 }
 
@@ -24,17 +26,19 @@ export const journey: JourneyStep[] = [
     title: "Welcome to Buggle Learn",
     href: "/welcome",
     available: true,
+    free: true,
     duration: "2 minutes",
   },
   ...foundations.lessons.map((lesson, index) => {
-    const preview = getPreviewLesson(lesson.slug);
+    const built = getBuiltLesson(lesson.slug);
     return {
       id: lesson.slug,
       label: `Lesson ${index + 1}`,
       title: lesson.title,
       href: `/modules/${foundations.slug}/lessons/${lesson.slug}`,
-      available: Boolean(preview),
-      duration: preview?.duration,
+      available: Boolean(built),
+      free: Boolean(built?.preview),
+      duration: built?.duration,
     };
   }),
 ];

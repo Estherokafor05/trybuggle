@@ -1,5 +1,6 @@
 import day from "../../public/lessons/maya-day/narration.json";
 import foundations from "../../public/lessons/what-is-ai/narration.json";
+import history from "../../public/lessons/before-chatgpt/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -30,5 +31,13 @@ export const stories: Record<
     title: "A day with Maya",
     introduction:
       "Maya is preparing an evening photography club. Watch how she uses familiar tools and checks what they tell her.",
+  },
+  "before-chatgpt": {
+    root: "/lessons/before-chatgpt/",
+    mediaVersion: "?v=20261112-1",
+    narration: history,
+    title: "AI did not start with ChatGPT",
+    introduction:
+      "Sarah, a pharmacist, thought AI began with ChatGPT. Travel back to the 1950s with her and follow the story to today.",
   },
 };

@@ -240,4 +240,116 @@ export const assessmentBank: Record<string, Question[]> = {
       "A name or appearance does not establish how a feature works. Product evidence matters, and uncertainty is an honest answer.",
     ),
   ],
+  "before-chatgpt": [
+    q(
+      "origins",
+      "When did researchers start working on the idea of artificial intelligence?",
+      [
+        "In 2022, when ChatGPT was released.",
+        "In the 1950s.",
+        "In 1997, when a computer beat a chess champion.",
+      ],
+      1,
+      "Turing's 1950 paper and the 1956 Dartmouth workshop mark the early days of AI research, decades before chat tools.",
+    ),
+    q(
+      "turing",
+      "What did Alan Turing suggest in 1950?",
+      [
+        "Judging a machine by whether its conversation could be told apart from a person's.",
+        "Building the first chat app for the public.",
+        "Stopping computers from doing calculations.",
+      ],
+      0,
+      "Turing asked whether machines could think and proposed a conversation test to judge a machine by its behaviour.",
+    ),
+    q(
+      "name",
+      "Where did the term artificial intelligence come from?",
+      [
+        "A 1997 chess match.",
+        "A 2022 product launch.",
+        "A 1956 summer workshop at Dartmouth College.",
+      ],
+      2,
+      "The Dartmouth Summer Research Project on Artificial Intelligence in 1956 gave the field its name.",
+    ),
+    q(
+      "expert",
+      "How did an expert system usually work?",
+      [
+        "It learned patterns from millions of photos.",
+        "It followed if-then rules written down from human experts.",
+        "It chatted with people in plain language.",
+      ],
+      1,
+      "Expert systems turned experts' knowledge into rules that the computer followed.",
+    ),
+    q(
+      "fragile",
+      "A rule-based helper meets a problem nobody wrote a rule for. What is most likely to happen?",
+      [
+        "It works out a new rule by itself.",
+        "It gets stuck or gives no useful answer.",
+        "It fixes the problem faster than usual.",
+      ],
+      1,
+      "A rule-based system can only follow the rules people gave it, which is why these systems were called fragile.",
+    ),
+    q(
+      "winter",
+      "What does the term AI winter describe?",
+      [
+        "The year AI research ended for good.",
+        "A season when computers run more slowly.",
+        "A period when interest and funding for AI dropped.",
+      ],
+      2,
+      "When results fell short of big promises, interest and funding dropped for a while. Research still carried on.",
+    ),
+    q(
+      "deep-blue",
+      "How did Deep Blue beat Garry Kasparov in 1997?",
+      [
+        "It learned chess by chatting with players.",
+        "It searched huge numbers of possible moves using rules and scoring written by people.",
+        "It copied Kasparov's earlier games move by move.",
+      ],
+      1,
+      "Deep Blue relied on search guided by human-written rules and scoring, not on learning the way people do.",
+    ),
+    q(
+      "machine-learning",
+      "What makes machine learning different from writing every rule by hand?",
+      [
+        "The computer finds patterns in many examples.",
+        "The computer can never make mistakes.",
+        "A person writes a rule for every possible situation.",
+      ],
+      0,
+      "Machine learning finds patterns in examples. It can still make mistakes, so results need checking.",
+    ),
+    q(
+      "before-2022",
+      "Which of these was already using AI in many places before 2022?",
+      [
+        "A basic kitchen timer.",
+        "Email spam filters.",
+        "An ordinary light switch.",
+      ],
+      1,
+      "Many email services used AI to sort spam long before chat tools appeared. A timer or switch follows fixed instructions.",
+    ),
+    q(
+      "what-changed",
+      "What changed in November 2022?",
+      [
+        "AI was invented.",
+        "Almost anyone could type a question in plain words and get a written reply.",
+        "Computers recognised speech for the first time.",
+      ],
+      1,
+      "ChatGPT and similar tools made AI visible and easy to use. AI itself was decades old.",
+    ),
+  ],
 };

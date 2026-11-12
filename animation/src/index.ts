@@ -4,6 +4,8 @@ import narration from "../../public/lessons/maya-day/narration.json";
 import { MayaDay } from "./MayaDay";
 import { WhatIsAI } from "./WhatIsAI";
 import foundations from "../../public/lessons/what-is-ai/narration.json";
+import { BeforeChatGPT } from "./BeforeChatGPT";
+import history from "../../public/lessons/before-chatgpt/narration.json";
 function Root() {
   return React.createElement(
     React.Fragment,
@@ -14,6 +16,18 @@ function Root() {
         id: mobile ? "WhatIsAIMobile" : "WhatIsAI",
         component: WhatIsAI,
         durationInFrames: foundations.duration * 24,
+        fps: 24,
+        width: mobile ? 960 : 1920,
+        height: mobile ? 1200 : 1080,
+        defaultProps: { mobile },
+      }),
+    ),
+    ...[false, true].map((mobile) =>
+      React.createElement(Composition, {
+        key: mobile ? "BeforeChatGPTMobile" : "BeforeChatGPT",
+        id: mobile ? "BeforeChatGPTMobile" : "BeforeChatGPT",
+        component: BeforeChatGPT,
+        durationInFrames: history.duration * 24,
         fps: 24,
         width: mobile ? 960 : 1920,
         height: mobile ? 1200 : 1080,

@@ -178,4 +178,84 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "before-chatgpt": {
+    slug: "before-chatgpt",
+    title: "The AI Time Machine",
+    reflections: [
+      "In my own words, AI didn't start with ChatGPT because…",
+      "One older AI tool I've used without noticing is…",
+      "What surprised me most was…",
+    ],
+    steps: [
+      {
+        id: "time-1950",
+        title: "1950: Could machines think?",
+        goal: "Play a short version of Turing's conversation game, then answer one question.",
+        reading: [
+          "Sarah is a pharmacist. At a team meeting, her manager mentions that AI has been around for decades. Sarah is surprised, so she takes a trip back in time to find out where it began.",
+          "Her first stop is 1950. Computers fill whole rooms and are mostly used for calculations. The mathematician Alan Turing writes a paper asking whether machines could think. Because “think” is hard to define, he suggests a practical test instead: a person chats by text with two hidden partners, one a person and one a machine. If the person cannot reliably tell which is which, that says something about what the machine can do.",
+          "Turing's question was not about building any particular product. It was about whether machines could show behaviour we usually link with human intelligence, such as using language.",
+        ],
+        takeaway:
+          "In 1950, Turing asked whether machines could show intelligent behaviour, decades before chat tools.",
+      },
+      {
+        id: "time-1956",
+        title: "1956: The field gets a name",
+        goal: "Choose the name researchers gave their new field.",
+        reading: [
+          "In the summer of 1956, a group of researchers met at Dartmouth College in the United States. Their workshop was called the Dartmouth Summer Research Project on Artificial Intelligence.",
+          "The name stuck. It is why we say “artificial intelligence”, or AI, today. That makes the term about seventy years old, much older than most of the tools people now link with it.",
+        ],
+        takeaway: "The term artificial intelligence comes from a 1956 workshop.",
+      },
+      {
+        id: "time-rules",
+        title: "1970s to 1980s: Teaching computers rules",
+        goal: "Use a rule-based printer helper until it reaches a problem it cannot solve.",
+        reading: [
+          "For many years, a popular way to build AI was to write rules. Researchers asked experts, such as doctors or engineers, how they made decisions, then turned the answers into long lists of “if this, then that” instructions. These programs were often called expert systems.",
+          "Imagine a printer helper. It asks whether the printer is switched on and whether there is paper in the tray, and gives the matching advice. For common problems, that works well.",
+          "But rule-based systems were fragile. Every rule had to be written by hand, and when a problem came up that nobody had planned for, the system had no answer. When results fell short of big promises, interest and funding dropped for a while. These quiet periods are often called “AI winters”. Research carried on through them.",
+        ],
+        takeaway:
+          "Rule-based systems worked for narrow jobs but got stuck when no rule fitted.",
+      },
+      {
+        id: "time-1997",
+        title: "1997 onwards: Searching and learning",
+        goal: "Sort four examples: rules and searching, or learning from examples?",
+        reading: [
+          "In 1997, IBM's Deep Blue beat the world chess champion Garry Kasparov. Deep Blue did not learn chess the way a person does. It searched through enormous numbers of possible moves using rules and scoring that people had written.",
+          "Over the following years, another approach grew: machine learning. Instead of writing every rule by hand, people gave computers many examples and let them find patterns. That made computers much better at recognising images, recognising speech and making predictions.",
+          "Both approaches are part of AI's history, and many tools today combine them.",
+        ],
+        takeaway:
+          "Deep Blue searched using rules written by people. Machine learning finds patterns in examples.",
+      },
+      {
+        id: "time-2022",
+        title: "2022: Put the story in order",
+        goal: "Tap the milestones in the order they happened, then answer one question.",
+        reading: [
+          "By the 2010s, AI was already part of everyday life. Spam filters, photo search and route suggestions used it, often without people noticing.",
+          "In November 2022, OpenAI released ChatGPT, and similar tools from other companies soon followed. For the first time, almost anyone could type a question in plain words and get a written reply on almost any topic.",
+          "AI was not new in 2022. What changed was how visible and easy to use it became.",
+        ],
+        takeaway:
+          "In 2022, chat tools made AI easy for anyone to talk to. AI itself was decades old.",
+      },
+      {
+        id: "time-reflect",
+        title: "Back to today",
+        goal: "Help Sarah answer a colleague, then put the story in your own words.",
+        reading: [
+          "Sarah is back at work. She now knows that AI grew from decades of research: questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of machine learning. ChatGPT is one recent chapter in a much longer story.",
+          "Think about a tool you have used for years, such as a spam filter or photo search. It may have been using AI long before chat tools appeared. Any notes you write here are private and stay on this device.",
+        ],
+        takeaway:
+          "AI has been around for decades. It just became much easier to see.",
+      },
+    ],
+  },
 };
