@@ -113,7 +113,7 @@ export default function Home() {
               free Google sign-in.
             </p>
           </div>
-          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {startSteps.map((step, index) => (
               <li key={step.id}>
                 <Link
@@ -145,6 +145,7 @@ export default function Home() {
                 </Link>
               </li>
             ))}
+            {comingSoon > 0 && (
             <li>
               <Link
                 href={foundationsPath}
@@ -170,6 +171,7 @@ export default function Home() {
                 </span>
               </Link>
             </li>
+            )}
           </ol>
         </section>
 

@@ -1,0 +1,102 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "scenes": [
+    {
+      "id": "is-everything-ai",
+      "title": "Is everything AI now?",
+      "description": "Daniel, a receptionist, starts his day at a busy company. A colleague says AI helps with almost everything now. Four tools on his desk light up: a calendar, a check-in tablet, a shared inbox and a badge printer.",
+      "lines": [
+        "Daniel is a receptionist at a busy company.",
+        "Every morning, he welcomes visitors, answers questions, books appointments and makes sure everyone gets to the right place.",
+        "This week, the company introduced some new digital tools.",
+        "A colleague leans over the desk and says, “Daniel, we’ve got AI helping with almost everything now!”",
+        "Daniel looks at his screen and wonders: does that mean everything on here is AI?",
+        "Not quite.",
+        "Let’s look at the tools Daniel uses today, and how each one actually works."
+      ]
+    },
+    {
+      "id": "reminder",
+      "title": "The appointment reminder",
+      "description": "Daniel books a 2 pm appointment with a reminder fifteen minutes before. The clock moves forward and the reminder appears at 1:45. The rule behind it is shown: fifteen minutes before an appointment, show a reminder.",
+      "lines": [
+        "A visitor is coming in at two o’clock.",
+        "Daniel books the appointment and sets a reminder for fifteen minutes before.",
+        "At quarter to two, the reminder pops up, right on time.",
+        "Useful?",
+        "Definitely.",
+        "But the system doesn’t need AI to do that.",
+        "Someone wrote a clear instruction: fifteen minutes before an appointment, show a reminder.",
+        "The software follows that instruction exactly, every time.",
+        "It doesn’t learn, guess or predict.",
+        "That’s ordinary software doing what it was programmed to do."
+      ]
+    },
+    {
+      "id": "check-in",
+      "title": "The visitor check-in",
+      "description": "A visitor types her name and host on a reception tablet. Three steps light up in order: save the details, print a badge, notify the host.",
+      "lines": [
+        "At two o’clock, the visitor arrives.",
+        "Instead of filling in a paper form, she types her name and who she’s meeting on a tablet.",
+        "The system records her arrival, prints a badge and sends a message to her host.",
+        "It all happens automatically, and it looks quite clever.",
+        "But each step is an instruction someone set up in advance: save the details, print the badge, send the message.",
+        "Automatic doesn’t mean AI.",
+        "A system can collect information, store it and follow steps without any artificial intelligence at all."
+      ]
+    },
+    {
+      "id": "smart-inbox",
+      "title": "The smart inbox",
+      "description": "Sorted example messages, with shared words highlighted, train a tool. A new message arrives and the tool suggests a folder based on the patterns it learned.",
+      "lines": [
+        "Next, Daniel opens the shared reception inbox.",
+        "There are messages about parking, deliveries, meeting rooms and visitor access.",
+        "The company has a new tool that suggests where each message should go.",
+        "This one works differently.",
+        "Nobody wrote a rule for every possible message.",
+        "Instead, the tool was trained on hundreds of messages that people had already sorted.",
+        "It learned patterns, such as which words tend to appear in parking questions, and uses them to predict where a new message belongs.",
+        "That’s machine learning, one way of building AI.",
+        "And because it’s a prediction, it won’t always be right."
+      ]
+    },
+    {
+      "id": "wrong-prediction",
+      "title": "When the prediction is wrong",
+      "description": "A message saying the check-in tablet is not working is filed under Visitor Information because of the words visitor and check-in. Daniel reads it and moves it to IT Support.",
+      "lines": [
+        "Then Daniel spots something.",
+        "A message says, “The visitor check-in tablet isn’t working.”",
+        "The tool has put it under Visitor Information.",
+        "Why?",
+        "Probably because the message mentions “visitor” and “check-in”, words that often appear in visitor questions.",
+        "But Daniel reads the whole message.",
+        "Someone is reporting a broken device, so he moves it to IT Support.",
+        "The tool matched patterns in the words.",
+        "Daniel understood what the person actually needed.",
+        "That’s why predictions like this still need a human check."
+      ]
+    },
+    {
+      "id": "difference",
+      "title": "So what's the difference?",
+      "description": "Two columns compare tools that follow instructions with a tool that learns patterns. A card for rule-based expert systems from Lesson 3 joins the AI side. A closing question asks what a system does and how it works.",
+      "lines": [
+        "So, what did Daniel’s day show us?",
+        "The reminder and the check-in system follow instructions that people wrote.",
+        "They’re useful, automatic and reliable, and they don’t need AI.",
+        "The smart inbox learned patterns from examples and makes predictions.",
+        "That’s one way AI can work.",
+        "But here’s a twist.",
+        "Remember the expert systems from Lesson 3?",
+        "Some AI uses rules too, written down from experts’ knowledge to make judgments.",
+        "So the real question is what a system does and how it decides.",
+        "Next time someone says a tool uses AI, don’t just go by the label.",
+        "Ask: what does it actually do, and how does it work?",
+        "Something can be automatic, helpful and impressive without being AI."
+      ]
+    }
+  ]
+}

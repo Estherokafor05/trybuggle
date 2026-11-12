@@ -4,12 +4,16 @@ import type { ExploreGuide } from "@/content/explore-guides";
 import type { Checkpoint } from "@/lib/learning-state";
 import { Activity, activityButton } from "./Activities";
 import { HistoryActivity } from "./HistoryActivities";
+import { OfficeActivity } from "./OfficeActivities";
+import { HiringActivity } from "./HiringActivities";
 
 const primaryButton =
   "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-3 font-semibold text-white hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
 
 const activityFor: Record<string, typeof Activity> = {
   "before-chatgpt": HistoryActivity,
+  "ai-or-software": OfficeActivity,
+  "what-ai-can-do": HiringActivity,
 };
 function StepActivity(props: Parameters<typeof Activity>[0]) {
   const Component = activityFor[props.slug] ?? Activity;

@@ -1,0 +1,436 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "duration": 237,
+  "audioDuration": 235.0,
+  "scenes": [
+    {
+      "id": "is-everything-ai",
+      "title": "Is everything AI now?",
+      "description": "Daniel, a receptionist, starts his day at a busy company. A colleague says AI helps with almost everything now. Four tools on his desk light up: a calendar, a check-in tablet, a shared inbox and a badge printer.",
+      "start": 0,
+      "end": 35.61
+    },
+    {
+      "id": "reminder",
+      "title": "The appointment reminder",
+      "description": "Daniel books a 2 pm appointment with a reminder fifteen minutes before. The clock moves forward and the reminder appears at 1:45. The rule behind it is shown: fifteen minutes before an appointment, show a reminder.",
+      "start": 35.61,
+      "end": 70.76
+    },
+    {
+      "id": "check-in",
+      "title": "The visitor check-in",
+      "description": "A visitor types her name and host on a reception tablet. Three steps light up in order: save the details, print a badge, notify the host.",
+      "start": 70.76,
+      "end": 106.4
+    },
+    {
+      "id": "smart-inbox",
+      "title": "The smart inbox",
+      "description": "Sorted example messages, with shared words highlighted, train a tool. A new message arrives and the tool suggests a folder based on the patterns it learned.",
+      "start": 106.4,
+      "end": 147.55
+    },
+    {
+      "id": "wrong-prediction",
+      "title": "When the prediction is wrong",
+      "description": "A message saying the check-in tablet is not working is filed under Visitor Information because of the words visitor and check-in. Daniel reads it and moves it to IT Support.",
+      "start": 147.55,
+      "end": 183.82
+    },
+    {
+      "id": "difference",
+      "title": "So what's the difference?",
+      "description": "Two columns compare tools that follow instructions with a tool that learns patterns. A card for rule-based expert systems from Lesson 3 joins the AI side. A closing question asks what a system does and how it works.",
+      "start": 183.82,
+      "end": 237
+    }
+  ],
+  "cues": [
+    {
+      "scene": "is-everything-ai",
+      "text": "Daniel is a receptionist at a busy company.",
+      "start": 0.14,
+      "end": 2.9,
+      "index": 0
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "Every morning, he welcomes visitors, answers questions, books appointments and makes sure everyone gets to the right place.",
+      "start": 3.58,
+      "end": 11.3,
+      "index": 1
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "This week, the company introduced some new digital tools.",
+      "start": 12.04,
+      "end": 15.62,
+      "index": 2
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "A colleague leans over the desk and says, “Daniel, we’ve got AI helping with almost everything now!”",
+      "start": 16.22,
+      "end": 22.72,
+      "index": 3
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "Daniel looks at his screen and wonders: does that mean everything on here is AI?",
+      "start": 23.6,
+      "end": 28.64,
+      "index": 4
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "Not quite.",
+      "start": 29.58,
+      "end": 30.18,
+      "index": 5
+    },
+    {
+      "scene": "is-everything-ai",
+      "text": "Let’s look at the tools Daniel uses today, and how each one actually works.",
+      "start": 30.8,
+      "end": 35.28,
+      "index": 6
+    },
+    {
+      "scene": "reminder",
+      "text": "A visitor is coming in at two o’clock.",
+      "start": 35.94,
+      "end": 38.2,
+      "index": 7
+    },
+    {
+      "scene": "reminder",
+      "text": "Daniel books the appointment and sets a reminder for fifteen minutes before.",
+      "start": 38.88,
+      "end": 43.06,
+      "index": 8
+    },
+    {
+      "scene": "reminder",
+      "text": "At quarter to two, the reminder pops up, right on time.",
+      "start": 43.78,
+      "end": 47.46,
+      "index": 9
+    },
+    {
+      "scene": "reminder",
+      "text": "Useful?",
+      "start": 48.14,
+      "end": 48.54,
+      "index": 10
+    },
+    {
+      "scene": "reminder",
+      "text": "Definitely.",
+      "start": 49.16,
+      "end": 49.76,
+      "index": 11
+    },
+    {
+      "scene": "reminder",
+      "text": "But the system doesn’t need AI to do that.",
+      "start": 50.28,
+      "end": 52.76,
+      "index": 12
+    },
+    {
+      "scene": "reminder",
+      "text": "Someone wrote a clear instruction: fifteen minutes before an appointment, show a reminder.",
+      "start": 53.34,
+      "end": 59.16,
+      "index": 13
+    },
+    {
+      "scene": "reminder",
+      "text": "The software follows that instruction exactly, every time.",
+      "start": 59.84,
+      "end": 63.76,
+      "index": 14
+    },
+    {
+      "scene": "reminder",
+      "text": "It doesn’t learn, guess or predict.",
+      "start": 64.34,
+      "end": 66.64,
+      "index": 15
+    },
+    {
+      "scene": "reminder",
+      "text": "That’s ordinary software doing what it was programmed to do.",
+      "start": 67.16,
+      "end": 70.46,
+      "index": 16
+    },
+    {
+      "scene": "check-in",
+      "text": "At two o’clock, the visitor arrives.",
+      "start": 71.06,
+      "end": 73.22,
+      "index": 17
+    },
+    {
+      "scene": "check-in",
+      "text": "Instead of filling in a paper form, she types her name and who she’s meeting on a tablet.",
+      "start": 73.78,
+      "end": 78.76,
+      "index": 18
+    },
+    {
+      "scene": "check-in",
+      "text": "The system records her arrival, prints a badge and sends a message to her host.",
+      "start": 79.38,
+      "end": 84.26,
+      "index": 19
+    },
+    {
+      "scene": "check-in",
+      "text": "It all happens automatically, and it looks quite clever.",
+      "start": 84.82,
+      "end": 88.1,
+      "index": 20
+    },
+    {
+      "scene": "check-in",
+      "text": "But each step is an instruction someone set up in advance: save the details, print the badge, send the message.",
+      "start": 88.74,
+      "end": 96.24,
+      "index": 21
+    },
+    {
+      "scene": "check-in",
+      "text": "Automatic doesn’t mean AI.",
+      "start": 96.9,
+      "end": 98.86,
+      "index": 22
+    },
+    {
+      "scene": "check-in",
+      "text": "A system can collect information, store it and follow steps without any artificial intelligence at all.",
+      "start": 99.44,
+      "end": 106.12,
+      "index": 23
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "Next, Daniel opens the shared reception inbox.",
+      "start": 106.68,
+      "end": 109.92,
+      "index": 24
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "There are messages about parking, deliveries, meeting rooms and visitor access.",
+      "start": 110.5,
+      "end": 115.44,
+      "index": 25
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "The company has a new tool that suggests where each message should go.",
+      "start": 116.1,
+      "end": 119.96,
+      "index": 26
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "This one works differently.",
+      "start": 120.6,
+      "end": 121.94,
+      "index": 27
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "Nobody wrote a rule for every possible message.",
+      "start": 122.62,
+      "end": 125.4,
+      "index": 28
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "Instead, the tool was trained on hundreds of messages that people had already sorted.",
+      "start": 125.92,
+      "end": 131.06,
+      "index": 29
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "It learned patterns, such as which words tend to appear in parking questions, and uses them to predict where a new message belongs.",
+      "start": 131.68,
+      "end": 139.64,
+      "index": 30
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "That’s machine learning, one way of building AI.",
+      "start": 140.24,
+      "end": 143.58,
+      "index": 31
+    },
+    {
+      "scene": "smart-inbox",
+      "text": "And because it’s a prediction, it won’t always be right.",
+      "start": 144.14,
+      "end": 147.3,
+      "index": 32
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "Then Daniel spots something.",
+      "start": 147.8,
+      "end": 149.52,
+      "index": 33
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "A message says, “The visitor check-in tablet isn’t working.”",
+      "start": 150.08,
+      "end": 153.86,
+      "index": 34
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "The tool has put it under Visitor Information.",
+      "start": 154.52,
+      "end": 157.16,
+      "index": 35
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "Why?",
+      "start": 157.68,
+      "end": 158,
+      "index": 36
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "Probably because the message mentions “visitor” and “check-in”, words that often appear in visitor questions.",
+      "start": 158.68,
+      "end": 165.28,
+      "index": 37
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "But Daniel reads the whole message.",
+      "start": 165.86,
+      "end": 167.86,
+      "index": 38
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "Someone is reporting a broken device, so he moves it to IT Support.",
+      "start": 168.52,
+      "end": 173.08,
+      "index": 39
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "The tool matched patterns in the words.",
+      "start": 173.64,
+      "end": 175.8,
+      "index": 40
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "Daniel understood what the person actually needed.",
+      "start": 176.16,
+      "end": 179.24,
+      "index": 41
+    },
+    {
+      "scene": "wrong-prediction",
+      "text": "That’s why predictions like this still need a human check.",
+      "start": 179.92,
+      "end": 183.42,
+      "index": 42
+    },
+    {
+      "scene": "difference",
+      "text": "So, what did Daniel’s day show us?",
+      "start": 184.22,
+      "end": 186.72,
+      "index": 43
+    },
+    {
+      "scene": "difference",
+      "text": "The reminder and the check-in system follow instructions that people wrote.",
+      "start": 187.32,
+      "end": 191.62,
+      "index": 44
+    },
+    {
+      "scene": "difference",
+      "text": "They’re useful, automatic and reliable, and they don’t need AI.",
+      "start": 192.2,
+      "end": 196.84,
+      "index": 45
+    },
+    {
+      "scene": "difference",
+      "text": "The smart inbox learned patterns from examples and makes predictions.",
+      "start": 197.42,
+      "end": 201.54,
+      "index": 46
+    },
+    {
+      "scene": "difference",
+      "text": "That’s one way AI can work.",
+      "start": 202.12,
+      "end": 204.02,
+      "index": 47
+    },
+    {
+      "scene": "difference",
+      "text": "But here’s a twist.",
+      "start": 204.52,
+      "end": 205.54,
+      "index": 48
+    },
+    {
+      "scene": "difference",
+      "text": "Remember the expert systems from Lesson 3?",
+      "start": 206.04,
+      "end": 208.46,
+      "index": 49
+    },
+    {
+      "scene": "difference",
+      "text": "Some AI uses rules too, written down from experts’ knowledge to make judgments.",
+      "start": 209.18,
+      "end": 214.74,
+      "index": 50
+    },
+    {
+      "scene": "difference",
+      "text": "So the real question is what a system does and how it decides.",
+      "start": 215.32,
+      "end": 219.86,
+      "index": 51
+    },
+    {
+      "scene": "difference",
+      "text": "Next time someone says a tool uses AI, don’t just go by the label.",
+      "start": 220.44,
+      "end": 225.18,
+      "index": 52
+    },
+    {
+      "scene": "difference",
+      "text": "Ask: what does it actually do, and how does it work?",
+      "start": 225.76,
+      "end": 229.34,
+      "index": 53
+    },
+    {
+      "scene": "difference",
+      "text": "Something can be automatic, helpful and impressive without being AI.",
+      "start": 229.9,
+      "end": 234.72,
+      "index": 54
+    }
+  ]
+}

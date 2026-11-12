@@ -580,3 +580,105 @@ test("Lesson 3 needs sign-in, then both routes, every activity and the check wor
   await expect(readingPage.getByRole("heading", { level: 2 })).toHaveCount(7);
   await reader.close();
 });
+
+test("Lessons 4 and 5: every activity, the previous-check notice and accessibility", async ({
+  browser,
+}) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    await signIn(context);
+    const page = await context.newPage();
+
+    // Lesson 4: Step into Daniel's reception
+    await page.goto(lesson("ai-or-software"));
+    await expect(page.getByRole("heading", { name: "AI or Ordinary Software?", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /haven't passed Lesson 3's knowledge check/ })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /ai-or-software\/story/);
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    for (const tool of ["Calendar", "Check-in tablet", "Shared inbox", "Badge printer"])
+      await page.getByRole("button", { name: new RegExp(tool) }).click();
+    for (const tool of ["calendar", "tablet", "inbox", "badge"])
+      await page.locator(`input[name="guess-${tool}"]`).first().check();
+    await expect(page.getByText("Guesses saved")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel("2:00 pm").check();
+    await page.getByLabel("15 min before").check();
+    await page.getByRole("button", { name: /Fast-forward/ }).click();
+    await page.getByLabel("4:30 pm").check();
+    await page.getByRole("button", { name: /Fast-forward/ }).click();
+    await expect(page.getByText("Under the hood")).toBeVisible();
+    await page.getByLabel(/It followed an instruction/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel("Who are you meeting?").fill("Tom Reed");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await page.getByLabel("Who are you meeting?").fill("Tom Red");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByText(/Host not found/)).toBeVisible();
+    await page.getByLabel(/It follows set steps/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    const sortTo = ["Parking", "Deliveries", "IT Support", "Parking", "Deliveries", "IT Support"];
+    for (const [i, folder] of sortTo.entries())
+      await page.locator(`input[name="train-m${i + 1}"]`).nth(["Parking", "Deliveries", "IT Support"].indexOf(folder)).check();
+    await page.getByRole("button", { name: /Send a new message/ }).click();
+    await page.getByRole("button", { name: /Send a new message/ }).click();
+    await expect(page.getByText("That's machine learning")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    const fix = { q1: 1, q2: 2, q3: 3, q4: 0 };
+    for (const [id, index] of Object.entries(fix))
+      await page.locator(`input[name="queue-${id}"]`).nth(index).check();
+    await expect(page.getByText("You caught it!")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    const kinds = { calendar: 0, tablet: 0, inbox: 1, sheet: 0, chatbot: 2 };
+    for (const [id, index] of Object.entries(kinds))
+      await page.locator(`input[name="sort-${id}"]`).nth(index).check();
+    await expect(page.getByText("Your first guesses", { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // Lesson 5: Help Amina hire fairly
+    await page.goto(lesson("what-ai-can-do"));
+    await expect(page.getByRole("heading", { name: "What AI Can Do, and Where You Stay in Charge", level: 1 })).toBeVisible();
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    await page.getByRole("button", { name: /list of applicants' names/ }).click();
+    await page.getByRole("button", { name: "Send to the assistant" }).click();
+    await expect(page.getByText("Take something out first")).toBeVisible();
+    await page.getByRole("button", { name: /list of applicants' names/ }).click();
+    for (const item of [/public job description/, /The role title/, /The tone/])
+      await page.getByRole("button", { name: item }).click();
+    await page.getByRole("button", { name: "Send to the assistant" }).click();
+    await expect(page.getByText("AI draft")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    for (const [id, index] of Object.entries({ c1: 0, c2: 0, c3: 1, c4: 0 }))
+      await page.locator(`input[name="claim-${id}"]`).nth(index).check();
+    await page.getByRole("button", { name: "Fix the summary" }).click();
+    await expect(page.getByText("Summary corrected")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    for (const [id, index] of Object.entries({ q1: 0, q2: 0, q3: 1, q4: 0, q5: 1, q6: 0 }))
+      await page.locator(`input[name="question-${id}"]`).nth(index).check();
+    await expect(page.getByText("A fairer list")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/approved HR system/).check();
+    await expect(page.getByText("Before sharing personal information")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Have the panel assess/).check();
+    await page.getByRole("button", { name: "See how the ranking was made" }).click();
+    await expect(page.getByText("Behind the ranking")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    for (const [id, index] of Object.entries({ s1: 0, s2: 1, s3: 1, s4: 2, s5: 2 }))
+      await page.locator(`input[name="level-${id}"]`).nth(index).check();
+    await expect(page.getByText("What you've learned")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("link", { name: "Take the knowledge check →" }).click();
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    for (const q of assessmentBank["what-ai-can-do"])
+      await expect(page.locator(`input[name="${q.id}"]`)).toHaveCount(q.options.length);
+    await context.close();
+  }
+});

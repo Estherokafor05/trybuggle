@@ -1794,6 +1794,10 @@ const exampleAnswers: Record<string, string> = {
     "AI is a name for computer systems that can recognise patterns, make predictions or create things like text. A writing tool could help me start an email. Before sending it, I would check the dates and names against my own notes.",
   "ai-in-your-day":
     "My music app suggests songs. It uses what I've listened to before. It gives me a playlist. Before playing it at a club event, I would listen to check the songs suit the audience.",
+  "ai-or-software":
+    "My phone's alarm follows set instructions. My music app's suggestions might learn from what I play. Before I call something AI, I would ask what it actually does and how it decides.",
+  "what-ai-can-do":
+    "AI could help me draft emails. I would always check names, dates and prices. A decision about someone's job or health is one I would keep for a person.",
   "before-chatgpt":
     "AI didn't start with ChatGPT because people have been building and studying it since the 1950s. My email's spam filter is an older AI tool I've used without noticing. What surprised me most was that the name artificial intelligence is about seventy years old.",
 };
