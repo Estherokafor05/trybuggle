@@ -116,7 +116,7 @@ export function StoryPlayer({
           >
             <p className="text-xl font-bold">Nice work! What next?</p>
             <p className="mt-2 max-w-[60ch] leading-relaxed text-ink">
-              Take the knowledge check to see what stuck.
+              Next is Step 2: take the knowledge check to see what stuck.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <a

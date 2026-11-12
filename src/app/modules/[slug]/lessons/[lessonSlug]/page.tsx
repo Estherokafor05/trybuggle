@@ -3,10 +3,12 @@ import { createHash } from "node:crypto";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { JourneyProgress } from "@/components/JourneyProgress";
 import { LessonPreview } from "@/components/LessonPreview";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getModule } from "@/content/modules";
+import { journeyPosition } from "@/content/journey";
 import { getPreviewLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 
@@ -81,33 +83,44 @@ export default async function LessonPage({
     );
   }
 
-  const previous = mod.lessons[lessonIndex - 1];
-  const next = mod.lessons[lessonIndex + 1];
-  const isLastPreview = lessonIndex === 1;
-  const nextPath = next
-    ? `/modules/${slug}/lessons/${next.slug}`
-    : `/modules/${slug}`;
+  const position = journeyPosition(lessonSlug);
+  const previous = position.previous;
+  const next = position.next;
   const nextStep = next
     ? {
-        href: nextPath,
-        label: `Lesson ${lessonIndex + 2}`,
+        href: next.href,
+        label: next.label,
         title: next.title,
-        available: Boolean(getPreviewLesson(next.slug)),
+        available: next.available,
       }
     : undefined;
+  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}`)}`;
 
   return (
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[960px] px-4 py-8 sm:px-6 sm:py-12">
-        <Link
-          href={`/modules/${slug}`}
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
-        >
-          <span aria-hidden="true">←</span> Module 1 overview
-        </Link>
+        <nav aria-label="Breadcrumb">
+          <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
+            <li>
+              <Link className="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href="/curriculum">
+                Learning path
+              </Link>
+            </li>
+            <li aria-hidden="true">›</li>
+            <li>
+              <Link className="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href={`/modules/${slug}`}>
+                Module 1
+              </Link>
+            </li>
+            <li aria-hidden="true">›</li>
+            <li aria-current="page" className="font-semibold text-navy">
+              Lesson {lessonIndex + 1}
+            </li>
+          </ol>
+        </nav>
 
-        <header className="mt-5 flex items-center justify-between gap-6 rounded-[2rem] bg-hero-lavender p-6 sm:p-8">
+        <header className="mt-3 flex items-center justify-between gap-6 rounded-[2rem] bg-hero-lavender p-6 sm:p-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
               Foundations of Artificial Intelligence
@@ -138,14 +151,44 @@ export default async function LessonPage({
           </div>
         </header>
 
+        <div className="mt-5">
+          <JourneyProgress current={lessonSlug} />
+        </div>
+
+        <ol
+          aria-label="How this lesson works"
+          className="mt-5 grid gap-2 text-sm sm:grid-cols-3"
+        >
+          {[
+            ["1", "Learn it", "Watch the film or read the guide"],
+            ["2", "Check it", "10 questions · pass with 7"],
+            ["3", "Move on", next ? `Then ${next.label}` : "Finish Module 1"],
+          ].map(([n, title, body]) => (
+            <li
+              key={n}
+              className="flex items-center gap-3 rounded-2xl bg-white/70 px-4 py-3"
+            >
+              <span
+                aria-hidden="true"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-lavender font-display font-bold text-navy"
+              >
+                {n}
+              </span>
+              <span>
+                <span className="block font-semibold text-ink">
+                  Step {n}: {title}
+                </span>
+                <span className="block text-muted">{body}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+
         {session?.user && !session.user.id && (
           <p className="mt-5 rounded-2xl bg-mint p-5 leading-relaxed">
             Saved learning is now available. Sign in with Google again to
             connect your account and keep your place across devices.{" "}
-            <Link
-              className="font-semibold underline"
-              href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}`)}`}
-            >
+            <Link className="font-semibold underline" href={signInHref}>
               Connect saved learning
             </Link>
           </p>
@@ -165,75 +208,91 @@ export default async function LessonPage({
           }
         />
 
+        <section
+          aria-labelledby="up-next-title"
+          className={`mt-7 rounded-[2rem] p-6 sm:p-8 ${next?.available ? "bg-hero-lavender" : session?.user ? "bg-mint" : "bg-blush"}`}
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
+            Step 3 · Move on
+          </p>
+          {next?.available ? (
+            <>
+              <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
+                Up next: {next.label}, {next.title}
+              </h2>
+              <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
+                When you&apos;re ready, carry on to the next lesson. You can
+                come back to this one at any time.
+              </p>
+              <Link
+                href={next.href}
+                className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Start {next.label} <span aria-hidden="true">→</span>
+              </Link>
+            </>
+          ) : session?.user ? (
+            <>
+              <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
+                {next
+                  ? `${next.label}, ${next.title}, is being prepared`
+                  : "You have reached the end of Module 1"}
+              </h2>
+              <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
+                Your account is ready. You can revisit these lessons or
+                return to the Module 1 overview.
+              </p>
+              <Link
+                href={`/modules/${slug}`}
+                className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Return to Module 1
+              </Link>
+            </>
+          ) : (
+            <>
+              <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
+                Continue with a free account
+              </h2>
+              <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
+                Sign in with Google to save your progress and continue through
+                the learning path.
+                {next && ` ${next.label}, ${next.title}, is still being prepared.`}
+              </p>
+              <Link
+                href={signInHref}
+                className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Continue with Google
+              </Link>
+            </>
+          )}
+        </section>
+
         <nav
           aria-label="Lesson navigation"
           className="mt-6 flex flex-wrap items-center justify-between gap-4"
         >
           {previous ? (
             <Link
-              href={`/modules/${slug}/lessons/${previous.slug}`}
+              href={previous.href}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
             >
-              <span aria-hidden="true">←</span> Previous lesson
+              <span aria-hidden="true">←</span>{" "}
+              {previous.id === "welcome"
+                ? "Back to the welcome"
+                : `Previous: ${previous.label}`}
             </Link>
           ) : (
             <span />
           )}
-          {next && !isLastPreview && (
-            <Link
-              href={nextPath}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
-            >
-              Next: {next.title} <span aria-hidden="true">→</span>
-            </Link>
-          )}
-        </nav>
-
-        {isLastPreview && (
-          <section
-            className={`mt-6 rounded-[2rem] p-6 sm:p-8 ${session?.user ? "bg-mint" : "bg-blush"}`}
+          <Link
+            href={`/modules/${slug}`}
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4"
           >
-            {session?.user ? (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
-                  You are signed in
-                </p>
-                <h2 className="mt-2 text-2xl font-bold">
-                  Your next lesson is being prepared
-                </h2>
-                <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
-                  Your account is ready. You can revisit these previews or
-                  return to the Module 1 overview.
-                </p>
-                <Link
-                  href={`/modules/${slug}`}
-                  className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
-                >
-                  Return to Module 1
-                </Link>
-              </>
-            ) : (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
-                  Want to keep going?
-                </p>
-                <h2 className="mt-2 text-2xl font-bold">
-                  Continue with a free account
-                </h2>
-                <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
-                  Sign in with Google to continue to the learning path. The next
-                  lesson is still being prepared.
-                </p>
-                <Link
-                  href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}`)}`}
-                  className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
-                >
-                  Continue with Google
-                </Link>
-              </>
-            )}
-          </section>
-        )}
+            All Module 1 lessons
+          </Link>
+        </nav>
       </main>
       <SiteFooter />
     </>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { JourneyProgress } from "@/components/JourneyProgress";
 import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
 import { TRACK_LABELS, getModule, modules } from "@/content/modules";
 import { auth } from "@/auth";
@@ -50,7 +51,7 @@ export default async function ModulePage({
           href="/curriculum"
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
         >
-          <span aria-hidden="true">←</span> Curriculum
+          <span aria-hidden="true">←</span> All modules
         </Link>
 
         <header
@@ -69,6 +70,22 @@ export default async function ModulePage({
             <p className="mt-4 max-w-[58ch] text-base leading-relaxed text-ink sm:text-lg">
               {mod.summary}
             </p>
+            {isFoundations && (
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <Link
+                  href="/welcome"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                >
+                  Start with the welcome <span aria-hidden="true">→</span>
+                </Link>
+                <Link
+                  href={`/modules/${slug}/lessons/${mod.lessons[0].slug}`}
+                  className="inline-flex min-h-11 items-center text-sm font-semibold text-ink underline decoration-ink/35 underline-offset-4 hover:decoration-ink"
+                >
+                  Go straight to Lesson 1
+                </Link>
+              </div>
+            )}
           </div>
           {isFoundations && (
             <div className="mx-auto w-full max-w-[16rem] md:max-w-none">
@@ -77,10 +94,16 @@ export default async function ModulePage({
           )}
         </header>
 
+        {isFoundations && (
+          <div className="mt-5">
+            <JourneyProgress />
+          </div>
+        )}
+
         <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.42fr)]">
           <section aria-labelledby="module-lessons">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <h2 id="module-lessons" className="text-2xl font-bold text-ink">Lessons</h2>
+              <h2 id="module-lessons" className="text-2xl font-bold text-ink">Lessons, in order</h2>
               <p className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-muted">
                 {mod.lessons.length} lessons
               </p>
@@ -164,7 +187,7 @@ export default async function ModulePage({
             href="/curriculum"
             className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
           >
-            Back to the learning path
+            All modules
           </Link>
           {next && (
             <Link

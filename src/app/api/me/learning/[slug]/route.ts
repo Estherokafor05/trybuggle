@@ -64,7 +64,7 @@ export async function POST(request: Request, { params }: Context) {
       return Response.json(
         {
           error:
-            "A newer place was saved on another tab or device. Reload the saved place before continuing.",
+            "A newer place was saved on another tab or device. Load the newer place before continuing.",
         },
         { status: 409, headers: privateHeaders },
       );

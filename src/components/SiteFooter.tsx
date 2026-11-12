@@ -10,7 +10,7 @@ export function SiteFooter() {
         <span>Understand AI. Learn how to use it.</span>
         <nav aria-label="Footer navigation" className="ml-auto flex flex-wrap gap-5">
           <Link href="/curriculum" className="hover:text-brand">
-            Learning path
+            All modules
           </Link>
           <Link href="/#how-it-works" className="hover:text-brand">
             How it works
