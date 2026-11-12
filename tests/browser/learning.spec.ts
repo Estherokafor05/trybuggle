@@ -507,7 +507,7 @@ test("Lesson 3 needs sign-in, then both routes, every activity and the check wor
     await expect(video).toHaveAttribute("src", /before-chatgpt\/story/);
     await expect
       .poll(() => video.evaluate((v: HTMLVideoElement) => v.duration), { timeout: 15000 })
-      .toBeGreaterThan(250);
+      .toBeGreaterThan(235);
 
     await page.getByRole("button", { name: /^Read & Explore/ }).click();
     // 1950: Turing's game
