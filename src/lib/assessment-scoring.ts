@@ -5,12 +5,18 @@ export type Question = {
   correct: string;
   explanation: string;
 };
-export function scoreAssessment(questions: Question[], answers: unknown) {
+/** Passing needs at least 70%: 7 of 10, or 6 of 8. */
+export const passMark = (questionCount: number) => Math.ceil((questionCount * 7) / 10);
+export function scoreAssessment(
+  questions: Question[],
+  answers: unknown,
+  expectedCount = 10,
+) {
   if (!answers || typeof answers !== "object" || Array.isArray(answers))
     throw new Error("Answer every question.");
   const input = answers as Record<string, unknown>;
   if (
-    questions.length !== 10 ||
+    questions.length !== expectedCount ||
     Object.keys(input).length !== questions.length ||
     Object.keys(input).some((id) => !questions.some((q) => q.id === id))
   )
@@ -29,5 +35,10 @@ export function scoreAssessment(questions: Question[], answers: unknown) {
     };
   });
   const correct = feedback.filter((f) => f.correct).length;
-  return { correct, score: correct * 10, passed: correct >= 7, feedback };
+  return {
+    correct,
+    score: Math.round((correct / questions.length) * 100),
+    passed: correct >= passMark(questions.length),
+    feedback,
+  };
 }

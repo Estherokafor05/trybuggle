@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 type Question = {
   id: string;
@@ -25,9 +25,25 @@ const button =
 export function KnowledgeCheck({
   slug,
   signedIn,
+  endpoint = `/api/assessments/${slug}`,
+  kicker = "Step 2 · Check it",
+  title = "Your knowledge check",
+  intro = "10 quick questions about this lesson. Get 7 or more right to pass. You can try again as many times as you need.",
+  noun = "knowledge check",
+  returnTo = `/modules/ai-foundations/lessons/${slug}#knowledge-check`,
+  afterPass,
 }: {
   slug: string;
   signedIn: boolean;
+  /** API base for loading questions and posting submissions. */
+  endpoint?: string;
+  kicker?: string;
+  title?: string;
+  intro?: string;
+  noun?: string;
+  returnTo?: string;
+  /** Shown once the learner has passed, e.g. a link to their certificate. */
+  afterPass?: ReactNode;
 }) {
   const [questions, setQuestions] = useState<Question[]>([]),
     [answers, setAnswers] = useState<Record<string, string>>({}),
@@ -42,7 +58,7 @@ export function KnowledgeCheck({
     setBusy(true);
     setMessage("");
     try {
-      const response = await fetch(`/api/assessments/${slug}`, {
+      const response = await fetch(endpoint, {
         cache: "no-store",
       });
       const data = await response.json();
@@ -67,7 +83,7 @@ export function KnowledgeCheck({
     setMessage("");
     setSubmitted(true);
     try {
-      const response = await fetch(`/api/assessments/${slug}/submissions`, {
+      const response = await fetch(`${endpoint}/submissions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -106,7 +122,7 @@ export function KnowledgeCheck({
       className="mt-7 scroll-mt-24 rounded-[2rem] border border-line bg-white p-5 sm:p-8"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
-        Step 2 · Check it
+        {kicker}
       </p>
       <h2
         id="check-title"
@@ -114,18 +130,15 @@ export function KnowledgeCheck({
         tabIndex={-1}
         className="mt-1 text-2xl font-bold"
       >
-        Your knowledge check
+        {title}
       </h2>
-      <p className="mt-3 leading-relaxed">
-        10 quick questions about this lesson. Get 7 or more right to pass. You
-        can try again as many times as you need.
-      </p>
+      <p className="mt-3 leading-relaxed">{intro}</p>
       {!signedIn ? (
         <Link
           className={button + " mt-5"}
-          href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/ai-foundations/lessons/${slug}#knowledge-check`)}`}
+          href={`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`}
         >
-          Sign in with Google to take the check
+          Sign in with Google to take the {noun}
         </Link>
       ) : (
         <>
@@ -135,25 +148,29 @@ export function KnowledgeCheck({
               disabled={busy}
               onClick={() => void load()}
             >
-              {busy ? "Loading…" : "Open the knowledge check"}
+              {busy ? "Loading…" : `Open the ${noun}`}
             </button>
           )}
           {everPassed && (
-            <p className="mt-5 rounded-xl bg-mint p-4 font-semibold">
-              ✓ You have passed this lesson’s knowledge check. Your verified
-              pass stays recorded if you practise again.
-            </p>
+            <div className="mt-5 rounded-xl bg-mint p-4">
+              <p className="font-semibold">
+                ✓ You have passed{" "}
+                {noun === "knowledge check" ? "this lesson’s knowledge check" : `the ${noun}`}
+                . Your verified pass stays recorded if you practise again.
+              </p>
+              {afterPass}
+            </div>
           )}
           {result ? (
             <div className="mt-5">
               <p className="text-xl font-bold">
                 {result.passed
-                  ? "Knowledge check passed"
+                  ? `${noun.charAt(0).toUpperCase()}${noun.slice(1)} passed`
                   : "Review the feedback and try again"}
               </p>
               <p className="mt-2">
-                {result.correct_count} of 10 correct ·{" "}
-                {result.correct_count * 10}%
+                {result.correct_count} of {result.feedback.length} correct ·{" "}
+                {Math.round((result.correct_count / result.feedback.length) * 100)}%
               </p>
               <ol className="mt-5 space-y-4">
                 {result.feedback.map((f, i) => (
@@ -174,7 +191,7 @@ export function KnowledgeCheck({
               </ol>
               <button className={button + " mt-5"} onClick={retry}>
                 {result.passed
-                  ? "Practise this check again"
+                  ? `Practise this ${noun} again`
                   : "Retry this assessment"}
               </button>
             </div>
@@ -220,7 +237,7 @@ export function KnowledgeCheck({
                     ? "Saving and checking…"
                     : submitted
                       ? "Retry the same submission"
-                      : "Submit knowledge check"}
+                      : `Submit ${noun}`}
                 </button>
                 {submitted && !busy && message && (
                   <p className="mt-3 text-sm">

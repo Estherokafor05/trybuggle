@@ -156,6 +156,48 @@ export default async function ModulePage({
                 );
               })}
             </ol>
+            {isFoundations && (
+              <ol start={mod.lessons.length + 1} className="mt-3 grid gap-3 sm:grid-cols-2">
+                <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-hero-lavender p-5 hover:border-brand/35">
+                  <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                    Then · 8 questions
+                  </span>
+                  <h3 className="mt-4 text-lg font-bold text-ink">
+                    <Link
+                      href={`/modules/${slug}/final-assessment`}
+                      className="after:absolute after:inset-0 after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
+                    >
+                      Final assessment
+                    </Link>
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    A short refresher across all five lessons. No time limit.
+                  </p>
+                  <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
+                    Take the refresher →
+                  </span>
+                </li>
+                <li className="relative flex flex-col items-start rounded-3xl border border-line bg-white p-5 hover:border-brand/35">
+                  <span className="rounded-full bg-mint px-3 py-1.5 text-xs font-semibold text-navy">
+                    Your reward
+                  </span>
+                  <h3 className="mt-4 text-lg font-bold text-ink">
+                    <Link
+                      href={`/modules/${slug}/certificate`}
+                      className="after:absolute after:inset-0 after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
+                    >
+                      Certificate of Completion
+                    </Link>
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    Pass every knowledge check and the final assessment, then download your certificate as a PDF.
+                  </p>
+                  <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
+                    See your progress →
+                  </span>
+                </li>
+              </ol>
+            )}
           </section>
 
           <aside className="flex flex-col gap-3 self-start lg:mt-12">

@@ -577,3 +577,97 @@ export const assessmentBank: Record<string, Question[]> = {
     ),
   ],
 };
+
+// Module final assessments: short refreshers across the module's lessons.
+export const moduleAssessmentBank: Record<string, Question[]> = {
+  "ai-foundations": [
+    q(
+      "explain-ai",
+      "A new colleague asks you what AI is. Which answer is most accurate?",
+      [
+        "A computer that thinks and feels like a person.",
+        "A broad name for computer systems that can recognise patterns, make predictions or create content.",
+        "Any machine that runs on electricity.",
+      ],
+      1,
+      "AI covers many kinds of systems that recognise, predict or create. It does not mean a machine thinks or feels like a person. (Lesson 1)",
+    ),
+    q(
+      "photo-search",
+      "Your photo app finds pictures of the beach that you never labelled. What is it most likely doing?",
+      [
+        "Recognising patterns in the pictures.",
+        "Searching file names you typed.",
+        "Choosing pictures at random.",
+      ],
+      0,
+      "Some photo apps use AI to recognise what is in a picture, then suggest likely matches. It is still worth checking the results. (Lesson 2)",
+    ),
+    q(
+      "journey-estimate",
+      "A map app says your journey will take 25 minutes. What is that estimate?",
+      [
+        "A promise that cannot change.",
+        "A prediction that can change as traffic changes.",
+        "A fixed rule written for your route.",
+      ],
+      1,
+      "Journey times are predictions based on current and past information. They are best guesses, not promises. (Lesson 2)",
+    ),
+    q(
+      "history",
+      "Which statement about the history of AI is true?",
+      [
+        "People have worked on AI since the 1950s, and chat tools made it much easier to use.",
+        "AI began in 2022, when chat tools were released.",
+        "AI was invented in 1997 when a computer won at chess.",
+      ],
+      0,
+      "The term artificial intelligence dates from 1956. ChatGPT and similar tools in 2022 made AI far more visible, but it was not new. (Lesson 3)",
+    ),
+    q(
+      "coffee-machine",
+      "The office coffee machine starts brewing at 8 am every weekday. Does it need AI?",
+      [
+        "Yes, anything automatic uses AI.",
+        "Yes, because it is useful.",
+        "No, it can follow a set schedule.",
+      ],
+      2,
+      "Following a fixed schedule is ordinary software. Automatic and useful does not mean AI. (Lesson 4)",
+    ),
+    q(
+      "misfiled",
+      "An inbox tool files a complaint under Compliments because it contains the word “thanks”. What does this show?",
+      [
+        "AI predictions can be wrong, so a person should check the important ones.",
+        "The tool fully understands what people mean.",
+        "Someone wrote a rule telling it to file complaints there.",
+      ],
+      0,
+      "Tools that learn patterns match things like words. They can miss what a message actually means, so people check. (Lesson 4)",
+    ),
+    q(
+      "request",
+      "You ask an AI tool to draft a reply to a customer. What should you leave out of your request?",
+      [
+        "The tone you want.",
+        "The customer's bank details.",
+        "What the reply should be about.",
+      ],
+      1,
+      "Give the tool what the task needs and nothing personal it does not. Bank details are private information. (Lesson 5)",
+    ),
+    q(
+      "policy-summary",
+      "An AI tool drafts a summary of a company policy that will go to all staff. What should happen next?",
+      [
+        "Send it, because it sounds professional.",
+        "Ask the AI whether it is accurate.",
+        "Check it against the actual policy before sharing it.",
+      ],
+      2,
+      "People will rely on the summary, so check it against the source. Asking the same tool is not an independent check. (Lesson 5)",
+    ),
+  ],
+};
