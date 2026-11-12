@@ -61,6 +61,22 @@ const ids: Record<string, string[]> = {
     "time-2022",
     "time-reflect",
   ],
+  "ai-or-software": [
+    "rec-desk",
+    "rec-reminder",
+    "rec-checkin",
+    "rec-inbox",
+    "rec-mistake",
+    "rec-sort",
+  ],
+  "what-ai-can-do": [
+    "hr-brief",
+    "hr-facts",
+    "hr-questions",
+    "hr-privacy",
+    "hr-ranking",
+    "hr-checking",
+  ],
 };
 // Step ids from earlier guide versions. Saved places that mention them are
 // still accepted; the retired entries are dropped instead of rejecting the
@@ -69,12 +85,16 @@ const retired: Record<string, string[]> = {
   "what-counts-as-ai": ["match", "repair"],
   "ai-in-your-day": ["messages", "tasks"],
   "before-chatgpt": [],
+  "ai-or-software": [],
+  "what-ai-can-do": [],
 };
 /** Longest film in seconds, so a saved video position can be validated. */
 const filmLength: Record<string, number> = {
   "what-counts-as-ai": 242,
   "ai-in-your-day": 193,
   "before-chatgpt": 256,
+  "ai-or-software": 237,
+  "what-ai-can-do": 185,
 };
 export function parseCheckpoint(
   value: unknown,

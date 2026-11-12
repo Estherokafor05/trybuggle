@@ -1,0 +1,88 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "scenes": [
+    {
+      "id": "busy-week",
+      "title": "A busy recruitment week",
+      "description": "Amina works in HR. Her calendar fills with interviews for a new office administrator. Her laptop shows a company-approved AI assistant.",
+      "lines": [
+        "Meet Amina.",
+        "She works in HR at a growing company, and this is a busy week.",
+        "Her team is hiring a new office administrator, and Amina is preparing the interview materials.",
+        "There’s a lot to do, so she decides to try the AI assistant her company has approved for staff.",
+        "It could save her time.",
+        "But as she’s about to find out, knowing when to check AI’s work matters just as much as knowing how to use it."
+      ]
+    },
+    {
+      "id": "starting-point",
+      "title": "A useful starting point",
+      "description": "Amina gives the assistant the public job description and asks for interview questions and a job summary. A list and a summary type out within seconds.",
+      "lines": [
+        "Amina gives the assistant the public job description and asks: “Suggest ten interview questions for this role, and write a short summary of the job for candidates.”",
+        "Within seconds, she has a list and a summary.",
+        "That’s genuinely helpful.",
+        "Instead of a blank page, she has a first draft to review and improve.",
+        "This is generative AI at work: creating new text from her request."
+      ]
+    },
+    {
+      "id": "needs-checking",
+      "title": "Something isn't right",
+      "description": "The summary claims a driving licence is required, which the job description never mentions. A question about children is struck out as unrelated and unfair. Amina checks the approved interview guidance.",
+      "lines": [
+        "But as Amina reads, two things catch her eye.",
+        "The summary says the role requires a driving licence.",
+        "The job description never mentions one.",
+        "The assistant made it up, and it sounded completely confident.",
+        "Then there’s question seven: “Do you have children, or are you planning to?”",
+        "That has nothing to do with the job, and asking it could treat candidates unfairly.",
+        "Amina removes the question, corrects the summary and checks everything against the company’s approved interview guidance."
+      ]
+    },
+    {
+      "id": "privacy",
+      "title": "Protecting people's information",
+      "description": "A colleague suggests pasting applicants' CVs into an AI website. A privacy checklist appears and Amina closes the window.",
+      "lines": [
+        "Later, a colleague has an idea.",
+        "“Why don’t we paste all the applicants’ CVs into an AI website and ask it to pick the best ones?”",
+        "Amina stops.",
+        "Those CVs contain names, addresses and work histories.",
+        "They belong to real people who shared them for one purpose.",
+        "Before putting personal information into any tool, she needs to know it’s approved, secure and allowed under her company’s privacy rules.",
+        "Just because a tool can process information doesn’t mean it’s the right place for it."
+      ]
+    },
+    {
+      "id": "who-decides",
+      "title": "Who makes the decision?",
+      "description": "An interview panel assesses candidates against the same agreed criteria. The AI assistant is set aside, and the panel is responsible for the decision.",
+      "lines": [
+        "And who should choose the new administrator?",
+        "Not the AI.",
+        "The assistant helped Amina prepare, but it doesn’t know the candidates, and it can repeat unfair patterns from the information it learned from.",
+        "The interview panel assesses every candidate against the same agreed criteria, and the panel is responsible for the decision.",
+        "When a choice affects someone’s job, people need to stay in charge."
+      ]
+    },
+    {
+      "id": "in-charge",
+      "title": "Stay in charge",
+      "description": "Four question cards, correct, fair, private and who decides, tick off over Amina's finished materials.",
+      "lines": [
+        "By the end of the week, Amina has a clear way of working with AI.",
+        "Before she uses anything it produces, she asks four questions.",
+        "Is it correct?",
+        "Is it fair?",
+        "Am I protecting people’s information?",
+        "And is this a decision a person should make?",
+        "AI can help us write, organise ideas and save time.",
+        "But it can also make mistakes, sound sure when it’s wrong and miss what matters.",
+        "So let it help with the work, and keep people responsible for the decisions.",
+        "That’s the end of Module 1’s lessons.",
+        "Well done."
+      ]
+    }
+  ]
+}

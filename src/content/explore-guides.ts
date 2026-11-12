@@ -258,4 +258,148 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "ai-or-software": {
+    slug: "ai-or-software",
+    title: "Step into Daniel's reception",
+    reflections: [
+      "A tool I use that follows set instructions is…",
+      "A tool I use that might learn from examples is…",
+      "Before I call something AI, I would ask…",
+    ],
+    steps: [
+      {
+        id: "rec-desk",
+        title: "Daniel's desk",
+        goal: "Tap each tool to see what it does, then guess which ones use AI.",
+        reading: [
+          "Daniel is a receptionist at a busy company. His colleagues say the new tools mean AI is helping with almost everything. Daniel is not so sure.",
+          "His desk has four tools: a calendar that sends reminders, a check-in tablet for visitors, a shared inbox that suggests where messages should go, and a badge printer. All of them do things automatically. The question is how each one works.",
+        ],
+        takeaway: "Automatic tools are everywhere. How they work is what matters.",
+      },
+      {
+        id: "rec-reminder",
+        title: "Set a reminder",
+        goal: "Book an appointment, choose a reminder and fast-forward the clock.",
+        reading: [
+          "Daniel books a visitor for two o'clock and asks for a reminder fifteen minutes before. At quarter to two, the reminder appears.",
+          "The calendar is following an instruction someone wrote: when an appointment is fifteen minutes away, show a reminder. Change the time and the reminder moves with it. Same input, same result, every time. It does not learn, guess or predict, so it does not need AI.",
+        ],
+        takeaway: "Following a fixed instruction is ordinary software, not AI.",
+      },
+      {
+        id: "rec-checkin",
+        title: "Welcome a visitor",
+        goal: "Sign a visitor in on the tablet, then see what happens with a small typo.",
+        reading: [
+          "A visitor types her name and who she is meeting on the reception tablet. The system saves her details, prints a badge and messages her host.",
+          "Each step is an instruction set up in advance. If the visitor types the host's name with a small mistake, the system cannot work out who she meant. It simply reports that the host was not found. It follows steps; it does not understand.",
+        ],
+        takeaway: "A system can collect, store and act on information without AI.",
+      },
+      {
+        id: "rec-inbox",
+        title: "Teach the inbox",
+        goal: "Sort example messages, then see how the tool predicts where new ones go.",
+        reading: [
+          "The shared inbox tool works differently. Nobody wrote a rule for every possible message. Instead, it was trained on messages that people had already sorted into folders such as Parking and Deliveries.",
+          "It learns patterns, such as words that often appear in parking questions, and uses them to predict where a new message belongs. This is machine learning, one way of building AI. Its suggestions are predictions, so they can be wrong.",
+        ],
+        takeaway: "Some AI learns patterns from examples and uses them to predict.",
+      },
+      {
+        id: "rec-mistake",
+        title: "Spot the mistake",
+        goal: "Check four suggestions from the inbox tool and fix any that are wrong.",
+        reading: [
+          "One message says: “The visitor check-in tablet isn't working.” The tool filed it under Visitor Information, probably because of the words “visitor” and “check-in”.",
+          "Daniel reads the whole message. Someone is reporting a broken device, so it belongs with IT Support. The tool matched words; Daniel understood the need. Predictions like this still need a person to check them.",
+        ],
+        takeaway: "AI predictions can be wrong, so a person checks the important ones.",
+      },
+      {
+        id: "rec-sort",
+        title: "AI or ordinary software?",
+        goal: "Sort five tools, then compare with your first guesses.",
+        reading: [
+          "The reminder and the check-in tablet follow instructions people wrote. A spreadsheet total follows a formula. None of these needs AI. The inbox tool learned from examples, which is one way AI can work.",
+          "Some AI also uses rules, like the expert systems in Lesson 3, which captured experts' knowledge to make judgments. And sometimes you simply cannot tell: a product called “smart” may or may not use AI. Without reliable information about how it works, “not enough information” is an honest answer.",
+          "Any notes you write here are private and stay on this device.",
+        ],
+        takeaway:
+          "Don't go by the label. Ask what a system does and how it works.",
+      },
+    ],
+  },
+  "what-ai-can-do": {
+    slug: "what-ai-can-do",
+    title: "Help Amina hire fairly",
+    reflections: [
+      "One task AI could help me with is…",
+      "Something I would always check is…",
+      "A decision I would keep for a person is…",
+    ],
+    steps: [
+      {
+        id: "hr-brief",
+        title: "Brief the assistant",
+        goal: "Choose what Amina should give the AI assistant, then see its draft.",
+        reading: [
+          "Amina works in HR. Her team is hiring an office administrator, and she is using the AI assistant her company has approved to prepare interview materials.",
+          "A useful request includes the public job description, the role title and the tone she wants. It should not include applicants' names or CVs: the assistant does not need them, and they are personal information. The assistant then writes a first draft of interview questions and a short job summary.",
+        ],
+        takeaway: "Give AI what the task needs and nothing personal it doesn't.",
+      },
+      {
+        id: "hr-facts",
+        title: "Fact-check the summary",
+        goal: "Compare each claim in the AI summary with the job description.",
+        reading: [
+          "The summary says the role involves managing the diary, answering enquiries and keeping records, which all match the job description. It also says a full driving licence is required. The job description never mentions one.",
+          "The assistant made that detail up and stated it confidently. If Amina published it, people without a licence might not apply. She removes it and checks every claim against the source.",
+        ],
+        takeaway: "AI can sound confident and still be wrong. Check claims against the source.",
+      },
+      {
+        id: "hr-questions",
+        title: "Review the questions",
+        goal: "Keep or remove each suggested interview question.",
+        reading: [
+          "Most suggested questions are about the job, such as managing a busy diary or keeping records accurate. Two are not: “Do you have children, or are you planning to?” and “What year did you leave school?”, which can hint at a candidate's age.",
+          "Questions like these have nothing to do with doing the job and could treat candidates unfairly. Amina removes them and checks the list against her company's approved interview guidance.",
+        ],
+        takeaway: "AI suggestions can be unfair. A person reviews them before they are used.",
+      },
+      {
+        id: "hr-privacy",
+        title: "The CV idea",
+        goal: "Decide what to do with a colleague's suggestion about applicants' CVs.",
+        reading: [
+          "A colleague suggests pasting every applicant's CV into a public AI website to pick the best ones. The CVs contain names, addresses and work histories that people shared for one purpose: applying for this job.",
+          "Before sharing personal information with any tool, Amina asks: is the tool approved, is it secure, and do our privacy rules allow it? Being able to process information does not make a tool the right place for it.",
+        ],
+        takeaway: "Protecting people's information is part of using AI responsibly.",
+      },
+      {
+        id: "hr-ranking",
+        title: "Who decides?",
+        goal: "A tool ranks the candidates. Decide what Amina's team should do.",
+        reading: [
+          "A screening tool scores each CV and says Candidate B is the best match. It made that ranking by comparing CVs with people the company hired before.",
+          "If past hiring was unfair, a tool like this can repeat the same pattern. That is why the interview panel assesses every candidate against the same agreed criteria, and the panel, not the tool, is responsible for the decision.",
+        ],
+        takeaway: "When a decision affects someone's job, people stay in charge.",
+      },
+      {
+        id: "hr-checking",
+        title: "How much checking?",
+        goal: "Match each situation to the level of checking it needs.",
+        reading: [
+          "Not every AI result needs the same care. A draft reminder about a meeting needs a quick read. A summary of a company policy needs checking against the policy. Health questions and decisions about people's jobs need a qualified or responsible person to decide.",
+          "The more serious the consequences of a mistake, the more careful the check. Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "Let AI help with the work, and keep people responsible for the decisions.",
+      },
+    ],
+  },
 };

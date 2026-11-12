@@ -6,6 +6,10 @@ import { WhatIsAI } from "./WhatIsAI";
 import foundations from "../../public/lessons/what-is-ai/narration.json";
 import { BeforeChatGPT } from "./BeforeChatGPT";
 import history from "../../public/lessons/before-chatgpt/narration.json";
+import { AiOrSoftware } from "./AiOrSoftware";
+import software from "../../public/lessons/ai-or-software/narration.json";
+import { WhatAiCanDo } from "./WhatAiCanDo";
+import charge from "../../public/lessons/what-ai-can-do/narration.json";
 function Root() {
   return React.createElement(
     React.Fragment,
@@ -33,6 +37,25 @@ function Root() {
         height: mobile ? 1200 : 1080,
         defaultProps: { mobile },
       }),
+    ),
+    ...(
+      [
+        ["AiOrSoftware", AiOrSoftware, software.duration],
+        ["WhatAiCanDo", WhatAiCanDo, charge.duration],
+      ] as const
+    ).flatMap(([id, component, duration]) =>
+      [false, true].map((mobile) =>
+        React.createElement(Composition, {
+          key: `${id}${mobile ? "Mobile" : ""}`,
+          id: `${id}${mobile ? "Mobile" : ""}`,
+          component,
+          durationInFrames: duration * 24,
+          fps: 24,
+          width: mobile ? 960 : 1920,
+          height: mobile ? 1200 : 1080,
+          defaultProps: { mobile },
+        }),
+      ),
     ),
     React.createElement(Composition, {
       id: "MayaDay",

@@ -1,0 +1,338 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "duration": 185,
+  "audioDuration": 183.33,
+  "scenes": [
+    {
+      "id": "busy-week",
+      "title": "A busy recruitment week",
+      "description": "Amina works in HR. Her calendar fills with interviews for a new office administrator. Her laptop shows a company-approved AI assistant.",
+      "start": 0,
+      "end": 29.54
+    },
+    {
+      "id": "starting-point",
+      "title": "A useful starting point",
+      "description": "Amina gives the assistant the public job description and asks for interview questions and a job summary. A list and a summary type out within seconds.",
+      "start": 29.54,
+      "end": 55.54
+    },
+    {
+      "id": "needs-checking",
+      "title": "Something isn't right",
+      "description": "The summary claims a driving licence is required, which the job description never mentions. A question about children is struck out as unrelated and unfair. Amina checks the approved interview guidance.",
+      "start": 55.54,
+      "end": 88.09
+    },
+    {
+      "id": "privacy",
+      "title": "Protecting people's information",
+      "description": "A colleague suggests pasting applicants' CVs into an AI website. A privacy checklist appears and Amina closes the window.",
+      "start": 88.09,
+      "end": 121.89
+    },
+    {
+      "id": "who-decides",
+      "title": "Who makes the decision?",
+      "description": "An interview panel assesses candidates against the same agreed criteria. The AI assistant is set aside, and the panel is responsible for the decision.",
+      "start": 121.89,
+      "end": 147.07
+    },
+    {
+      "id": "in-charge",
+      "title": "Stay in charge",
+      "description": "Four question cards, correct, fair, private and who decides, tick off over Amina's finished materials.",
+      "start": 147.07,
+      "end": 185
+    }
+  ],
+  "cues": [
+    {
+      "scene": "busy-week",
+      "text": "Meet Amina.",
+      "start": 0.12,
+      "end": 0.94,
+      "index": 0
+    },
+    {
+      "scene": "busy-week",
+      "text": "She works in HR at a growing company, and this is a busy week.",
+      "start": 1.54,
+      "end": 6.36,
+      "index": 1
+    },
+    {
+      "scene": "busy-week",
+      "text": "Her team is hiring a new office administrator, and Amina is preparing the interview materials.",
+      "start": 7,
+      "end": 12.84,
+      "index": 2
+    },
+    {
+      "scene": "busy-week",
+      "text": "There’s a lot to do, so she decides to try the AI assistant her company has approved for staff.",
+      "start": 13.46,
+      "end": 19.64,
+      "index": 3
+    },
+    {
+      "scene": "busy-week",
+      "text": "It could save her time.",
+      "start": 20.16,
+      "end": 21.3,
+      "index": 4
+    },
+    {
+      "scene": "busy-week",
+      "text": "But as she’s about to find out, knowing when to check AI’s work matters just as much as knowing how to use it.",
+      "start": 22,
+      "end": 29.22,
+      "index": 5
+    },
+    {
+      "scene": "starting-point",
+      "text": "Amina gives the assistant the public job description and asks: “Suggest ten interview questions for this role, and write a short summary of the job for candidates.”",
+      "start": 29.86,
+      "end": 39.38,
+      "index": 6
+    },
+    {
+      "scene": "starting-point",
+      "text": "Within seconds, she has a list and a summary.",
+      "start": 40.06,
+      "end": 43.1,
+      "index": 7
+    },
+    {
+      "scene": "starting-point",
+      "text": "That’s genuinely helpful.",
+      "start": 43.58,
+      "end": 45,
+      "index": 8
+    },
+    {
+      "scene": "starting-point",
+      "text": "Instead of a blank page, she has a first draft to review and improve.",
+      "start": 45.58,
+      "end": 49.7,
+      "index": 9
+    },
+    {
+      "scene": "starting-point",
+      "text": "This is generative AI at work: creating new text from her request.",
+      "start": 50.38,
+      "end": 55.3,
+      "index": 10
+    },
+    {
+      "scene": "needs-checking",
+      "text": "But as Amina reads, two things catch her eye.",
+      "start": 55.78,
+      "end": 58.94,
+      "index": 11
+    },
+    {
+      "scene": "needs-checking",
+      "text": "The summary says the role requires a driving licence.",
+      "start": 59.66,
+      "end": 62.66,
+      "index": 12
+    },
+    {
+      "scene": "needs-checking",
+      "text": "The job description never mentions one.",
+      "start": 63.18,
+      "end": 65.4,
+      "index": 13
+    },
+    {
+      "scene": "needs-checking",
+      "text": "The assistant made it up, and it sounded completely confident.",
+      "start": 65.96,
+      "end": 69.68,
+      "index": 14
+    },
+    {
+      "scene": "needs-checking",
+      "text": "Then there’s question seven: “Do you have children, or are you planning to?”",
+      "start": 70.3,
+      "end": 74.72,
+      "index": 15
+    },
+    {
+      "scene": "needs-checking",
+      "text": "That has nothing to do with the job, and asking it could treat candidates unfairly.",
+      "start": 75.44,
+      "end": 80.3,
+      "index": 16
+    },
+    {
+      "scene": "needs-checking",
+      "text": "Amina removes the question, corrects the summary and checks everything against the company’s approved interview guidance.",
+      "start": 80.98,
+      "end": 87.78,
+      "index": 17
+    },
+    {
+      "scene": "privacy",
+      "text": "Later, a colleague has an idea.",
+      "start": 88.4,
+      "end": 90.4,
+      "index": 18
+    },
+    {
+      "scene": "privacy",
+      "text": "“Why don’t we paste all the applicants’ CVs into an AI website and ask it to pick the best ones?”",
+      "start": 91.06,
+      "end": 97.04,
+      "index": 19
+    },
+    {
+      "scene": "privacy",
+      "text": "Amina stops.",
+      "start": 97.56,
+      "end": 98.46,
+      "index": 20
+    },
+    {
+      "scene": "privacy",
+      "text": "Those CVs contain names, addresses and work histories.",
+      "start": 99.16,
+      "end": 103.22,
+      "index": 21
+    },
+    {
+      "scene": "privacy",
+      "text": "They belong to real people who shared them for one purpose.",
+      "start": 103.74,
+      "end": 107.18,
+      "index": 22
+    },
+    {
+      "scene": "privacy",
+      "text": "Before putting personal information into any tool, she needs to know it’s approved, secure and allowed under her company’s privacy rules.",
+      "start": 107.84,
+      "end": 116.42,
+      "index": 23
+    },
+    {
+      "scene": "privacy",
+      "text": "Just because a tool can process information doesn’t mean it’s the right place for it.",
+      "start": 117.04,
+      "end": 121.64,
+      "index": 24
+    },
+    {
+      "scene": "who-decides",
+      "text": "And who should choose the new administrator?",
+      "start": 122.14,
+      "end": 124.22,
+      "index": 25
+    },
+    {
+      "scene": "who-decides",
+      "text": "Not the AI.",
+      "start": 124.76,
+      "end": 125.6,
+      "index": 26
+    },
+    {
+      "scene": "who-decides",
+      "text": "The assistant helped Amina prepare, but it doesn’t know the candidates, and it can repeat unfair patterns from the information it learned from.",
+      "start": 126.18,
+      "end": 133.92,
+      "index": 27
+    },
+    {
+      "scene": "who-decides",
+      "text": "The interview panel assesses every candidate against the same agreed criteria, and the panel is responsible for the decision.",
+      "start": 134.56,
+      "end": 142.1,
+      "index": 28
+    },
+    {
+      "scene": "who-decides",
+      "text": "When a choice affects someone’s job, people need to stay in charge.",
+      "start": 142.78,
+      "end": 146.8,
+      "index": 29
+    },
+    {
+      "scene": "in-charge",
+      "text": "By the end of the week, Amina has a clear way of working with AI.",
+      "start": 147.34,
+      "end": 151.22,
+      "index": 30
+    },
+    {
+      "scene": "in-charge",
+      "text": "Before she uses anything it produces, she asks four questions.",
+      "start": 151.8,
+      "end": 155.86,
+      "index": 31
+    },
+    {
+      "scene": "in-charge",
+      "text": "Is it correct?",
+      "start": 156.42,
+      "end": 157.18,
+      "index": 32
+    },
+    {
+      "scene": "in-charge",
+      "text": "Is it fair?",
+      "start": 157.74,
+      "end": 158.4,
+      "index": 33
+    },
+    {
+      "scene": "in-charge",
+      "text": "Am I protecting people’s information?",
+      "start": 159,
+      "end": 160.98,
+      "index": 34
+    },
+    {
+      "scene": "in-charge",
+      "text": "And is this a decision a person should make?",
+      "start": 161.4,
+      "end": 164.1,
+      "index": 35
+    },
+    {
+      "scene": "in-charge",
+      "text": "AI can help us write, organise ideas and save time.",
+      "start": 164.72,
+      "end": 168.66,
+      "index": 36
+    },
+    {
+      "scene": "in-charge",
+      "text": "But it can also make mistakes, sound sure when it’s wrong and miss what matters.",
+      "start": 168.92,
+      "end": 174.18,
+      "index": 37
+    },
+    {
+      "scene": "in-charge",
+      "text": "So let it help with the work, and keep people responsible for the decisions.",
+      "start": 174.82,
+      "end": 179.28,
+      "index": 38
+    },
+    {
+      "scene": "in-charge",
+      "text": "That’s the end of Module 1’s lessons.",
+      "start": 179.84,
+      "end": 182.1,
+      "index": 39
+    },
+    {
+      "scene": "in-charge",
+      "text": "Well done.",
+      "start": 182.54,
+      "end": 183.1,
+      "index": 40
+    }
+  ]
+}

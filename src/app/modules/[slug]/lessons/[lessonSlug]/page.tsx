@@ -11,6 +11,18 @@ import { getModule } from "@/content/modules";
 import { journeyPosition } from "@/content/journey";
 import { getBuiltLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
+import { db } from "@/server/database";
+
+/** Whether a signed-in learner has passed a lesson's knowledge check. Never blocks: null when unknown. */
+async function passedCheck(learner: string, lessonSlug: string) {
+  try {
+    const rows =
+      await db()`SELECT EXISTS(SELECT 1 FROM assessment_attempts WHERE learner_id=${learner} AND lesson_slug=${lessonSlug} AND passed) AS passed`;
+    return Boolean(rows[0]?.passed);
+  } catch {
+    return null;
+  }
+}
 
 export async function generateMetadata({
   params,
@@ -101,6 +113,12 @@ export default async function LessonPage({
       }
     : undefined;
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`;
+  // Passing each check is encouraged, but learners can always carry on.
+  const previousLesson = previous && previous.id !== "welcome" ? previous : undefined;
+  const previousPassed =
+    previousLesson && session?.user?.id
+      ? await passedCheck(session.user.id, previousLesson.id)
+      : null;
   // Guests who reach the end of a free lesson sign in on their way to the next one.
   const nextNeedsSignIn = Boolean(next?.available && !next.free && !session?.user);
 
@@ -165,6 +183,36 @@ export default async function LessonPage({
           <JourneyProgress current={lessonSlug} />
         </div>
 
+        {previousLesson && previousPassed === false && (
+          <section
+            aria-labelledby="previous-check-title"
+            className="mt-5 rounded-2xl border-l-4 border-brand bg-lavender p-5"
+          >
+            <h2 id="previous-check-title" className="font-bold">
+              You haven&apos;t passed {previousLesson.label}&apos;s knowledge check yet
+            </h2>
+            <p className="mt-1 leading-relaxed text-ink">
+              Passing every knowledge check is part of completing Module 1. You
+              can take it now, or carry on with this lesson and come back to it
+              later.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+              <Link
+                href={`${previousLesson.href}#knowledge-check`}
+                className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Take {previousLesson.label}&apos;s check
+              </Link>
+              <a
+                href="#lesson-start"
+                className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4"
+              >
+                Continue with this lesson
+              </a>
+            </div>
+          </section>
+        )}
+        <span id="lesson-start" className="block scroll-mt-24" />
         {session?.user && !session.user.id && (
           <p className="mt-5 rounded-2xl bg-mint p-5 leading-relaxed">
             Saved learning is now available. Sign in with Google again to

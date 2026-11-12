@@ -112,7 +112,7 @@ export default async function ModulePage({
             {session?.user && isFoundations && (
               <p className="mb-4 rounded-2xl bg-mint p-4 text-sm leading-relaxed text-ink">
                 You&apos;re signed in, so your progress and knowledge check
-                results are saved. Lessons 4 and 5 are coming soon.
+                results are saved.
               </p>
             )}
             <ol className="grid gap-3 sm:grid-cols-2">

@@ -1,0 +1,166 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:02.900
+Daniel is a receptionist at a busy company.
+
+00:00:03.580 --> 00:00:11.300
+Every morning, he welcomes visitors, answers questions, books appointments and makes sure everyone gets to the right place.
+
+00:00:12.040 --> 00:00:15.620
+This week, the company introduced some new digital tools.
+
+00:00:16.220 --> 00:00:22.720
+A colleague leans over the desk and says, “Daniel, we’ve got AI helping with almost everything now!”
+
+00:00:23.600 --> 00:00:28.640
+Daniel looks at his screen and wonders: does that mean everything on here is AI?
+
+00:00:29.580 --> 00:00:30.180
+Not quite.
+
+00:00:30.800 --> 00:00:35.280
+Let’s look at the tools Daniel uses today, and how each one actually works.
+
+00:00:35.940 --> 00:00:38.200
+A visitor is coming in at two o’clock.
+
+00:00:38.880 --> 00:00:43.060
+Daniel books the appointment and sets a reminder for fifteen minutes before.
+
+00:00:43.780 --> 00:00:47.460
+At quarter to two, the reminder pops up, right on time.
+
+00:00:48.140 --> 00:00:48.540
+Useful?
+
+00:00:49.160 --> 00:00:49.760
+Definitely.
+
+00:00:50.280 --> 00:00:52.760
+But the system doesn’t need AI to do that.
+
+00:00:53.340 --> 00:00:59.160
+Someone wrote a clear instruction: fifteen minutes before an appointment, show a reminder.
+
+00:00:59.840 --> 00:01:03.760
+The software follows that instruction exactly, every time.
+
+00:01:04.340 --> 00:01:06.640
+It doesn’t learn, guess or predict.
+
+00:01:07.160 --> 00:01:10.460
+That’s ordinary software doing what it was programmed to do.
+
+00:01:11.060 --> 00:01:13.220
+At two o’clock, the visitor arrives.
+
+00:01:13.780 --> 00:01:18.760
+Instead of filling in a paper form, she types her name and who she’s meeting on a tablet.
+
+00:01:19.380 --> 00:01:24.260
+The system records her arrival, prints a badge and sends a message to her host.
+
+00:01:24.820 --> 00:01:28.100
+It all happens automatically, and it looks quite clever.
+
+00:01:28.740 --> 00:01:36.240
+But each step is an instruction someone set up in advance: save the details, print the badge, send the message.
+
+00:01:36.900 --> 00:01:38.860
+Automatic doesn’t mean AI.
+
+00:01:39.440 --> 00:01:46.120
+A system can collect information, store it and follow steps without any artificial intelligence at all.
+
+00:01:46.680 --> 00:01:49.920
+Next, Daniel opens the shared reception inbox.
+
+00:01:50.500 --> 00:01:55.440
+There are messages about parking, deliveries, meeting rooms and visitor access.
+
+00:01:56.100 --> 00:01:59.960
+The company has a new tool that suggests where each message should go.
+
+00:02:00.600 --> 00:02:01.940
+This one works differently.
+
+00:02:02.620 --> 00:02:05.400
+Nobody wrote a rule for every possible message.
+
+00:02:05.920 --> 00:02:11.060
+Instead, the tool was trained on hundreds of messages that people had already sorted.
+
+00:02:11.680 --> 00:02:19.640
+It learned patterns, such as which words tend to appear in parking questions, and uses them to predict where a new message belongs.
+
+00:02:20.240 --> 00:02:23.580
+That’s machine learning, one way of building AI.
+
+00:02:24.140 --> 00:02:27.300
+And because it’s a prediction, it won’t always be right.
+
+00:02:27.800 --> 00:02:29.520
+Then Daniel spots something.
+
+00:02:30.080 --> 00:02:33.860
+A message says, “The visitor check-in tablet isn’t working.”
+
+00:02:34.520 --> 00:02:37.160
+The tool has put it under Visitor Information.
+
+00:02:37.680 --> 00:02:38.000
+Why?
+
+00:02:38.680 --> 00:02:45.280
+Probably because the message mentions “visitor” and “check-in”, words that often appear in visitor questions.
+
+00:02:45.860 --> 00:02:47.860
+But Daniel reads the whole message.
+
+00:02:48.520 --> 00:02:53.080
+Someone is reporting a broken device, so he moves it to IT Support.
+
+00:02:53.640 --> 00:02:55.800
+The tool matched patterns in the words.
+
+00:02:56.160 --> 00:02:59.240
+Daniel understood what the person actually needed.
+
+00:02:59.920 --> 00:03:03.420
+That’s why predictions like this still need a human check.
+
+00:03:04.220 --> 00:03:06.720
+So, what did Daniel’s day show us?
+
+00:03:07.320 --> 00:03:11.620
+The reminder and the check-in system follow instructions that people wrote.
+
+00:03:12.200 --> 00:03:16.840
+They’re useful, automatic and reliable, and they don’t need AI.
+
+00:03:17.420 --> 00:03:21.540
+The smart inbox learned patterns from examples and makes predictions.
+
+00:03:22.120 --> 00:03:24.020
+That’s one way AI can work.
+
+00:03:24.520 --> 00:03:25.540
+But here’s a twist.
+
+00:03:26.040 --> 00:03:28.460
+Remember the expert systems from Lesson 3?
+
+00:03:29.180 --> 00:03:34.740
+Some AI uses rules too, written down from experts’ knowledge to make judgments.
+
+00:03:35.320 --> 00:03:39.860
+So the real question is what a system does and how it decides.
+
+00:03:40.440 --> 00:03:45.180
+Next time someone says a tool uses AI, don’t just go by the label.
+
+00:03:45.760 --> 00:03:49.340
+Ask: what does it actually do, and how does it work?
+
+00:03:49.900 --> 00:03:54.720
+Something can be automatic, helpful and impressive without being AI.

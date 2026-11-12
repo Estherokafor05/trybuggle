@@ -109,6 +109,64 @@ export const builtLessons: PreviewLesson[] = [
       },
     ],
   },
+  {
+    slug: "ai-or-software",
+    title: "AI or Ordinary Software?",
+    duration: "4 minutes to watch",
+    preview: false,
+    objective:
+      "Tell ordinary software apart from AI, and explain why automatic does not always mean AI.",
+    sources: [
+      {
+        label: "OECD: Explaining the AI system definition",
+        url: "https://oecd.ai/en/wonk/definition",
+        claim:
+          "AI systems infer from input how to produce outputs such as predictions; they can be built with machine learning, knowledge and rules, or both.",
+      },
+      {
+        label: "Google: Classification (Machine Learning Crash Course)",
+        url: "https://developers.google.com/machine-learning/crash-course/classification",
+        claim:
+          "A classification model learns from labelled examples to predict which category a new item belongs to, and its predictions can be wrong.",
+      },
+      {
+        label: "Encyclopaedia Britannica: Expert system",
+        url: "https://www.britannica.com/technology/expert-system",
+        claim: "Expert systems are AI that uses knowledge and rules gathered from human experts.",
+      },
+    ],
+  },
+  {
+    slug: "what-ai-can-do",
+    title: "What AI Can Do, and Where You Stay in Charge",
+    duration: "3 minutes to watch",
+    preview: false,
+    objective:
+      "Use AI as a helper while checking its output, protecting personal information and keeping people responsible for decisions.",
+    sources: [
+      {
+        label: "NIST: Generative AI risk profile",
+        url: "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+        claim: "Generative AI can produce confident but false content, so its output needs checking.",
+      },
+      {
+        label: "GOV.UK: Employers preventing discrimination in recruitment",
+        url: "https://www.gov.uk/employer-preventing-discrimination/recruitment",
+        claim:
+          "Employers must not ask candidates whether they have children or plan to have children.",
+      },
+      {
+        label: "GOV.UK: Responsible AI in recruitment",
+        url: "https://www.gov.uk/government/publications/responsible-ai-in-recruitment-guide",
+        claim: "AI tools used in hiring can perpetuate existing biases.",
+      },
+      {
+        label: "ICO: Guidance on AI and data protection",
+        url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/",
+        claim: "Using personal information in AI tools must follow data protection law.",
+      },
+    ],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {
