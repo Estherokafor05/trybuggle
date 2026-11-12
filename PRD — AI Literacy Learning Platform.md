@@ -223,6 +223,19 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - Each category includes an understandable example of a task it may support.
 - Learners can revisit definitions without losing their place in the learning path.
 
+#### Story B5: Sign out of my account
+
+**As a signed-in learner,** I want to sign out, so that nobody else using the same device can continue as me or see my progress.
+
+**Acceptance criteria**
+
+- A clearly labelled **Sign out** control appears in the site header on every page while the learner is signed in: beside the main navigation on larger screens, and inside the menu on phones, with the signed-in name shown there.
+- Signing out ends the session on that device and returns the learner to the home page. The header then no longer offers Sign out.
+- After signing out, account-only pages (Lesson 3 onwards, the final assessment and the certificate) ask the learner to sign in again, and account APIs reject requests.
+- Signing out does not delete anything. Saved progress, assessment results and certificates remain on the learner's account and reappear when they sign in again.
+- Learning places and private notes kept in the browser stay filed under each learner's own account, so another person using the same device cannot see them by signing in themselves or browsing as a guest.
+- The control is keyboard accessible, has a visible focus state and works on phones and desktop.
+
 ### Epic C: Practise and apply learning
 
 #### Story C1: Find an example that feels relevant
