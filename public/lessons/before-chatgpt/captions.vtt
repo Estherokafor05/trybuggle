@@ -1,157 +1,157 @@
 WEBVTT
 
-00:00:00.140 --> 00:00:00.960
+00:00:00.160 --> 00:00:01.000
 This is Sarah.
 
 00:00:01.460 --> 00:00:03.000
 She works as a pharmacist.
 
-00:00:03.640 --> 00:00:09.040
+00:00:03.600 --> 00:00:08.800
 At this morning’s team meeting, her manager said that AI has been around for decades.
 
-00:00:09.660 --> 00:00:11.000
+00:00:09.420 --> 00:00:10.680
 Sarah was surprised.
 
-00:00:11.360 --> 00:00:13.740
+00:00:11.120 --> 00:00:13.440
 Didn’t all of this start with ChatGPT?
 
-00:00:14.540 --> 00:00:19.960
+00:00:14.180 --> 00:00:19.380
 Like many people, Sarah first heard about AI when chat tools appeared in the news.
 
-00:00:20.640 --> 00:00:24.800
+00:00:19.960 --> 00:00:24.140
 So let’s travel back in time and see where the story really begins.
 
-00:00:25.460 --> 00:00:30.460
+00:00:24.800 --> 00:00:29.660
 In the 1950s, computers filled whole rooms and cost a fortune.
 
-00:00:31.080 --> 00:00:32.880
+00:00:30.220 --> 00:00:31.980
 Most were used for calculations.
 
-00:00:33.460 --> 00:00:43.520
+00:00:32.540 --> 00:00:42.640
 But some researchers began asking a bigger question: could a computer do things we normally link with human intelligence, like solving problems or using language?
 
-00:00:44.220 --> 00:00:48.860
+00:00:43.300 --> 00:00:47.920
 In 1950, the mathematician Alan Turing wrote about this question.
 
-00:00:49.460 --> 00:00:56.460
+00:00:48.480 --> 00:00:55.400
 He suggested a test: if you chatted with a machine and couldn’t tell it apart from a person, what would that tell us?
 
-00:00:57.060 --> 00:01:03.900
+00:00:56.060 --> 00:01:02.780
 Then, in 1956, researchers gathered for a summer workshop at Dartmouth College in the United States.
 
-00:01:04.520 --> 00:01:10.300
+00:01:03.460 --> 00:01:09.260
 It was called the Dartmouth Summer Research Project on Artificial Intelligence, and the name stuck.
 
-00:01:10.820 --> 00:01:15.120
+00:01:09.880 --> 00:01:14.020
 So the term “artificial intelligence” is about seventy years old.
 
-00:01:15.820 --> 00:01:19.820
+00:01:14.540 --> 00:01:18.440
 For many years, a popular approach was to give computers rules.
 
-00:01:20.440 --> 00:01:26.360
+00:01:19.040 --> 00:01:24.860
 Researchers sat with experts, like doctors or engineers, and wrote down how they made decisions.
 
-00:01:27.000 --> 00:01:32.120
+00:01:25.460 --> 00:01:30.500
 Then they turned that knowledge into long lists of “if this, then that” rules.
 
-00:01:32.760 --> 00:01:35.160
+00:01:31.100 --> 00:01:33.400
 Imagine a help system for a broken printer.
 
-00:01:35.700 --> 00:01:37.940
+00:01:33.900 --> 00:01:36.020
 It asks: is the printer switched on?
 
-00:01:38.480 --> 00:01:39.780
+00:01:36.500 --> 00:01:37.840
 If not, switch it on.
 
-00:01:40.380 --> 00:01:42.580
+00:01:38.420 --> 00:01:40.640
 If it is, is there paper in the tray?
 
-00:01:43.080 --> 00:01:44.460
+00:01:41.140 --> 00:01:42.560
 If not, add paper.
 
-00:01:45.100 --> 00:01:50.180
+00:01:43.180 --> 00:01:48.280
 Systems like this, often called expert systems, could be useful for narrow jobs.
 
-00:01:50.660 --> 00:01:52.140
+00:01:48.740 --> 00:01:50.240
 But they were also fragile.
 
-00:01:52.780 --> 00:02:02.680
+00:01:50.900 --> 00:02:00.820
 Every rule had to be written by hand, the lists grew huge and hard to update, and when something happened that nobody had written a rule for, the system got stuck.
 
-00:02:03.200 --> 00:02:07.820
+00:02:01.480 --> 00:02:06.160
 When results fell short of big promises, interest and funding dropped for a while.
 
-00:02:08.480 --> 00:02:11.920
+00:02:06.760 --> 00:02:10.380
 People later called these quiet periods “AI winters”.
 
-00:02:12.440 --> 00:02:14.000
+00:02:10.920 --> 00:02:12.420
 But the research carried on.
 
-00:02:14.580 --> 00:02:20.060
-In 1997, a computer called Deep Blue beat by champion Garry Kasparov.
+00:02:13.000 --> 00:02:20.580
+In 1997, a computer called Deep Blue, built by IBM, beat the world chess champion, Garry Kasparov.
 
-00:02:20.700 --> 00:02:23.240
+00:02:21.200 --> 00:02:23.820
 Deep Blue didn’t learn chess the way a person does.
 
-00:02:23.700 --> 00:02:29.880
+00:02:24.240 --> 00:02:30.360
 It checked millions of possible moves every second, guided by rules and scoring that people had written.
 
-00:02:30.520 --> 00:02:32.840
-Over the following years, machine learning.
+00:02:30.940 --> 00:02:34.940
+Over the following years, a different approach grew: machine learning.
 
-00:02:33.460 --> 00:02:42.120
+00:02:35.600 --> 00:02:44.360
 Instead of writing every rule by hand, people gave computers lots of examples and let them find patterns, like the idea you met in Lesson 1.
 
-00:02:42.780 --> 00:02:48.000
-Machine learning helped computers get much better recognising speech and making predictions.
+00:02:44.840 --> 00:02:52.900
+Machine learning helped computers get much better at recognising images, recognising speech and making predictions.
 
-00:02:48.300 --> 00:02:51.460
+00:02:53.580 --> 00:02:56.980
 That’s how AI found its way into everyday tools.
 
-00:02:51.980 --> 00:02:55.880
+00:02:57.760 --> 00:03:01.780
 By the 2010s, AI was already part of daily life.
 
-00:02:56.340 --> 00:02:56.880
-Lesson 2.
+00:03:02.420 --> 00:03:04.180
+Remember Maya’s day in Lesson 2?
 
-00:02:57.560 --> 00:03:04.600
+00:03:05.000 --> 00:03:11.980
 Spam filters, photo search and route suggestions were already using it, often without anyone noticing.
 
-00:03:05.080 --> 00:03:13.320
-Then, in November 2022, a company called OpenAI released ChatGPT, and similar tools from other…
+00:03:12.680 --> 00:03:22.460
+Then, in November 2022, a company called OpenAI released ChatGPT, and similar tools from other companies soon followed.
 
-00:03:13.640 --> 00:03:21.060
+00:03:23.180 --> 00:03:30.880
 For the first time, almost anyone could type a question in plain words and get a written reply on almost any topic.
 
-00:03:21.600 --> 00:03:23.780
+00:03:31.520 --> 00:03:33.780
 People could talk to AI directly.
 
-00:03:24.260 --> 00:03:25.360
+00:03:34.440 --> 00:03:35.520
 AI wasn’t new.
 
-00:03:25.860 --> 00:03:29.320
+00:03:36.100 --> 00:03:39.760
 What changed was how visible and easy to use it became.
 
-00:03:29.840 --> 00:03:32.520
+00:03:40.560 --> 00:03:43.340
 So, did AI start with ChatGPT?
 
-00:03:33.020 --> 00:03:33.260
+00:03:44.220 --> 00:03:44.460
 No.
 
-00:03:33.800 --> 00:03:44.040
-It grew from decades of work: big questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of…
+00:03:45.100 --> 00:03:56.080
+It grew from decades of work: big questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of machine learning.
 
-00:03:44.360 --> 00:03:47.160
-…is one recent chapter in a much longer story.
+00:03:56.800 --> 00:04:00.900
+ChatGPT is one recent chapter in a much longer story.
 
-00:03:47.580 --> 00:03:49.540
+00:04:01.780 --> 00:04:03.780
 Back at work, Sarah smiles.
 
-00:03:49.980 --> 00:03:52.040
+00:04:04.540 --> 00:04:06.660
 AI has been around for decades.
 
-00:03:52.360 --> 00:03:54.280
+00:04:07.080 --> 00:04:09.100
 It just became much easier to see.
 
-00:03:54.780 --> 00:03:58.820
+00:04:09.960 --> 00:04:14.100
 Next, we’ll look at how to tell AI apart from ordinary software.

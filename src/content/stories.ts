@@ -34,7 +34,7 @@ export const stories: Record<
   },
   "before-chatgpt": {
     root: "/lessons/before-chatgpt/",
-    mediaVersion: "?v=20261112-2",
+    mediaVersion: "?v=20261112-3",
     narration: history,
     title: "AI did not start with ChatGPT",
     introduction:
