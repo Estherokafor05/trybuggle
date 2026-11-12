@@ -1,6 +1,6 @@
 # Product Requirements Document: AI Literacy Learning Platform
 
-**Status:** Revised draft for review
+**Status:** Approved learning decisions with remaining curriculum decisions identified below
 **Product:** Working title: AI Literacy Learning Platform
 **Audience:** People new to AI, including nontechnical workers and students
 **Purpose:** Define the learner journey, delivery experience, curriculum, assessments, and first certificate before redesigning or extending the codebase.
@@ -50,19 +50,19 @@ Someone studying or exploring AI who wants a clear introduction, practical examp
 
 ## 4. End-to-end customer journey
 
-| Stage | Learner’s question or need | Platform experience | Desired outcome |
-|---|---|---|---|
-| 1. Discover | “Is this for someone like me?” | Clear introduction that welcomes beginners, workers across roles, and students. | Learner recognizes that no technical background is required. |
-| 2. Understand the offer | “What will I learn, and why should I trust it?” | Learning-path overview, sample lesson, delivery explanation, and practical, balanced approach. | Learner knows what the course covers and what it does not promise. |
-| 3. Choose a starting point | “Where do I begin?” | A recommended six-module path, starting with AI foundations. | Learner can begin without understanding jargon or selecting a profession-specific course. |
-| 4. Choose how to learn a lesson | “Would I rather watch or read?” | A short narrated visual lesson and a separate structured guide teach the same learning outcomes. The learner may use either or both. | Learner chooses a suitable format without being required to consume the same material twice. |
-| 5. Check understanding | “Have I understood the key idea?” | A mandatory knowledge check follows every lesson, with explanatory feedback and an opportunity to retry. | Learner receives feedback and demonstrates understanding before moving on. |
-| 6. Practise and apply | “How does this work in a situation I recognize?” | Guided activities use familiar scenarios from work, study, and everyday life. | Learner applies a concept and sees where human review matters. |
-| 7. Progress | “What have I completed, and what comes next?” | Completion tracking, clear next steps, and access to previous lessons and guides. | Learner moves through the structured path while being able to revisit material. |
-| 8. Complete Module 1 | “Can I show what I have learned so far?” | Module assessment follows all Module 1 lessons and knowledge checks. Passing makes the learner eligible for the Module 1 Certificate of Completion. | Learner earns an early, clearly scoped recognition of learning. |
-| 9. Continue | “What can I learn next?” | The next module is presented, with the learner’s progress retained. The full path concludes with a final assessment. | Learner continues through the curriculum and can demonstrate learning across the programme. |
+| Stage                           | Learner’s question or need                       | Platform experience                                                                                                                                 | Desired outcome                                                                              |
+| ------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 1. Discover                     | “Is this for someone like me?”                   | Clear introduction that welcomes beginners, workers across roles, and students.                                                                     | Learner recognizes that no technical background is required.                                 |
+| 2. Understand the offer         | “What will I learn, and why should I trust it?”  | Learning-path overview, sample lesson, delivery explanation, and practical, balanced approach.                                                      | Learner knows what the course covers and what it does not promise.                           |
+| 3. Choose a starting point      | “Where do I begin?”                              | A recommended six-module path, starting with AI foundations.                                                                                        | Learner can begin without understanding jargon or selecting a profession-specific course.    |
+| 4. Choose how to learn a lesson | “Would I rather watch or read?”                  | A short narrated visual lesson and a separate structured guide teach the same learning outcomes. The learner may use either or both.                | Learner chooses a suitable format without being required to consume the same material twice. |
+| 5. Check understanding          | “Have I understood the key idea?”                | A mandatory knowledge check follows every lesson, with explanatory feedback and an opportunity to retry.                                            | Learner receives feedback and demonstrates understanding before moving on.                   |
+| 6. Practise and apply           | “How does this work in a situation I recognize?” | Guided activities use familiar scenarios from work, study, and everyday life.                                                                       | Learner applies a concept and sees where human review matters.                               |
+| 7. Progress                     | “What have I completed, and what comes next?”    | Completion tracking, clear next steps, and access to previous lessons and guides.                                                                   | Learner moves through the structured path while being able to revisit material.              |
+| 8. Complete Module 1            | “Can I show what I have learned so far?”         | Module assessment follows all Module 1 lessons and knowledge checks. Passing makes the learner eligible for the Module 1 Certificate of Completion. | Learner earns an early, clearly scoped recognition of learning.                              |
+| 9. Continue                     | “What can I learn next?”                         | The next module is presented, with the learner’s progress retained. The full path concludes with a final assessment.                                | Learner continues through the curriculum and can demonstrate learning across the programme.  |
 
-**Proposed account decision:** Allow learners to preview the platform and begin the first lesson without an account. Require an account before recording durable progress, assessment results, or issuing a certificate. This supports open discovery while enabling reliable certification records.
+**Approved account decision:** The first two lessons are public previews. Visitors can resume a learning place on their device. Google sign-in is required for progress saved to an account across devices, official assessment results and certificate eligibility. Preview access does not count as a verified pass.
 
 ## 5. Learning Experience and Delivery Requirements
 
@@ -70,12 +70,12 @@ Someone studying or exploring AI who wants a clear introduction, practical examp
 
 Each lesson has two complementary formats that cover the same learning outcomes:
 
-1. **Watch and listen:** A short narrated visual lesson using visual demonstrations, motion graphics, diagrams, and familiar scenarios. Visuals actively explain the concept; they are not decorative filler.
-2. **Read and follow:** A separate, structured learning guide that explains the topic step by step, with diagrams, definitions, examples, and practical instructions. It is not simply a transcript of the video.
+1. **Watch & Listen:** A continuous, professionally illustrated and animated story with the user’s approved narration, synchronized captions, playback controls and a transcript. Meaningful visual changes explain the concept.
+2. **Read & Explore:** An independent interactive guide using progressive discovery, illustrations, practical examples, varied meaningful interactions and explanatory feedback. It includes a complete accessible reading alternative and covers the same essential outcomes without requiring the video.
 
 Learners may use either format or both. Watching the video and reading the guide are alternatives, not two mandatory steps. The knowledge check remains mandatory regardless of the format chosen.
 
-**Open decision:** Set a target duration for narrated lessons after prototyping the first module. Keep lessons short enough to complete in one sitting, and prioritize clarity over a fixed runtime.
+**Approved duration:** Each lesson is no longer than eight minutes. Planned module content is 30 to 60 minutes with a one-hour cap; self-paced reading, accessibility needs and retries are not timed.
 
 ### 5.2 Lesson sequence
 
@@ -102,7 +102,7 @@ Each lesson follows this sequence:
 
 - Every lesson has a mandatory knowledge check tied to its stated learning outcomes.
 - Feedback explains why an answer is correct or incorrect and points the learner to relevant material for review.
-- After a failed check, the learner may review its feedback and the relevant lesson section, then retry that assessment only. They do not restart the lesson or module, and previously completed progress remains saved. No fixed retry limit is proposed for the first release.
+- After a failed check, the learner may review its feedback and the relevant lesson section, then retry that assessment only. They do not restart the lesson or module, and previously completed progress remains saved. There is no fixed retry limit.
 - A learner must pass the lesson check before the next lesson unlocks.
 - Learners can revisit completed lessons and guides at any time.
 - Progress is recorded per learner and remains available when they return on another visit or device.
@@ -116,14 +116,14 @@ Each lesson follows this sequence:
 
 The curriculum moves from broad concepts to practical use. Each module builds on the previous modules while repeating responsible-use principles throughout.
 
-| Module | Title | Core concepts | Practical application | Assessment / completion |
-|---|---|---|---|---|
-| 1 | Foundations of Artificial Intelligence | What AI is, where it came from, how it has evolved, and why it matters in everyday life. | Identify examples of AI in familiar work, study, and everyday settings; distinguish AI claims from ordinary software capabilities. | Mandatory check after each lesson and Module 1 final assessment. First Certificate of Completion is issued after passing all Module 1 requirements. |
-| 2 | Understanding Different Types of AI Systems | Rules-based systems, predictive AI, generative AI, and how these categories relate to one another. | Match example tasks to system types and discuss where labels can overlap. | Mandatory lesson checks and module assessment. |
-| 3 | Understanding Machine Learning | Learning patterns from data; supervised and unsupervised learning; training and testing; data quality. | Explore how a change in examples or data quality can affect a system’s output. | Mandatory lesson checks and module assessment. |
-| 4 | Understanding Generative AI and LLMs | What tools such as ChatGPT and Claude do; how language models generate responses; context; incorrect or unsupported outputs. | Use or review a guided example that improves a request and checks the response. | Mandatory lesson checks and module assessment. |
-| 5 | Understanding AI Agents and Workflows | Assistants, configured workspaces, automated workflows, and agents; instructions, context, tools, actions, and oversight. | Classify familiar examples and trace how an agent can move from a request to an action. | Mandatory lesson checks and module assessment. |
-| 6 | Creating Your First AI-Assisted Workflow | No-code interfaces, ChatGPT Projects, and other accessible ways to create reusable support for routine tasks. | Create or follow a beginner-friendly workflow for a low-risk everyday task, then review and improve its output. | Mandatory lesson checks, module assessment, and final assessment covering the full learning path. |
+| Module | Title                                       | Core concepts                                                                                                                | Practical application                                                                                                              | Assessment / completion                                                                                                                             |
+| ------ | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | Foundations of Artificial Intelligence      | What AI is, where it came from, how it has evolved, and why it matters in everyday life.                                     | Identify examples of AI in familiar work, study, and everyday settings; distinguish AI claims from ordinary software capabilities. | Mandatory check after each lesson and Module 1 final assessment. First Certificate of Completion is issued after passing all Module 1 requirements. |
+| 2      | Understanding Different Types of AI Systems | Rules-based systems, predictive AI, generative AI, and how these categories relate to one another.                           | Match example tasks to system types and discuss where labels can overlap.                                                          | Mandatory lesson checks and module assessment.                                                                                                      |
+| 3      | Understanding Machine Learning              | Learning patterns from data; supervised and unsupervised learning; training and testing; data quality.                       | Explore how a change in examples or data quality can affect a system’s output.                                                     | Mandatory lesson checks and module assessment.                                                                                                      |
+| 4      | Understanding Generative AI and LLMs        | What tools such as ChatGPT and Claude do; how language models generate responses; context; incorrect or unsupported outputs. | Use or review a guided example that improves a request and checks the response.                                                    | Mandatory lesson checks and module assessment.                                                                                                      |
+| 5      | Understanding AI Agents and Workflows       | Assistants, configured workspaces, automated workflows, and agents; instructions, context, tools, actions, and oversight.    | Classify familiar examples and trace how an agent can move from a request to an action.                                            | Mandatory lesson checks and module assessment.                                                                                                      |
+| 6      | Creating Your First AI-Assisted Workflow    | No-code interfaces, ChatGPT Projects, and other accessible ways to create reusable support for routine tasks.                | Create or follow a beginner-friendly workflow for a low-risk everyday task, then review and improve its output.                    | Mandatory lesson checks, module assessment, and final assessment covering the full learning path.                                                   |
 
 ### 6.2 Relationship between concepts, lessons, activities, and assessments
 
@@ -190,7 +190,14 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 
 - Each lesson provides a narrated visual lesson and a separate structured guide covering the same learning outcomes.
 - The learner is not required to watch and read both formats before taking the knowledge check.
-- The written guide is a complete learning resource, not only a video transcript.
+- Read & Explore is a complete interactive learning resource, not a video transcript or static text-card sequence.
+- Interactions have an educational purpose, immediate explanatory feedback and keyboard/tap access; dragging is optional.
+- A complete reading alternative works without JavaScript.
+- Guide activities and reflections are unscored and do not create official assessment attempts.
+- Route, activity state and film position are preserved; changing routes pauses the film.
+- Use Remotion as isolated film production tooling and React for learning interactions.
+- Lesson 1 opens with a plain definition, ordinary automation contrast, capabilities, learning from examples, generative AI, errors and human checks. Move the four approaches to a later unit pending curriculum approval.
+- Preserve Lesson 2’s existing Maya film and supplied voice; its guide investigates objects and decisions through her day.
 - Video meaning is available through captions and text access; diagrams and visuals have accessible alternatives where needed.
 - The learner can switch formats or revisit either format without losing their place.
 
@@ -289,7 +296,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 **Acceptance criteria**
 
 - Every lesson ends with a mandatory check aligned to that lesson’s stated outcomes.
-- The proposed pass mark is 70% and can be configured without rebuilding the lesson.
+- The approved pass mark is 70%: at least 7 correct answers out of 10.
 - Feedback explains why each selected answer is correct or incorrect and points to the relevant learning material.
 - If the learner does not pass, they can revisit the relevant video or guide section and retry that assessment only; they do not restart the lesson or module, and completed progress remains saved.
 - Passing the check records lesson completion and unlocks the next lesson.
@@ -327,7 +334,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 **Acceptance criteria**
 
 1. Each Module 1 lesson has a mandatory knowledge check.
-2. The learner must achieve the proposed passing score of at least 70% on each check before progressing to the next lesson.
+2. The learner must achieve the approved passing score of at least 70% on each check before progressing to the next lesson.
 3. A learner who does not pass can review the relevant materials and retake that assessment only. They do not restart completed lessons or the module, and completed progress remains saved.
 4. The learner must complete all Module 1 lessons and pass the Module 1 final assessment.
 5. A certificate is issued only after all Module 1 completion requirements have been recorded as satisfied.
@@ -382,20 +389,20 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 
 ## 8. Assessment and certification requirements
 
-| Requirement | Proposed decision |
-|---|---|
-| Knowledge checks | Mandatory after every lesson. |
-| Passing score | At least 70% proposed for each lesson check and assessment; configurable and subject to validation. |
-| Failed assessment | Learner reviews feedback and relevant material, then retries that assessment only. No restart of completed lessons or modules; no fixed retry limit proposed. |
-| Lesson progression | Next lesson unlocks only after passing the current lesson check. |
-| Module completion | All lesson checks and the module assessment are passed. |
-| Module 1 certificate eligibility | All Module 1 lessons and checks completed, and Module 1 final assessment passed. |
-| Full-path final assessment | Mandatory after completion of all six modules; covers the full learning path. |
-| First certificate | Digital certificate titled "Foundations of Artificial Intelligence, Certificate of Completion", issued after Module 1. |
-| Certificate details | Learner name, module title, completion date, and issuing organisation. |
-| Certificate record | Store learner completion, assessment results, certificate issue date, and a unique certificate ID. |
-| Public certificate verification | Consider for a later release; do not expose learner information publicly without a separate privacy decision. |
-| Full-programme certificate | Potential later credential after all modules and the full-path final assessment; scope and launch timing remain open. |
+| Requirement                      | Proposed decision                                                                                                                                    |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Knowledge checks                 | Mandatory after every lesson.                                                                                                                        |
+| Passing score                    | At least 70% for each lesson check and assessment. Each lesson check has 10 questions.                                                               |
+| Failed assessment                | Learner reviews feedback and relevant material, then retries that assessment only. No restart of completed lessons or modules; no fixed retry limit. |
+| Lesson progression               | Next lesson unlocks only after passing the current lesson check.                                                                                     |
+| Module completion                | All lesson checks and the module assessment are passed.                                                                                              |
+| Module 1 certificate eligibility | All Module 1 lessons and checks completed, and Module 1 final assessment passed.                                                                     |
+| Full-path final assessment       | Mandatory after completion of all six modules; covers the full learning path.                                                                        |
+| First certificate                | Digital certificate titled "Foundations of Artificial Intelligence, Certificate of Completion", issued after Module 1.                               |
+| Certificate details              | Learner name, module title, completion date, and issuing organisation.                                                                               |
+| Certificate record               | Store learner completion, assessment results, certificate issue date, and a unique certificate ID.                                                   |
+| Public certificate verification  | Consider for a later release; do not expose learner information publicly without a separate privacy decision.                                        |
+| Full-programme certificate       | Potential later credential after all modules and the full-path final assessment; scope and launch timing remain open.                                |
 
 ## 9. First-version scope
 
@@ -451,19 +458,20 @@ Success measures should show whether learners understand and can apply the basic
 
 **Open decision:** Set numerical targets, collection methods, retention periods, and privacy expectations after deciding what analytics and account data will be used. No numerical targets are assumed in this draft.
 
-## 12. Open decisions for review
+## 12. Approved decisions and remaining review
 
-1. What name and public-facing description should the platform use?
-2. Is the initial learning content free, paid, or undecided?
-3. Confirm the proposed account model: open preview and first lesson, account required to save progress and earn a certificate.
-4. Confirm the 70% passing score and whether it applies uniformly to checks and assessments.
-5. Which specific historical milestones and examples belong in Module 1?
-6. Which no-code interface should be used for the first workflow activity, and what tool-independent alternative will be offered?
-7. What target duration should narrated lessons meet?
-8. Will the full-programme certificate be included in the initial launch or a later release?
-9. What certificate ID and record-retention approach will be used? When, if ever, should public verification be available?
-10. What accessibility standard and content review process should the team commit to?
-11. Which learning outcomes and measures will define a successful first release?
+Approved: Google sign-in; the first two lesson previews; two equivalent learning routes; 10-question official lesson checks; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; 30 to 60 minutes of planned module content; Modules 1 and 2 free; one-time USD 50 Stripe unlock for practical workflow content; WCAG 2.2 AA; Module 1 Certificate of Completion subject to all requirements being satisfied. Narration recordings are requested from the user before film production, as defined in LEARNING_EXPERIENCE.md.
+
+Remaining decisions:
+
+1. Which historical milestones and remaining lessons belong in Module 1, including the later home for the four classical approaches?
+2. What is the Module 1 final assessment blueprint and question count?
+3. Which no-code interface and tool-independent alternative should support the first paid workflow activity?
+4. What exact content is paid, and what refund policy applies?
+5. What certificate ID, retention policy and later public verification experience should be used?
+6. Which outcome measures define a successful complete first release?
+
+The current implementation slice covers Lessons 1 and 2, their separate official checks and saved learning places. It does not imply that all Module 1 lessons, the final assessment, certificate issuance or payments are ready.
 
 ## 13. Working definition of done for the first release
 

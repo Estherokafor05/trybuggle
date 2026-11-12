@@ -1,161 +1,111 @@
 "use client";
-
-import { useState } from "react";
-import Image from "next/image";
-import { MayaDayFilm } from "@/components/story/MayaDayFilm";
-import {
-  LessonPractice,
-  GuideDiagram,
-  DayActivity,
-} from "@/components/walkthrough/LessonPractice";
-import { FoundationsWalkthrough } from "@/components/walkthrough/FoundationsWalkthrough";
+import Link from "next/link";
 import type { PreviewLesson } from "@/content/preview-lessons";
+import { stories } from "@/content/stories";
+import { exploreGuides } from "@/content/explore-guides";
+import { StoryPlayer } from "./story/StoryPlayer";
+import { ExploreJourney } from "./explore/ExploreJourney";
+import { Reflection } from "./explore/Activities";
+import { useLearningPlace } from "./explore/useLearningPlace";
+import { KnowledgeCheck } from "./assessment/KnowledgeCheck";
 
-const STEP_TONES = ["bg-lavender", "bg-peach", "bg-mint", "bg-blush"];
-const FORMAT_BUTTON =
-  "min-h-11 rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-
-export function LessonPreview({ lesson }: { lesson: PreviewLesson }) {
-  const [format, setFormat] = useState<"visual" | "guide" | "story">(
-    lesson.visualFormat === "day" ? "story" : "visual",
-  );
-  function openGuide() {
-    setFormat("guide");
-  }
-
+export function LessonPreview({
+  lesson,
+  scope = "guest",
+  signedIn = false,
+}: {
+  lesson: PreviewLesson;
+  scope?: string;
+  signedIn?: boolean;
+}) {
+  const learning = useLearningPlace(lesson.slug, scope, signedIn);
+  const { place, update } = learning;
+  const guide = exploreGuides[lesson.slug];
   return (
     <>
-      {lesson.slug === "what-counts-as-ai" && (
-        <section
-          aria-labelledby="ai-start-title"
-          className="mt-7 grid items-center gap-5 rounded-[2rem] bg-lavender p-5 sm:grid-cols-[1fr_0.55fr] sm:p-8"
-        >
-          <div>
-            <h2 id="ai-start-title" className="text-2xl font-bold">
-              What is AI?
-            </h2>
-            <p className="mt-3 leading-relaxed">
-              AI is short for artificial intelligence. It is a broad name for
-              computer systems designed to carry out tasks such as recognising
-              speech, interpreting messages, making recommendations or creating
-              a draft.
-            </p>
-            <p className="mt-3 leading-relaxed">
-              Some use knowledge and rules supplied by people. Others learn
-              patterns from examples. Systems can also combine these approaches.
-            </p>
-            <p className="mt-3 leading-relaxed">
-              Doing something automatically does not necessarily make it AI. A
-              basic reminder that rings at the time you set can work without AI.
-            </p>
-          </div>
-          <Image
-            src="/illustrations/ai-learning-hero.png"
-            alt="A learner exploring something new on a laptop."
-            width={1448}
-            height={1086}
-            sizes="(max-width: 639px) 220px, 300px"
-            className="mx-auto h-auto w-full max-w-56 sm:max-w-none"
-          />
-        </section>
-      )}
       <div
-        className="mt-7 inline-flex flex-wrap gap-1 rounded-3xl border border-line bg-white p-1.5"
+        className="mt-7 flex flex-wrap gap-2 rounded-3xl border border-line bg-white p-2"
         role="group"
-        aria-label="Choose a lesson format"
+        aria-label="Choose your learning experience"
       >
-        {lesson.visualFormat === "day" && (
+        {[
+          { id: "watch" as const, label: "Watch & Listen" },
+          { id: "explore" as const, label: "Read & Explore" },
+        ].map((route) => (
+          <button
+            key={route.id}
+            type="button"
+            disabled={!learning.ready}
+            aria-pressed={place.route === route.id}
+            className={`min-h-12 flex-1 rounded-full px-5 py-3 font-semibold disabled:opacity-50 ${place.route === route.id ? "bg-navy text-white" : "hover:bg-lavender"}`}
+            onClick={() => update({ route: route.id })}
+          >
+            {route.label}
+          </button>
+        ))}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
+        <span role="status">{learning.status}</span>
+        {signedIn && (
           <button
             type="button"
-            aria-pressed={format === "story"}
-            onClick={() => setFormat("story")}
-            className={`${FORMAT_BUTTON} ${format === "story" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
+            className="min-h-11 underline"
+            onClick={() =>
+              learning.conflict ? void learning.reload() : learning.retry()
+            }
           >
-            Watch the illustrated film
+            {learning.conflict ? "Reload the saved place" : "Retry saving"}
           </button>
         )}
-        {lesson.visualFormat === "four-ways" && <button
-          type="button"
-          aria-pressed={format === "visual"}
-          onClick={() => setFormat("visual")}
-          className={`${FORMAT_BUTTON} ${format === "visual" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
+        <Link
+          className="inline-flex min-h-11 items-center underline"
+          href={`/modules/ai-foundations/lessons/${lesson.slug}/reading`}
         >
-          Visual walkthrough
-        </button>}
-        <button
-          type="button"
-          aria-pressed={format === "guide"}
-          onClick={openGuide}
-          className={`${FORMAT_BUTTON} ${format === "guide" ? "bg-navy text-white" : "text-ink hover:bg-lavender"}`}
-        >
-          Read the guide
-        </button>
+          Complete reading alternative
+        </Link>
       </div>
-
-      {lesson.visualFormat === "day" && (
-        <div hidden={format !== "story"}>
-          <MayaDayFilm active={format === "story"} />
-          <DayActivity />
-        </div>
+      {!learning.ready && (
+        <p className="my-8">Preparing your learning experience…</p>
       )}
-      {lesson.visualFormat === "four-ways" && <div hidden={format !== "visual"}>
-        <FoundationsWalkthrough
-          active={format === "visual"}
-          title={lesson.visualTitle}
-        />
-      </div>}
-
-      {format === "guide" && (
-        <section aria-labelledby="guide-title" className="mt-5">
-          <div className="rounded-[2rem] border border-line bg-white p-5 shadow-sm sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-deep">
-              Written learning guide
-            </p>
-            <h2 id="guide-title" className="mt-2 text-2xl font-bold">
-              {lesson.title}
-            </h2>
-            <p className="mt-3 max-w-[68ch] leading-relaxed text-muted">
-              Use these steps to connect the idea to a task you recognize.
-            </p>
-            <GuideDiagram kind={lesson.visualFormat} />
-            <ol className="mt-6 flex flex-col gap-3">
-              {lesson.guideSteps.map((step, index) => (
-                <li
-                  key={step.title}
-                  className={`grid grid-cols-[2.5rem_1fr] gap-4 rounded-2xl p-4 ${STEP_TONES[index % STEP_TONES.length]}`}
-                >
-                  <span className="flex size-10 items-center justify-center rounded-full bg-white/75 font-mono text-sm font-semibold text-navy">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-bold">{step.title}</h3>
-                    <p className="mt-1 leading-relaxed text-ink">{step.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-7 rounded-2xl bg-ivory p-4 leading-relaxed">
-              <strong className="block">Key idea</strong>
-              {lesson.takeaway}
-            </p>
-            <LessonPractice kind={lesson.visualFormat} />
+      {learning.ready && (
+        <>
+          <div hidden={place.route !== "watch"}>
+            <StoryPlayer
+              active={place.route === "watch"}
+              {...stories[lesson.slug]}
+              initialTime={place.videoTime}
+              onPlace={(videoTime) => update({ videoTime })}
+            />
+            <details className="mt-4 rounded-2xl border border-line bg-white p-5">
+              <summary className="cursor-pointer py-2 font-semibold">
+                Try the reflection after the film
+              </summary>
+              <div className="mt-4">
+                <Reflection
+                  prompts={guide.reflections}
+                  slug={lesson.slug}
+                  scope={scope}
+                />
+              </div>
+            </details>
           </div>
-        </section>
+          <div hidden={place.route !== "explore"}>
+            <ExploreJourney
+              guide={guide}
+              place={place}
+              update={update}
+              scope={scope}
+            />
+          </div>
+        </>
       )}
-      {lesson.visualFormat === "four-ways" && (
-        <details className="mt-5 rounded-2xl border border-line bg-white p-4 text-sm">
-          <summary className="cursor-pointer py-2 font-semibold">Sources and example notes</summary>
-          <p className="mt-3">
-            The situations, messages and journey times are fictional teaching examples.
-            A feature’s appearance alone does not prove it uses AI.
-          </p>
-          <ul className="mt-3 list-disc space-y-2 pl-5">
-            {lesson.sources.map(source => <li key={source.url}>
-              <a className="underline underline-offset-2" href={source.url} target="_blank" rel="noreferrer">{source.label}</a>: {source.claim}
-            </li>)}
-          </ul>
-        </details>
-      )}
+      <noscript>
+        <p className="mt-5 rounded-xl bg-peach p-5">
+          The film and interactive activities need JavaScript. The complete
+          reading alternative above covers all the learning outcomes without it.
+        </p>
+      </noscript>
+      <KnowledgeCheck slug={lesson.slug} signedIn={signedIn} />
     </>
   );
 }

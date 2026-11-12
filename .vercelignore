@@ -1,5 +1,6 @@
 .env*
 references/
+public/lessons/maya-journey/
 .git/
 
 animation/

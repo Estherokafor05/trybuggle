@@ -40,7 +40,7 @@ export const modules: Module[] = [
     lessons: [
       {
         slug: "what-counts-as-ai",
-        title: "So, What Counts as AI?",
+        title: "What is AI?",
         summary:
           "Meet the idea of artificial intelligence in plain language, and learn why the label covers many different things.",
       },
@@ -84,22 +84,26 @@ export const modules: Module[] = [
       {
         slug: "not-one-kind",
         title: "AI Is Not Just One Thing",
-        summary: "Why one label can describe systems that work in very different ways.",
+        summary:
+          "Why one label can describe systems that work in very different ways.",
       },
       {
         slug: "rules-and-predictions",
         title: "Rules, Patterns, and Predictions",
-        summary: "Compare systems that follow instructions with systems that learn from examples.",
+        summary:
+          "Compare systems that follow instructions with systems that learn from examples.",
       },
       {
         slug: "generating-new-things",
         title: "When AI Makes Something New",
-        summary: "Meet generative systems and see how they differ from predictive tools.",
+        summary:
+          "Meet generative systems and see how they differ from predictive tools.",
       },
       {
         slug: "choose-the-right-tool",
         title: "Which Kind Fits the Job?",
-        summary: "Match everyday tasks with the kinds of systems that may support them.",
+        summary:
+          "Match everyday tasks with the kinds of systems that may support them.",
       },
     ],
   },
@@ -117,12 +121,14 @@ export const modules: Module[] = [
       {
         slug: "learning-from-examples",
         title: "Learning from Examples",
-        summary: "How a computer can learn patterns instead of following only hand-written rules.",
+        summary:
+          "How a computer can learn patterns instead of following only hand-written rules.",
       },
       {
         slug: "training-and-testing",
         title: "Practice, Then a Fair Test",
-        summary: "What training and testing mean, using an everyday comparison.",
+        summary:
+          "What training and testing mean, using an everyday comparison.",
       },
       {
         slug: "data-quality",
@@ -132,7 +138,8 @@ export const modules: Module[] = [
       {
         slug: "supervised-unsupervised",
         title: "Learning with and without Answer Keys",
-        summary: "A plain-language introduction to supervised and unsupervised learning.",
+        summary:
+          "A plain-language introduction to supervised and unsupervised learning.",
       },
     ],
   },
@@ -150,22 +157,26 @@ export const modules: Module[] = [
       {
         slug: "what-generative-means",
         title: "What Does Generative AI Generate?",
-        summary: "How tools create text, images, and other outputs from a request.",
+        summary:
+          "How tools create text, images, and other outputs from a request.",
       },
       {
         slug: "inside-a-language-model",
         title: "A Language Model, in Everyday Terms",
-        summary: "A beginner-friendly picture of how a large language model produces a response.",
+        summary:
+          "A beginner-friendly picture of how a large language model produces a response.",
       },
       {
         slug: "context-matters",
         title: "Give It Context, Get a Better Answer",
-        summary: "Why the information around a request can change the response.",
+        summary:
+          "Why the information around a request can change the response.",
       },
       {
         slug: "check-the-answer",
         title: "Fluent Does Not Always Mean True",
-        summary: "Why generative tools can be wrong and how to check important information.",
+        summary:
+          "Why generative tools can be wrong and how to check important information.",
       },
     ],
   },
@@ -175,7 +186,8 @@ export const modules: Module[] = [
     title: "Understanding AI Agents and Workflows",
     summary:
       "Tell an assistant, a configured workspace, an automated workflow, and an agent apart.",
-    outcome: "A clear picture of what agents can do and where oversight belongs.",
+    outcome:
+      "A clear picture of what agents can do and where oversight belongs.",
     track: "practice",
     status: "planned",
     handsOn: true,
@@ -183,17 +195,20 @@ export const modules: Module[] = [
       {
         slug: "assistant-workspace-workflow-agent",
         title: "Assistant, Workspace, Workflow, or Agent?",
-        summary: "Compare four ideas that are often described with the same words.",
+        summary:
+          "Compare four ideas that are often described with the same words.",
       },
       {
         slug: "how-agents-work",
         title: "How an Agent Gets from Request to Action",
-        summary: "See how instructions, context, tools, and actions can work together.",
+        summary:
+          "See how instructions, context, tools, and actions can work together.",
       },
       {
         slug: "keep-a-person-in-the-loop",
         title: "Where You Stay in Control",
-        summary: "Recognize when an action needs a person's review or confirmation.",
+        summary:
+          "Recognize when an action needs a person's review or confirmation.",
       },
     ],
   },
@@ -226,7 +241,8 @@ export const modules: Module[] = [
       {
         slug: "review-and-improve",
         title: "Check It, Then Make It Better",
-        summary: "Review the result, notice a limitation, and refine the workflow.",
+        summary:
+          "Review the result, notice a limitation, and refine the workflow.",
       },
     ],
   },

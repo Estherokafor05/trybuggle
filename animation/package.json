@@ -4,7 +4,8 @@
   "scripts": {
     "render": "node render.mjs",
     "still": "remotion still src/index.ts MayaDay --public-dir=../public",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "render:foundations": "node render-foundations.mjs"
   },
   "dependencies": {
     "remotion": "4.0.542",

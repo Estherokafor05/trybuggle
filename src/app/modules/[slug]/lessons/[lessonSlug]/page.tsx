@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { createHash } from "node:crypto";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
@@ -44,7 +45,9 @@ export default async function LessonPage({
 
   if (!lesson) {
     if (!googleAuthConfigured) {
-      redirect(`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`);
+      redirect(
+        `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`,
+      );
     }
     const session = await auth();
     if (!session?.user) {
@@ -59,7 +62,9 @@ export default async function LessonPage({
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
               Your account is ready
             </p>
-            <h1 className="mt-3 text-3xl font-bold">This lesson is being prepared</h1>
+            <h1 className="mt-3 text-3xl font-bold">
+              This lesson is being prepared
+            </h1>
             <p className="mt-4 leading-relaxed text-ink">
               You can revisit the first two lessons from the Module 1 overview.
             </p>
@@ -106,17 +111,50 @@ export default async function LessonPage({
               {lesson.objective}
             </p>
             <p className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy">
-              <span className="rounded-full bg-white/80 px-3 py-1.5">Lesson {lessonIndex + 1}</span>
-              <span className="rounded-full bg-white/80 px-3 py-1.5">About {lesson.duration}</span>
-              <span className="rounded-full bg-mint px-3 py-1.5">Free preview</span>
+              <span className="rounded-full bg-white/80 px-3 py-1.5">
+                Lesson {lessonIndex + 1}
+              </span>
+              <span className="rounded-full bg-white/80 px-3 py-1.5">
+                About {lesson.duration}
+              </span>
+              <span className="rounded-full bg-mint px-3 py-1.5">
+                Free preview
+              </span>
             </p>
           </div>
-          <div aria-hidden="true" className="hidden size-24 shrink-0 items-center justify-center rounded-[1.75rem] bg-white/65 font-display text-4xl font-bold text-navy sm:flex lg:size-28">
+          <div
+            aria-hidden="true"
+            className="hidden size-24 shrink-0 items-center justify-center rounded-[1.75rem] bg-white/65 font-display text-4xl font-bold text-navy sm:flex lg:size-28"
+          >
             {String(lessonIndex + 1).padStart(2, "0")}
           </div>
         </header>
 
-        <LessonPreview lesson={lesson} />
+        {session?.user && !session.user.id && (
+          <p className="mt-5 rounded-2xl bg-mint p-5 leading-relaxed">
+            Saved learning is now available. Sign in with Google again to
+            connect your account and keep your place across devices.{" "}
+            <Link
+              className="font-semibold underline"
+              href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}`)}`}
+            >
+              Connect saved learning
+            </Link>
+          </p>
+        )}
+        <LessonPreview
+          key={lesson.slug}
+          lesson={lesson}
+          signedIn={Boolean(session?.user?.id)}
+          scope={
+            session?.user?.id
+              ? createHash("sha256")
+                  .update(session.user.id)
+                  .digest("hex")
+                  .slice(0, 24)
+              : "guest"
+          }
+        />
 
         <nav
           aria-label="Lesson navigation"
@@ -129,25 +167,31 @@ export default async function LessonPage({
             >
               <span aria-hidden="true">←</span> Previous lesson
             </Link>
-          ) : <span />}
+          ) : (
+            <span />
+          )}
           {next && !isLastPreview && (
             <Link
               href={nextPath}
               className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              Continue to the next lesson <span aria-hidden="true">→</span>
+              Preview Lesson 2 <span aria-hidden="true">→</span>
             </Link>
           )}
         </nav>
 
         {isLastPreview && (
-          <section className={`mt-6 rounded-[2rem] p-6 sm:p-8 ${session?.user ? "bg-mint" : "bg-blush"}`}>
+          <section
+            className={`mt-6 rounded-[2rem] p-6 sm:p-8 ${session?.user ? "bg-mint" : "bg-blush"}`}
+          >
             {session?.user ? (
               <>
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
                   You are signed in
                 </p>
-                <h2 className="mt-2 text-2xl font-bold">Your next lesson is being prepared</h2>
+                <h2 className="mt-2 text-2xl font-bold">
+                  Your next lesson is being prepared
+                </h2>
                 <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
                   Your account is ready. You can revisit these previews or
                   return to the Module 1 overview.
@@ -164,7 +208,9 @@ export default async function LessonPage({
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
                   Want to keep going?
                 </p>
-                <h2 className="mt-2 text-2xl font-bold">Continue with a free account</h2>
+                <h2 className="mt-2 text-2xl font-bold">
+                  Continue with a free account
+                </h2>
                 <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
                   Sign in with Google to continue to the learning path. The next
                   lesson is still being prepared.

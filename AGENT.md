@@ -1,5 +1,4 @@
-
-# AGENTS.md — AI Literacy Learning Platform
+# AGENTS.md : AI Literacy Learning Platform
 
 ## 1. Mission
 
@@ -18,6 +17,7 @@ Use the approved Product Requirements Document (PRD) as the primary source of re
 Do not invent product features, business rules, acceptance criteria, or curriculum content.
 
 Maintain traceability between:
+
 - PRD requirements
 - User stories
 - Implementation tasks
@@ -25,6 +25,7 @@ Maintain traceability between:
 - Delivered functionality
 
 If requirements are missing, ambiguous, or contradictory:
+
 1. Record the question.
 2. Explain its impact.
 3. Propose options where helpful.
@@ -33,16 +34,27 @@ If requirements are missing, ambiguous, or contradictory:
 ## 3. Confirmed Product Requirements
 
 ### Learning Experience
+
 - Visual-first, narrated educational videos.
 - Diagrams, animations, and practical demonstrations.
-- Structured step-by-step written learning guides.
+- Watch & Listen: continuous narrated illustrated films with captions, transcripts and learner-controlled playback.
+- Read & Explore: separate interactive formative guides with progressive discovery, meaningful feedback and a complete accessible reading alternative.
+- Guide activities are unscored and never consume official assessment attempts or satisfy progression.
 - Written guides must not simply duplicate video transcripts.
 - Learners can revisit lessons.
 - Plain-language explanations before technical terminology.
 - Examples relevant to different occupations and everyday life.
 - Responsive and accessible learning interfaces.
 
+### Narration production rule
+
+- Before producing any new lesson film, present its narration script for review and request the user's narration recording. Wait for the recording before rendering the narrated film.
+- Use the supplied recording unchanged as the voice source. Check that its content matches the intended lesson, then align the animation, captions and transcript to the words actually spoken.
+- Do not generate a replacement voice, clone a voice, or use browser speech as the primary narration. Generate a voice preview only when the user explicitly requests one for that lesson. A preview does not authorise its publication.
+- Reuse existing approved recordings for their own lessons without requesting them again. When the user supplies a replacement, use the latest file for the requested lesson after checking its content. Clarify any mismatch before changing the published lesson.
+
 ### Assessments
+
 - Mandatory knowledge checks throughout the learning path.
 - Learners must achieve the approved passing score before progressing.
 - Learners can review material and retry failed assessments.
@@ -50,6 +62,7 @@ If requirements are missing, ambiguous, or contradictory:
 - A final Module 1 assessment is required.
 
 ### Certification
+
 - Only Module 1, Foundations of Artificial Intelligence, awards a certificate at initial launch.
 - Certificates are awarded only after all Module 1 requirements are satisfied.
 - Certificate type: Certificate of Completion.
@@ -58,6 +71,7 @@ If requirements are missing, ambiguous, or contradictory:
 - Certificates must include the learner's name, programme title, and completion date.
 
 ### Curriculum Direction
+
 1. Foundations of Artificial Intelligence
 2. Types of AI Systems
 3. Machine Learning
@@ -67,38 +81,36 @@ If requirements are missing, ambiguous, or contradictory:
 
 The detailed curriculum and scope of later modules require approval.
 
-## 4. Open Product Decisions
-
-
 ## 4. Product Decisions
 
 ### Approved
-- Minimum passing score: 70%.
+
+- Minimum passing score: 70%, including the Module 1 final assessment.
+- Maximum lesson duration: eight minutes. Module planned content: 30 to 60 minutes, with a one-hour cap.
+- The first two lessons can be previewed before Google sign-in. Sign-in is required for account progress and official results.
+- Accessibility target: WCAG 2.2 AA.
+- Practical workflow content uses a one-time USD 50 Stripe payment; exact gated content remains subject to approval.
 - Questions per knowledge check: 10.
 - No fixed retry limit. After a failed assessment, learners review feedback and retry that assessment only; they do not restart lessons or modules, and completed progress is preserved.
 - All required Module 1 lessons and quizzes must be passed before certificate eligibility.
 - Module 1 awards the only certificate available at initial launch.
-- Certificate type: Foundations of Artificial Intelligence — Certificate of Completion.
+- Certificate type: Foundations of Artificial Intelligence : Certificate of Completion.
 - Certificate uses the learner's confirmed name.
 - Google sign-up is the only authentication method at launch.
 - The first two modules are free.
 - The platform will offer free and paid learning experiences.
 
-### Recommended — Awaiting Approval
-- Maximum lesson duration: 8 minutes per lesson rather than per module.
-- Module 1 final assessment requires a score of at least 70%.
-- Keep conceptual AI literacy modules free.
-- Introduce Free and Premium tiers initially; defer Standard.
-- Charge for guided, occupation-specific AI workflow creation.
-- Verify certificate eligibility on the backend.
-- Allow learners to confirm their certificate name before issuance.
+### Recommended : Awaiting Approval
 
+- Keep conceptual AI literacy modules free.
+- Allow learners to confirm their certificate name before issuance.
 
 ## 5. Architecture Principles
 
 Inspect the existing repository before recommending architectural changes.
 
 Prefer:
+
 - Simple, maintainable architecture.
 - Type-safe interfaces.
 - Reusable components.
@@ -112,7 +124,8 @@ Do not introduce microservices, event brokers, AI APIs, or other infrastructure 
 
 ## 6. Implementation Workflow
 
-### Gate 0 — Discovery
+### Gate 0 : Discovery
+
 - Inspect existing code, dependencies, architecture, and deployment.
 - Review the PRD and confirmed decisions.
 - Identify missing requirements and risks.
@@ -120,7 +133,8 @@ Do not introduce microservices, event brokers, AI APIs, or other infrastructure 
 
 STOP for approval.
 
-### Gate 1 — Design
+### Gate 1 : Design
+
 - Define data models and relationships.
 - Define API contracts.
 - Define authentication and authorization.
@@ -129,7 +143,7 @@ STOP for approval.
 
 STOP for approval.
 
-### Gate 2 — Build in Vertical Slices
+### Gate 2 : Build in Vertical Slices
 
 Implement complete, testable user journeys in this order:
 
@@ -143,6 +157,7 @@ Implement complete, testable user journeys in this order:
 8. Review learning history and certificate.
 
 For each slice:
+
 - Implement frontend and backend changes together.
 - Add required database migrations.
 - Add automated tests.
@@ -150,9 +165,10 @@ For each slice:
 - Demonstrate working functionality.
 - Obtain review before proceeding.
 
-### Gate 3 — Quality Assurance
+### Gate 3 : Quality Assurance
 
 Test:
+
 - Functional requirements and acceptance criteria.
 - Authentication and authorization.
 - Assessment scoring and retries.
@@ -166,9 +182,10 @@ Test:
 
 Never trust browser-submitted scores or completion flags.
 
-### Gate 4 — Release
+### Gate 4 : Release
 
 Before deployment:
+
 - Run linting, type checks, and automated tests.
 - Validate environment configuration.
 - Check database migration safety.
@@ -197,6 +214,7 @@ The user has given standing approval to deploy approved, tested work to Vercel a
 ## 8. Definition of Done
 
 A feature is complete only when:
+
 - Its PRD requirement is traceable.
 - Its acceptance criteria are satisfied.
 - Required frontend and backend behaviour works.

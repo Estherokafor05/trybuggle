@@ -1,5 +1,4 @@
-
-# AI Literacy Platform — Learning Experience Specification
+# AI Literacy Platform : Learning Experience Specification
 
 **Document:** LEARNING_EXPERIENCE.md
 **Status:** Initial specification
@@ -52,7 +51,7 @@ Design for someone who has never encountered AI. Open the first lesson with a sh
 
 ## 3. Learning Delivery Model
 
-The learning experience combines:
+Every published lesson offers two distinct routes from the same page: **Watch & Listen** and **Read & Explore**. Both cover the same essential learning outcomes. Learners may choose either or switch between them. The official knowledge check is separate from both routes.
 
 ### 3.1 Narrated Visual Lessons
 
@@ -64,7 +63,7 @@ Use generated image illustrations to establish familiar human situations. Reuse 
 
 The primary presentation should not depend on a person speaking directly to the camera.
 
-Choose the visual format that best teaches the concept. Lessons may use continuous character-led animation, visual demonstrations, interactive simulations or self-paced illustrated sequences. Do not force every concept into one card or slide template. No media starts automatically.
+Watch & Listen is a continuous narrated, illustrated story with purposeful animation, demonstrations and diagrams. Vary the visual treatment to suit the concept. Read & Explore supplies learner-paced interactive discovery; do not add a second slide player beside the film. No media starts automatically.
 
 Offer learner-controlled playback and an independent written guide. Continuous stories follow one character through believable situations, with purposeful character actions and visual changes timed to the narration. Learners can pause, seek, replay and move between meaningful moments. Switching to the written guide pauses playback.
 
@@ -76,23 +75,25 @@ Lesson 2 follows Maya in one continuous illustrated film using the user's suppli
 
 Recorded narration is the primary audio. Time meaningful movement and captions to the relevant words. Browser speech is not a replacement for produced narration. Narration should describe the meaningful visual actions so that its transcript is useful on its own.
 
+**Narration recording comes before film production.** For every new lesson, present the proposed script and request the user's recording before rendering its narrated film. Use the supplied voice recording unchanged. Check that it covers the intended lesson, then align captions, transcript and meaningful visual changes to the words actually spoken. Do not generate or substitute a voice unless the user explicitly requests a voice preview for that lesson. A preview requires review and is not automatically approved for publication. Reuse existing approved recordings for their own lessons without requesting them again. When a replacement is supplied, use the latest file for the requested lesson after checking its content; clarify any mismatch before changing the published lesson.
+
 Before implementing a new story, review and approve its storyboard, visual sequence, interactions and narration.
 
-### 3.2 Step-by-Step Learning Guides
+### 3.2 Read & Explore
 
-Every lesson has a written learning guide that learners can choose as a separate learning option.
+Each lesson has an independent interactive learning guide covering the same essential outcomes as the film. It must teach the topic without requiring the learner to watch the film first.
 
-The guide must:
+- Introduce ideas progressively through familiar situations, illustrations, short explanations and meaningful feedback.
+- Vary interactions according to the learning purpose: reveal information, match input to output, inspect evidence, compare outcomes, change a simulation, make a scenario decision or reflect.
+- Matching must also work through click, tap and keyboard selection. Never require dragging.
+- Do not make every activity a multiple-choice question or a static text card.
+- Provide a worked explanation for every activity and a complete accessible reading alternative that works without JavaScript.
+- Include plain definitions, diagrams, practical examples, key takeaways and a reflection.
+- Allow learners to go back, revisit any activity and resume their place.
+- Activities are formative and unscored. They do not create assessment attempts, pass a lesson or unlock gated content.
+- Reflection notes stay on the device and are not sent to the server. Explain this and discourage personal or confidential information.
 
-- Explain the concept independently.
-- Follow a logical sequence.
-- Include definitions.
-- Include relevant diagrams.
-- Include practical scenarios.
-- Summarise important points.
-- Support revision before assessments.
-
-A transcript alone does not satisfy this requirement.
+A transcript alone does not satisfy this requirement. The guide uses an independent teaching sequence and worked examples rather than copying the spoken script.
 
 ### 3.3 Mandatory Knowledge Checks
 
@@ -122,15 +123,15 @@ External AI tools may be used, but the platform does not require its own AI mode
 
 ## 4. Standard Lesson Structure
 
-Each lesson should provide the following. Learners may use the visual walkthrough or the written guide before taking the knowledge check.
+Each lesson provides the following across its two alternative learning routes. Learners choose Watch & Listen or Read & Explore before taking the separate knowledge check; both routes are not mandatory.
 
-### Step 1 — Learning Objective
+### Step 1 : Learning Objective
 
 Explain what the learner will understand by the end.
 
 Use plain language.
 
-### Step 2 — Familiar Situation
+### Step 2 : Familiar Situation
 
 Start with a relatable situation the learner can recognise before introducing the concept or its technical name.
 
@@ -138,29 +139,29 @@ For example:
 
 "Have you noticed how your email sometimes knows which messages are spam?"
 
-### Step 3 — Visual Explanation
+### Step 3 : Visual Explanation
 
 Show the situation unfolding and narrate the meaningful changes as they happen. Explain the idea in everyday language, then introduce its technical name.
 
-### Step 4 — Step-by-Step Guide
+### Step 4: Read & Explore
 
-Provide a separate written explanation with diagrams, definitions and examples that a learner can follow independently.
+Provide progressive interactive discovery with meaningful feedback, independent worked explanations and a complete reading alternative.
 
-### Step 5 — Practical Connection
+### Step 5 : Practical Connection
 
 Show how the concept relates to work, education, or everyday life.
 
 Use examples from varied contexts.
 
-### Step 6 — Key Takeaways
+### Step 6 : Key Takeaways
 
 Return to the examples and show how they connect to the main ideas.
 
-### Step 7 — Knowledge Check
+### Step 7 : Knowledge Check
 
 Present the mandatory 10-question assessment.
 
-### Step 8 — Progression
+### Step 8 : Progression
 
 If the learner passes, unlock the next required lesson.
 
@@ -168,25 +169,15 @@ If the learner fails, provide feedback and direct them to the relevant material.
 
 ## 5. Lesson Duration
 
-The stated requirement is a maximum of 8 minutes per module.
+Approved: each lesson is no longer than eight minutes. Lessons may be shorter where the concept needs less explanation. Aim for 30 to 60 minutes of planned content per module, with a one-hour cap. Do not impose a timer on accessibility needs, reading, revisiting material or assessment retries.
 
-This requires clarification because a module may contain several lessons.
-
-Do not reinterpret this as 8 minutes per lesson without approval.
-
-Until clarified:
-
-- Keep individual learning segments concise.
-- Avoid unnecessarily long videos.
-- Provide pause and replay controls.
-- Allow self-paced reading.
-- Do not hardcode an unapproved duration limit.
+Keep narration concise, show rather than repeat paragraphs, and provide pause, seek and replay. Lesson 1's supplied recording is approximately four minutes; Lesson 2's existing film is approximately three minutes thirteen seconds.
 
 ## 6. Curriculum Structure
 
 Proposed curriculum sequence:
 
-### Module 1 — Foundations of Artificial Intelligence
+### Module 1 : Foundations of Artificial Intelligence
 
 Purpose:
 
@@ -205,122 +196,43 @@ This is the only module that awards a certificate at initial launch.
 
 Detailed lesson titles require curriculum approval.
 
-#### Approved visual lesson storyboards
+#### Approved Lessons 1 and 2
 
-Approved on 10 November 2026. Both lessons use the same silent slide navigation and optional synchronised recorded narration. Technical terms follow the everyday example. No scene completion is treated as assessment success.
+The November 2026 approval replaces Lesson 1's 39-slide walkthrough with a continuous six-scene film. The four classical approaches are retained as editorial material for a later learning unit, subject to curriculum approval. They are not the opening explanation of AI.
 
-##### Lesson 1: Four ways to look at AI
+##### Lesson 1: What is AI?
 
-**Scene 1. Four familiar situations**
+| Scene                                | Narrative and meaningful visual change                                                                                                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. What is AI?                       | Meet Maya in a familiar setting. Explain artificial intelligence in everyday language. Introduce recognising patterns, predicting, solving problems and creating content through practical examples.                |
+| 2. Automatic does not always mean AI | Maya sets a kitchen timer, then speaks a reminder into a phone. Contrast a fixed countdown with a speech-recognition demonstration. Explain that some AI uses knowledge and rules, while some learns from examples. |
+| 3. Learning from examples            | Show labelled cats and dogs, then a different dog and a partly hidden cat. Reveal a correct and an incorrect prediction. Label this as a simplified illustration, not a real model being trained.                   |
+| 4. A first draft                     | Maya supplies meeting details. A fictional generative tool builds an invitation. Introduce generative AI after showing it create text.                                                                              |
+| 5. Check the time                    | Compare the draft's incorrect meeting time with the team calendar. Maya corrects the draft using the record. A fluent answer is not proof of accuracy.                                                              |
+| 6. Maya decides                      | Revisit the useful tasks, appropriate privacy precautions and human checks. End by inviting the learner to explain AI in their own words.                                                                           |
 
-- Visual: A person at a kitchen table introduces a puzzle, a checkout, a library and a map, one at a time.
-  Narration: Think about putting a puzzle together, checking a discount, asking someone for help, or choosing your route to work.
-- Visual: The four situations are connected to four questions.
-  Narration: These familiar situations can help us explore four questions people ask about AI.
-- Visual: Two labelled paths appear: the process, and what it does.
-  Narration: Are we looking at how a system works through a problem, or what it does?
-- Visual: The paths connect to comparing with people or checking reasoning and choices.
-  Narration: And are we comparing it with people, or checking its reasoning and choices?
-- Visual: The puzzle returns as the first example.
-  Narration: Let's see what that means.
+Use the user's latest approved recording unchanged. The actual spoken script is in `animation/foundations-script.json`; aligned cues and captions are in `public/lessons/what-is-ai/`. Reuse Maya's character and community-centre artwork and an original generated kitchen illustration. Keep essential visual changes synchronized to the recording.
 
-**Scene 2. How would you start this puzzle?**
-
-- Visual: Loose puzzle pieces sit on a table.
-  Narration: You've tipped a jigsaw puzzle onto the table. Where would you start?
-- Visual: Corner pieces are highlighted and blue pieces are grouped beside the board.
-  Narration: You might find the corners, group similar colours, then try a piece.
-- Visual: An attempted piece does not fit. A matching piece replaces it.
-  Narration: If it doesn't fit, you try another.
-- Visual: A computer model appears beside the person's board, with the observed steps connected.
-  Narration: Imagine researchers watching how people solve that puzzle, then building a computer model to follow similar steps.
-- Visual: Compare the steps replays the person's and model's sequences side by side.
-  Narration: They compare the model with what people actually do.
-- Visual: Thinking humanly appears below the two processes.
-  Narration: This approach is called thinking humanly. The interest is in the process, not just finishing the puzzle.
-
-**Scene 3. Does the discount apply?**
-
-- Visual: A shopper and a receipt show an item priced at £20.
-  Narration: You're buying something for twenty pounds.
-- Visual: The shop rule appears, followed by the shopper's membership card.
-  Narration: The sign says members get ten percent off, and you have a membership card.
-- Visual: An arrow connects the rule to the confirmed membership.
-  Narration: The rule applies to you.
-- Visual: The receipt subtracts £2 and shows a total of £18.
-  Narration: Ten percent of twenty pounds is two pounds, so the price becomes eighteen pounds.
-- Visual: Thinking rationally appears below the rule, fact and result.
-  Narration: We've used a rule and a fact to work out what follows. That illustrates thinking rationally, which focuses on logical reasoning.
-- Visual: A label explains that this is an ordinary software example. Compare member and non-member prices.
-  Narration: A normal checkout can do this without AI. We're using the discount to explain the idea.
-
-**Scene 4. Asking for help**
-
-- Visual: A visitor holds a book beside a library help screen.
-  Narration: You're at the library with a book to return.
-- Visual: The visitor's question appears in the chat.
-  Narration: You ask its chat assistant, 'Where do I drop this off?'
-- Visual: The assistant's reply mentions a returns box.
-  Narration: 'There's a returns box beside the main entrance.'
-- Visual: The follow-up question appears. It refers to the returns box.
-  Narration: 'Is it outside?'
-- Visual: The reply appears and the returns box outside the entrance is highlighted.
-  Narration: 'Yes, just outside the main doors.'
-- Visual: The word it and the earlier returns box are linked.
-  Narration: Notice how the reply connects your follow-up question to the same box. You're looking at whether the conversation resembles how a person might help.
-- Visual: Acting humanly appears. The visitor checks the entrance sign.
-  Narration: That's acting humanly. A natural-sounding reply doesn't prove the system thinks like a person, or that its directions are right.
-
-**Scene 5. The quicker route changes**
-
-- Visual: A map shows the destination and the goal: quickest safe route.
-  Narration: You're about to leave for work. You want the quickest safe route.
-- Visual: Route A is estimated at 10 minutes and highlighted. Route B is estimated at 12 minutes.
-  Narration: Your map estimates ten minutes for one route and twelve for another. It recommends the ten-minute route.
-- Visual: Traffic appears on A and its estimate changes to 18 minutes. B remains at 12.
-  Narration: Then traffic builds up. That estimate changes to eighteen minutes, while the other stays at twelve.
-- Visual: Route B becomes the recommendation. The destination stays fixed.
-  Narration: The recommendation switches.
-- Visual: Acting rationally appears below the updated map.
-  Narration: This illustrates acting rationally: choosing an action expected to help achieve a goal, using the information available.
-- Visual: A road sign and a check remind the learner to review the route before leaving.
-  Narration: The estimate can still be wrong. You still need to follow road signs and check that the route is suitable.
-
-**Scene 6. Four questions to take away**
-
-- Visual: A labelled two-by-two comparison brings back the four examples.
-  Narration: Let's bring the examples together.
-- Visual: The puzzle cell reveals Thinking humanly.
-  Narration: The puzzle asks whether the model follows a process like a person's: thinking humanly.
-- Visual: The checkout cell reveals Thinking rationally.
-  Narration: The discount asks whether the reasoning follows the rule and facts: thinking rationally.
-- Visual: The library cell reveals Acting humanly.
-  Narration: The conversation asks whether the response resembles a person's: acting humanly.
-- Visual: The map cell reveals Acting rationally.
-  Narration: The map asks whether the choice serves the goal: acting rationally.
-- Visual: All four approaches remain visible. A reflection asks what else you need to know about two systems that finish the same puzzle.
-  Narration: These are four approaches to studying AI. One system can be examined in more than one way. And an everyday example can illustrate an approach without being AI itself.
+Read & Explore has eight activities: reveal inputs and outputs; compare a timer with speech recognition; match information to useful results; test a simplified learning demonstration; assemble a safe invitation request; investigate a wrong day and unsupported parking claim; repair the draft and consider higher-stakes checking; explain the idea in the learner's own words. Its independent worked example is a volunteer meeting on Thursday at 6 pm in Room Three. The complete reading alternative includes all explanations, evidence and worked outcomes.
 
 ##### Lesson 2: AI in Your Day
 
-Maya is an administrator at a community centre preparing an evening photography club. The visual lesson is one narrated film. The exact spoken script, scene descriptions and order live in `animation/day-script.json`, and the measured caption times live in `public/lessons/maya-day/narration.json`.
+Preserve Maya's existing film, supplied narration, illustrations, aligned captions and playback controls.
 
-1. **Morning:** Maya's alarm rings at the time she set. This simple automation does not require AI.
-2. **Photo:** She searches her own gallery for dog photos for the club poster. Some photo apps use AI to recognise image patterns. She opens a result to check it is the one she needs.
-3. **Journey:** Traffic builds on her usual road. Some navigation systems use AI to estimate travel times from current conditions and earlier patterns. Maya checks the suggested route.
-4. **Shopping:** At the centre, a shop suggests a camera bag. Some shops use AI to recommend items from browsing patterns. Maya compares dimensions and price and rejects the too-small bag.
-5. **Message:** The expected club booking appears in Spam. Some email services use AI to classify messages. Maya checks the booking details through her own records and uses a known contact if unsure.
-6. **Recap:** The four possible AI uses appear in the context of Maya's day. Each result is paired with a human check, and learners reflect on one tool in their own day.
+1. Morning: her seven o'clock alarm illustrates simple automation.
+2. Photo: she searches for a dog photo, then checks the actual result.
+3. Journey: she compares travel-time estimates and checks the route.
+4. Shopping: she inspects a suggested camera bag and its fit and price.
+5. Message: she finds a booking in Spam and checks through her records or a known contact.
+6. Recap: connect recognition, prediction, recommendation and classification to suitable human checks.
 
-**Interactions:** Lesson 1 retains its approved comparison and reflection activities. Lesson 2 uses film playback, seeking, captions, transcript, and the independent guide reflection. Reflection notes are unscored and are not submitted or persisted.
+Read & Explore follows the same day through seven activities: explore a location map; inspect the alarm and search a photo library; update traffic and compare changed estimates; inspect a camera bag's stated capacity and price; find and verify a missing message; connect tasks to their everyday names; reflect on a tool in the learner's own day. It applies the concepts rather than repeating Lesson 1's definition. Recognition, prediction, recommendation and classification are overlapping tasks, not exclusive categories of AI.
 
-**Independent guides:** Lesson 1 examines a library kiosk through the four approaches, with a comparison diagram and practice questions. Lesson 2 follows Maya preparing a photography club, tracing information, results and human checks, with definitions and a source-verification step.
+#### Accuracy and evidence
 
-**Illustration choices:** Reuse the supplied checkout image and generated library illustration. Add an original generated kitchen-table puzzle illustration to establish the human scenario. Keep prices, routes, comparisons and conversation text as accessible UI alongside artwork. Use original fictional photo, shopping and inbox illustrations to show changing information without copying a product interface. Reuse the same animated Maya model and original generated home and community-centre backgrounds throughout the day.
+Source-supported claims and links remain in editorial lesson data, not a learner-facing source-notes panel. Evidence includes the OECD AI definition, Google's machine-learning introduction, NIST's generative AI risk profile, Apple photo-search documentation, Google DeepMind traffic prediction, AWS recommendations and Google Workspace spam filtering. Qualify examples as features that some tools implement with AI. A feature's appearance alone does not prove that it uses AI. All demonstrated records, prices, messages and travel times are fictional.
 
-**Factual sources:** Russell and Norvig's introductory AI chapter; Apple WWDC19 Designing Great ML Experiences; Google DeepMind Traffic prediction with advanced Graph Neural Networks; AWS Amazon Personalize documentation; Google Workspace Understanding Gmail's spam filters. Links and supported claims remain in the editorial lesson data for verification. They are not displayed in a source-notes panel on the lesson page. Situations, prices and travel times are illustrative, not reported product outcomes.
-
-### Module 2 — Types of AI Systems
+### Module 2 : Types of AI Systems
 
 Purpose:
 
@@ -338,7 +250,7 @@ Module 2 is free.
 
 No certificate is awarded for this module at initial launch.
 
-### Module 3 — Understanding Machine Learning
+### Module 3 : Understanding Machine Learning
 
 Purpose:
 
@@ -354,7 +266,7 @@ Suggested topics:
 - Testing and evaluation.
 - Data quality and bias.
 
-### Module 4 — Generative AI and LLMs
+### Module 4 : Generative AI and LLMs
 
 Purpose:
 
@@ -369,7 +281,7 @@ Suggested topics:
 - Hallucinations and verification.
 - Practical uses and limitations.
 
-### Module 5 — Understanding AI Agents
+### Module 5 : Understanding AI Agents
 
 Purpose:
 
@@ -393,7 +305,7 @@ An AI-assisted workflow may become more agent-like when a system can use tools, 
 
 Teach this distinction without unnecessary technical complexity.
 
-### Module 6 — Creating AI-Assisted Workflows
+### Module 6 : Creating AI-Assisted Workflows
 
 Purpose:
 
@@ -536,7 +448,9 @@ The system must track:
 - Certificate eligibility.
 - Certificate issuance.
 
-Progress must persist across authenticated sessions.
+Progress must persist across authenticated sessions and devices. Save the selected route, current guide activity, non-sensitive interaction state and film position separately from official assessment results. Visitors can resume on the same device; after sign-in, an existing account checkpoint takes precedence over a guest checkpoint.
+
+Only server-verified assessment results satisfy progression requirements. Playback, visited activities and reflection text are not evidence of a pass. Reject stale checkpoint writes rather than silently overwriting a newer save from another device. Explain failed saves honestly and allow retry. Reflection notes remain device-local.
 
 A learner must not be able to modify another learner's records.
 
@@ -548,11 +462,11 @@ A learner progresses when:
 2. Its mandatory knowledge check is passed.
 3. Any additional approved prerequisites are satisfied.
 
-The next lesson becomes available only after the progression rules are satisfied.
+The next gated lesson becomes available only after the progression rules are satisfied. The first two approved public preview lessons are an access exception; opening either preview does not award completion.
 
 Previously completed lessons remain available for revision.
 
-The exact mechanism for recording lesson consumption or completion requires approval.
+Record the learning place for convenience. Record official lesson completion only from a verified passing knowledge-check result.
 
 Do not assume video playback alone proves understanding.
 
@@ -562,7 +476,7 @@ Do not assume video playback alone proves understanding.
 
 - Only Module 1 awards a certificate at launch.
 - Certificate title:
-  "Foundations of Artificial Intelligence — Certificate of Completion"
+  "Foundations of Artificial Intelligence : Certificate of Completion"
 - The certificate uses the learner's confirmed name.
 - Certificates are issued after verified completion.
 - The platform supports certificate download.
@@ -577,7 +491,7 @@ The learner must:
 4. Meet the approved final assessment passing criteria.
 5. Confirm the name displayed on the certificate.
 
-The final assessment passing threshold should be explicitly confirmed before implementation.
+The approved minimum passing threshold is 70%, including the Module 1 final assessment.
 
 ### Certificate Integrity
 
@@ -615,7 +529,7 @@ Confirmed:
 
 - Module 1 is free.
 - Module 2 is free.
-- Practical AI workflow creation is intended to be paid.
+- Practical AI workflow creation is paid through an approved one-time USD 50 unlock using Stripe. It is not a recurring subscription.
 
 Proposed:
 
@@ -625,13 +539,10 @@ Proposed:
 Open:
 
 - Whether Modules 3–5 are free or paid.
-- Whether pricing uses Free/Standard/Premium.
-- Whether paid access is subscription-based or one-time.
 - Exact premium features.
-- Payment provider.
 - Refund and cancellation rules.
 
-Do not implement billing or payment gates until these decisions are approved.
+The USD 50 one-time payment and Stripe provider are approved. Confirm the exact gated content and refund policy before implementing billing.
 
 ## 15. Accessibility and Inclusion
 
@@ -734,14 +645,10 @@ A module is complete when all its approved lessons and assessment requirements a
 
 Resolve before implementing dependent functionality:
 
-1. Whether the 8-minute limit applies to a module or lesson.
-2. Detailed Module 1 curriculum.
-3. Final assessment question count.
-4. Final assessment passing threshold.
-5. How lesson completion is recorded.
-6. Exact MVP module scope.
-7. Pricing and paid-content boundaries.
-8. Certificate verification requirements.
-9. Whether unauthenticated users can preview lessons.
+1. Remaining Module 1 lesson content and where the four classical approaches belong.
+2. Module 1 final assessment question count and blueprint.
+3. Detailed scope and approval of later modules.
+4. Exact paid workflow content and refund policy. Modules 1 and 2 remain free; Stripe and the one-time USD 50 baseline are approved.
+5. Certificate record retention and any later public verification experience.
 
-Do not invent answers to these questions.
+Do not invent answers to these questions. The two lesson routes, first two public previews, Google authentication, 10-question checks, 70% pass threshold, assessment-only retries, narration recording rule and WCAG 2.2 AA target are already approved.

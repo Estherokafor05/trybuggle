@@ -1,8 +1,7 @@
-
-# AI Literacy Platform — Design System
+# AI Literacy Platform : Design System
 
 **Document:** DESIGN_SYSTEM.md
-**Status:** Design specification — initial version
+**Status:** Design specification : initial version
 **Product:** AI Literacy Learning Platform
 **Design direction:** Friendly, professional, accessible, visual-first
 
@@ -43,15 +42,15 @@ The interface must:
 
 Proposed design tokens:
 
-| Token | Hex | Usage |
-|---|---|---|
-| Navy | #17243C | Primary headings, navigation |
-| Violet | #7155D9 | Primary actions, active states |
-| Teal | #087F72 | Success, progress |
-| Ivory | #F7F5EF | Warm page backgrounds |
+| Token    | Hex     | Usage                             |
+| -------- | ------- | --------------------------------- |
+| Navy     | #17243C | Primary headings, navigation      |
+| Violet   | #7155D9 | Primary actions, active states    |
+| Teal     | #087F72 | Success, progress                 |
+| Ivory    | #F7F5EF | Warm page backgrounds             |
 | Lavender | #EAE5FA | Learning cards, subtle highlights |
-| Slate | #526174 | Secondary text |
-| White | #FFFFFF | Content surfaces |
+| Slate    | #526174 | Secondary text                    |
+| White    | #FFFFFF | Content surfaces                  |
 
 These colours are the proposed visual direction and should be validated for accessibility.
 
@@ -88,15 +87,15 @@ Recommended font families:
 
 Suggested type scale:
 
-| Element | Desktop | Mobile |
-|---|---|---|
-| Hero heading | 48px | 32px |
-| Page heading | 36px | 28px |
-| Section heading | 28px | 24px |
-| Card heading | 20px | 18px |
-| Body | 16px | 16px |
-| Supporting text | 14px | 14px |
-| Caption | 12px | 12px |
+| Element         | Desktop | Mobile |
+| --------------- | ------- | ------ |
+| Hero heading    | 48px    | 32px   |
+| Page heading    | 36px    | 28px   |
+| Section heading | 28px    | 24px   |
+| Card heading    | 20px    | 18px   |
+| Body            | 16px    | 16px   |
+| Supporting text | 14px    | 14px   |
+| Caption         | 12px    | 12px   |
 
 Requirements:
 
@@ -289,12 +288,14 @@ Required elements:
 - Volume.
 - Captions.
 - Full-screen option where supported.
-- Separate written learning guide.
+- Two clearly named route controls: Watch & Listen and Read & Explore.
+- Separate interactive guide with a complete reading alternative.
+- Switching to the guide pauses the film; returning preserves the playback position.
 - Key terminology.
 - Lesson progress.
 - Knowledge-check navigation.
 
-Use a 16:9 video area by default.
+Use a 16:9 film on wider screens and the authored portrait composition on phones. Preserve the current position and playback speed when switching sizes. Never autoplay.
 
 The written guide must be accessible independently of video playback.
 
@@ -302,9 +303,17 @@ Do not require the learner to watch a talking-head video.
 
 The video must actively explain concepts through visual cues, diagrams, animations, and demonstrations.
 
-### 6.5 Written Learning Guide
+### 6.5 Read & Explore
 
-The guide is not simply a transcript.
+The guide is an independent, interactive learning experience, not a transcript or a second slide player. Show one purposeful activity at a time with Previous/Continue, an activity count and optional navigation to earlier activities.
+
+Use varied interactions: tap to reveal, inspect a diagram, compare changing outcomes, connect related ideas, find an unsupported claim, repair an example or reflect. Explain feedback immediately. Avoid turning every step into multiple choice.
+
+All activities are unscored. Only the separate official knowledge check can award a pass. Provide keyboard and tap alternatives to dragging, visible focus, labelled controls, screen-reader feedback and reduced-motion behavior. Keep primary controls legible at phone widths and high zoom.
+
+Save the route, activity state and film position. Show whether the place is saved on the device or account, and make failures and conflicting saves recoverable. Keep reflection text local and explain its storage.
+
+Provide a complete server-rendered reading alternative with worked examples and all essential outcomes. It must work with JavaScript disabled and without playing the film.
 
 Structure:
 

@@ -1,0 +1,107 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "scenes": [
+    {
+      "id": "what-is-ai",
+      "title": "What is AI?",
+      "description": "Maya sees speech become written words, a picture recognised and notes become a draft. These demonstrations introduce AI before returning to Maya at home.",
+      "lines": [
+        "AI is short for artificial intelligence.",
+        "It’s a broad name for computer systems that can recognise patterns, make predictions, work through problems or create things like text and pictures.",
+        "For example, some tools can turn spoken words into writing.",
+        "Others can help you put together a first draft.",
+        "Meet Maya.",
+        "She works at a community centre and keeps hearing people talk about AI.",
+        "Today, a few familiar situations will help her understand what it can do and where she still needs to check its work."
+      ]
+    },
+    {
+      "id": "automatic-or-ai",
+      "title": "Does everything automatic use AI?",
+      "description": "In her kitchen, a timer follows a set countdown. Maya then dictates a reminder and sees spoken words become writing. A simple diagram distinguishes human-supplied knowledge from learning patterns.",
+      "lines": [
+        "Maya’s kitchen timer rings.",
+        "She set the time herself, and the timer follows that instruction.",
+        "It can do this without AI.",
+        "Next, she speaks a reminder into her phone.",
+        "Her words appear as text.",
+        "Some tools use AI to recognise speech.",
+        "Both tasks happen automatically, but that doesn’t mean they work in the same way.",
+        "AI can be built in different ways, too.",
+        "Some systems use knowledge and rules supplied by people.",
+        "Others learn patterns from examples.",
+        "Simply following a rule doesn’t automatically make a program AI.",
+        "Let’s look at learning from examples."
+      ]
+    },
+    {
+      "id": "learning-from-examples",
+      "title": "How can examples help?",
+      "description": "Labelled cat and dog pictures move through a training diagram. Separate unfamiliar test pictures receive predictions, including a wrong prediction for a partly hidden animal.",
+      "lines": [
+        "Imagine a system being trained to recognise cats and dogs in pictures.",
+        "During training, it receives pictures with labels saying which animal they contain.",
+        "It uses those examples to learn patterns.",
+        "We’re showing a small selection here to explain the idea.",
+        "Afterwards, we try pictures it hasn’t trained on.",
+        "Can it use those patterns to recognise the animal?",
+        "Sometimes it gets the answer right.",
+        "Sometimes it makes a mistake.",
+        "An unfamiliar picture or a partly hidden animal can be difficult.",
+        "Learning patterns from data is called machine learning.",
+        "It’s one way to build AI.",
+        "The examples used for training, and how well the system handles new situations, both matter."
+      ]
+    },
+    {
+      "id": "a-first-draft",
+      "title": "Can AI help Maya get started?",
+      "description": "At the community centre, Maya enters a fictional request for a Tuesday team meeting in Room Two. A private contacts document stays outside the tool. The tool generates an invitation draft.",
+      "lines": [
+        "At work, Maya needs to invite her colleagues to a team meeting.",
+        "She knows what she wants to say, but getting started is taking a while.",
+        "She opens a tool her workplace allows and types: ‘Draft a friendly invitation to our team meeting on Tuesday in Room Two.’",
+        "She keeps private information about colleagues out of the request.",
+        "The tool produces a draft.",
+        "This is an example of generative AI, which creates content such as text, pictures or audio.",
+        "Maya now has something to work with.",
+        "Before she uses it, she needs to read it."
+      ]
+    },
+    {
+      "id": "check-the-time",
+      "title": "Where did that time come from?",
+      "description": "The draft claims nine oclock without a supplied time. Maya compares it with the actual calendar entry at ten thirty, then corrects the draft.",
+      "lines": [
+        "Hang on.",
+        "The invitation says the meeting starts at nine.",
+        "Maya didn’t give the tool a time, and she hasn’t connected it to the team calendar.",
+        "She checks the calendar herself.",
+        "The meeting starts at half past ten.",
+        "The draft sounds confident, but that detail is wrong.",
+        "Generative AI can produce information that sounds convincing without being true.",
+        "Maya corrects the time using the meeting record.",
+        "Asking the tool whether it is sure would not replace that check.",
+        "A useful draft still needs someone to check the facts."
+      ]
+    },
+    {
+      "id": "maya-decides",
+      "title": "What should Maya remember?",
+      "description": "Maya reviews the corrected invitation, chooses to send it and reflects on how AI can help. A final invitation asks learners to explain AI in their own words.",
+      "lines": [
+        "Maya reads the invitation again.",
+        "The details are right, it says what she means, and she chooses to send it.",
+        "AI helped her get started.",
+        "Maya checked the result and made the decision.",
+        "AI can help us recognise patterns, make predictions and create content.",
+        "Some AI learns from examples, and some uses knowledge and rules.",
+        "Not every automatic feature is AI.",
+        "Before using a result, ask: does this fit my task, and which details need checking?",
+        "Keep private information protected.",
+        "For decisions that could seriously affect someone’s life, involve an appropriately qualified person.",
+        "Now, tell me, how would you explain AI to someone who has never used it?"
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { safeReturnPath } from "../src/lib/paths.ts";
 import { foundationScenes } from "../src/content/foundations-walkthrough.ts";
+import { exploreGuides } from "../src/content/explore-guides.ts";
 import {
   previewLessons,
   getPreviewLesson,
@@ -27,7 +28,7 @@ test("sign-in cannot redirect learners to a different site", () => {
   }
 });
 
-test("the remaining Lesson 1 scenes have bundled audio and ordered descriptive cues", () => {
+test("the retained four-approaches material has bundled audio and ordered cues for future curriculum review", () => {
   assert.equal(new Set(foundationScenes.map((scene) => scene.id)).size, 6);
   for (const scene of foundationScenes) {
     assert.ok(
@@ -47,7 +48,7 @@ test("only prepared preview lessons resolve and both have independent guides", (
   assert.equal(previewLessons.length, 2);
   for (const lesson of previewLessons) {
     assert.equal(getPreviewLesson(lesson.slug), lesson);
-    assert.ok(lesson.guideSteps.length >= 3);
+    assert.ok(exploreGuides[lesson.slug].steps.length >= 7);
   }
   assert.equal(getPreviewLesson("not-a-lesson"), undefined);
 });
@@ -58,7 +59,7 @@ const approvedScripts = JSON.parse(
     "utf8",
   ),
 );
-test("published narration and descriptive transcripts match the approved scripts", () => {
+test("retained four-approaches narration matches its approved script", () => {
   for (const [key, scenes] of [["four-ways", foundationScenes]]) {
     assert.ok(scenes.reduce((sum, scene) => sum + scene.duration, 0) < 8 * 60);
     for (const scene of scenes) {
@@ -78,9 +79,12 @@ test("published narration and descriptive transcripts match the approved scripts
 
 test("both preview lessons provide an independent guide and evidence links", () => {
   for (const lesson of previewLessons) {
-    assert.ok(["four-ways", "day"].includes(lesson.visualFormat));
     assert.ok(lesson.sources.length > 0);
-    assert.ok(lesson.guideSteps.length >= 6);
+    assert.ok(
+      exploreGuides[lesson.slug].steps.every(
+        (step) => step.reading.length >= 2,
+      ),
+    );
     lesson.sources.forEach((source) =>
       assert.equal(new URL(source.url).protocol, "https:"),
     );

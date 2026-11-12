@@ -1,0 +1,471 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+  "duration": 242,
+  "audioDuration": 241.319125,
+  "scenes": [
+    {
+      "id": "what-is-ai",
+      "title": "What is AI?",
+      "description": "Maya sees speech become written words, a picture recognised and notes become a draft. These demonstrations introduce AI before returning to Maya at home.",
+      "start": 0,
+      "end": 36.42
+    },
+    {
+      "id": "automatic-or-ai",
+      "title": "Does everything automatic use AI?",
+      "description": "In her kitchen, a timer follows a set countdown. Maya then dictates a reminder and sees spoken words become writing. A simple diagram distinguishes human-supplied knowledge from learning patterns.",
+      "start": 36.42,
+      "end": 77.14
+    },
+    {
+      "id": "learning-from-examples",
+      "title": "How can examples help?",
+      "description": "Labelled cat and dog pictures move through a training diagram. Separate unfamiliar test pictures receive predictions, including a wrong prediction for a partly hidden animal.",
+      "start": 77.14,
+      "end": 122.16
+    },
+    {
+      "id": "a-first-draft",
+      "title": "Can AI help Maya get started?",
+      "description": "At the community centre, Maya enters a fictional request for a Tuesday team meeting in Room Two. A private contacts document stays outside the tool. The tool generates an invitation draft.",
+      "start": 122.16,
+      "end": 158.24
+    },
+    {
+      "id": "check-the-time",
+      "title": "Where did that time come from?",
+      "description": "The draft claims nine oclock without a supplied time. Maya compares it with the actual calendar entry at ten thirty, then corrects the draft.",
+      "start": 158.24,
+      "end": 192.8
+    },
+    {
+      "id": "maya-decides",
+      "title": "What should Maya remember?",
+      "description": "Maya reviews the corrected invitation, chooses to send it and reflects on how AI can help. A final invitation asks learners to explain AI in their own words.",
+      "start": 192.8,
+      "end": 242
+    }
+  ],
+  "cues": [
+    {
+      "scene": "what-is-ai",
+      "text": "AI is short for artificial intelligence.",
+      "start": 0,
+      "end": 3.32,
+      "index": 0
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "It’s a broad name for computer systems that can recognise patterns, make predictions, work through problems or create things like text and pictures.",
+      "start": 4.2,
+      "end": 13.48,
+      "index": 1
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "For example, some tools can turn spoken words into writing.",
+      "start": 14.12,
+      "end": 18.14,
+      "index": 2
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "Others can help you put together a first draft.",
+      "start": 18.78,
+      "end": 21.58,
+      "index": 3
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "Meet Maya.",
+      "start": 22.28,
+      "end": 22.9,
+      "index": 4
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "She works at a community centre and keeps hearing people talk about AI.",
+      "start": 23.52,
+      "end": 27.92,
+      "index": 5
+    },
+    {
+      "scene": "what-is-ai",
+      "text": "Today, a few familiar situations will help her understand what it can do and where she still needs to check its work.",
+      "start": 28.46,
+      "end": 35.74,
+      "index": 6
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Maya’s kitchen timer rings.",
+      "start": 36.42,
+      "end": 38.04,
+      "index": 0
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "She set the time herself, and the timer follows that instruction.",
+      "start": 38.52,
+      "end": 42.34,
+      "index": 1
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "It can do this without AI.",
+      "start": 42.82,
+      "end": 44.82,
+      "index": 2
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Next, she speaks a reminder into her phone.",
+      "start": 45.5,
+      "end": 48.5,
+      "index": 3
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Her words appear as text.",
+      "start": 48.84,
+      "end": 50.64,
+      "index": 4
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Some tools use AI to recognise speech.",
+      "start": 51.18,
+      "end": 54,
+      "index": 5
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Both tasks happen automatically, but that doesn’t mean they work in the same way.",
+      "start": 54.56,
+      "end": 59.54,
+      "index": 6
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "AI can be built in different ways, too.",
+      "start": 60.02,
+      "end": 62.64,
+      "index": 7
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Some systems use knowledge and rules supplied by people.",
+      "start": 63.16,
+      "end": 66.52,
+      "index": 8
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Others learn patterns from examples.",
+      "start": 67.38,
+      "end": 69.18,
+      "index": 9
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Simply following a rule doesn’t automatically make a program AI.",
+      "start": 69.98,
+      "end": 73.88,
+      "index": 10
+    },
+    {
+      "scene": "automatic-or-ai",
+      "text": "Let’s look at learning from examples.",
+      "start": 74.48,
+      "end": 76.4,
+      "index": 11
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Imagine a system being trained to recognise cats and dogs in pictures.",
+      "start": 77.14,
+      "end": 81.28,
+      "index": 0
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "During training, it receives pictures with labels saying which animal they contain.",
+      "start": 81.8,
+      "end": 86.64,
+      "index": 1
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "It uses those examples to learn patterns.",
+      "start": 87.22,
+      "end": 89.86,
+      "index": 2
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "We’re showing a small selection here to explain the idea.",
+      "start": 90.4,
+      "end": 93.42,
+      "index": 3
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Afterwards, we try pictures it hasn’t trained on.",
+      "start": 94.22,
+      "end": 97.44,
+      "index": 4
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Can it use those patterns to recognise the animal?",
+      "start": 97.74,
+      "end": 100.2,
+      "index": 5
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Sometimes it gets the answer right.",
+      "start": 100.88,
+      "end": 102.88,
+      "index": 6
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Sometimes it makes a mistake.",
+      "start": 103.42,
+      "end": 104.94,
+      "index": 7
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "An unfamiliar picture or a partly hidden animal can be difficult.",
+      "start": 105.6,
+      "end": 109.5,
+      "index": 8
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "Learning patterns from data is called machine learning.",
+      "start": 110.08,
+      "end": 113.12,
+      "index": 9
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "It’s one way to build AI.",
+      "start": 113.62,
+      "end": 115.44,
+      "index": 10
+    },
+    {
+      "scene": "learning-from-examples",
+      "text": "The examples used for training, and how well the system handles new situations, both matter.",
+      "start": 116.08,
+      "end": 121.58,
+      "index": 11
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "At work, Maya needs to invite her colleagues to a team meeting.",
+      "start": 122.16,
+      "end": 125.92,
+      "index": 0
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "She knows what she wants to say, but getting started is taking a while.",
+      "start": 126.52,
+      "end": 130.52,
+      "index": 1
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "She opens a tool her workplace allows and types: ‘Draft a friendly invitation to our team meeting on Tuesday in Room Two.’",
+      "start": 131.08,
+      "end": 139,
+      "index": 2
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "She keeps private information about colleagues out of the request.",
+      "start": 139.56,
+      "end": 143.08,
+      "index": 3
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "The tool produces a draft.",
+      "start": 143.6,
+      "end": 145.36,
+      "index": 4
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "This is an example of generative AI, which creates content such as text, pictures or audio.",
+      "start": 145.78,
+      "end": 152.28,
+      "index": 5
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "Maya now has something to work with.",
+      "start": 152.84,
+      "end": 154.88,
+      "index": 6
+    },
+    {
+      "scene": "a-first-draft",
+      "text": "Before she uses it, she needs to read it.",
+      "start": 155.16,
+      "end": 157.88,
+      "index": 7
+    },
+    {
+      "scene": "check-the-time",
+      "text": "Hang on.",
+      "start": 158.24,
+      "end": 158.74,
+      "index": 0
+    },
+    {
+      "scene": "check-the-time",
+      "text": "The invitation says the meeting starts at nine.",
+      "start": 159.1,
+      "end": 161.72,
+      "index": 1
+    },
+    {
+      "scene": "check-the-time",
+      "text": "Maya didn’t give the tool a time, and she hasn’t connected it to the team calendar.",
+      "start": 162.3,
+      "end": 166.44,
+      "index": 2
+    },
+    {
+      "scene": "check-the-time",
+      "text": "She checks the calendar herself.",
+      "start": 167.04,
+      "end": 168.7,
+      "index": 3
+    },
+    {
+      "scene": "check-the-time",
+      "text": "The meeting starts at half past ten.",
+      "start": 169.2,
+      "end": 171.42,
+      "index": 4
+    },
+    {
+      "scene": "check-the-time",
+      "text": "The draft sounds confident, but that detail is wrong.",
+      "start": 171.62,
+      "end": 175.3,
+      "index": 5
+    },
+    {
+      "scene": "check-the-time",
+      "text": "Generative AI can produce information that sounds convincing without being true.",
+      "start": 175.9,
+      "end": 181.02,
+      "index": 6
+    },
+    {
+      "scene": "check-the-time",
+      "text": "Maya corrects the time using the meeting record.",
+      "start": 181.54,
+      "end": 184.26,
+      "index": 7
+    },
+    {
+      "scene": "check-the-time",
+      "text": "Asking the tool whether it is sure would not replace that check.",
+      "start": 184.8,
+      "end": 188.48,
+      "index": 8
+    },
+    {
+      "scene": "check-the-time",
+      "text": "A useful draft still needs someone to check the facts.",
+      "start": 188.96,
+      "end": 192.08,
+      "index": 9
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Maya reads the invitation again.",
+      "start": 192.8,
+      "end": 194.66,
+      "index": 0
+    },
+    {
+      "scene": "maya-decides",
+      "text": "The details are right, it says what she means, and she chooses to send it.",
+      "start": 195.04,
+      "end": 199.8,
+      "index": 1
+    },
+    {
+      "scene": "maya-decides",
+      "text": "AI helped her get started.",
+      "start": 200.08,
+      "end": 201.82,
+      "index": 2
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Maya checked the result and made the decision.",
+      "start": 202.28,
+      "end": 204.8,
+      "index": 3
+    },
+    {
+      "scene": "maya-decides",
+      "text": "AI can help us recognise patterns, make predictions and create content.",
+      "start": 205.38,
+      "end": 210.3,
+      "index": 4
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Some AI learns from examples, and some uses knowledge and rules.",
+      "start": 210.78,
+      "end": 215.22,
+      "index": 5
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Not every automatic feature is AI.",
+      "start": 215.54,
+      "end": 218.24,
+      "index": 6
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Before using a result, ask: does this fit my task, and which details need checking?",
+      "start": 218.68,
+      "end": 224.86,
+      "index": 7
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Keep private information protected.",
+      "start": 225.26,
+      "end": 227.52,
+      "index": 8
+    },
+    {
+      "scene": "maya-decides",
+      "text": "For decisions that could seriously affect someone’s life, involve an appropriately qualified person.",
+      "start": 228,
+      "end": 234.34,
+      "index": 9
+    },
+    {
+      "scene": "maya-decides",
+      "text": "Now, tell me, how would you explain AI to someone who has never used it?",
+      "start": 236.1,
+      "end": 241.3,
+      "index": 10
+    }
+  ]
+}

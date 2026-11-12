@@ -26,5 +26,15 @@
   "reference": {
     "url": "https://www.firstmedia.co.uk/animation-illustration/",
     "use": "Educational storytelling quality reference only. No artwork or footage copied."
+  },
+  "foundationsNarration": {
+    "path": "public/lessons/what-is-ai/narration.mp3",
+    "provenance": "Latest user-supplied ElevenLabs recording, 12 November 2026 at 00:19:14. Voice recording unchanged. Earlier Lesson 1 recordings superseded.",
+    "sha256": "882f84bc183cffa6df5cec0da6b5697e7096bd1079999611b02794215e351e8b"
+  },
+  "kitchen": {
+    "path": "public/lessons/what-is-ai/kitchen.png",
+    "provenance": "Original background generated with the built-in image generation tool, 12 November 2026.",
+    "prompt": "Warm editorial 2D home kitchen, ivory, sage, teal and navy. Clear foreground for animated Maya, timer and phone. No people, text or logos."
   }
 }
