@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ModuleCard } from "@/components/ModuleCard";
@@ -85,6 +86,22 @@ export default function CurriculumPage() {
               ))}
             </ol>
           </nav>
+        </section>
+
+        <section className="mt-6 flex flex-col items-start gap-4 rounded-3xl bg-navy p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <h2 className="text-lg font-bold">New here? Start with Module 1</h2>
+            <p className="mt-1 text-sm leading-relaxed text-white/85">
+              Begin with a 2-minute welcome. It leads you into Lesson 1, then
+              each lesson points you to the next.
+            </p>
+          </div>
+          <Link
+            href="/welcome"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-navy hover:bg-lavender"
+          >
+            Start with the welcome <span aria-hidden="true">→</span>
+          </Link>
         </section>
 
         <div className="mt-10 flex flex-col gap-10 sm:mt-12 sm:gap-12">

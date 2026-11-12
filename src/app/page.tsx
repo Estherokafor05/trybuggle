@@ -1,30 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ModuleCard } from "@/components/ModuleCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { modules } from "@/content/modules";
-import { previewLessons } from "@/content/preview-lessons";
+import { journey } from "@/content/journey";
 
 const foundationsPath = "/modules/ai-foundations";
+
+const startSteps = journey.filter((step) => step.available);
+const comingSoon = journey.length - startSteps.length;
 
 const learningMethods = [
   {
     number: "01",
-    title: "See the idea",
-    body: "Diagrams make unfamiliar AI concepts easier to picture.",
+    title: "Learn it",
+    body: "Watch a short narrated film, or read an interactive guide. Your choice.",
     accent: "bg-lavender",
   },
   {
     number: "02",
-    title: "Listen or read",
-    body: "Choose a narrated walkthrough or a written guide.",
+    title: "Check it",
+    body: "Answer 10 quick questions. Get 7 right to pass, and retry as often as you need.",
     accent: "bg-peach",
   },
   {
     number: "03",
-    title: "Check what you learned",
-    body: "Knowledge checks will give feedback and let you try again.",
+    title: "Move on",
+    body: "Each lesson ends by pointing you to the next one.",
     accent: "bg-mint",
   },
 ];
@@ -74,13 +76,10 @@ export default function Home() {
               >
                 Start learning <Arrow />
               </Link>
-              <Link
-                href="/curriculum"
-                className="inline-flex min-h-11 items-center rounded-full px-1 text-sm font-semibold text-ink underline decoration-ink/35 underline-offset-4 hover:decoration-ink"
-              >
-                View the learning path
-              </Link>
             </div>
+            <p className="mt-3 text-xs text-ink/75">
+              Begins with a 2-minute welcome, then Lesson 1.
+            </p>
           </div>
 
           <div className="relative isolate mx-auto flex w-full max-w-[24rem] items-end justify-center px-7 pb-5 pt-5 sm:max-w-[27rem] md:max-w-none md:self-stretch md:px-4 md:py-6 lg:items-center lg:px-8">
@@ -99,101 +98,129 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="mt-8 grid items-start gap-7 sm:mt-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <section id="learn" aria-labelledby="learning-path-title" className="scroll-mt-24">
-            <div className="mb-4 sm:mb-5">
-              <h2 id="learning-path-title" className="text-2xl font-bold sm:text-[1.85rem]">
-                Your learning path
-              </h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                Start with the foundations. Modules 1 and 2 are free.
-              </p>
-            </div>
-            <div className="grid auto-rows-fr gap-3.5 sm:grid-cols-2">
-              {modules.map((module) => (
-                <ModuleCard key={module.slug} module={module} />
-              ))}
-            </div>
-          </section>
-
-          <aside className="grid gap-7 sm:grid-cols-2 lg:grid-cols-1">
-            <section aria-labelledby="preview-title">
-              <div className="mb-4 sm:mb-5">
-                <h2 id="preview-title" className="text-2xl font-bold sm:text-[1.85rem]">
-                  Try a free lesson
-                </h2>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                  Open either preview without an account.
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] border border-line/70 bg-white px-4 py-2 shadow-sm sm:px-5">
-                <ol className="divide-y divide-line/80">
-                  {previewLessons.map((lesson, index) => (
-                    <li key={lesson.slug}>
-                      <Link
-                        href={foundationsPath + "/lessons/" + lesson.slug}
-                        className="group grid min-h-20 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-1.5 py-3 transition-colors hover:bg-canvas"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="grid size-10 place-items-center rounded-2xl bg-lavender font-display text-sm font-bold text-navy"
-                        >
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span>
-                          <span className="block text-sm font-semibold leading-snug group-hover:underline">
-                            {lesson.title}
-                          </span>
-                          <span className="mt-1 block text-xs text-muted">{lesson.duration}</span>
-                        </span>
-                        <Arrow />
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </section>
-
-            <section id="how-it-works" aria-labelledby="learning-methods-title" className="scroll-mt-24">
-              <h2 id="learning-methods-title" className="mb-4 text-2xl font-bold">
-                How it works
-              </h2>
-              <ol className="grid gap-2.5">
-                {learningMethods.map((method) => (
-                  <li
-                    key={method.number}
-                    className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-2xl border border-line/70 bg-white p-3.5"
-                  >
-                    <span aria-hidden="true" className={"grid size-9 place-items-center rounded-xl font-display text-xs font-bold " + method.accent}>
-                      {method.number}
-                    </span>
-                    <div>
-                      <h3 className="text-base font-bold">{method.title}</h3>
-                      <p className="mt-0.5 text-sm leading-relaxed text-muted">{method.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </section>
-          </aside>
-        </div>
-
-        <section className="mt-9 flex flex-col items-start gap-5 rounded-[1.75rem] bg-navy p-6 text-white sm:mt-11 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <div>
-            <p className="text-xs font-semibold text-teal-light">Practical learning</p>
-            <h2 className="mt-1 text-xl font-bold sm:text-2xl">
-              Build a workflow for a task you know
+        <section
+          id="start"
+          aria-labelledby="start-title"
+          className="mt-8 scroll-mt-24 sm:mt-10"
+        >
+          <div className="mb-4 sm:mb-5">
+            <h2 id="start-title" className="text-2xl font-bold sm:text-[1.85rem]">
+              Start here
             </h2>
-            <p className="mt-1.5 max-w-[55ch] text-sm leading-relaxed text-white/85">
-              The practical workflow creation experience is planned as a one-time $50 purchase.
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">
+              Follow these steps in order. No account is needed for the
+              welcome and the first two lessons.
             </p>
           </div>
-          <Link
-            href="/curriculum"
-            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-lavender"
-          >
-            Explore the modules <Arrow />
-          </Link>
+          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {startSteps.map((step, index) => (
+              <li key={step.id}>
+                <Link
+                  href={step.href}
+                  className="group flex h-full flex-col rounded-3xl border border-line/70 bg-white p-5 transition-shadow hover:shadow-md"
+                >
+                  <span className="flex items-center justify-between gap-2">
+                    <span
+                      aria-hidden="true"
+                      className={`grid size-10 place-items-center rounded-2xl font-display text-sm font-bold ${
+                        "bg-lavender text-navy"
+                      }`}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="text-xs font-semibold text-muted">
+                      {step.duration}
+                    </span>
+                  </span>
+                  <span className="mt-4 block text-xs font-semibold uppercase tracking-[0.08em] text-brand-deep">
+                    {step.label}
+                  </span>
+                  <span className="mt-1 block text-lg font-bold leading-snug group-hover:underline">
+                    {step.title}
+                  </span>
+                  <span className="mt-auto flex items-center gap-2 pt-4 text-sm font-semibold">
+                    {index === 0 ? "Watch the welcome" : `Open ${step.label}`} <Arrow />
+                  </span>
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link
+                href={foundationsPath}
+                className="flex h-full flex-col rounded-3xl border border-dashed border-line bg-white/60 p-5 hover:bg-white"
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid size-10 place-items-center rounded-2xl bg-white font-display text-sm font-bold text-muted"
+                >
+                  {startSteps.length + 1}
+                </span>
+                <span className="mt-4 block text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                  Then
+                </span>
+                <span className="mt-1 block text-lg font-bold leading-snug">
+                  The rest of Module 1
+                </span>
+                <span className="mt-1 block text-sm text-muted">
+                  {comingSoon} more lessons are coming soon.
+                </span>
+                <span className="mt-auto flex items-center gap-2 pt-4 text-sm font-semibold text-navy">
+                  See all Module 1 lessons <Arrow />
+                </span>
+              </Link>
+            </li>
+          </ol>
+        </section>
+
+        <section id="how-it-works" aria-labelledby="learning-methods-title" className="mt-10 scroll-mt-24">
+          <h2 id="learning-methods-title" className="mb-4 text-2xl font-bold sm:text-[1.85rem]">
+            How each lesson works
+          </h2>
+          <ol className="grid gap-2.5 sm:grid-cols-3">
+            {learningMethods.map((method) => (
+              <li
+                key={method.number}
+                className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-2xl border border-line/70 bg-white p-3.5"
+              >
+                <span aria-hidden="true" className={"grid size-9 place-items-center rounded-xl font-display text-xs font-bold " + method.accent}>
+                  {method.number}
+                </span>
+                <div>
+                  <h3 className="text-base font-bold">{method.title}</h3>
+                  <p className="mt-0.5 text-sm leading-relaxed text-muted">{method.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section
+          aria-labelledby="who-title"
+          className="mt-10 grid gap-5 rounded-[1.75rem] border border-line/70 bg-white p-6 sm:p-8 md:grid-cols-2 md:gap-10"
+        >
+          <div>
+            <h2 id="who-title" className="text-xl font-bold sm:text-2xl">
+              Who it&apos;s for
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
+              Teachers, nurses, administrators, students, jobseekers,
+              small-business owners and anyone curious about AI. You don&apos;t
+              need any programming or technical background.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold sm:text-2xl">Where it leads</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
+              Module 1, Foundations of Artificial Intelligence, is the first of{" "}
+              {modules.length} modules. Modules 1 and 2 are free.
+            </p>
+            <Link
+              href="/curriculum"
+              className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4"
+            >
+              See all {modules.length} modules <Arrow />
+            </Link>
+          </div>
         </section>
       </main>
       <SiteFooter />

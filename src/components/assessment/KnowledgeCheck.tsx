@@ -105,11 +105,14 @@ export function KnowledgeCheck({
       aria-labelledby="check-title"
       className="mt-7 scroll-mt-24 rounded-[2rem] border border-line bg-white p-5 sm:p-8"
     >
+      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
+        Step 2 · Check it
+      </p>
       <h2
         id="check-title"
         ref={heading}
         tabIndex={-1}
-        className="text-2xl font-bold"
+        className="mt-1 text-2xl font-bold"
       >
         Your knowledge check
       </h2>

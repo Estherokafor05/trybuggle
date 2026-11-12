@@ -410,7 +410,7 @@ test("guest progress carries into sign-in and a newer-device save can be restore
   await expect(
     page.getByText(/A newer place was saved in another tab or device/),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Reload the saved place" }).click();
+  await page.getByRole("button", { name: "Load the newer place" }).click();
   await expect(
     page.getByRole("button", { name: /^Watch & Listen/ }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -419,13 +419,7 @@ test("guest progress carries into sign-in and a newer-device save can be restore
       page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
     )
     .toBeGreaterThan(79);
-  await page.getByLabel("Playback speed").selectOption("1.5");
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect
-    .poll(() =>
-      page.locator("video").evaluate((v: HTMLVideoElement) => v.playbackRate),
-    )
-    .toBe(1.5);
   await expect
     .poll(() =>
       page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),

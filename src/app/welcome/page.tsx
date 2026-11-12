@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JourneyProgress } from "@/components/JourneyProgress";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomeIntro } from "@/components/welcome/WelcomeIntro";
@@ -16,6 +17,9 @@ export default function WelcomePage() {
       <SiteHeader />
       <main className="mx-auto max-w-[1232px] px-4 pb-12 pt-6 sm:px-7 sm:pb-16 sm:pt-8">
         <WelcomeIntro />
+        <div className="mt-5">
+          <JourneyProgress current="welcome" />
+        </div>
         <details className="mt-5 rounded-2xl border border-line bg-white p-5">
           <summary className="cursor-pointer py-2 font-semibold">
             Read the whole welcome
