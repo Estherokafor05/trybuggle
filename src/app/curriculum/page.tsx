@@ -44,8 +44,9 @@ export default function CurriculumPage() {
               No coding experience is required.
             </p>
             <p className="mt-4 max-w-[52ch] text-sm leading-relaxed">
-              <strong className="font-semibold">Modules 1 and 2 are free.</strong>{" "}
-              Practical workflow creation is a one-time $50 purchase.
+              <strong className="font-semibold">Everything on Buggle Learn is free.</strong>{" "}
+              Every module, knowledge check and certificate, with no payments
+              or subscriptions.
             </p>
           </div>
 

@@ -33,7 +33,7 @@ The interface must:
 6. Support learners with varying digital confidence.
 7. Provide accessible and predictable interactions.
 8. Make assessments and certificate requirements understandable.
-9. Distinguish free and paid learning without confusing users.
+9. Make it clear that all learning is free, with nothing to pay or subscribe to.
 10. Avoid unnecessary complexity.
 
 ## 3. Visual Identity
@@ -267,7 +267,7 @@ Each module card should show:
 - Learning outcomes.
 - Estimated duration.
 - Progress.
-- Free or paid access.
+- Whether a free account is needed (no paid access exists).
 - Available, locked, or completed state.
 
 Do not imply that a module awards a certificate unless it does.
@@ -393,24 +393,16 @@ The backend must verify eligibility.
 
 Do not generate a certificate solely because the frontend reports completion.
 
-### 6.9 Paid Learning Access
+### 6.9 Free Learning Access
 
-The platform will offer free and paid learning.
-
-Confirmed:
-
-- First two modules are free.
-- Practical agent-workflow learning is intended to be paid.
-
-Exact pricing tiers and content boundaries remain open.
+Everything on Buggle Learn is free: every module, lesson, assessment and certificate.
 
 Design requirements:
 
-- Clearly label paid content.
-- Explain what is included before payment.
-- Do not interrupt free lessons with aggressive upselling.
+- Never show prices, payment steps, upgrade prompts or subscription offers.
+- Do not label content as paid, premium or locked behind payment.
+- Where sign-in is needed, describe it as a free account for saving progress and earning certificates.
 - Preserve earned progress.
-- Do not imply a certificate is available for paid modules at launch.
 
 ## 7. Component Library
 

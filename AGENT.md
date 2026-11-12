@@ -91,7 +91,7 @@ The detailed curriculum and scope of later modules require approval.
 - Maximum lesson duration: eight minutes. Module planned content: 30 to 60 minutes, with a one-hour cap.
 - The first two lessons can be previewed before Google sign-in. Sign-in is required for account progress and official results.
 - Accessibility target: WCAG 2.2 AA.
-- Practical workflow content uses a one-time USD 50 Stripe payment; exact gated content remains subject to approval.
+- Buggle Learn is completely free. Every module, lesson, knowledge check, assessment and certificate is free, with no payments, paid tiers, subscriptions or paywalls. Do not add pricing, payment, upgrade or subscription prompts, and do not integrate a payment provider.
 - Questions per knowledge check: 10.
 - No fixed retry limit. After a failed assessment, learners review feedback and retry that assessment only; they do not restart lessons or modules, and completed progress is preserved.
 - All required Module 1 lessons and quizzes must be passed before certificate eligibility.
@@ -99,12 +99,10 @@ The detailed curriculum and scope of later modules require approval.
 - Certificate type: Foundations of Artificial Intelligence : Certificate of Completion.
 - Certificate uses the learner's confirmed name.
 - Google sign-up is the only authentication method at launch.
-- The first two modules are free.
-- The platform will offer free and paid learning experiences.
+- All modules are free. Google sign-in (free) is required for saved progress, official results and certificates; the first two lessons can be previewed without it.
 
 ### Recommended : Awaiting Approval
 
-- Keep conceptual AI literacy modules free.
 - Allow learners to confirm their certificate name before issuance.
 
 ## 5. Architecture Principles

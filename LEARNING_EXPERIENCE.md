@@ -323,9 +323,7 @@ Suggested activities:
 
 Avoid requiring Python or other programming languages.
 
-This is the intended paid practical-learning area.
-
-The exact payment boundary remains open.
+Like every module, this practical-learning area is free.
 
 ## 7. Occupation-Based Learning
 
@@ -523,26 +521,14 @@ Do not use a Google display name as an immutable identity key.
 
 Use the authentication provider's stable user identifier.
 
-## 14. Free and Paid Learning
+## 14. Free Learning
 
-Confirmed:
+Confirmed: Buggle Learn is completely free.
 
-- Module 1 is free.
-- Module 2 is free.
-- Practical AI workflow creation is paid through an approved one-time USD 50 unlock using Stripe. It is not a recurring subscription.
-
-Proposed:
-
-- Keep foundational conceptual learning accessible.
-- Charge for advanced guided practical workflow-building experiences.
-
-Open:
-
-- Whether Modules 3–5 are free or paid.
-- Exact premium features.
-- Refund and cancellation rules.
-
-The USD 50 one-time payment and Stripe provider are approved. Confirm the exact gated content and refund policy before implementing billing.
+- Every module, lesson, guide, knowledge check, final assessment and certificate is free.
+- There are no payments, paid tiers, premium features, subscriptions or paywalls.
+- Do not add pricing, upgrade or subscription prompts, and do not integrate a payment provider.
+- A free Google sign-in is needed only to save progress across devices, record official results and issue certificates.
 
 ## 15. Accessibility and Inclusion
 
@@ -648,7 +634,7 @@ Resolve before implementing dependent functionality:
 1. Remaining Module 1 lesson content and where the four classical approaches belong.
 2. Module 1 final assessment question count and blueprint.
 3. Detailed scope and approval of later modules.
-4. Exact paid workflow content and refund policy. Modules 1 and 2 remain free; Stripe and the one-time USD 50 baseline are approved.
+4. Practical workflow tools for Module 6 that learners can use without a paid subscription. Buggle Learn itself is free throughout.
 5. Certificate record retention and any later public verification experience.
 
 Do not invent answers to these questions. The two lesson routes, first two public previews, Google authentication, 10-question checks, 70% pass threshold, assessment-only retries, narration recording rule and WCAG 2.2 AA target are already approved.
