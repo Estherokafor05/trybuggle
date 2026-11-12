@@ -12,13 +12,12 @@ import { parseCheckpoint } from "../src/lib/learning-state.ts";
 const slug = "before-chatgpt";
 const root = new URL("../public/lessons/before-chatgpt/", import.meta.url);
 const story = JSON.parse(readFileSync(new URL("narration.json", root), "utf8"));
-// The published audio is the user's own recording; captions follow its words.
-const recording = JSON.parse(
-  readFileSync(new URL("../animation/before-chatgpt-recording.json", import.meta.url), "utf8"),
+const script = JSON.parse(
+  readFileSync(new URL("../animation/before-chatgpt-script.json", import.meta.url), "utf8"),
 );
 const noEmDash = (text) => assert.ok(!text.includes("—"), `No em dash: ${text}`);
 
-test("Lesson 3 captions follow the published recording, scene by scene", () => {
+test("Lesson 3 narration follows the approved script, scene by scene", () => {
   assert.deepEqual(story.scenes.map((s) => s.id), [
     "surprise",
     "early-questions",
@@ -27,7 +26,7 @@ test("Lesson 3 captions follow the published recording, scene by scene", () => {
     "chatgpt",
     "bigger-picture",
   ]);
-  assert.deepEqual(story.cues.map((c) => c.text), recording.scenes.flatMap((s) => s.lines));
+  assert.deepEqual(story.cues.map((c) => c.text), script.scenes.flatMap((s) => s.lines));
   assert.ok(story.duration < 8 * 60, "lessons stay under eight minutes");
   assert.ok(story.cues[0].start < 1, "the voice starts within the first second");
   for (const scene of story.scenes) {

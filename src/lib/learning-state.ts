@@ -74,7 +74,7 @@ const retired: Record<string, string[]> = {
 const filmLength: Record<string, number> = {
   "what-counts-as-ai": 242,
   "ai-in-your-day": 193,
-  "before-chatgpt": 241,
+  "before-chatgpt": 256,
 };
 export function parseCheckpoint(
   value: unknown,

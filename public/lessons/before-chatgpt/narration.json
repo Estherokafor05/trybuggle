@@ -1,57 +1,57 @@
 {
   "voice": "User-supplied ElevenLabs recording, 12 November 2026",
-  "duration": 241,
-  "audioDuration": 238.99,
+  "duration": 256,
+  "audioDuration": 254.35,
   "scenes": [
     {
       "id": "surprise",
       "title": "The surprise",
       "description": "At a pharmacy team meeting, Sarah's manager says AI has been around for decades. Sarah is surprised: she thought it started with ChatGPT. A clock spins backwards to begin the journey.",
       "start": 0,
-      "end": 25.13
+      "end": 24.47
     },
     {
       "id": "early-questions",
       "title": "The early questions",
       "description": "A room-sized 1950s computer. Alan Turing's 1950 question about whether machines could think, shown as a chat between a person and a hidden machine. The 1956 Dartmouth summer workshop gives the field its name.",
-      "start": 25.13,
-      "end": 75.47
+      "start": 24.47,
+      "end": 74.28
     },
     {
       "id": "rules",
       "title": "Teaching computers rules",
       "description": "An expert's knowledge becomes if-then rules. A printer help checklist works step by step until it meets a problem with no rule. A cold, quiet lab shows an AI winter.",
-      "start": 75.47,
-      "end": 134.29
+      "start": 74.28,
+      "end": 132.71
     },
     {
       "id": "new-challenges",
       "title": "Machines take on new challenges",
       "description": "In 1997 Deep Blue beats Garry Kasparov at chess by searching through moves. Later, machine learning finds patterns in many examples, helping with images, speech and predictions.",
-      "start": 134.29,
-      "end": 171.72
+      "start": 132.71,
+      "end": 177.37
     },
     {
       "id": "chatgpt",
       "title": "Then came ChatGPT",
       "description": "Everyday tools from Lesson 2 already use AI: spam filters, photo search and route suggestions. In November 2022 a chat window appears, and anyone can type a question and get a written reply.",
-      "start": 171.72,
-      "end": 209.58
+      "start": 177.37,
+      "end": 220.16
     },
     {
       "id": "bigger-picture",
       "title": "The bigger picture",
       "description": "A timeline gathers every milestone from 1950 to 2022. Back at the pharmacy, Sarah smiles. The next lesson, AI or ordinary software, is introduced.",
-      "start": 209.58,
-      "end": 241
+      "start": 220.16,
+      "end": 256
     }
   ],
   "cues": [
     {
       "scene": "surprise",
       "text": "This is Sarah.",
-      "start": 0.14,
-      "end": 0.96,
+      "start": 0.16,
+      "end": 1,
       "index": 0
     },
     {
@@ -64,351 +64,351 @@
     {
       "scene": "surprise",
       "text": "At this morning’s team meeting, her manager said that AI has been around for decades.",
-      "start": 3.64,
-      "end": 9.04,
+      "start": 3.6,
+      "end": 8.8,
       "index": 2
     },
     {
       "scene": "surprise",
       "text": "Sarah was surprised.",
-      "start": 9.66,
-      "end": 11,
+      "start": 9.42,
+      "end": 10.68,
       "index": 3
     },
     {
       "scene": "surprise",
       "text": "Didn’t all of this start with ChatGPT?",
-      "start": 11.36,
-      "end": 13.74,
+      "start": 11.12,
+      "end": 13.44,
       "index": 4
     },
     {
       "scene": "surprise",
       "text": "Like many people, Sarah first heard about AI when chat tools appeared in the news.",
-      "start": 14.54,
-      "end": 19.96,
+      "start": 14.18,
+      "end": 19.38,
       "index": 5
     },
     {
       "scene": "surprise",
       "text": "So let’s travel back in time and see where the story really begins.",
-      "start": 20.64,
-      "end": 24.8,
+      "start": 19.96,
+      "end": 24.14,
       "index": 6
     },
     {
       "scene": "early-questions",
       "text": "In the 1950s, computers filled whole rooms and cost a fortune.",
-      "start": 25.46,
-      "end": 30.46,
+      "start": 24.8,
+      "end": 29.66,
       "index": 7
     },
     {
       "scene": "early-questions",
       "text": "Most were used for calculations.",
-      "start": 31.08,
-      "end": 32.88,
+      "start": 30.22,
+      "end": 31.98,
       "index": 8
     },
     {
       "scene": "early-questions",
       "text": "But some researchers began asking a bigger question: could a computer do things we normally link with human intelligence, like solving problems or using language?",
-      "start": 33.46,
-      "end": 43.52,
+      "start": 32.54,
+      "end": 42.64,
       "index": 9
     },
     {
       "scene": "early-questions",
       "text": "In 1950, the mathematician Alan Turing wrote about this question.",
-      "start": 44.22,
-      "end": 48.86,
+      "start": 43.3,
+      "end": 47.92,
       "index": 10
     },
     {
       "scene": "early-questions",
       "text": "He suggested a test: if you chatted with a machine and couldn’t tell it apart from a person, what would that tell us?",
-      "start": 49.46,
-      "end": 56.46,
+      "start": 48.48,
+      "end": 55.4,
       "index": 11
     },
     {
       "scene": "early-questions",
       "text": "Then, in 1956, researchers gathered for a summer workshop at Dartmouth College in the United States.",
-      "start": 57.06,
-      "end": 63.9,
+      "start": 56.06,
+      "end": 62.78,
       "index": 12
     },
     {
       "scene": "early-questions",
       "text": "It was called the Dartmouth Summer Research Project on Artificial Intelligence, and the name stuck.",
-      "start": 64.52,
-      "end": 70.3,
+      "start": 63.46,
+      "end": 69.26,
       "index": 13
     },
     {
       "scene": "early-questions",
       "text": "So the term “artificial intelligence” is about seventy years old.",
-      "start": 70.82,
-      "end": 75.12,
+      "start": 69.88,
+      "end": 74.02,
       "index": 14
     },
     {
       "scene": "rules",
       "text": "For many years, a popular approach was to give computers rules.",
-      "start": 75.82,
-      "end": 79.82,
+      "start": 74.54,
+      "end": 78.44,
       "index": 15
     },
     {
       "scene": "rules",
       "text": "Researchers sat with experts, like doctors or engineers, and wrote down how they made decisions.",
-      "start": 80.44,
-      "end": 86.36,
+      "start": 79.04,
+      "end": 84.86,
       "index": 16
     },
     {
       "scene": "rules",
       "text": "Then they turned that knowledge into long lists of “if this, then that” rules.",
-      "start": 87,
-      "end": 92.12,
+      "start": 85.46,
+      "end": 90.5,
       "index": 17
     },
     {
       "scene": "rules",
       "text": "Imagine a help system for a broken printer.",
-      "start": 92.76,
-      "end": 95.16,
+      "start": 91.1,
+      "end": 93.4,
       "index": 18
     },
     {
       "scene": "rules",
       "text": "It asks: is the printer switched on?",
-      "start": 95.7,
-      "end": 97.94,
+      "start": 93.9,
+      "end": 96.02,
       "index": 19
     },
     {
       "scene": "rules",
       "text": "If not, switch it on.",
-      "start": 98.48,
-      "end": 99.78,
+      "start": 96.5,
+      "end": 97.84,
       "index": 20
     },
     {
       "scene": "rules",
       "text": "If it is, is there paper in the tray?",
-      "start": 100.38,
-      "end": 102.58,
+      "start": 98.42,
+      "end": 100.64,
       "index": 21
     },
     {
       "scene": "rules",
       "text": "If not, add paper.",
-      "start": 103.08,
-      "end": 104.46,
+      "start": 101.14,
+      "end": 102.56,
       "index": 22
     },
     {
       "scene": "rules",
       "text": "Systems like this, often called expert systems, could be useful for narrow jobs.",
-      "start": 105.1,
-      "end": 110.18,
+      "start": 103.18,
+      "end": 108.28,
       "index": 23
     },
     {
       "scene": "rules",
       "text": "But they were also fragile.",
-      "start": 110.66,
-      "end": 112.14,
+      "start": 108.74,
+      "end": 110.24,
       "index": 24
     },
     {
       "scene": "rules",
       "text": "Every rule had to be written by hand, the lists grew huge and hard to update, and when something happened that nobody had written a rule for, the system got stuck.",
-      "start": 112.78,
-      "end": 122.68,
+      "start": 110.9,
+      "end": 120.82,
       "index": 25
     },
     {
       "scene": "rules",
       "text": "When results fell short of big promises, interest and funding dropped for a while.",
-      "start": 123.2,
-      "end": 127.82,
+      "start": 121.48,
+      "end": 126.16,
       "index": 26
     },
     {
       "scene": "rules",
       "text": "People later called these quiet periods “AI winters”.",
-      "start": 128.48,
-      "end": 131.92,
+      "start": 126.76,
+      "end": 130.38,
       "index": 27
     },
     {
       "scene": "rules",
       "text": "But the research carried on.",
-      "start": 132.44,
-      "end": 134,
+      "start": 130.92,
+      "end": 132.42,
       "index": 28
     },
     {
       "scene": "new-challenges",
-      "text": "In 1997, a computer called Deep Blue beat by champion Garry Kasparov.",
-      "start": 134.58,
-      "end": 140.06,
+      "text": "In 1997, a computer called Deep Blue, built by IBM, beat the world chess champion, Garry Kasparov.",
+      "start": 133,
+      "end": 140.58,
       "index": 29
     },
     {
       "scene": "new-challenges",
       "text": "Deep Blue didn’t learn chess the way a person does.",
-      "start": 140.7,
-      "end": 143.24,
+      "start": 141.2,
+      "end": 143.82,
       "index": 30
     },
     {
       "scene": "new-challenges",
       "text": "It checked millions of possible moves every second, guided by rules and scoring that people had written.",
-      "start": 143.7,
-      "end": 149.88,
+      "start": 144.24,
+      "end": 150.36,
       "index": 31
     },
     {
       "scene": "new-challenges",
-      "text": "Over the following years, machine learning.",
-      "start": 150.52,
-      "end": 152.84,
+      "text": "Over the following years, a different approach grew: machine learning.",
+      "start": 150.94,
+      "end": 154.94,
       "index": 32
     },
     {
       "scene": "new-challenges",
       "text": "Instead of writing every rule by hand, people gave computers lots of examples and let them find patterns, like the idea you met in Lesson 1.",
-      "start": 153.46,
-      "end": 162.12,
+      "start": 155.6,
+      "end": 164.36,
       "index": 33
     },
     {
       "scene": "new-challenges",
-      "text": "Machine learning helped computers get much better recognising speech and making predictions.",
-      "start": 162.78,
-      "end": 168,
+      "text": "Machine learning helped computers get much better at recognising images, recognising speech and making predictions.",
+      "start": 164.84,
+      "end": 172.9,
       "index": 34
     },
     {
       "scene": "new-challenges",
       "text": "That’s how AI found its way into everyday tools.",
-      "start": 168.3,
-      "end": 171.46,
+      "start": 173.58,
+      "end": 176.98,
       "index": 35
     },
     {
       "scene": "chatgpt",
       "text": "By the 2010s, AI was already part of daily life.",
-      "start": 171.98,
-      "end": 175.88,
+      "start": 177.76,
+      "end": 181.78,
       "index": 36
     },
     {
       "scene": "chatgpt",
-      "text": "Lesson 2.",
-      "start": 176.34,
-      "end": 176.88,
+      "text": "Remember Maya’s day in Lesson 2?",
+      "start": 182.42,
+      "end": 184.18,
       "index": 37
     },
     {
       "scene": "chatgpt",
       "text": "Spam filters, photo search and route suggestions were already using it, often without anyone noticing.",
-      "start": 177.56,
-      "end": 184.6,
+      "start": 185,
+      "end": 191.98,
       "index": 38
     },
     {
       "scene": "chatgpt",
-      "text": "Then, in November 2022, a company called OpenAI released ChatGPT, and similar tools from other…",
-      "start": 185.08,
-      "end": 193.32,
+      "text": "Then, in November 2022, a company called OpenAI released ChatGPT, and similar tools from other companies soon followed.",
+      "start": 192.68,
+      "end": 202.46,
       "index": 39
     },
     {
       "scene": "chatgpt",
       "text": "For the first time, almost anyone could type a question in plain words and get a written reply on almost any topic.",
-      "start": 193.64,
-      "end": 201.06,
+      "start": 203.18,
+      "end": 210.88,
       "index": 40
     },
     {
       "scene": "chatgpt",
       "text": "People could talk to AI directly.",
-      "start": 201.6,
-      "end": 203.78,
+      "start": 211.52,
+      "end": 213.78,
       "index": 41
     },
     {
       "scene": "chatgpt",
       "text": "AI wasn’t new.",
-      "start": 204.26,
-      "end": 205.36,
+      "start": 214.44,
+      "end": 215.52,
       "index": 42
     },
     {
       "scene": "chatgpt",
       "text": "What changed was how visible and easy to use it became.",
-      "start": 205.86,
-      "end": 209.32,
+      "start": 216.1,
+      "end": 219.76,
       "index": 43
     },
     {
       "scene": "bigger-picture",
       "text": "So, did AI start with ChatGPT?",
-      "start": 209.84,
-      "end": 212.52,
+      "start": 220.56,
+      "end": 223.34,
       "index": 44
     },
     {
       "scene": "bigger-picture",
       "text": "No.",
-      "start": 213.02,
-      "end": 213.26,
+      "start": 224.22,
+      "end": 224.46,
       "index": 45
     },
     {
       "scene": "bigger-picture",
-      "text": "It grew from decades of work: big questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of…",
-      "start": 213.8,
-      "end": 224.04,
+      "text": "It grew from decades of work: big questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of machine learning.",
+      "start": 225.1,
+      "end": 236.08,
       "index": 46
     },
     {
       "scene": "bigger-picture",
-      "text": "…is one recent chapter in a much longer story.",
-      "start": 224.36,
-      "end": 227.16,
+      "text": "ChatGPT is one recent chapter in a much longer story.",
+      "start": 236.8,
+      "end": 240.9,
       "index": 47
     },
     {
       "scene": "bigger-picture",
       "text": "Back at work, Sarah smiles.",
-      "start": 227.58,
-      "end": 229.54,
+      "start": 241.78,
+      "end": 243.78,
       "index": 48
     },
     {
       "scene": "bigger-picture",
       "text": "AI has been around for decades.",
-      "start": 229.98,
-      "end": 232.04,
+      "start": 244.54,
+      "end": 246.66,
       "index": 49
     },
     {
       "scene": "bigger-picture",
       "text": "It just became much easier to see.",
-      "start": 232.36,
-      "end": 234.28,
+      "start": 247.08,
+      "end": 249.1,
       "index": 50
     },
     {
       "scene": "bigger-picture",
       "text": "Next, we’ll look at how to tell AI apart from ordinary software.",
-      "start": 234.78,
-      "end": 238.82,
+      "start": 249.96,
+      "end": 254.1,
       "index": 51
     }
   ]
