@@ -26,44 +26,65 @@ export function LessonPreview({
   return (
     <>
       <div
-        className="mt-7 flex flex-wrap gap-2 rounded-3xl border border-line bg-white p-2"
+        className="mt-7 grid gap-2 rounded-3xl border border-line bg-white p-2 sm:grid-cols-2"
         role="group"
-        aria-label="Choose your learning experience"
+        aria-label="Choose how to learn"
       >
         {[
-          { id: "watch" as const, label: "Watch & Listen" },
-          { id: "explore" as const, label: "Read & Explore" },
+          {
+            id: "watch" as const,
+            label: "Watch & Listen",
+            detail: `Narrated film · ${lesson.duration.replace(" to watch", "")}`,
+          },
+          {
+            id: "explore" as const,
+            label: "Read & Explore",
+            detail: `Interactive guide · ${guide.steps.length} short steps`,
+          },
         ].map((route) => (
           <button
             key={route.id}
             type="button"
             disabled={!learning.ready}
             aria-pressed={place.route === route.id}
-            className={`min-h-12 flex-1 rounded-full px-5 py-3 font-semibold disabled:opacity-50 ${place.route === route.id ? "bg-navy text-white" : "hover:bg-lavender"}`}
+            className={`min-h-14 rounded-[1.25rem] px-5 py-3 text-center disabled:opacity-50 ${place.route === route.id ? "bg-navy text-white" : "hover:bg-lavender"}`}
             onClick={() => update({ route: route.id })}
           >
-            {route.label}
+            <span className="block font-semibold">{route.label}</span>
+            <span
+              className={`block text-sm ${place.route === route.id ? "text-white/75" : "text-muted"}`}
+            >
+              {route.detail}
+            </span>
           </button>
         ))}
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
-        <span role="status">{learning.status}</span>
-        {signedIn && (
-          <button
-            type="button"
-            className="min-h-11 underline"
-            onClick={() =>
-              learning.conflict ? void learning.reload() : learning.retry()
-            }
-          >
-            {learning.conflict ? "Reload the saved place" : "Retry saving"}
-          </button>
+        {signedIn || /could not|unavailable/i.test(learning.status) ? (
+          <span role="status" className="flex items-center gap-2">
+            {learning.status}
+            {signedIn &&
+              (learning.conflict ||
+                /waiting|could not|retry/i.test(learning.status)) && (
+              <button
+                type="button"
+                className="min-h-11 font-semibold underline"
+                onClick={() =>
+                  learning.conflict ? void learning.reload() : learning.retry()
+                }
+              >
+                {learning.conflict ? "Load the newer place" : "Retry saving"}
+              </button>
+            )}
+          </span>
+        ) : (
+          <span />
         )}
         <Link
-          className="inline-flex min-h-11 items-center underline"
+          className="inline-flex min-h-11 items-center underline underline-offset-4"
           href={`/modules/ai-foundations/lessons/${lesson.slug}/reading`}
         >
-          Complete reading alternative
+          Prefer plain text? Read the text version
         </Link>
       </div>
       {!learning.ready && (
@@ -81,7 +102,7 @@ export function LessonPreview({
             />
             <details className="mt-4 rounded-2xl border border-line bg-white p-5">
               <summary className="cursor-pointer py-2 font-semibold">
-                Try the reflection after the film
+                After the film: put it in your own words (optional)
               </summary>
               <div className="mt-4">
                 <Reflection
@@ -104,8 +125,8 @@ export function LessonPreview({
       )}
       <noscript>
         <p className="mt-5 rounded-xl bg-peach p-5">
-          The film and interactive activities need JavaScript. The complete
-          reading alternative above covers all the learning outcomes without it.
+          The film and interactive guide need JavaScript. The text version
+          covers everything in this lesson without it.
         </p>
       </noscript>
       <KnowledgeCheck slug={lesson.slug} signedIn={signedIn} />

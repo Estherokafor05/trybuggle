@@ -3,6 +3,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { StoryNarration } from "@/content/stories";
 
+function subscribeWidth(callback: () => void) {
+  const query = window.matchMedia("(max-width: 600px)");
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+const serverValue = () => false;
+
 export type NextStep = {
   href: string;
   label: string;
@@ -10,19 +17,6 @@ export type NextStep = {
   available: boolean;
 };
 
-const control =
-  "min-h-11 rounded-full border border-navy/25 bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-lavender focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
-function subscribeWidth(callback: () => void) {
-  const query = window.matchMedia("(max-width: 600px)");
-  query.addEventListener("change", callback);
-  return () => query.removeEventListener("change", callback);
-}
-function subscribeMotion(callback: () => void) {
-  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-  query.addEventListener("change", callback);
-  return () => query.removeEventListener("change", callback);
-}
-const serverValue = () => false;
 export function StoryPlayer({
   active,
   root,
@@ -49,67 +43,25 @@ export function StoryPlayer({
     () => window.matchMedia("(max-width: 600px)").matches,
     serverValue,
   );
-  const reducedMotion = useSyncExternalStore(
-    subscribeMotion,
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    serverValue,
-  );
   const video = useRef<HTMLVideoElement>(null);
   const position = useRef(initialTime);
   const lastSaved = useRef(initialTime);
-  const started = useRef(false);
-  const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [speed, setSpeed] = useState(1);
-  const [time, setTime] = useState(initialTime);
-  const [captions, setCaptions] = useState(true);
   const [failed, setFailed] = useState(false);
   const [ended, setEnded] = useState(false);
-  const cue = narration.cues.find((c) => time >= c.start && time < c.end);
   useEffect(() => {
     if (!active) video.current?.pause();
   }, [active]);
   useEffect(() => {
     video.current?.pause();
   }, [mobile]);
-  async function play(restart = false) {
-    const media = video.current;
-    if (!media || !active) return;
-    try {
-      if (media.error) media.load();
-      if (restart) {
-        media.currentTime = 0;
-        position.current = 0;
-        setTime(0);
-      } else if (media.ended) media.currentTime = 0;
-      if (!started.current) {
-        media.muted = false;
-        media.volume = 1;
-        started.current = true;
-      }
-      await media.play();
-      setFailed(false);
-    } catch {
-      setFailed(true);
-    }
-  }
   return (
     <section
       aria-labelledby="film-title"
       className="mt-6 overflow-hidden rounded-[2rem] border border-line bg-white shadow-sm"
     >
-      <div className="p-5 sm:p-7">
-        <h2 id="film-title" className="text-2xl font-bold sm:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-2 max-w-[65ch] text-muted">{introduction}</p>
-        {reducedMotion && (
-          <p className="mt-2 text-sm text-muted">
-            The film stays paused until you choose to play it. You can use the
-            written guide or transcript if you prefer.
-          </p>
-        )}
-      </div>
+      <h2 id="film-title" className="sr-only">
+        Film: {title}
+      </h2>
       <video
         key={mobile ? "mobile" : "desktop"}
         ref={video}
@@ -121,127 +73,50 @@ export function StoryPlayer({
           root + (mobile ? "poster-mobile.jpg" : "poster.jpg") + mediaVersion
         }
         src={root + (mobile ? "story-mobile.mp4" : "story.mp4") + mediaVersion}
-        aria-label={`Narrated illustrated story: ${title}`}
+        aria-label={`Narrated illustrated film: ${title}`}
         onLoadedMetadata={(e) => {
-          e.currentTarget.currentTime = position.current;
-          e.currentTarget.playbackRate = speed;
-          setPlaying(false);
+          // Resume only a real position, so the poster stays visible at 0:00.
+          if (position.current > 0.5 && position.current < narration.duration - 1)
+            e.currentTarget.currentTime = position.current;
         }}
         onPlay={() => {
-          setPlaying(true);
-          setEnded(false);
           setFailed(false);
+          setEnded(false);
         }}
-        onPause={(e) => {
-          setPlaying(false);
-          onPlace(Math.min(narration.duration, e.currentTarget.currentTime));
-        }}
+        onPause={(e) =>
+          onPlace(Math.min(narration.duration, e.currentTarget.currentTime))
+        }
         onTimeUpdate={(e) => {
           position.current = e.currentTarget.currentTime;
-          setTime(position.current);
           if (Math.abs(position.current - lastSaved.current) >= 5) {
             lastSaved.current = position.current;
             onPlace(Math.min(narration.duration, position.current));
           }
         }}
-        onVolumeChange={(e) =>
-          setMuted(e.currentTarget.muted || e.currentTarget.volume === 0)
-        }
         onEnded={() => {
-          setPlaying(false);
           setEnded(true);
           onPlace(narration.duration);
         }}
-        onError={() => {
-          setPlaying(false);
-          setFailed(true);
-        }}
+        onError={() => setFailed(true)}
       >
         <track
           kind="captions"
           src={root + "captions.vtt" + mediaVersion}
           srcLang="en"
           label="English"
+          default
         />
       </video>
-      <div className="p-4 sm:p-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
-            Speed
-            <select
-              aria-label="Playback speed"
-              value={speed}
-              className="min-h-11 rounded-lg border border-line bg-white px-2"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setSpeed(value);
-                if (video.current) video.current.playbackRate = value;
-              }}
-            >
-              {[0.75, 1, 1.25, 1.5].map((value) => (
-                <option key={value} value={value}>
-                  {value}×
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="button"
-            className={control}
-            onClick={() => (playing ? video.current?.pause() : void play())}
-          >
-            {playing ? "Pause film" : "Play film with narration"}
-          </button>
-          <button
-            type="button"
-            className={control}
-            onClick={() => void play(true)}
-          >
-            Replay film
-          </button>
-          <button
-            type="button"
-            className={control}
-            aria-pressed={captions}
-            onClick={() => setCaptions(!captions)}
-          >
-            {captions ? "Hide captions" : "Show captions"}
-          </button>
-          {muted && (
-            <button
-              type="button"
-              className={control}
-              onClick={() => {
-                if (video.current) {
-                  video.current.muted = false;
-                  video.current.volume = 1;
-                }
-              }}
-            >
-              Turn narration on
-            </button>
-          )}
-        </div>
-        <div
-          aria-label="Current narration caption"
-          className="mt-4 min-h-16 rounded-xl bg-navy px-4 py-3 text-sm leading-relaxed text-white sm:text-base"
-        >
-          {captions
-            ? (cue?.text ??
-              (playing ? "" : "Narration appears here as the film plays."))
-            : "Captions are hidden."}
-        </div>
+      <div className="p-5 sm:p-6">
+        <p className="leading-relaxed text-muted">{introduction}</p>
         {ended && (
           <div
             role="status"
             className="welcome-rise mt-4 rounded-2xl bg-mint p-5 sm:p-6"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
-              Film complete
-            </p>
-            <p className="mt-2 text-xl font-bold">Nice work. What next?</p>
+            <p className="text-xl font-bold">Nice work! What next?</p>
             <p className="mt-2 max-w-[60ch] leading-relaxed text-ink">
-              Take the knowledge check to see what stuck, then carry on.
+              Take the knowledge check to see what stuck.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <a
@@ -268,8 +143,8 @@ export function StoryPlayer({
         )}
         {failed && (
           <p role="alert" className="mt-3 rounded-xl bg-peach p-3">
-            The film could not play. Try again or read the guide or transcript
-            below.
+            The film couldn&apos;t play. Try again, or switch to Read &amp;
+            Explore.
           </p>
         )}
         <details className="mt-4 border-t border-line pt-3">

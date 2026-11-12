@@ -114,9 +114,8 @@ export function KnowledgeCheck({
         Your knowledge check
       </h2>
       <p className="mt-3 leading-relaxed">
-        10 questions. Pass with at least 7 correct answers (70%). If you need
-        another try, retry this assessment only. Your lesson and guide progress
-        stay saved.
+        10 quick questions about this lesson. Get 7 or more right to pass. You
+        can try again as many times as you need.
       </p>
       {!signedIn ? (
         <Link

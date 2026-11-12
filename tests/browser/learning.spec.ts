@@ -55,7 +55,7 @@ test("Lesson 1 supports both routes, all activities and local resume", async ({
     page.getByRole("heading", { name: "What is AI?", exact: true }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Read & Explore", exact: true }),
+    page.getByRole("button", { name: /^Read & Explore/ }),
   ).toBeEnabled();
   const video = page.locator("video");
   await expect
@@ -64,89 +64,71 @@ test("Lesson 1 supports both routes, all activities and local resume", async ({
   await video.evaluate((v: HTMLVideoElement) => {
     v.currentTime = 48;
   });
+  await video.evaluate((v: HTMLVideoElement) => v.play());
   await page
-    .getByRole("button", { name: "Play film with narration", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Read & Explore", exact: true })
+    .getByRole("button", { name: /^Read & Explore/ })
     .click();
   await expect
     .poll(() => video.evaluate((v: HTMLVideoElement) => v.paused))
     .toBe(true);
-  await page
-    .getByRole("button", { name: "Turn spoken words into notes", exact: true })
-    .click();
+  // Step 1: try the three tools, then answer
+  for (const tool of ["Speech to text", "Photo search", "Writing helper"])
+    await page.getByRole("button", { name: new RegExp(`^${tool}`) }).click();
   await expect(
-    page.getByText("A recording of someone speaking", { exact: true }),
+    page.getByText("A short request: “Invite the team to a meeting”"),
   ).toBeVisible();
+  await page.getByLabel(/^Computer systems that can recognise/).check();
+  await expect(page.getByText("You got it!")).toBeVisible();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page.getByRole("button", { name: "Advance five minutes" }).click();
-  await expect(page.getByText("Ring! The set time has passed.")).toBeVisible();
-  await page
-    .getByRole("button", { name: "See the speech-tool demonstration" })
-    .click();
-  await expect(
-    page.getByText("Written reminder: Bring a notebook."),
-  ).toBeVisible();
+  // Step 2: timer, then speech
+  await page.getByRole("button", { name: /Start the timer/ }).click();
+  await expect(page.getByText(/Time's up/)).toBeVisible();
+  await page.getByLabel(/^Yes, because it works automatically/).check();
+  await expect(page.getByText(/Not quite/)).toBeVisible();
+  await page.getByLabel(/^No, working automatically/).check();
+  await page.getByRole("button", { name: /Play Maya's voice note/ }).click();
+  await expect(page.getByText("What's the difference?")).toBeVisible();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
+  // Step 3: train and test
   await page
-    .getByRole("button", { name: "A meeting recording", exact: true })
+    .getByRole("button", { name: "Train the computer with these examples" })
     .click();
-  await page
-    .getByRole("button", { name: "Written notes", exact: true })
-    .click();
-  await expect(page.getByText("✓ Connected", { exact: true })).toHaveCount(1);
+  await expect(page.getByText("✓ Trained on 4 examples")).toBeVisible();
+  await page.locator("input[name=test1]").first().check();
+  await page.locator("input[name=test2]").first().check();
+  await expect(page.getByText(/It's actually a cat hiding/)).toBeVisible();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Try a partly hidden animal" })
-    .click();
-  await expect(page.getByText(/This prediction is wrong/)).toBeVisible();
+  // Step 4: build a safe request
+  await page.getByLabel(/^Volunteers' private phone numbers/).check();
+  await page.getByRole("button", { name: /Send the request/ }).click();
+  await expect(page.getByText(/Keep private information out/)).toBeVisible();
+  await page.getByLabel(/^Volunteers' private phone numbers/).uncheck();
+  await page.getByLabel(/^What it's for/).check();
+  await page.getByLabel(/^The details/).check();
+  await page.getByRole("button", { name: /Send the request/ }).click();
+  await expect(page.getByText("It sounds great. But is it right?")).toBeVisible();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page
-    .getByLabel("Invite volunteers to a meeting", { exact: true })
-    .check();
-  await page.getByLabel("Thursday, 6 pm, Room Three", { exact: true }).check();
-  await page.getByRole("button", { name: "Preview the example draft" }).click();
-  await expect(
-    page.getByText("Your request gives useful context.", { exact: true }),
-  ).toBeVisible();
+  // Step 5: check and fix the draft
+  for (const part of ["Friday", "6 pm", "Room Three", "Parking is free."])
+    await page.getByRole("button", { name: `Check “${part}”` }).click();
+  await expect(page.getByText(/The tool made this up/)).toBeVisible();
+  await page.getByRole("button", { name: /Fix the draft/ }).click();
+  await expect(page.getByText("✅ Checked invitation")).toBeVisible();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page.getByRole("button", { name: "Friday", exact: true }).click();
-  await expect(page.getByText(/Friday conflicts with the brief/)).toBeVisible();
+  // Step 6: final question and private notes
+  await page.getByLabel(/^Check with a pharmacist or doctor/).check();
   await page
-    .getByRole("button", { name: "Parking is free.", exact: true })
-    .click();
-  await expect(
-    page.getByText(/we cannot conclude it is true or false/),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page
-    .getByRole("button", {
-      name: "Correct the day and remove unverified parking",
-    })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Checked invitation", exact: true }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Involve a qualified health professional" })
-    .click();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page
-    .getByRole("textbox", { name: "AI can help people…", exact: true })
+    .getByRole("textbox", { name: "In my own words, AI is…", exact: true })
     .fill("Find patterns, but check important details.");
   await page.reload();
   await expect(
-    page.getByRole("heading", {
-      name: "Explain it in your own words",
-      exact: true,
-    }),
+    page.getByRole("heading", { name: "Put it in your own words", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("textbox", { name: "AI can help people…", exact: true }),
+    page.getByRole("textbox", { name: "In my own words, AI is…", exact: true }),
   ).toHaveValue("Find patterns, but check important details.");
   await page
-    .getByRole("button", { name: "Watch & Listen", exact: true })
+    .getByRole("button", { name: /^Watch & Listen/ })
     .click();
   await expect
     .poll(() =>
@@ -166,51 +148,29 @@ test("Maya guide explores photos, changing predictions, fit and message verifica
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(lesson("ai-in-your-day"));
   await page
-    .getByRole("button", { name: "Read & Explore", exact: true })
+    .getByRole("button", { name: /^Read & Explore/ })
     .click();
-  await page.getByRole("button", { name: "Home: alarm and photos" }).click();
-  await page
-    .getByRole("button", { name: "Search the photos for “dog”" })
-    .click();
+  const places = [
+    ["1. Home", "Alarm clock", "Photo app", /^That it's the right dog/],
+    ["2. The journey", "Traffic lights", "Map app", /^Treat the time as a guess/],
+    ["3. Community centre", "Printer", "Email app", /^Compare it with her booking/],
+    ["4. Online shop", "Basket total", "“You might like”", /^No\. It only fits/],
+  ] as const;
+  for (const [stop, ordinary, tool, check] of places) {
+    await page.getByRole("button", { name: new RegExp(`^${stop}`) }).click();
+    await page.getByRole("button", { name: ordinary, exact: true }).click();
+    await expect(page.getByText(/probably not AI/)).toBeVisible();
+    await page.getByRole("button", { name: tool, exact: true }).click();
+    await page.getByRole("button", { name: /Watch it work/ }).click();
+    await page.getByLabel(check).check();
+    await expect(page.getByText(/^This is called/)).toBeVisible();
+    await page.getByRole("button", { name: "← Back to the map" }).click();
+  }
+  await expect(page.getByText("4 of 4 places explored")).toBeVisible();
+  await page.getByRole("button", { name: /^Step 6/ }).click();
   await expect(
-    page.getByRole("button", { name: "Blue sky", exact: true }),
-  ).toHaveCount(0);
-  await page
-    .getByRole("button", {
-      name: "Club dog wearing a teal collar",
-      exact: true,
-    })
-    .click();
-  await expect(
-    page.getByText(/This is the club’s dog with the teal collar/),
+    page.getByRole("heading", { name: "What did you notice?" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page.getByRole("button", { name: "Show a traffic update" }).click();
-  await expect(
-    page.getByRole("button", { name: "Inspect alternative: 35 minutes" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page.getByRole("button", { name: "Inspect fit information" }).click();
-  await page.getByRole("button", { name: "Keep looking", exact: true }).click();
-  await expect(
-    page.getByText(/28 cm exceeds the bag’s maximum of 25 cm/),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page.getByRole("button", { name: "Spam", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Verify through a known contact" })
-    .click();
-  await expect(
-    page.getByText(/Maya uses contact details she already trusts/),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Find likely dog pictures", exact: true })
-    .focus();
-  await page.keyboard.press("Enter");
-  await page.getByRole("button", { name: "Recognise", exact: true }).focus();
-  await page.keyboard.press("Enter");
-  await expect(page.getByText("✓ Connected", { exact: true })).toHaveCount(1);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -239,9 +199,9 @@ test("reading alternative is complete with JavaScript disabled", async ({
       page.getByRole("heading", { name: "Try it in your own words" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Open the separate knowledge check" }),
+      page.getByRole("link", { name: "Take the knowledge check" }),
     ).toBeVisible();
-    expect(await page.locator("section").count()).toBeGreaterThan(7);
+    expect(await page.locator("section").count()).toBeGreaterThan(6);
   }
   await context.close();
 });
@@ -366,11 +326,11 @@ test("signed-in learner can submit, review feedback and retry without restarting
   await signIn(context);
   await page.goto(lesson());
   await page
-    .getByRole("button", { name: "Read & Explore", exact: true })
+    .getByRole("button", { name: /^Read & Explore/ })
     .click();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Automatic does not always mean AI" }),
+    page.getByRole("heading", { name: "Automatic or AI?" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Open the knowledge check" }).click();
   const questions = assessmentBank["what-counts-as-ai"];
@@ -397,7 +357,7 @@ test("signed-in learner can submit, review feedback and retry without restarting
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Automatic does not always mean AI" }),
+    page.getByRole("heading", { name: "Automatic or AI?" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Open the knowledge check" }).click();
   await expect(
@@ -416,13 +376,13 @@ test("guest progress carries into sign-in and a newer-device save can be restore
 }) => {
   await page.goto(lesson());
   await page
-    .getByRole("button", { name: "Read & Explore", exact: true })
+    .getByRole("button", { name: /^Read & Explore/ })
     .click();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
   const id = await signIn(context);
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Automatic does not always mean AI" }),
+    page.getByRole("heading", { name: "Automatic or AI?" }),
   ).toBeVisible();
   await expect(
     page.getByText("Saved to your account", { exact: true }),
@@ -452,7 +412,7 @@ test("guest progress carries into sign-in and a newer-device save can be restore
   ).toBeVisible();
   await page.getByRole("button", { name: "Reload the saved place" }).click();
   await expect(
-    page.getByRole("button", { name: "Watch & Listen", exact: true }),
+    page.getByRole("button", { name: /^Watch & Listen/ }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect
     .poll(() =>
@@ -487,7 +447,7 @@ test("an interrupted account save resumes from the device and retries safely", a
   await signIn(context);
   await page.goto(lesson());
   await page
-    .getByRole("button", { name: "Read & Explore", exact: true })
+    .getByRole("button", { name: /^Read & Explore/ })
     .click();
   await expect(
     page.getByText("Saved to your account", { exact: true }),
@@ -505,7 +465,7 @@ test("an interrupted account save resumes from the device and retries safely", a
   await expect(page.getByText(/Could not save to your account/)).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Automatic does not always mean AI" }),
+    page.getByRole("heading", { name: "Automatic or AI?" }),
   ).toBeVisible();
   await page.unroute("**/api/me/learning/what-counts-as-ai");
   await expect(

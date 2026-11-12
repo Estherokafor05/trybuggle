@@ -1,461 +1,839 @@
 "use client";
-import { useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import type { ActivityState } from "@/lib/learning-state";
 import { Animal, RouteMap, TaskIcon } from "./Illustrations";
-import { MatchingActivity, activityButton as button } from "./MatchingActivity";
 
+export const activityButton =
+  "min-h-11 rounded-xl border border-line bg-white px-4 py-3 text-left font-semibold hover:bg-lavender focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
+const button = activityButton;
+const primary =
+  "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-3 font-semibold text-white hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep disabled:opacity-40";
+
+type Change = (value: ActivityState) => void;
 type Props = {
   id: string;
   state: ActivityState;
-  change: (value: ActivityState) => void;
+  all: Record<string, ActivityState>;
+  change: Change;
   go: (step: number) => void;
   slug: string;
   scope: string;
   prompts: string[];
 };
-function Feedback({ children }: { children: React.ReactNode }) {
+
+/* ------------------------------------------------------------------ */
+/* Shared building blocks                                              */
+/* ------------------------------------------------------------------ */
+
+function subscribeMotion(callback: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+function useReducedMotion() {
+  return useSyncExternalStore(
+    subscribeMotion,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false,
+  );
+}
+
+/** Steps through numbered phases on a timer. Reduced motion jumps to the end. */
+function usePhases(durations: number[], onDone?: () => void) {
+  const reduced = useReducedMotion();
+  const [phase, setPhase] = useState(0);
+  const timers = useRef<number[]>([]);
+  const done = useRef(onDone);
+  useEffect(() => {
+    done.current = onDone;
+  });
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  function play() {
+    timers.current.forEach(clearTimeout);
+    if (reduced) {
+      setPhase(durations.length + 1);
+      done.current?.();
+      return;
+    }
+    setPhase(1);
+    let at = 0;
+    timers.current = durations.map((ms, i) => {
+      at += ms;
+      return window.setTimeout(() => {
+        setPhase(i + 2);
+        if (i === durations.length - 1) done.current?.();
+      }, at);
+    });
+  }
+  return { phase, play, setPhase };
+}
+
+function MayaFace() {
+  return (
+    <svg viewBox="0 0 40 40" className="size-9 shrink-0" aria-hidden="true">
+      <circle cx="20" cy="20" r="20" fill="#d8f4ec" />
+      <path d="M8 40q0-12 12-12t12 12z" fill="#17867b" />
+      <circle cx="20" cy="17" r="8" fill="#8d5a3b" />
+      <path
+        d="M11 17q-1-11 9-11t9 11q-2-6-9-6t-9 6z"
+        fill="#21160f"
+      />
+      <circle cx="17" cy="17" r="1" fill="#17243c" />
+      <circle cx="23" cy="17" r="1" fill="#17243c" />
+      <path d="M17.5 20.5q2.5 2 5 0" stroke="#17243c" fill="none" />
+    </svg>
+  );
+}
+
+function Story({ children }: { children: ReactNode }) {
+  return (
+    <div className="rounded-2xl bg-canvas p-5">
+      <p className="flex items-center gap-3 font-semibold">
+        <MayaFace />
+        Maya&apos;s story
+      </p>
+      <div className="mt-3 space-y-2 text-lg leading-relaxed">{children}</div>
+    </div>
+  );
+}
+
+function Idea({
+  title = "New idea",
+  children,
+}: {
+  title?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="welcome-rise mt-5 rounded-2xl border-l-4 border-brand bg-lavender p-5">
+      <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.08em] text-brand-deep">
+        <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
+          <path
+            d="M10 2a6 6 0 0 0-3.5 10.9V15h7v-2.1A6 6 0 0 0 10 2Zm-2.5 15h5v1.2H7.5z"
+            fill="currentColor"
+          />
+        </svg>
+        {title}
+      </p>
+      <div className="mt-2 space-y-2 leading-relaxed">{children}</div>
+    </div>
+  );
+}
+
+function Instruction({ children }: { children: ReactNode }) {
+  return (
+    <p className="mt-6 flex items-center gap-2 font-semibold text-navy">
+      <span
+        aria-hidden="true"
+        className="grid size-7 place-items-center rounded-full bg-peach text-sm"
+      >
+        ☝
+      </span>
+      {children}
+    </p>
+  );
+}
+
+function Feedback({
+  tone = "info",
+  title,
+  children,
+}: {
+  tone?: "good" | "retry" | "info";
+  title?: string;
+  children: ReactNode;
+}) {
+  const styles = {
+    good: "border-teal bg-mint/60",
+    retry: "border-orange-400 bg-peach/60",
+    info: "border-navy/30 bg-canvas",
+  }[tone];
   return (
     <div
       role="status"
-      className="mt-5 rounded-2xl border-l-4 border-teal bg-mint/50 p-4 leading-relaxed"
+      className={`welcome-rise mt-4 rounded-2xl border-l-4 p-4 leading-relaxed ${styles}`}
     >
+      {title && (
+        <p className="mb-1 flex items-center gap-2 font-bold">
+          {tone === "good" ? "✓" : tone === "retry" ? "↺" : "ℹ"} {title}
+        </p>
+      )}
       {children}
     </div>
   );
 }
-function Reveal({
-  state,
-  change,
+
+type Option = { id: string; text: string; correct?: boolean; feedback: string };
+
+function Choice({
+  name,
+  question,
+  options,
+  value,
+  onChange,
+  goodTitle = "You got it!",
 }: {
-  state: ActivityState;
-  change: Props["change"];
+  name: string;
+  question: string;
+  options: Option[];
+  value?: string;
+  onChange: (id: string) => void;
+  goodTitle?: string;
 }) {
-  const examples = [
-    {
-      id: "speech",
-      name: "Turn spoken words into notes",
-      input: "A recording of someone speaking",
-      output: "Written words",
-      check: "Replay important details, especially names and dates.",
-      kind: "speech" as const,
-    },
-    {
-      id: "predict",
-      name: "Plan for tomorrow’s visitors",
-      input: "Past visitor counts and relevant current information",
-      output: "An attendance estimate",
-      check: "Allow for special events that could change attendance.",
-      kind: "predict" as const,
-    },
-    {
-      id: "draft",
-      name: "Get an invitation started",
-      input: "A request with the meeting details",
-      output: "A possible first draft",
-      check: "Compare the facts with the meeting record.",
-      kind: "draft" as const,
-    },
-  ];
-  const active = examples.find((e) => e.id === state.selection);
+  const chosen = options.find((o) => o.id === value);
+  const anyCorrect = options.some((o) => o.correct);
+  return (
+    <fieldset className="mt-6">
+      <legend className="text-lg font-bold">{question}</legend>
+      <div className="mt-3 space-y-3">
+        {options.map((o) => (
+          <label
+            key={o.id}
+            className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3 transition-colors ${value === o.id ? "border-brand bg-lavender/60" : "border-line bg-white hover:bg-canvas"}`}
+          >
+            <input
+              type="radio"
+              name={name}
+              className="size-5 shrink-0 accent-brand"
+              checked={value === o.id}
+              onChange={() => onChange(o.id)}
+            />
+            {o.text}
+          </label>
+        ))}
+      </div>
+      {chosen &&
+        (anyCorrect ? (
+          <Feedback
+            tone={chosen.correct ? "good" : "retry"}
+            title={chosen.correct ? goodTitle : "Not quite. Try another answer."}
+          >
+            {chosen.feedback}
+          </Feedback>
+        ) : (
+          <Feedback>{chosen.feedback}</Feedback>
+        ))}
+    </fieldset>
+  );
+}
+
+function answer(state: ActivityState, key: string) {
+  return state.matches?.[key];
+}
+function withAnswer(state: ActivityState, key: string, value: string) {
+  return { ...state, matches: { ...state.matches, [key]: value } };
+}
+function correctAnswer(options: Option[], value?: string) {
+  return Boolean(options.find((o) => o.id === value)?.correct);
+}
+
+function Typewriter({
+  text,
+  instant,
+  onDone,
+}: {
+  text: string;
+  instant: boolean;
+  onDone?: () => void;
+}) {
+  const reduced = useReducedMotion();
+  const [shown, setShown] = useState(instant || reduced ? text.length : 0);
+  const done = useRef(onDone);
+  useEffect(() => {
+    done.current = onDone;
+  });
+  const reported = useRef(instant);
+  useEffect(() => {
+    if (shown >= text.length) {
+      if (!reported.current) {
+        reported.current = true;
+        done.current?.();
+      }
+      return;
+    }
+    const t = window.setTimeout(() => setShown((n) => n + 2), 28);
+    return () => clearTimeout(t);
+  }, [shown, text.length]);
+  return (
+    <span>
+      {text.slice(0, shown)}
+      {shown < text.length && (
+        <span aria-hidden="true" className="ml-0.5 animate-pulse">
+          ▍
+        </span>
+      )}
+      <span className="sr-only">{shown < text.length ? text : ""}</span>
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Lesson 1: Help Maya understand AI                                   */
+/* ------------------------------------------------------------------ */
+
+const tools = [
+  {
+    id: "speech",
+    name: "Speech to text",
+    kind: "speech" as const,
+    input: "A recording of someone talking",
+    output: "Written words",
+    verb: "recognises",
+  },
+  {
+    id: "photo",
+    name: "Photo search",
+    kind: "photo" as const,
+    input: "Photos and the word “dog”",
+    output: "The photos that probably show dogs",
+    verb: "recognises",
+  },
+  {
+    id: "draft",
+    name: "Writing helper",
+    kind: "draft" as const,
+    input: "A short request: “Invite the team to a meeting”",
+    output: "A first draft of an invitation",
+    verb: "creates",
+  },
+];
+const meetQuestion: Option[] = [
+  {
+    id: "robot",
+    text: "A robot that thinks and feels like a person",
+    feedback:
+      "AI tools can do useful tasks, but they do not think or feel like people. Most AI is software inside apps you already use.",
+  },
+  {
+    id: "systems",
+    text: "Computer systems that can recognise patterns, make predictions or create things like text",
+    correct: true,
+    feedback:
+      "AI is a broad name for many kinds of computer systems. The three tools you just tried are all examples.",
+  },
+  {
+    id: "anything",
+    text: "Any machine that runs on electricity",
+    feedback:
+      "Lots of machines run on electricity without using AI, like a toaster or a basic calculator. AI is about tasks like recognising, predicting and creating.",
+  },
+];
+
+function Meet({ state, change }: { state: ActivityState; change: Change }) {
+  const explored = state.items ?? [];
+  const active = tools.find((t) => t.id === state.selection);
   return (
     <>
-      <p className="mb-5 text-lg leading-relaxed">
-        AI is short for <strong>artificial intelligence</strong>. It is a broad
-        name for computer systems that can recognise patterns, make predictions,
-        work through problems or create content.
-      </p>
-      <div className="grid gap-3 sm:grid-cols-3">
-        {examples.map((e) => (
+      <Story>
+        <p>
+          Maya works at a community centre. Everyone at work keeps talking about
+          AI. She nods along, but she isn&apos;t sure what it actually means.
+        </p>
+      </Story>
+      <Idea>
+        <p>
+          <b>AI</b> stands for <b>artificial intelligence</b>. It&apos;s a name
+          for computer systems that can do tasks like{" "}
+          <b>recognising patterns</b>, <b>making predictions</b> or{" "}
+          <b>creating text and pictures</b>.
+        </p>
+      </Idea>
+      <Instruction>
+        Tap each tool to see what goes in and what comes out.
+      </Instruction>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {tools.map((t) => (
           <button
-            key={e.id}
-            className={`${button} ${state.selection === e.id ? "ring-2 ring-brand-deep bg-lavender" : ""}`}
-            aria-pressed={state.selection === e.id}
-            onClick={() => change({ ...state, selection: e.id })}
+            key={t.id}
+            type="button"
+            aria-pressed={state.selection === t.id}
+            className={`${button} relative flex flex-col items-center gap-1 text-center ${state.selection === t.id ? "border-brand bg-lavender ring-2 ring-brand" : ""}`}
+            onClick={() =>
+              change({
+                ...state,
+                selection: t.id,
+                items: [...new Set([...explored, t.id])],
+              })
+            }
           >
-            <TaskIcon kind={e.kind} />
-            {e.name}
+            {explored.includes(t.id) && (
+              <span className="absolute right-3 top-3 grid size-6 place-items-center rounded-full bg-teal text-xs text-white">
+                <span aria-hidden="true">✓</span>
+                <span className="sr-only">(tried)</span>
+              </span>
+            )}
+            <TaskIcon kind={t.kind} />
+            {t.name}
           </button>
         ))}
       </div>
       {active && (
-        <div className="mt-5">
-          <div className="grid items-center gap-3 rounded-2xl bg-ivory p-5 sm:grid-cols-[1fr_auto_1fr]">
-            <div>
-              <b>Information in</b>
-              <p className="mt-2">{active.input}</p>
-            </div>
-            <span aria-hidden="true" className="text-3xl text-teal">
-              →
-            </span>
-            <div>
-              <b>Result out</b>
-              <p className="mt-2">{active.output}</p>
-            </div>
+        <div
+          key={active.id}
+          className="welcome-rise mt-4 grid items-center gap-3 rounded-2xl bg-ivory p-5 sm:grid-cols-[1fr_auto_1fr]"
+        >
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.08em] text-muted">
+              What goes in
+            </p>
+            <p className="mt-1 text-lg">{active.input}</p>
           </div>
-          <Feedback>
-            <b>The human check:</b> {active.check} These tools can help with
-            tasks without thinking or feeling like a person.
-          </Feedback>
+          <span
+            aria-hidden="true"
+            className="wv-bob mx-auto grid size-12 place-items-center rounded-full bg-brand text-sm font-bold text-white"
+          >
+            AI
+          </span>
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.08em] text-muted">
+              What comes out
+            </p>
+            <p className="mt-1 text-lg">{active.output}</p>
+          </div>
+        </div>
+      )}
+      <p className="mt-3 text-sm text-muted">
+        {explored.length} of 3 tools tried
+      </p>
+      {explored.length === 3 && (
+        <div className="welcome-rise">
+          <Choice
+            name="meet"
+            question="So, which sentence describes AI best?"
+            options={meetQuestion}
+            value={answer(state, "q")}
+            onChange={(id) => change(withAnswer(state, "q", id))}
+          />
         </div>
       )}
     </>
   );
 }
-function Automation({
+
+const timerQuestion: Option[] = [
+  {
+    id: "yes",
+    text: "Yes, because it works automatically",
+    feedback:
+      "It does work automatically, but the timer is just following an instruction Maya gave it: count five minutes, then ring. It doesn't need AI for that.",
+  },
+  {
+    id: "no",
+    text: "No, working automatically doesn’t necessarily mean AI",
+    correct: true,
+    feedback:
+      "Exactly. A timer follows a simple instruction without needing AI.",
+  },
+];
+
+function Automatic({
   state,
   change,
 }: {
   state: ActivityState;
-  change: Props["change"];
+  change: Change;
 }) {
   const stage = state.stage ?? 0;
+  const reduced = useReducedMotion();
+  const [left, setLeft] = useState(stage >= 1 ? 0 : 300);
+  const running = useRef(false);
+  function startTimer() {
+    if (running.current) return;
+    if (reduced) {
+      setLeft(0);
+      change({ ...state, stage: Math.max(stage, 1) });
+      return;
+    }
+    running.current = true;
+    setLeft(300);
+    const started = performance.now();
+    const tick = () => {
+      const remaining = Math.max(
+        0,
+        300 - Math.round(((performance.now() - started) / 2400) * 300),
+      );
+      setLeft(remaining);
+      if (remaining > 0) requestAnimationFrame(tick);
+      else {
+        running.current = false;
+        change({ ...state, stage: Math.max(stage, 1) });
+      }
+    };
+    requestAnimationFrame(tick);
+  }
+  const timerAnswer = answer(state, "timer");
+  const speech = usePhases([900, 1600], () =>
+    change({ ...state, stage: 3 }),
+  );
+  const speechDone = stage >= 3 || speech.phase >= 3;
   return (
     <>
+      <Story>
+        <p>
+          Maya sets a kitchen timer for five minutes. When the time is up, it
+          rings.
+        </p>
+      </Story>
       <div
-        className="relative overflow-hidden rounded-3xl bg-[#e6ddcb] p-5 sm:p-8"
+        className="mt-5 flex flex-wrap items-center gap-5 rounded-2xl p-5"
         style={{
           backgroundImage:
-            "linear-gradient(#fffdf8dd,#fffdf8cc),url('/lessons/what-is-ai/kitchen.png')",
+            "linear-gradient(#fffdf8e6,#fffdf8e6),url('/lessons/what-is-ai/kitchen.png')",
           backgroundSize: "cover",
         }}
       >
-        <div className="grid items-center gap-6 sm:grid-cols-2">
-          <div>
-            <TaskIcon kind="timer" />
-            <p className="font-mono text-4xl font-bold">
-              {stage === 0 ? "05:00" : "00:00"}
-            </p>
-            <p className="my-3">Maya set a five-minute timer.</p>
-            <button
-              className={button}
-              onClick={() => change({ ...state, stage: 1 })}
-            >
-              Advance five minutes
+        <div
+          className={`grid size-28 place-items-center rounded-full border-[6px] border-navy bg-white font-mono text-2xl font-bold ${left === 0 && stage >= 1 ? "animate-[wv-wave_0.4s_ease-in-out_3] bg-peach" : ""}`}
+          aria-live="polite"
+        >
+          {String(Math.floor(left / 60)).padStart(2, "0")}:
+          {String(left % 60).padStart(2, "0")}
+        </div>
+        <div>
+          {stage >= 1 ? (
+            <p className="text-xl font-bold text-teal">⏰ Ring ring! Time&apos;s up.</p>
+          ) : (
+            <button type="button" className={primary} onClick={startTimer}>
+              ▶ Start the timer
             </button>
-            {stage > 0 && (
-              <p className="mt-3 font-bold text-teal">
-                Ring! The set time has passed.
-              </p>
-            )}
-          </div>
-          <div className="rounded-3xl border-4 border-navy bg-white p-5">
-            <TaskIcon kind="speech" />
-            <p className="my-3">Maya says, “Bring a notebook.”</p>
-            <button
-              className={button}
-              onClick={() => change({ ...state, stage: 2 })}
-            >
-              See the speech-tool demonstration
-            </button>
-            {stage >= 2 && (
-              <p className="mt-4 rounded-lg bg-mint p-3 font-semibold">
-                Written reminder: Bring a notebook.
-              </p>
-            )}
-          </div>
+          )}
+          <p className="mt-2 text-sm text-muted">
+            We&apos;ve sped it up so you don&apos;t have to wait five minutes.
+          </p>
         </div>
       </div>
-      <Feedback>
-        {stage < 2
-          ? "A timer follows a fixed instruction. It does not need AI to count down and ring."
-          : "In some speech tools, AI recognises patterns in sound to produce written words. Both tasks happen automatically, but that does not make them the same. This is a demonstration, not a live speech tool."}
-      </Feedback>
-      <details className="mt-4">
-        <summary className="cursor-pointer py-2 font-semibold">
-          Can AI use rules too?
-        </summary>
-        <p className="mt-2 leading-relaxed">
-          Yes. Some AI uses knowledge and rules supplied by people; some learns
-          patterns from examples. A rule by itself does not prove a program is
-          AI. Look for reliable information about how a particular tool works.
-        </p>
-      </details>
+      {stage >= 1 && (
+        <div className="welcome-rise">
+          <Choice
+            name="timer"
+            question="Does that mean the timer is using AI?"
+            options={timerQuestion}
+            value={timerAnswer}
+            onChange={(id) =>
+              change({ ...withAnswer(state, "timer", id), stage: Math.max(stage, 1) })
+            }
+          />
+        </div>
+      )}
+      {correctAnswer(timerQuestion, timerAnswer) && (
+        <div className="welcome-rise mt-8">
+          <Story>
+            <p>
+              Next, Maya picks up her phone and says,{" "}
+              <b>&ldquo;Bring a notebook.&rdquo;</b> Her words appear on the
+              screen as text.
+            </p>
+          </Story>
+          <div className="mt-5 rounded-2xl border-4 border-navy bg-white p-5">
+            {stage < 3 && speech.phase === 0 ? (
+              <button
+                type="button"
+                className={primary}
+                onClick={() => {
+                  change({ ...state, stage: 2 });
+                  speech.play();
+                }}
+              >
+                🎙 Play Maya&apos;s voice note
+              </button>
+            ) : (
+              <>
+                <div className="flex h-12 items-end gap-1" aria-hidden="true">
+                  {[3, 6, 9, 5, 8, 4, 7, 10, 6, 3, 8, 5].map((h, i) => (
+                    <span
+                      key={i}
+                      className={`w-2 rounded-full bg-teal ${speechDone ? "opacity-30" : "wv-bob"}`}
+                      style={{ height: `${h * 4}px`, animationDelay: `${i * 0.08}s`, animationDuration: "0.6s" }}
+                    />
+                  ))}
+                </div>
+                <p className="mt-3 rounded-xl bg-mint p-3 text-lg font-semibold">
+                  {speech.phase >= 2 || stage >= 3 ? (
+                    <Typewriter text="Bring a notebook." instant={stage >= 3 && speech.phase === 0} />
+                  ) : (
+                    <span className="text-muted">Listening…</span>
+                  )}
+                </p>
+              </>
+            )}
+          </div>
+          {speechDone && (
+            <Idea title="What's the difference?">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl bg-white p-4">
+                  <p className="font-bold">⏰ The timer</p>
+                  <p className="mt-1">
+                    Follows a fixed instruction. It doesn&apos;t need AI.
+                  </p>
+                </div>
+                <div className="rounded-xl bg-white p-4">
+                  <p className="font-bold">🎙 The speech tool</p>
+                  <p className="mt-1">
+                    Recognises patterns in the sound of Maya&apos;s voice to work
+                    out the words. Many speech tools use AI for this.
+                  </p>
+                </div>
+              </div>
+              <p>
+                Both happen automatically, but they work differently. So
+                &ldquo;automatic&rdquo; doesn&apos;t always mean &ldquo;AI&rdquo;.
+              </p>
+            </Idea>
+          )}
+        </div>
+      )}
     </>
   );
 }
-function Learning({
-  state,
-  change,
-}: {
-  state: ActivityState;
-  change: Props["change"];
-}) {
+
+const examples = [
+  { cat: false, label: "Dog" },
+  { cat: true, label: "Cat" },
+  { cat: true, label: "Cat" },
+  { cat: false, label: "Dog" },
+];
+const guessOptions = (truth: string): Option[] => [
+  { id: "dog", text: "It will guess dog", feedback: truth },
+  { id: "cat", text: "It will guess cat", feedback: truth },
+];
+
+function Learn({ state, change }: { state: ActivityState; change: Change }) {
   const stage = state.stage ?? 0;
+  const training = usePhases([1800], () => change({ ...state, stage: 1 }));
+  const trained = stage >= 1;
+  const test1 = answer(state, "test1");
+  const test2 = answer(state, "test2");
   return (
     <>
-      <p className="mb-4 text-sm text-muted">
-        A simplified, predetermined demonstration. We are not training a real
-        model here.
-      </p>
-      <div className="grid items-center gap-5 rounded-3xl bg-ivory p-5 sm:grid-cols-[1fr_auto_1fr]">
-        <div className="grid grid-cols-2 gap-3">
-          {[false, true, true, false].map((cat, i) => (
-            <figure key={i}>
-              <div className="h-24">
-                <Animal cat={cat} />
+      <Story>
+        <p>
+          Maya types &ldquo;dog&rdquo; into her phone&apos;s photo search, and
+          pictures of dogs appear. She never labelled them. How does the phone
+          know what a dog looks like?
+        </p>
+      </Story>
+      <Instruction>
+        Let&apos;s find out by training a pretend computer to tell cats from
+        dogs.
+      </Instruction>
+      <div className="mt-3 rounded-2xl bg-ivory p-5">
+        <p className="font-bold">Step 1: Example pictures, each with a label</p>
+        <div className="mt-3 grid grid-cols-4 gap-3">
+          {examples.map((e, i) => (
+            <figure
+              key={i}
+              className={`rounded-xl bg-white p-2 transition-all duration-700 ${training.phase === 1 ? "translate-y-3 scale-90 opacity-50" : ""}`}
+              style={{ transitionDelay: `${i * 120}ms` }}
+            >
+              <div className="h-16 sm:h-20">
+                <Animal cat={e.cat} />
               </div>
-              <figcaption className="mt-1 text-center font-semibold">
-                {cat ? "Cat" : "Dog"}
+              <figcaption className="mt-1 text-center text-sm font-bold">
+                {e.label}
               </figcaption>
             </figure>
           ))}
         </div>
-        <span aria-hidden="true" className="text-4xl text-teal">
-          →
-        </span>
-        <div className="text-center">
-          <p className="font-semibold">
-            {stage === 0 ? "Examples with labels" : "Try an unfamiliar picture"}
-          </p>
-          {stage === 0 ? (
-            <TaskIcon kind="predict" />
-          ) : (
-            <div className="mx-auto my-3 h-40 max-w-52">
-              <Animal
-                cat={stage >= 2}
-                covered={stage >= 2}
-                novel={stage === 1}
-              />
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          {!trained && training.phase === 0 && (
+            <button type="button" className={primary} onClick={training.play}>
+              Train the computer with these examples
+            </button>
+          )}
+          {training.phase === 1 && (
+            <div className="w-full max-w-sm" role="status">
+              <p className="font-semibold">Finding patterns…</p>
+              <div className="mt-2 h-3 overflow-hidden rounded-full bg-white">
+                <div className="h-full w-full origin-left animate-[wv-open_1.8s_ease-out_both] rounded-full bg-brand" />
+              </div>
             </div>
           )}
-          {stage > 0 && (
-            <p className="font-semibold">
-              {stage === 1
-                ? "Prediction: dog"
-                : "Prediction: dog? The animal is a cat."}
-            </p>
+          {trained && (
+            <p className="font-bold text-teal">✓ Trained on 4 examples</p>
           )}
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 1 })}
-        >
-          Try a new picture
-        </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 2 })}
-        >
-          Try a partly hidden animal
-        </button>
-      </div>
-      <Feedback>
-        {stage === 0
-          ? "During training, the system uses labelled examples to learn patterns. Learning patterns from data is called machine learning, one way to build AI."
-          : stage === 1
-            ? "This illustrated prediction is correct. Testing on pictures not used in training helps reveal whether learned patterns are useful in new situations."
-            : "This prediction is wrong. Part of the animal is hidden, and the result needs checking. The examples used in training and the way a system handles unfamiliar situations both matter. A few successful examples do not prove a system is reliable."}
-      </Feedback>
+      {trained && (
+        <>
+          <Idea>
+            <p>
+              The computer looked for patterns in the labelled examples, like
+              ear shapes and fur. Learning patterns from examples is called{" "}
+              <b>machine learning</b>. It&apos;s one common way to build AI.
+            </p>
+          </Idea>
+          <div className="welcome-rise mt-6 grid gap-5 sm:grid-cols-[10rem_1fr]">
+            <div className="rounded-2xl bg-white p-3 shadow-sm">
+              <div className="h-28">
+                <Animal novel />
+              </div>
+              <p className="text-center text-sm text-muted">
+                A new picture it has never seen
+              </p>
+            </div>
+            <div>
+              <p className="font-bold">Step 2: Test it on a new picture</p>
+              <Choice
+                name="test1"
+                question="What do you think the computer will guess?"
+                options={guessOptions(
+                  "The computer guessed: dog. ✓ Correct! It recognised the patterns of a dog, even in a picture it had never seen.",
+                )}
+                value={test1}
+                onChange={(id) => change(withAnswer(state, "test1", id))}
+              />
+            </div>
+          </div>
+        </>
+      )}
+      {test1 && (
+        <div className="welcome-rise mt-6 grid gap-5 sm:grid-cols-[10rem_1fr]">
+          <div className="rounded-2xl bg-white p-3 shadow-sm">
+            <div className="h-28">
+              <Animal cat covered />
+            </div>
+            <p className="text-center text-sm text-muted">
+              A tricky picture: an animal partly hidden
+            </p>
+          </div>
+          <div>
+            <p className="font-bold">Step 3: Try something trickier</p>
+            <Choice
+              name="test2"
+              question="What do you think it will guess this time?"
+              options={guessOptions(
+                "The computer guessed: dog. ✗ Wrong! It's actually a cat hiding behind a box. With part of the animal hidden, the patterns didn't match what it had learned.",
+              )}
+              value={test2}
+              onChange={(id) => change(withAnswer(state, "test2", id))}
+            />
+          </div>
+        </div>
+      )}
+      {test2 && (
+        <Idea title="Remember">
+          <p>
+            AI can learn from examples, but it can still get things wrong,
+            especially with unusual or unclear examples. That&apos;s why its
+            results need checking.
+          </p>
+        </Idea>
+      )}
     </>
   );
 }
-const facts = [
-  { id: "purpose", label: "Invite volunteers to a meeting" },
-  { id: "details", label: "Thursday, 6 pm, Room Three" },
-  { id: "tone", label: "Use friendly, clear language" },
-  { id: "private", label: "Include volunteers’ private phone numbers" },
+
+const requestItems = [
+  { id: "purpose", label: "What it's for: invite volunteers to a meeting", needed: true },
+  { id: "details", label: "The details: Thursday, 6 pm, Room Three", needed: true },
+  { id: "tone", label: "The tone: friendly and clear", needed: false },
+  { id: "private", label: "Volunteers' private phone numbers", needed: false },
 ];
-function Request({
-  state,
-  change,
-}: {
-  state: ActivityState;
-  change: Props["change"];
-}) {
-  const selected = state.items ?? [];
+const draftText =
+  "Hi everyone! Please join our volunteer meeting on Friday at 6 pm in Room Three. Parking is free. See you there!";
+
+function Request({ state, change }: { state: ActivityState; change: Change }) {
+  const chosen = state.items ?? [];
+  const stage = state.stage ?? 0;
+  const [tried, setTried] = useState(false);
+  const hasPrivate = chosen.includes("private");
+  const ready = chosen.includes("purpose") && chosen.includes("details");
   return (
     <>
-      <p className="mb-4 rounded-xl bg-lavender p-4">
-        <b>Event brief:</b> A volunteer meeting on Thursday at 6 pm in Room
-        Three.
-      </p>
-      <fieldset>
-        <legend className="mb-3 font-semibold">
-          Choose what belongs in the request.
+      <Story>
+        <p>
+          Maya needs to invite volunteers to a meeting on{" "}
+          <b>Thursday at 6 pm in Room Three</b>. She decides to try an AI
+          writing tool that her workplace allows.
+        </p>
+      </Story>
+      <Idea>
+        <p>
+          Tools that create new text or pictures are called{" "}
+          <b>generative AI</b>. What you type in is called a{" "}
+          <b>request</b> (or a <b>prompt</b>).
+        </p>
+      </Idea>
+      <fieldset className="mt-6">
+        <legend className="text-lg font-bold">
+          What should Maya include in her request? Choose all that help.
         </legend>
-        <div className="space-y-3">
-          {facts.map((f) => (
+        <div className="mt-3 space-y-3">
+          {requestItems.map((f) => (
             <label
               key={f.id}
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-line p-3"
+              className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3 ${chosen.includes(f.id) ? "border-brand bg-lavender/60" : "border-line bg-white hover:bg-canvas"}`}
             >
               <input
                 type="checkbox"
-                className="size-5 accent-teal"
-                checked={selected.includes(f.id)}
-                onChange={() =>
+                className="size-5 shrink-0 accent-brand"
+                checked={chosen.includes(f.id)}
+                disabled={stage >= 1}
+                onChange={() => {
+                  setTried(false);
                   change({
                     ...state,
-                    stage: 0,
-                    items: selected.includes(f.id)
-                      ? selected.filter((x) => x !== f.id)
-                      : [...selected, f.id],
-                  })
-                }
+                    items: chosen.includes(f.id)
+                      ? chosen.filter((x) => x !== f.id)
+                      : [...chosen, f.id],
+                  });
+                }}
               />
               {f.label}
             </label>
           ))}
         </div>
       </fieldset>
-      <button
-        className={`${button} mt-4`}
-        onClick={() => change({ ...state, stage: 1 })}
-      >
-        Preview the example draft
-      </button>
-      {state.stage === 1 && (
-        <Feedback>
-          {selected.includes("private") ? (
-            <>
-              The phone numbers are not needed to write this invitation. Remove
-              them before sharing a request. No information was sent anywhere.
-            </>
-          ) : selected.includes("purpose") && selected.includes("details") ? (
-            <>
-              <b>Your request gives useful context.</b> A generative tool
-              creates new content from a request. Here is a fictional draft to
-              investigate next: “Join our volunteer meeting on Friday at 6 pm in
-              Room Three. Parking is free.” Even with good instructions, a
-              result can be wrong.
-            </>
-          ) : (
-            <>
-              Add the purpose and event details so the tool has useful
-              information. Tone can help too. No information was sent to an AI
-              service.
-            </>
-          )}
+      {stage === 0 && (
+        <button
+          type="button"
+          className={`${primary} mt-5`}
+          onClick={() => {
+            setTried(true);
+            if (ready && !hasPrivate) change({ ...state, stage: 1 });
+          }}
+        >
+          Send the request to the writing tool →
+        </button>
+      )}
+      {tried && stage === 0 && (
+        <Feedback tone="retry" title="Not quite ready">
+          {hasPrivate
+            ? "The writing tool doesn't need volunteers' phone numbers to write an invitation. Keep private information out of AI tools. Untick it and try again."
+            : "The tool needs to know what the message is for and the meeting details. Without them, it can only guess."}
         </Feedback>
       )}
-    </>
-  );
-}
-function Evidence({
-  state,
-  change,
-  repair = false,
-}: {
-  state: ActivityState;
-  change: Props["change"];
-  repair?: boolean;
-}) {
-  const checks: Record<string, string> = {
-    day: "Friday conflicts with the brief. The meeting is on Thursday.",
-    time: "6 pm agrees with the brief. This detail is supported.",
-    room: "Room Three agrees with the brief. This detail is supported.",
-    parking:
-      "Free parking is not in the brief. Remove it or verify it with a reliable source; we cannot conclude it is true or false from this record.",
-  };
-  const fixed = Boolean(state.revised);
-  return (
-    <>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="rounded-2xl bg-mint/60 p-5">
-          <TaskIcon kind="draft" />
-          <h4 className="text-lg font-bold">The event brief</h4>
-          <dl className="mt-4 space-y-3">
-            <div>
-              <dt className="font-semibold">Day</dt>
-              <dd>Thursday</dd>
-            </div>
-            <div>
-              <dt className="font-semibold">Time</dt>
-              <dd>6 pm</dd>
-            </div>
-            <div>
-              <dt className="font-semibold">Place</dt>
-              <dd>Room Three</dd>
-            </div>
-          </dl>
-          <p className="mt-4 text-sm">No parking information is provided.</p>
-        </div>
-        <div className="rounded-2xl border border-line bg-[#fffdf8] p-5 shadow-sm">
-          <h4 className="text-lg font-bold">
-            {fixed ? "Checked invitation" : "The draft"}
-          </h4>
-          <p className="mt-4">Please join our volunteer meeting on</p>
-          <div className="my-3 flex flex-wrap gap-2">
-            {[
-              ["day", fixed ? "Thursday" : "Friday"],
-              ["time", "6 pm"],
-              ["room", "Room Three"],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                type="button"
-                aria-pressed={state.selection === id}
-                className={`${button} ${state.selection === id ? "ring-2 ring-brand-deep" : ""}`}
-                onClick={() => change({ ...state, selection: id })}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          {!fixed && (
-            <button
-              type="button"
-              className={button}
-              aria-pressed={state.selection === "parking"}
-              onClick={() => change({ ...state, selection: "parking" })}
-            >
-              Parking is free.
-            </button>
-          )}
-          <p className="mt-5 text-sm text-muted">
-            {fixed
-              ? "Ready for a person’s final review."
-              : "Select a detail to investigate it."}
-          </p>
-        </div>
-      </div>
-      {state.selection && (
-        <Feedback>
-          {fixed && state.selection === "day"
-            ? "Thursday now matches the brief."
-            : checks[state.selection]}
-        </Feedback>
-      )}
-      {repair && (
+      {stage >= 1 && (
         <>
-          <button
-            className={`${button} mt-5`}
-            onClick={() => change({ ...state, revised: !fixed })}
-          >
-            {fixed
-              ? "Compare with the original draft"
-              : "Correct the day and remove unverified parking"}
-          </button>
-          <p className="mt-4 leading-relaxed">
-            A final review checks that the message is accurate and fits the
-            task. The person responsible decides whether to send it.
-          </p>
-          <fieldset className="mt-6">
-            <legend className="font-semibold">
-              What if the next AI answer is about someone’s health?
-            </legend>
-            <div className="mt-3 flex flex-wrap gap-3">
-              <button
-                className={button}
-                onClick={() => change({ ...state, stage: 1 })}
-              >
-                Ask the same tool if it is sure
-              </button>
-              <button
-                className={button}
-                onClick={() => change({ ...state, stage: 2 })}
-              >
-                Involve a qualified health professional
-              </button>
-            </div>
-          </fieldset>
-          {state.stage && (
-            <Feedback>
-              {state.stage === 2
-                ? "That matches the consequences of a mistake. A qualified person can consider the person’s actual situation and appropriate evidence."
-                : "A confident second answer is not independent verification. For decisions that could seriously affect someone’s life, involve an appropriately qualified person."}
+          <Feedback tone="good" title="Good request!">
+            You gave the tool what it needed and kept private information out.
+            {chosen.includes("tone") ? " Adding the tone helps too." : ""}
+          </Feedback>
+          <div className="welcome-rise mt-5 overflow-hidden rounded-2xl border-2 border-navy bg-white">
+            <p className="flex items-center gap-2 bg-navy px-4 py-2 text-sm font-semibold text-white">
+              <span className="grid size-6 place-items-center rounded-full bg-brand text-xs">
+                AI
+              </span>
+              Writing tool
+            </p>
+            <p className="p-5 text-lg leading-relaxed">
+              <Typewriter
+                text={draftText}
+                instant={stage >= 2}
+                onDone={() => change({ ...state, stage: 2 })}
+              />
+            </p>
+          </div>
+          {stage >= 2 && (
+            <Feedback title="It sounds great. But is it right?">
+              The draft is friendly and confident. In the next step, you&apos;ll
+              help Maya check it before she sends it.
             </Feedback>
           )}
         </>
@@ -463,320 +841,897 @@ function Evidence({
     </>
   );
 }
-function DayMap({ go }: { go: Props["go"] }) {
-  return (
-    <>
-      <div className="rounded-3xl bg-[#e5eee5] p-5 sm:p-8">
-        <RouteMap />
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          {[
-            { n: 1, t: "Home: alarm and photos", i: "photo" as const },
-            { n: 2, t: "Journey: route estimates", i: "predict" as const },
-            { n: 3, t: "Shopping: the camera bag", i: "bag" as const },
-            { n: 4, t: "Centre: a missing message", i: "mail" as const },
-          ].map((p) => (
-            <button key={p.n} className={button} onClick={() => go(p.n)}>
-              <TaskIcon kind={p.i} />
-              {p.t}
-            </button>
-          ))}
-        </div>
-      </div>
-      <p className="mt-4 leading-relaxed">
-        Maya is preparing an evening photography club. Explore what each tool
-        receives, what it gives back, and the check Maya makes.
-      </p>
-    </>
-  );
-}
-function Home({
+
+const draftParts = [
+  {
+    id: "day",
+    text: "Friday",
+    verdict: "wrong",
+    note: "Maya's notes say Thursday. This is wrong and needs fixing.",
+  },
+  {
+    id: "time",
+    text: "6 pm",
+    verdict: "ok",
+    note: "This matches Maya's notes. Checking includes confirming what's right, too.",
+  },
+  {
+    id: "room",
+    text: "Room Three",
+    verdict: "ok",
+    note: "This matches Maya's notes.",
+  },
+  {
+    id: "parking",
+    text: "Parking is free.",
+    verdict: "unknown",
+    note: "Maya's notes don't mention parking. The tool made this up. It might be true, but there's no evidence, so Maya should remove it or check it first.",
+  },
+] as const;
+const verdictStyle = {
+  wrong: "bg-[#fde2e2] ring-[#e5484d]",
+  ok: "bg-mint ring-teal",
+  unknown: "bg-peach ring-orange-400",
+};
+const verdictLabel = { wrong: "✗ Wrong", ok: "✓ Matches", unknown: "? Not in notes" };
+
+function Investigate({
   state,
   change,
 }: {
   state: ActivityState;
-  change: Props["change"];
+  change: Change;
 }) {
-  const stage = state.stage ?? 0;
+  const checked = state.items ?? [];
+  const fixed = Boolean(state.revised);
+  const last = draftParts.find((p) => p.id === state.selection);
+  const part = (id: (typeof draftParts)[number]["id"]) => {
+    const item = draftParts.find((p) => p.id === id)!;
+    const done = checked.includes(id);
+    return (
+      <button
+        type="button"
+        aria-pressed={state.selection === id}
+        key={id}
+        aria-label={`Check “${item.text}”${done ? `: ${verdictLabel[item.verdict]}` : ""}`}
+        className={`mx-0.5 rounded-lg px-1.5 py-0.5 font-semibold underline decoration-dotted underline-offset-4 ring-2 ${done ? verdictStyle[item.verdict] : "bg-lavender ring-brand/40 hover:bg-brand-soft"}`}
+        onClick={() =>
+          change({
+            ...state,
+            selection: id,
+            items: [...new Set([...checked, id])],
+          })
+        }
+      >
+        {item.text}
+        {done && (
+          <span className="ml-1 text-xs font-bold">
+            {verdictLabel[item.verdict]}
+          </span>
+        )}
+      </button>
+    );
+  };
   return (
     <>
-      <div className="flex flex-wrap items-center gap-3">
-        <button
-          className={button}
-          onClick={() => change({ ...state, selection: "alarm" })}
-        >
-          Inspect Maya’s 7:00 alarm
-        </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 1, selection: "search" })}
-        >
-          Search the photos for “dog”
-        </button>
-      </div>
-      <p className="my-4">
-        <b>The poster needs:</b> a clear photo of the club’s dog wearing its
-        teal collar.
-      </p>
-      <div className="rounded-3xl border-4 border-navy bg-white p-4">
-        <p className="mb-3 rounded-full bg-lavender px-4 py-3 font-semibold">
-          ⌕ {stage ? "dog" : "Maya’s photo library"}
+      <Story>
+        <p>
+          The draft sounds friendly and confident. Before sending it, Maya
+          compares it with her meeting notes.
         </p>
-        <div className="grid grid-cols-3 gap-3">
-          {(stage ? [0, 3, 5] : [0, 1, 2, 3, 4, 5]).map((index) => (
-            <button
-              key={index}
-              aria-label={
-                [
-                  "Golden dog portrait",
-                  "Blue sky",
-                  "Grey cat",
-                  "Club dog wearing a teal collar",
-                  "Flowers",
-                  "Brown terrier",
-                ][index]
-              }
-              aria-pressed={state.selection === String(index)}
-              className={`relative aspect-square overflow-hidden rounded-xl border-4 ${state.selection === String(index) ? "border-teal" : "border-transparent"}`}
-              onClick={() => change({ ...state, selection: String(index) })}
-            >
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 bg-cover"
-                style={{
-                  backgroundImage:
-                    "url('/lessons/maya-day/gallery-contact-sheet.png')",
-                  backgroundSize: "300% 200%",
-                  backgroundPosition: `${(index % 3) * 50}% ${Math.floor(index / 3) * 100}%`,
-                }}
-              />
-            </button>
-          ))}
+      </Story>
+      <div className="mt-5 grid gap-5 sm:grid-cols-[0.8fr_1.2fr]">
+        <div className="rounded-2xl bg-mint/60 p-5">
+          <p className="font-bold">📋 Maya&apos;s meeting notes</p>
+          <dl className="mt-3 space-y-2">
+            {[
+              ["Day", "Thursday"],
+              ["Time", "6 pm"],
+              ["Place", "Room Three"],
+              ["Parking", "Not mentioned"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex justify-between gap-3 border-b border-teal/20 pb-1">
+                <dt className="font-semibold">{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-      </div>
-      <Feedback>
-        {state.selection === "alarm"
-          ? "Maya set seven o’clock. A basic alarm can ring at that time without AI."
-          : state.selection === "3"
-            ? "This is the club’s dog with the teal collar. Maya has checked the actual picture against the poster’s needs. She should also make sure she has permission to use it."
-            : state.selection && /^[0-5]$/.test(state.selection)
-              ? "Open the picture and compare it with the task. A likely search match is not automatically the right photo for the club poster."
-              : "Some photo apps recognise patterns in image content. They can find likely dog pictures even without named files. Maya still needs to check the result."}
-      </Feedback>
-    </>
-  );
-}
-function Journey({
-  state,
-  change,
-}: {
-  state: ActivityState;
-  change: Props["change"];
-}) {
-  const updated = state.stage === 1;
-  return (
-    <>
-      <RouteMap updated={updated} route={state.selection} />
-      <p className="my-4">
-        Maya wants a suitable route to the centre. These are estimates using the
-        information available now.
-      </p>
-      <div className="flex flex-wrap gap-3">
-        <button
-          className={button}
-          aria-pressed={state.selection === "usual"}
-          onClick={() => change({ ...state, selection: "usual" })}
-        >
-          Inspect usual route: 30 minutes
-        </button>
-        <button
-          className={button}
-          aria-pressed={state.selection === "alternative"}
-          onClick={() => change({ ...state, selection: "alternative" })}
-        >
-          Inspect alternative: {updated ? 35 : 20} minutes
-        </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: updated ? 0 : 1 })}
-        >
-          {updated ? "Replay the earlier estimate" : "Show a traffic update"}
-        </button>
-      </div>
-      <Feedback>
-        {updated
-          ? "New traffic information changes the alternative to 35 minutes. A prediction can change. Maya checks route suitability and leaves room for uncertainty before deciding."
-          : state.selection === "alternative"
-            ? "The alternative is estimated to be quicker now. Maya still checks whether it suits her journey. A travel-time estimate is not a guaranteed arrival time."
-            : "Some navigation tools use current traffic and patterns from past journeys to predict travel time. Inspect both options, then see what a traffic update changes."}
-      </Feedback>
-    </>
-  );
-}
-function Shopping({
-  state,
-  change,
-}: {
-  state: ActivityState;
-  change: Props["change"];
-}) {
-  const fit = state.items?.includes("fit"),
-    price = state.items?.includes("price");
-  const toggle = (id: string) =>
-    change({
-      ...state,
-      items: state.items?.includes(id)
-        ? state.items.filter((x) => x !== id)
-        : [...(state.items ?? []), id],
-    });
-  return (
-    <>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="rounded-3xl bg-lavender p-6">
-          <TaskIcon kind="bag" />
-          <h4 className="mt-3 text-xl font-bold">Suggested camera bag</h4>
-          <p className="mt-2">
-            Maya has been browsing camera bags. The shop suggests this one.
+        <div className="rounded-2xl border-2 border-navy bg-white p-5">
+          <p className="font-bold">
+            {fixed ? "✅ Checked invitation" : "🤖 The AI draft"}
           </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <button
-              className={button}
-              aria-pressed={Boolean(fit)}
-              onClick={() => toggle("fit")}
-            >
-              Inspect fit information
-            </button>
-            <button
-              className={button}
-              aria-pressed={Boolean(price)}
-              onClick={() => toggle("price")}
-            >
-              Check the price
-            </button>
-          </div>
-        </div>
-        <div className="p-5">
-          <h4 className="font-bold">The club’s needs</h4>
-          <p className="mt-3">
-            Camera length: <b>28 cm</b>
-            <br />
-            Budget: <b>$40</b>
-          </p>
-          {fit && (
-            <div className="mt-5">
-              <div className="h-6 w-full rounded bg-navy" />
-              <p className="mt-1 text-sm">Camera: 28 cm</p>
-              <div className="mt-3 h-6 w-[89%] rounded bg-brand" />
-              <p className="mt-1 text-sm">
-                Bag’s stated maximum camera length: 25 cm
-              </p>
-            </div>
-          )}
-          {price && (
-            <p className="mt-4 text-lg">
-              Bag price: <b>$38</b>
+          {fixed ? (
+            <p className="welcome-rise mt-3 text-lg leading-loose">
+              Hi everyone! Please join our volunteer meeting on{" "}
+              <mark className="rounded bg-mint px-1 font-semibold">Thursday</mark>{" "}
+              at 6 pm in Room Three. See you there!
+            </p>
+          ) : (
+            <p className="mt-3 text-lg leading-loose">
+              Hi everyone! Please join our volunteer meeting on{" "}
+              {part("day")} at {part("time")} in {part("room")}.{" "}
+              {part("parking")} See you there!
             </p>
           )}
         </div>
       </div>
-      <div className="mt-4 flex gap-3">
+      {!fixed && (
+        <>
+          <Instruction>
+            Tap each highlighted part of the draft to check it against
+            Maya&apos;s notes. ({checked.length} of 4 checked)
+          </Instruction>
+          {last && (
+            <Feedback
+              key={last.id}
+              tone={last.verdict === "ok" ? "good" : "retry"}
+              title={verdictLabel[last.verdict]}
+            >
+              {last.note}
+            </Feedback>
+          )}
+        </>
+      )}
+      {checked.length === 4 && !fixed && (
         <button
-          className={button}
-          onClick={() => change({ ...state, selection: "take" })}
+          type="button"
+          className={`${primary} mt-5`}
+          onClick={() => change({ ...state, revised: true })}
         >
-          Choose this bag
+          ✏️ Fix the draft: change the day and remove the parking claim
         </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, selection: "look" })}
-        >
-          Keep looking
-        </button>
-      </div>
-      <Feedback>
-        {state.selection === "take"
-          ? "The price fits the budget, but the stated capacity does not fit the camera. A suggestion can be relevant without meeting all your needs. Check the product specifications."
-          : state.selection === "look"
-            ? "A sensible choice after checking the stated fit: 28 cm exceeds the bag’s maximum of 25 cm. Some shops use patterns in browsing and purchases to recommend items; Maya makes the decision."
-            : "A recommendation is a suggestion. Inspect the fit and price before deciding."}
-      </Feedback>
+      )}
+      {fixed && (
+        <>
+          <Feedback tone="good" title="Ready to send">
+            Maya fixed the wrong day and removed the claim she couldn&apos;t
+            back up. Now she decides to send it.
+          </Feedback>
+          <Idea title="Remember">
+            <p>
+              AI can produce information that <b>sounds convincing but isn&apos;t
+              true</b>. Asking the same tool &ldquo;are you sure?&rdquo; isn&apos;t
+              a real check. Check important details against a reliable source,
+              like Maya&apos;s notes.
+            </p>
+          </Idea>
+        </>
+      )}
     </>
   );
 }
-function Messages({
+
+const healthQuestion: Option[] = [
+  {
+    id: "ask",
+    text: "Ask the chatbot if it's sure",
+    feedback:
+      "A chatbot can sound just as confident the second time and still be wrong. Asking it again isn't an independent check.",
+  },
+  {
+    id: "expert",
+    text: "Check with a pharmacist or doctor",
+    correct: true,
+    feedback:
+      "When a wrong answer could seriously affect someone, involve a qualified person. The bigger the risk, the more careful the check.",
+  },
+  {
+    id: "trust",
+    text: "Follow it, because it sounded clear and confident",
+    feedback:
+      "Sounding confident doesn't make something true, as you saw with Maya's draft. Health decisions need a qualified person.",
+  },
+];
+const lesson1Recap = [
+  "AI is a name for computer systems that can recognise, predict or create.",
+  "Automatic doesn't always mean AI.",
+  "Some AI learns from examples, and it can still get things wrong.",
+  "Check important details before you use an AI result.",
+];
+
+function Reflect({
   state,
   change,
+  slug,
+  scope,
+  prompts,
 }: {
   state: ActivityState;
-  change: Props["change"];
+  change: Change;
+  slug: string;
+  scope: string;
+  prompts: string[];
 }) {
   return (
     <>
-      <div className="rounded-3xl border-4 border-navy bg-white p-5">
-        <div className="flex gap-3">
-          <button
-            className={button}
-            aria-pressed={state.selection === "inbox"}
-            onClick={() => change({ ...state, selection: "inbox" })}
-          >
-            Inbox
-          </button>
-          <button
-            className={button}
-            aria-pressed={state.selection === "spam"}
-            onClick={() => change({ ...state, selection: "spam" })}
-          >
-            Spam
-          </button>
-        </div>
-        <div className="mt-5 min-h-28">
-          {state.selection === "spam" ? (
-            <>
-              <h4 className="text-lg font-bold">
-                Photography club booking confirmation
-              </h4>
-              <p className="mt-2">Tuesday evening · Room One</p>
-              <p className="mt-2 text-sm text-muted">
-                Found in Spam. The folder alone cannot tell us whether this
-                message is genuine.
-              </p>
-            </>
-          ) : (
-            <p>The expected booking confirmation is missing from this inbox.</p>
-          )}
+      <div className="rounded-2xl bg-mint/60 p-5">
+        <p className="text-lg font-bold">What you&apos;ve learned</p>
+        <ul className="mt-3 space-y-2">
+          {lesson1Recap.map((r) => (
+            <li key={r} className="flex gap-3">
+              <span
+                aria-hidden="true"
+                className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-teal text-xs text-white"
+              >
+                ✓
+              </span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Story>
+        <p>
+          Maya&apos;s friend asks an AI chatbot how much of a medicine she can
+          safely take. The chatbot gives a clear, confident answer.
+        </p>
+      </Story>
+      <Choice
+        name="health"
+        question="What should Maya's friend do?"
+        options={healthQuestion}
+        value={answer(state, "health")}
+        onChange={(id) => change(withAnswer(state, "health", id))}
+      />
+      <div className="mt-8 border-t border-line pt-6">
+        <p className="text-lg font-bold">
+          Explain AI in your own words{" "}
+          <span className="text-sm font-normal text-muted">(optional)</span>
+        </p>
+        <div className="mt-3">
+          <Reflection prompts={prompts} slug={slug} scope={scope} />
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 1 })}
-        >
-          Compare with Maya’s booking record
-        </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 2 })}
-        >
-          Trust whichever folder it landed in
-        </button>
-        <button
-          className={button}
-          onClick={() => change({ ...state, stage: 3 })}
-        >
-          Verify through a known contact
-        </button>
-      </div>
-      <Feedback>
-        {state.stage === 1
-          ? "Maya’s own record also says Tuesday evening, Room One. Matching details are useful evidence, but a folder label still cannot prove the message is safe."
-          : state.stage === 2
-            ? "Sorting can be wrong in either direction. A genuine message can go to Spam and a misleading one can reach the inbox. Look for evidence beyond the folder."
-            : state.stage === 3
-              ? "If unsure, Maya uses contact details she already trusts. She does not rely on a link or phone number in the unexpected message."
-              : "Some email services use AI to classify messages using patterns and other signals. Find the confirmation, then consider how to check it."}
-      </Feedback>
     </>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Lesson 2: Explore AI in Maya's day                                  */
+/* ------------------------------------------------------------------ */
+
+type SceneObject = { id: string; icon: ReactNode; label: string; note: string };
+type Place = {
+  id: string;
+  backdrop: string;
+  intro: string;
+  find: string;
+  objects: SceneObject[];
+  tool: { id: string; icon: ReactNode; label: string };
+  foundNote: string;
+  input: string;
+  output: string;
+  task: string;
+  taskMeaning: string;
+  question: string;
+  options: Option[];
+};
+
+function Emoji({ children }: { children: string }) {
+  return (
+    <span aria-hidden="true" className="text-3xl leading-none">
+      {children}
+    </span>
+  );
+}
+
+const places: Place[] = [
+  {
+    id: "home",
+    backdrop: "/lessons/maya-day/hallway.png",
+    intro:
+      "It's 7 am. Maya's alarm goes off. Before leaving, she needs a dog photo for tonight's club poster, but she has hundreds of pictures and can't remember the file name.",
+    find: "Tap things in Maya's home. Which one might use AI?",
+    objects: [
+      {
+        id: "alarm",
+        icon: <TaskIcon kind="timer" />,
+        label: "Alarm clock",
+        note: "Maya set it for 7:00 and it rang at 7:00. It follows her instruction, so it doesn't need AI.",
+      },
+      {
+        id: "kettle",
+        icon: <Emoji>☕</Emoji>,
+        label: "Kettle",
+        note: "It switches off when the water boils. That's a simple sensor, not AI.",
+      },
+    ],
+    tool: { id: "photos", icon: <TaskIcon kind="photo" />, label: "Photo app" },
+    foundNote:
+      "Maya types “dog” into her photo app. Dog pictures appear, even though she never named the files.",
+    input: "Maya's photos and the word “dog”",
+    output: "Photos that probably show dogs",
+    task: "Recognition",
+    taskMeaning: "spotting patterns in pictures, like what a dog looks like",
+    question: "The search found three dog photos. What should Maya check?",
+    options: [
+      {
+        id: "first",
+        text: "Nothing. Use the first result, the app found dogs",
+        feedback:
+          "The app found likely dog photos, but Maya needs one specific dog: the club's dog in its teal collar. The first result might not be it.",
+      },
+      {
+        id: "right",
+        text: "That it's the right dog, clear enough for a poster, and OK to use",
+        correct: true,
+        feedback:
+          "Exactly. The app suggests likely matches. Maya opens the photo and checks it's the one she actually needs.",
+      },
+    ],
+  },
+  {
+    id: "journey",
+    backdrop: "",
+    intro:
+      "Maya is ready to leave for the community centre. Traffic is building on her usual road.",
+    find: "Tap things on Maya's journey. Which one might use AI?",
+    objects: [
+      {
+        id: "lights",
+        icon: <Emoji>🚦</Emoji>,
+        label: "Traffic lights",
+        note: "Most traffic lights change on a fixed timer or a simple sensor. No AI needed.",
+      },
+      {
+        id: "radio",
+        icon: <Emoji>📻</Emoji>,
+        label: "Car radio",
+        note: "The radio just plays a station. It isn't making any predictions.",
+      },
+    ],
+    tool: { id: "map", icon: <TaskIcon kind="predict" />, label: "Map app" },
+    foundNote:
+      "Maya's map app estimates how long each route will take, using live traffic and patterns from past journeys.",
+    input: "Live traffic and patterns from past journeys",
+    output: "An estimate of how long each route will take",
+    task: "Prediction",
+    taskMeaning: "making a best guess about something that hasn't happened yet",
+    question: "The other route just changed from 20 to 35 minutes. What should Maya do?",
+    options: [
+      {
+        id: "first",
+        text: "Take it anyway, the app said 20 minutes first",
+        feedback:
+          "A prediction is a best guess based on what the app knows right now. When the information changes, so does the guess.",
+      },
+      {
+        id: "right",
+        text: "Treat the time as a guess, check the route suits her, and leave a little extra time",
+        correct: true,
+        feedback:
+          "Exactly. Predictions can change. Maya uses the estimate to help her decide, not as a promise.",
+      },
+    ],
+  },
+  {
+    id: "centre",
+    backdrop: "/lessons/maya-day/community-centre.png",
+    intro:
+      "At the community centre, Maya checks her email for tonight's room booking confirmation. It isn't in her inbox.",
+    find: "Tap things at the centre. Which one might use AI?",
+    objects: [
+      {
+        id: "lights",
+        icon: <Emoji>💡</Emoji>,
+        label: "Light switch",
+        note: "Flick it and the lights come on. A simple switch, no AI.",
+      },
+      {
+        id: "printer",
+        icon: <Emoji>🖨️</Emoji>,
+        label: "Printer",
+        note: "It prints exactly what it's sent. No AI needed for that.",
+      },
+    ],
+    tool: { id: "email", icon: <TaskIcon kind="mail" />, label: "Email app" },
+    foundNote:
+      "Maya's email app sorts incoming messages into Inbox and Spam. Her booking confirmation was sorted into Spam.",
+    input: "Each email's words, sender and other signals",
+    output: "A folder: Inbox or Spam",
+    task: "Classification",
+    taskMeaning: "sorting things into groups",
+    question: "Maya found the booking email in Spam. What should she do?",
+    options: [
+      {
+        id: "trust",
+        text: "Delete it. If it's in Spam, it must be fake",
+        feedback:
+          "Sorting can be wrong. Genuine emails sometimes land in Spam, and fake ones sometimes reach the Inbox.",
+      },
+      {
+        id: "right",
+        text: "Compare it with her booking record, and contact the venue directly if unsure",
+        correct: true,
+        feedback:
+          "Exactly. The folder is the app's best guess. Maya checks the details herself, using contact details she already trusts.",
+      },
+    ],
+  },
+  {
+    id: "shopping",
+    backdrop: "",
+    intro:
+      "The club needs a bag for its camera. Maya browses a few bags online, and the shop suggests one for her.",
+    find: "Tap things on the shopping site. Which one might use AI?",
+    objects: [
+      {
+        id: "basket",
+        icon: <Emoji>🛒</Emoji>,
+        label: "Basket total",
+        note: "It adds up prices. That's simple arithmetic, not AI.",
+      },
+      {
+        id: "search",
+        icon: <Emoji>🔢</Emoji>,
+        label: "Price filter",
+        note: "It hides bags above the price Maya chose. A simple rule, no AI needed.",
+      },
+    ],
+    tool: { id: "suggest", icon: <TaskIcon kind="bag" />, label: "“You might like”" },
+    foundNote:
+      "The shop suggests a bag based on what Maya and other shoppers have viewed and bought.",
+    input: "What Maya and other shoppers viewed and bought",
+    output: "A suggested bag: fits cameras up to 25 cm, $38",
+    task: "Recommendation",
+    taskMeaning: "suggesting something you might like",
+    question: "The club's camera is 28 cm long. Should Maya buy the suggested bag?",
+    options: [
+      {
+        id: "buy",
+        text: "Yes. The shop suggested it and it's within budget",
+        feedback:
+          "The price is fine, but the bag only fits cameras up to 25 cm. A suggestion can look relevant and still not meet your needs.",
+      },
+      {
+        id: "right",
+        text: "No. It only fits cameras up to 25 cm, so she keeps looking",
+        correct: true,
+        feedback:
+          "Exactly. A recommendation is a suggestion. Maya checks the size and price, and makes the decision herself.",
+      },
+    ],
+  },
+];
+
+function PhotoAnim({ phase }: { phase: number }) {
+  const labels = [
+    "Golden dog",
+    "Blue sky",
+    "Grey cat",
+    "Club dog with teal collar",
+    "Flowers",
+    "Brown terrier",
+  ];
+  const dogs = [0, 3, 5];
+  return (
+    <div className="rounded-2xl border-4 border-navy bg-white p-3">
+      <p className="mb-3 rounded-full bg-lavender px-4 py-2 font-semibold">
+        ⌕ {phase >= 1 ? <Typewriter text="dog" instant={phase > 1} /> : <span className="text-muted">Search photos</span>}
+      </p>
+      <div className="grid grid-cols-3 gap-2">
+        {labels.map((label, i) => {
+          const isDog = dogs.includes(i);
+          const faded = phase >= 2 && !isDog;
+          return (
+            <div
+              key={label}
+              role="img"
+              aria-label={label + (phase >= 2 ? (isDog ? ", found" : ", not a match") : "")}
+              className={`relative aspect-square overflow-hidden rounded-lg transition-all duration-500 ${faded ? "scale-90 opacity-20" : ""} ${phase >= 2 && isDog ? "ring-4 ring-teal" : ""}`}
+            >
+              <span
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: "url('/lessons/maya-day/gallery-contact-sheet.png')",
+                  backgroundSize: "300% 200%",
+                  backgroundPosition: `${(i % 3) * 50}% ${Math.floor(i / 3) * 100}%`,
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RouteAnim({ phase }: { phase: number }) {
+  return (
+    <div className="relative">
+      <RouteMap updated={phase >= 3} route={phase >= 2 ? "alternative" : ""} />
+      {phase >= 3 && (
+        <p className="welcome-rise absolute bottom-3 right-3 rounded-full bg-[#e5484d] px-3 py-1 text-sm font-bold text-white">
+          ⚠ Traffic update
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SpamAnim({ phase }: { phase: number }) {
+  const mails = [
+    { from: "Library newsletter", to: "inbox" },
+    { from: "You've won a prize!!!", to: "spam" },
+    { from: "Room booking confirmed", to: "spam", key: true },
+    { from: "Club members", to: "inbox" },
+  ];
+  return (
+    <div className="grid gap-3 rounded-2xl border-4 border-navy bg-white p-3 sm:grid-cols-[1fr_1fr]">
+      {(["inbox", "spam"] as const).map((folder) => (
+        <div key={folder} className={`min-h-36 rounded-xl p-3 ${folder === "spam" ? "bg-peach/60" : "bg-mint/60"}`}>
+          <p className="font-bold">{folder === "inbox" ? "📥 Inbox" : "🚫 Spam"}</p>
+          <ul className="mt-2 space-y-2">
+            {mails.map((m, i) =>
+              phase >= 2 + Math.floor(i / 2) && m.to === folder ? (
+                <li
+                  key={m.from}
+                  className={`welcome-rise rounded-lg bg-white px-3 py-2 text-sm ${m.key ? "font-bold ring-2 ring-brand" : ""}`}
+                >
+                  ✉ {m.from}
+                </li>
+              ) : null,
+            )}
+          </ul>
+        </div>
+      ))}
+      {phase === 1 && (
+        <p className="text-muted sm:col-span-2" role="status">
+          Sorting new emails…
+        </p>
+      )}
+    </div>
+  );
+}
+
+function BagAnim({ phase }: { phase: number }) {
+  return (
+    <div className="rounded-2xl border-4 border-navy bg-white p-3">
+      <p className="text-sm font-bold text-muted">Recently viewed</p>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {["Canvas bag", "Padded case", "Shoulder bag"].map((b, i) =>
+          phase >= 1 ? (
+            <div
+              key={b}
+              className="welcome-rise rounded-lg bg-canvas p-2 text-center text-xs font-semibold"
+              style={{ animationDelay: `${i * 0.25}s` }}
+            >
+              <span aria-hidden="true" className="block text-2xl">👜</span>
+              {b}
+            </div>
+          ) : (
+            <div key={b} className="h-16 rounded-lg bg-canvas" />
+          ),
+        )}
+      </div>
+      {phase >= 2 && (
+        <div className="wv-pop mt-3 flex items-center gap-3 rounded-xl bg-lavender p-3">
+          <TaskIcon kind="bag" />
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-brand-deep">
+              ✨ You might like
+            </p>
+            <p className="font-bold">Compact camera bag · $38</p>
+            <p className="text-sm">Fits cameras up to 25 cm</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const placeAnims: Record<string, { durations: number[]; Anim: (p: { phase: number }) => ReactNode }> = {
+  home: { durations: [700, 900], Anim: PhotoAnim },
+  journey: { durations: [600, 900, 1600], Anim: RouteAnim },
+  centre: { durations: [700, 700, 700], Anim: SpamAnim },
+  shopping: { durations: [900, 900], Anim: BagAnim },
+};
+
+function PlaceActivity({
+  place,
+  state,
+  change,
+  go,
+}: {
+  place: Place;
+  state: ActivityState;
+  change: Change;
+  go: (step: number) => void;
+}) {
+  const found = state.selection === place.tool.id || (state.stage ?? 0) >= 1;
+  const watched = (state.stage ?? 0) >= 2;
+  const { durations, Anim } = placeAnims[place.id];
+  const anim = usePhases(durations, () =>
+    change({ ...state, selection: place.tool.id, stage: 2 }),
+  );
+  const shownPhase = watched && anim.phase === 0 ? durations.length + 1 : anim.phase;
+  const tapped = place.objects.find((o) => o.id === state.selection);
+  const done = Boolean(state.revised);
+  const sceneObjects = [...place.objects, { ...place.tool, note: "" }];
+  // Put the AI tool in the middle so it isn't always first or last.
+  sceneObjects.splice(1, 0, sceneObjects.pop()!);
+  return (
+    <>
+      <Story>
+        <p>{place.intro}</p>
+      </Story>
+      <Instruction>{place.find}</Instruction>
+      <div
+        className="mt-3 rounded-3xl bg-[#e5eee5] bg-cover bg-center p-4 sm:p-6"
+        style={
+          place.backdrop
+            ? { backgroundImage: `linear-gradient(#ffffffb3,#ffffffb3),url('${place.backdrop}')` }
+            : undefined
+        }
+      >
+        <div className="grid grid-cols-3 gap-3">
+          {sceneObjects.map((o) => {
+            const isTool = o.id === place.tool.id;
+            const selected = state.selection === o.id || (isTool && found);
+            return (
+              <button
+                key={o.id}
+                type="button"
+                aria-pressed={selected}
+                className={`flex min-h-32 flex-col items-center justify-center gap-2 rounded-2xl border-2 bg-white/95 p-3 text-center font-semibold shadow-sm transition-transform hover:-translate-y-0.5 ${selected ? (isTool ? "border-teal ring-4 ring-teal/30" : "border-navy/40") : "border-white"}`}
+                onClick={() =>
+                  change(
+                    isTool
+                      ? { ...state, selection: o.id, stage: Math.max(state.stage ?? 0, 1) }
+                      : { ...state, selection: o.id },
+                  )
+                }
+              >
+                <span className="grid h-16 place-items-center [&_svg]:h-16 [&_svg]:w-20">{o.icon}</span>
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {tapped && !found && (
+        <Feedback tone="retry" title={`${tapped.label}: probably not AI`}>
+          {tapped.note} Try another one.
+        </Feedback>
+      )}
+      {tapped && found && (
+        <Feedback title={`${tapped.label}: probably not AI`}>{tapped.note}</Feedback>
+      )}
+      {found && (
+        <div className="welcome-rise">
+          <Feedback tone="good" title={`Found it: the ${place.tool.label.replace(/[“”]/g, "")}`}>
+            {place.foundNote}
+          </Feedback>
+          <div className="mt-6 rounded-2xl bg-ivory p-5">
+            <p className="text-lg font-bold">How does it work?</p>
+            <div className="mt-4 grid items-start gap-4 lg:grid-cols-[1fr_1.6fr_1fr]">
+              <div className="rounded-xl bg-white p-4">
+                <p className="text-sm font-bold uppercase tracking-[0.08em] text-muted">
+                  Information it uses
+                </p>
+                <p className="mt-1">{place.input}</p>
+              </div>
+              <div>
+                {shownPhase === 0 ? (
+                  <button type="button" className={`${primary} w-full justify-center py-8`} onClick={anim.play}>
+                    ▶ Watch it work
+                  </button>
+                ) : (
+                  <Anim phase={shownPhase} />
+                )}
+              </div>
+              <div className={`rounded-xl bg-white p-4 transition-opacity ${watched || anim.phase > durations.length ? "" : "opacity-40"}`}>
+                <p className="text-sm font-bold uppercase tracking-[0.08em] text-muted">
+                  What it gives back
+                </p>
+                <p className="mt-1">{place.output}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {watched && (
+        <div className="welcome-rise">
+          <Choice
+            name={`check-${place.id}`}
+            question={place.question}
+            options={place.options}
+            value={answer(state, "check")}
+            onChange={(id) =>
+              change({
+                ...withAnswer(state, "check", id),
+                revised: done || correctAnswer(place.options, id),
+              })
+            }
+          />
+        </div>
+      )}
+      {done && (
+        <Idea title={`This is called ${place.task.toLowerCase()}`}>
+          <p>
+            <b>{place.task}</b> means {place.taskMeaning}. The tool helped, and
+            Maya checked the result and made the decision.
+          </p>
+          <button type="button" className={`${button} mt-2`} onClick={() => go(0)}>
+            ← Back to the map
+          </button>
+        </Idea>
+      )}
+    </>
+  );
+}
+
+function DayMap({
+  all,
+  go,
+}: {
+  all: Record<string, ActivityState>;
+  go: (step: number) => void;
+}) {
+  const stops = [
+    { step: 1, id: "home", label: "Home", sub: "Finding a photo", x: 18, y: 70, icon: "🏠" },
+    { step: 2, id: "journey", label: "The journey", sub: "Choosing a route", x: 40, y: 30, icon: "🚗" },
+    { step: 3, id: "centre", label: "Community centre", sub: "A missing email", x: 66, y: 62, icon: "🏢" },
+    { step: 4, id: "shopping", label: "Online shop", sub: "A suggested bag", x: 86, y: 24, icon: "🛍️" },
+  ];
+  const doneCount = stops.filter((s) => all[s.id]?.revised).length;
+  return (
+    <>
+      <Story>
+        <p>
+          Maya is an administrator at a community centre. Tonight she&apos;s
+          running a photography club, and a few everyday tools help her get
+          ready. Some of them might use AI.
+        </p>
+      </Story>
+      <Instruction>
+        Pick a place to explore. In each one, find the tool that might use AI,
+        watch how it works and decide what Maya should check.
+      </Instruction>
+      <div className="relative mt-4 overflow-hidden rounded-3xl bg-[#e5eee5]">
+        <svg viewBox="0 0 100 60" className="block w-full" aria-hidden="true">
+          <path d="M0 45Q20 40 35 48T70 40T100 35V60H0Z" fill="#d4e6d3" />
+          <circle cx="8" cy="12" r="6" fill="#cfe3cf" />
+          <circle cx="94" cy="52" r="7" fill="#cfe3cf" />
+          <path
+            d="M18 42Q28 10 40 18T66 37T86 14"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M18 42Q28 10 40 18T66 37T86 14"
+            fill="none"
+            stroke="#17243c"
+            strokeOpacity=".35"
+            strokeWidth=".6"
+            strokeDasharray="1.5 1.5"
+          />
+        </svg>
+        {stops.map((s) => {
+          const done = Boolean(all[s.id]?.revised);
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => go(s.step)}
+              className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+              style={{ left: `${s.x}%`, top: `${s.y}%` }}
+            >
+              <span
+                className={`wv-bob grid size-12 place-items-center rounded-full border-[3px] text-2xl shadow-md transition-transform group-hover:scale-110 sm:size-16 sm:text-3xl ${done ? "border-teal bg-mint" : "border-navy bg-white"}`}
+                style={{ animationDelay: `${s.step * 0.3}s` }}
+              >
+                <span aria-hidden="true">{s.icon}</span>
+              </span>
+              <span className="mt-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-bold shadow-sm sm:text-sm">
+                {done && <span className="text-teal">✓ </span>}
+                {s.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {stops.map((s) => {
+          const done = Boolean(all[s.id]?.revised);
+          return (
+            <button
+              key={s.id}
+              type="button"
+              className={`${button} flex items-center gap-3`}
+              onClick={() => go(s.step)}
+            >
+              <span aria-hidden="true" className="text-2xl">{s.icon}</span>
+              <span className="flex-1">
+                {s.step}. {s.label}
+                <span className="block text-sm font-normal text-muted">{s.sub}</span>
+              </span>
+              {done ? (
+                <span className="rounded-full bg-mint px-2.5 py-1 text-xs font-bold text-teal">
+                  ✓ Done
+                </span>
+              ) : (
+                <span aria-hidden="true">→</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <p className="mt-4 text-sm text-muted" role="status">
+        {doneCount} of 4 places explored
+      </p>
+    </>
+  );
+}
+
+function DayReflect({
+  all,
+  go,
+  slug,
+  scope,
+  prompts,
+}: {
+  all: Record<string, ActivityState>;
+  go: (step: number) => void;
+  slug: string;
+  scope: string;
+  prompts: string[];
+}) {
+  return (
+    <>
+      <p className="text-lg leading-relaxed">
+        Across her day, Maya used tools that may use AI in four different ways.
+        In every case, <b>the tool helped and Maya decided</b>.
+      </p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {places.map((p, i) => {
+          const done = Boolean(all[p.id]?.revised);
+          return (
+            <div
+              key={p.id}
+              className={`rounded-2xl border-2 p-4 ${done ? "border-teal bg-mint/50" : "border-dashed border-line bg-white"}`}
+            >
+              <div className="flex items-center gap-3 [&_svg]:h-12 [&_svg]:w-14">
+                {p.tool.icon}
+                <div>
+                  <p className="font-bold">{p.task}</p>
+                  <p className="text-sm">{p.taskMeaning}</p>
+                </div>
+              </div>
+              <p className="mt-2 text-sm text-muted">
+                {p.tool.label.replace(/[“”]/g, "")}: {p.output.toLowerCase()}
+              </p>
+              {!done && (
+                <button type="button" className="mt-2 text-sm font-semibold underline" onClick={() => go(i + 1)}>
+                  Explore this place →
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-8 border-t border-line pt-6">
+        <p className="text-lg font-bold">Now think about your own day</p>
+        <p className="mt-1 text-muted">
+          Pick a tool you use, like a music app that suggests songs.{" "}
+          <span className="text-sm">(optional)</span>
+        </p>
+        <div className="mt-3">
+          <Reflection prompts={prompts} slug={slug} scope={scope} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Private notes (stay on this device)                                 */
+/* ------------------------------------------------------------------ */
+
 const noteMemory = new Map<string, string>();
 function subscribeNotes(callback: () => void) {
   window.addEventListener("buggle-notes", callback);
@@ -805,7 +1760,7 @@ function Note({ name, label }: { name: string; label: string }) {
       <textarea
         value={value}
         maxLength={1500}
-        rows={3}
+        rows={2}
         className="mt-2 w-full rounded-xl border border-line bg-white p-3 focus-visible:outline-2 focus-visible:outline-brand-deep"
         onChange={(e) => {
           noteMemory.set(name, e.target.value);
@@ -836,114 +1791,52 @@ export function Reflection({
   scope: string;
 }) {
   return (
-    <div className="space-y-5">
-      <p className="leading-relaxed text-muted">
-        These notes are unscored and stay on this device. They are not uploaded
-        or used as an assessment attempt. Please leave out personal or
-        confidential information.
+    <div className="space-y-4">
+      <p className="text-sm text-muted">
+        Your notes are private and stay on this device. They aren&apos;t marked.
       </p>
       {prompts.map((p, i) => (
         <Note key={p} name={`buggle-notes:${scope}:${slug}:${i}`} label={p} />
       ))}
       <details>
         <summary className="cursor-pointer py-2 font-semibold">
-          Read one possible response
+          See an example answer
         </summary>
-        <p className="mt-3 leading-relaxed">
+        <p className="mt-2 leading-relaxed">
           {slug === "what-counts-as-ai"
-            ? "AI can help recognise patterns, make predictions or create content. Some AI learns from examples, and some uses knowledge and rules. A draft can sound convincing and still get the date wrong. I would check the date against the event record before sending it."
-            : "A music service may use my listening activity to suggest songs. I would listen before adding a song to a club playlist. I would check the service’s official information before saying exactly how its recommendations use AI."}
+            ? "AI is a name for computer systems that can recognise patterns, make predictions or create things like text. A writing tool could help me start an email. Before sending it, I would check the dates and names against my own notes."
+            : "My music app suggests songs. It uses what I've listened to before. It gives me a playlist. Before playing it at a club event, I would listen to check the songs suit the audience."}
         </p>
       </details>
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ */
+
 export function Activity(p: Props) {
   const common = { state: p.state, change: p.change };
+  const place = places.find((x) => x.id === p.id);
+  if (place)
+    return <PlaceActivity place={place} {...common} go={p.go} />;
   switch (p.id) {
     case "meet":
-      return <Reveal {...common} />;
+      return <Meet {...common} />;
     case "automatic":
-      return <Automation {...common} />;
-    case "match":
-      return (
-        <MatchingActivity
-          state={p.state}
-          onChange={p.change}
-          pairs={[
-            {
-              id: "speech",
-              from: "A meeting recording",
-              to: "Written notes",
-              why: "Speech recognition can turn sound into words. Check names and important details against the recording.",
-            },
-            {
-              id: "predict",
-              from: "Past visitor counts",
-              to: "An attendance estimate",
-              why: "Patterns can help estimate demand. Special events may change the result.",
-            },
-            {
-              id: "draft",
-              from: "Instructions for an invitation",
-              to: "A first draft",
-              why: "Generative AI can create a starting point. Check its facts and wording before using it.",
-            },
-          ]}
-        />
-      );
+      return <Automatic {...common} />;
     case "learn":
-      return <Learning {...common} />;
+      return <Learn {...common} />;
     case "request":
       return <Request {...common} />;
     case "investigate":
-      return <Evidence {...common} />;
-    case "repair":
-      return <Evidence {...common} repair />;
+      return <Investigate {...common} />;
+    case "reflect":
+      return <Reflect {...common} slug={p.slug} scope={p.scope} prompts={p.prompts} />;
     case "day-map":
-      return <DayMap go={p.go} />;
-    case "home":
-      return <Home {...common} />;
-    case "journey":
-      return <Journey {...common} />;
-    case "shopping":
-      return <Shopping {...common} />;
-    case "messages":
-      return <Messages {...common} />;
-    case "tasks":
-      return (
-        <MatchingActivity
-          state={p.state}
-          onChange={p.change}
-          pairs={[
-            {
-              id: "recognise",
-              from: "Find likely dog pictures",
-              to: "Recognise",
-              why: "Recognition identifies patterns in pictures. Maya checks the actual photo.",
-            },
-            {
-              id: "predict",
-              from: "Estimate journey time",
-              to: "Predict",
-              why: "Prediction estimates something not yet known. Traffic updates can change it.",
-            },
-            {
-              id: "recommend",
-              from: "Suggest a camera bag",
-              to: "Recommend",
-              why: "Recommendation suggests something potentially useful. Maya checks the fit and price.",
-            },
-            {
-              id: "classify",
-              from: "Put a message in Spam",
-              to: "Classify",
-              why: "Classification assigns a group. The folder does not prove safety. These tasks can overlap in the same system.",
-            },
-          ]}
-        />
-      );
+      return <DayMap all={p.all} go={p.go} />;
+    case "day-reflect":
+      return <DayReflect all={p.all} go={p.go} slug={p.slug} scope={p.scope} prompts={p.prompts} />;
     default:
-      return <Reflection prompts={p.prompts} slug={p.slug} scope={p.scope} />;
+      return null;
   }
 }

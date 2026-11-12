@@ -24,9 +24,8 @@ export default async function Reading({
         </Link>
         <h1 className="mt-5 text-4xl font-bold">{guide.title}</h1>
         <p className="mt-4 leading-relaxed text-muted">
-          The complete reading alternative. All explanations and worked examples
-          are available here without playing the film or completing
-          interactions.
+          Everything from this lesson as plain text. You don&apos;t need to
+          play the film or complete the interactive steps.
         </p>
         <nav
           aria-label="Reading contents"
@@ -103,7 +102,7 @@ export default async function Reading({
           href={`/modules/${slug}/lessons/${lessonSlug}#knowledge-check`}
           className="mt-6 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-3 font-semibold text-white"
         >
-          Open the separate knowledge check
+          Take the knowledge check
         </Link>
       </main>
       <SiteFooter />

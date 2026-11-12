@@ -40,22 +40,26 @@ const ids: Record<string, string[]> = {
   "what-counts-as-ai": [
     "meet",
     "automatic",
-    "match",
     "learn",
     "request",
     "investigate",
-    "repair",
     "reflect",
   ],
   "ai-in-your-day": [
     "day-map",
     "home",
     "journey",
+    "centre",
     "shopping",
-    "messages",
-    "tasks",
     "day-reflect",
   ],
+};
+// Step ids from earlier guide versions. Saved places that mention them are
+// still accepted; the retired entries are dropped instead of rejecting the
+// learner's whole saved place.
+const retired: Record<string, string[]> = {
+  "what-counts-as-ai": ["match", "repair"],
+  "ai-in-your-day": ["messages", "tasks"],
 };
 export function parseCheckpoint(
   value: unknown,
@@ -88,7 +92,7 @@ export function parseCheckpoint(
     !["watch", "explore"].includes(String(v.route)) ||
     !Number.isInteger(v.step) ||
     Number(v.step) < 0 ||
-    Number(v.step) >= ids[slug].length
+    Number(v.step) >= ids[slug].length + retired[slug].length
   )
     return null;
   if (
@@ -98,10 +102,13 @@ export function parseCheckpoint(
     v.videoTime > (slug === "ai-in-your-day" ? 193 : 242)
   )
     return null;
+  const known = (x: unknown) =>
+    typeof x === "string" &&
+    (ids[slug].includes(x) || retired[slug].includes(x));
   if (
     !Array.isArray(v.visited) ||
-    v.visited.length > ids[slug].length ||
-    !v.visited.every((x) => typeof x === "string" && ids[slug].includes(x))
+    v.visited.length > ids[slug].length + retired[slug].length ||
+    !v.visited.every(known)
   )
     return null;
   if (
@@ -113,7 +120,7 @@ export function parseCheckpoint(
   const activities: Record<string, ActivityState> = {};
   for (const [id, raw] of Object.entries(v.activities)) {
     if (
-      !ids[slug].includes(id) ||
+      !known(id) ||
       !raw ||
       typeof raw !== "object" ||
       Array.isArray(raw)
@@ -160,13 +167,15 @@ export function parseCheckpoint(
         ))
     )
       return null;
-    activities[id] = activity as ActivityState;
+    if (ids[slug].includes(id)) activities[id] = activity as ActivityState;
   }
   return {
     version: 1,
     route: v.route as Checkpoint["route"],
-    step: Number(v.step),
-    visited: [...new Set(v.visited as string[])],
+    step: Math.min(Number(v.step), ids[slug].length - 1),
+    visited: [
+      ...new Set((v.visited as string[]).filter((x) => ids[slug].includes(x))),
+    ],
     activities,
     videoTime: v.videoTime,
   };

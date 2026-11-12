@@ -87,8 +87,8 @@ export default async function ModulePage({
             </div>
             {session?.user && isFoundations && (
               <p className="mb-4 rounded-2xl bg-mint p-4 text-sm leading-relaxed text-ink">
-                You are signed in with Google. The next Module 1 lesson is being
-                prepared. You can revisit the two free previews below.
+                You&apos;re signed in, so your progress and knowledge check
+                results are saved. Lessons 3 to 5 are coming soon.
               </p>
             )}
             <ol className="grid gap-3 sm:grid-cols-2">
@@ -106,11 +106,7 @@ export default async function ModulePage({
                         {mod.order}.{index + 1}
                       </span>
                       <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                        {preview
-                          ? "Free preview"
-                          : session?.user
-                            ? "In preparation"
-                            : "Sign in to continue"}
+                        {preview ? "Free" : "Coming soon"}
                       </span>
                     </div>
                     <h3 className="mt-4 text-lg font-bold text-ink">
@@ -128,7 +124,7 @@ export default async function ModulePage({
                     <p className="mt-2 text-sm leading-relaxed text-muted">{lesson.summary}</p>
                     {preview && (
                       <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                        Open preview →
+                        Start lesson →
                       </span>
                     )}
                   </li>
@@ -144,17 +140,18 @@ export default async function ModulePage({
             </section>
             {isFoundations && (
               <section className="rounded-3xl bg-blush p-5 sm:p-6">
-                <h2 className="text-lg font-bold text-navy">Try the free previews</h2>
-                <p className="mt-2 text-sm leading-relaxed text-ink">
-                  Each preview offers a visual explanation and a separate written
-                  guide. Knowledge checks and the remaining lessons are being prepared.
-                </p>
+                <h2 className="text-lg font-bold text-navy">How each lesson works</h2>
+                <ol className="mt-3 space-y-2 text-sm leading-relaxed text-ink">
+                  <li>1. Watch a short film, or work through an interactive guide.</li>
+                  <li>2. Take a 10-question knowledge check.</li>
+                  <li>3. Pass with 7 or more. Retry as often as you need.</li>
+                </ol>
                 {!session?.user && (
                   <Link
                     href={`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`}
                     className="mt-4 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
                   >
-                    Continue with Google after the previews
+                    Sign in to save your progress
                   </Link>
                 )}
               </section>

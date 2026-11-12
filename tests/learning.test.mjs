@@ -75,9 +75,30 @@ test("unscored checkpoints reject pass flags, private notes, invalid steps and o
     assert.equal(parseCheckpoint(value, "what-counts-as-ai"), null);
   assert.equal(parseCheckpoint(base, "unknown"), null);
 });
+test("places saved by the earlier guides are kept, without retired steps", () => {
+  const old = {
+    ...emptyCheckpoint(),
+    route: "explore",
+    step: 7,
+    visited: ["meet", "match", "repair"],
+    activities: { meet: { selection: "speech" }, repair: { revised: true } },
+    videoTime: 42,
+  };
+  const parsed = parseCheckpoint(old, "what-counts-as-ai");
+  assert.equal(parsed.step, 5);
+  assert.deepEqual(parsed.visited, ["meet"]);
+  assert.deepEqual(Object.keys(parsed.activities), ["meet"]);
+  assert.equal(parsed.videoTime, 42);
+  const day = parseCheckpoint(
+    { ...emptyCheckpoint(), visited: ["messages"], activities: { tasks: {} } },
+    "ai-in-your-day",
+  );
+  assert.deepEqual(day.visited, []);
+  assert.deepEqual(day.activities, {});
+});
 test("both guides have complete explanations and no em dashes", () => {
-  assert.equal(exploreGuides["what-counts-as-ai"].steps.length, 8);
-  assert.equal(exploreGuides["ai-in-your-day"].steps.length, 7);
+  assert.equal(exploreGuides["what-counts-as-ai"].steps.length, 6);
+  assert.equal(exploreGuides["ai-in-your-day"].steps.length, 6);
   for (const guide of Object.values(exploreGuides))
     for (const step of guide.steps) {
       assert.ok(step.reading.join(" ").length > 250);

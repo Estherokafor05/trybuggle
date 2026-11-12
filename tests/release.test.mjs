@@ -48,7 +48,7 @@ test("only prepared preview lessons resolve and both have independent guides", (
   assert.equal(previewLessons.length, 2);
   for (const lesson of previewLessons) {
     assert.equal(getPreviewLesson(lesson.slug), lesson);
-    assert.ok(exploreGuides[lesson.slug].steps.length >= 7);
+    assert.ok(exploreGuides[lesson.slug].steps.length >= 6);
   }
   assert.equal(getPreviewLesson("not-a-lesson"), undefined);
 });
