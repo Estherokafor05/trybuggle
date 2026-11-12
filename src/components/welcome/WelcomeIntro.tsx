@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { firstLessonPath, welcome, welcomeMedia } from "@/content/welcome";
 import { WelcomeVisual } from "./WelcomeVisuals";
 
-const control =
-  "min-h-11 rounded-full border border-navy/25 bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-lavender disabled:opacity-40";
+const iconControl =
+  "grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-35";
 
 const { scenes, cues, duration } = welcome;
 const minutes = `${Math.floor(duration / 60)} min ${Math.round(duration % 60)} sec`;
@@ -23,7 +23,6 @@ export function WelcomeIntro() {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
-  const [captions, setCaptions] = useState(true);
   const [failed, setFailed] = useState(false);
 
   const index = sceneAt(time);
@@ -145,50 +144,60 @@ export function WelcomeIntro() {
             </div>
           ) : (
             <>
-              <div
-                aria-live="off"
-                className="min-h-14 rounded-xl bg-navy px-4 py-3 text-sm leading-relaxed text-white sm:text-base"
-              >
-                {captions
-                  ? (cue?.text ?? "")
-                  : "Captions are hidden."}
+              {/* One compact player: captions above, previous / play / next below. */}
+              <div className="rounded-2xl bg-navy p-3 text-white shadow-sm sm:p-4">
+                <p
+                  aria-live="off"
+                  className="min-h-[4.75rem] px-1 text-[0.95rem] leading-relaxed sm:min-h-[3.5rem] sm:text-base"
+                >
+                  {cue?.text ?? ""}
+                </p>
+                <div className="mt-3 flex items-center justify-center border-t border-white/15 pt-3">
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      className={iconControl}
+                      aria-label="Previous part"
+                      disabled={index === 0}
+                      onClick={() => seekTo(index - 1)}
+                    >
+                      <svg aria-hidden="true" viewBox="0 0 20 20" className="size-5">
+                        <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className="grid size-12 place-items-center rounded-full bg-white text-navy transition-colors hover:bg-lavender focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                      aria-label={playing ? "Pause" : time >= duration ? "Replay" : "Play"}
+                      onClick={() =>
+                        playing ? audio.current?.pause() : void play()
+                      }
+                    >
+                      {playing ? (
+                        <svg aria-hidden="true" viewBox="0 0 20 20" className="size-5">
+                          <path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z" fill="currentColor" />
+                        </svg>
+                      ) : (
+                        <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-0.5 size-5">
+                          <path d="M6 4.5v11l9-5.5-9-5.5Z" fill="currentColor" />
+                        </svg>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className={iconControl}
+                      aria-label="Next part"
+                      disabled={index === last}
+                      onClick={() => seekTo(index + 1)}
+                    >
+                      <svg aria-hidden="true" viewBox="0 0 20 20" className="size-5">
+                        <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  className={control}
-                  disabled={index === 0}
-                  onClick={() => seekTo(index - 1)}
-                >
-                  <span aria-hidden="true">←</span> Back
-                </button>
-                <button
-                  type="button"
-                  className={control}
-                  onClick={() =>
-                    playing ? audio.current?.pause() : void play()
-                  }
-                >
-                  {playing ? "Pause" : time >= duration ? "Replay" : "Play"}
-                </button>
-                <button
-                  type="button"
-                  className={control}
-                  disabled={index === last}
-                  onClick={() => seekTo(index + 1)}
-                >
-                  Next <span aria-hidden="true">→</span>
-                </button>
-                <button
-                  type="button"
-                  className={control}
-                  aria-pressed={captions}
-                  onClick={() => setCaptions(!captions)}
-                >
-                  {captions ? "Hide captions" : "Show captions"}
-                </button>
-              </div>
-              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
                 <Link
                   href={firstLessonPath}
                   className={
