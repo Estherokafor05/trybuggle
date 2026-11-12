@@ -460,18 +460,17 @@ Success measures should show whether learners understand and can apply the basic
 
 ## 12. Approved decisions and remaining review
 
-Approved: Google sign-in; the first two lesson previews; two equivalent learning routes; 10-question official lesson checks; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; 30 to 60 minutes of planned module content; Modules 1 and 2 free; one-time USD 50 Stripe unlock for practical workflow content; WCAG 2.2 AA; Module 1 Certificate of Completion subject to all requirements being satisfied. Narration recordings are requested from the user before film production, as defined in LEARNING_EXPERIENCE.md.
+Approved: Google sign-in; the first two lesson previews; two equivalent learning routes; 10-question official lesson checks; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; 30 to 60 minutes of planned module content; Buggle Learn completely free, with no payments, paid tiers or subscriptions; WCAG 2.2 AA; Module 1 Certificate of Completion subject to all requirements being satisfied. Narration recordings are requested from the user before film production, as defined in LEARNING_EXPERIENCE.md.
 
 Remaining decisions:
 
 1. Which historical milestones and remaining lessons belong in Module 1, including the later home for the four classical approaches?
 2. What is the Module 1 final assessment blueprint and question count?
-3. Which no-code interface and tool-independent alternative should support the first paid workflow activity?
-4. What exact content is paid, and what refund policy applies?
-5. What certificate ID, retention policy and later public verification experience should be used?
-6. Which outcome measures define a successful complete first release?
+3. Which no-code interface and tool-independent alternative should support the first practical workflow activity, usable without a paid subscription?
+4. What certificate ID, retention policy and later public verification experience should be used?
+5. Which outcome measures define a successful complete first release?
 
-The current implementation slice covers Lessons 1 and 2, their separate official checks and saved learning places. It does not imply that all Module 1 lessons, the final assessment, certificate issuance or payments are ready.
+The current implementation slice covers Lessons 1 and 2, their separate official checks and saved learning places. It does not imply that all Module 1 lessons, the final assessment or certificate issuance are ready. Buggle Learn is free throughout; there are no payments.
 
 ## 13. Working definition of done for the first release
 

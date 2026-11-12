@@ -215,7 +215,7 @@ export default function Home() {
             <h2 className="text-xl font-bold sm:text-2xl">Where it leads</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
               Module 1, Foundations of Artificial Intelligence, is the first of{" "}
-              {modules.length} modules. Modules 1 and 2 are free.
+              {modules.length} modules, and every one of them is free.
             </p>
             <Link
               href="/curriculum"

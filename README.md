@@ -8,7 +8,7 @@ Lessons 1 and 2 each offer **Watch & Listen** and **Read & Explore**. Lesson 1 h
 
 Both lessons include independent interactive guides, complete reading alternatives that work without JavaScript, locally saved reflections and separate official knowledge checks. Each check has 10 questions, a 70% passing threshold, helpful feedback and unlimited assessment-only retries. Only server-verified results count as a pass; guide activity and playback never do.
 
-Visitors can use both previews and resume on the same device. Google sign-in enables learning places and assessment results saved to PostgreSQL across devices. The remaining Module 1 lessons, module final assessment, certificates and payments are still to be implemented. The first two previews remain open access; their availability is not a claim of completed progression.
+Visitors can use both previews and resume on the same device. Google sign-in enables learning places and assessment results saved to PostgreSQL across devices. All five Module 1 lessons, the Module 1 final assessment and the Certificate of Completion are live. Buggle Learn is completely free: there are no payments, paid tiers or subscriptions. The first two previews remain open access; their availability is not a claim of completed progression.
 
 ## Run and check
 
