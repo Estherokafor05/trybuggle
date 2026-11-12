@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { firstLessonPath, welcome, welcomeMedia } from "@/content/welcome";
+import { WelcomeVisual } from "./WelcomeVisuals";
 
 const control =
   "min-h-11 rounded-full border border-navy/25 bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-lavender disabled:opacity-40";
@@ -79,8 +79,8 @@ export function WelcomeIntro() {
           setFailed(true);
         }}
       />
-      <div className="grid md:grid-cols-[1.2fr_0.8fr] md:items-center">
-        <div className="px-6 pb-6 pt-8 sm:px-10 sm:pt-12 lg:px-14">
+      <div className="grid md:grid-cols-[0.9fr_1.1fr] md:items-center">
+        <div className="order-last px-6 pb-7 pt-2 sm:px-10 md:order-first md:py-12 lg:px-12">
           <div
             className="flex gap-1"
             role="progressbar"
@@ -109,7 +109,7 @@ export function WelcomeIntro() {
             })}
           </div>
 
-          <div className="mt-8 min-h-[15rem] sm:min-h-[17rem]">
+          <div className="mt-6 min-h-[7.5rem] sm:min-h-[8.5rem]">
             <div key={scene.id} className="welcome-rise">
               <p className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3.5 py-2 text-xs font-semibold text-ink">
                 <span
@@ -118,45 +118,9 @@ export function WelcomeIntro() {
                 />
                 {scene.kicker}
               </p>
-              <p
-                className={`mt-5 max-w-[22ch] font-display font-bold leading-[1.1] tracking-tight text-ink ${index === 0 ? "text-[clamp(2.5rem,5.6vw,4.2rem)]" : "text-[clamp(1.6rem,3.3vw,2.5rem)]"}`}
-              >
+              <p className="mt-4 font-display text-[clamp(1.9rem,3.6vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink">
                 {scene.headline}
               </p>
-              {scene.items && scene.style === "list" && (
-                <ol className="mt-5 grid max-w-[46ch] gap-2">
-                  {scene.items.map((item, i) =>
-                    itemVisible(item.at) ? (
-                      <li
-                        key={item.text}
-                        className="welcome-rise flex items-start gap-3 rounded-2xl bg-white/80 px-4 py-2.5 text-sm font-semibold text-ink sm:text-base"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="grid size-6 shrink-0 place-items-center rounded-full bg-navy text-xs text-white"
-                        >
-                          {i + 1}
-                        </span>
-                        {item.text}
-                      </li>
-                    ) : null,
-                  )}
-                </ol>
-              )}
-              {scene.items && scene.style === "chips" && (
-                <ul className="mt-5 flex max-w-[48ch] flex-wrap gap-2">
-                  {scene.items.map((item) =>
-                    itemVisible(item.at) ? (
-                      <li
-                        key={item.text}
-                        className="welcome-rise rounded-full bg-white/85 px-4 py-2 text-sm font-semibold text-navy"
-                      >
-                        {item.text}
-                      </li>
-                    ) : null,
-                  )}
-                </ul>
-              )}
             </div>
           </div>
 
@@ -253,20 +217,13 @@ export function WelcomeIntro() {
           )}
         </div>
 
-        <div className="relative mx-auto hidden w-full max-w-[22rem] px-7 pb-6 pt-2 sm:block md:max-w-none md:px-6 md:py-10">
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-[12%] top-[8%] -z-10 aspect-square rounded-full border border-ink/15"
-          />
-          <Image
-            src="/illustrations/ai-learning-hero.png"
-            alt=""
-            width={1448}
-            height={1086}
-            sizes="(min-width: 768px) 38vw, 80vw"
-            priority
-            className={`h-auto w-full object-contain ${playing ? "welcome-float" : ""}`}
-          />
+        <div className="relative mx-auto w-full max-w-[30rem] px-5 pt-6 md:max-w-none md:px-6 md:py-8 lg:px-10">
+          <div key={scene.id} className="welcome-rise">
+            <WelcomeVisual
+              sceneId={scene.id}
+              shown={(scene.items ?? []).map((item) => itemVisible(item.at))}
+            />
+          </div>
         </div>
       </div>
     </section>

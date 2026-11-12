@@ -79,6 +79,135 @@ h3 {
   animation: welcome-float 6s ease-in-out infinite;
 }
 
+/* Welcome scene illustrations */
+@keyframes wv-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wv-bob {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes wv-ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes wv-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes wv-wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15%,
+  45% {
+    transform: rotate(16deg);
+  }
+  30% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes wv-drift {
+  0% {
+    opacity: 0;
+    transform: translate(var(--dx, 0), -40px) rotate(var(--r, 0deg));
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(var(--r, 0deg));
+  }
+}
+
+@keyframes wv-walk {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--walk, 220px));
+  }
+}
+
+@keyframes wv-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.wv-pop,
+.wv-bob,
+.wv-ring,
+.wv-wave,
+.wv-drift,
+.wv-grow {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.wv-pop {
+  animation: wv-pop 0.6s cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+
+.wv-bob {
+  animation: wv-bob 3.2s ease-in-out infinite;
+}
+
+.wv-ring {
+  animation: wv-ring 2.4s ease-out infinite;
+}
+
+.wv-draw {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: wv-draw 2.2s ease-out forwards;
+}
+
+.wv-wave {
+  transform-origin: 20% 90%;
+  animation: wv-wave 2.4s ease-in-out infinite;
+}
+
+.wv-drift {
+  animation: wv-drift 0.8s ease-out both;
+}
+
+.wv-walk {
+  animation: wv-walk 7s ease-in-out both;
+}
+
+.wv-grow {
+  transform-origin: bottom;
+  animation: wv-grow 1s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -86,4 +215,27 @@ h3 {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+@keyframes wv-open {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.wv-open-left,
+.wv-open-right {
+  transform-box: fill-box;
+  animation: wv-open 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.wv-open-left {
+  transform-origin: right;
+}
+
+.wv-open-right {
+  transform-origin: left;
 }

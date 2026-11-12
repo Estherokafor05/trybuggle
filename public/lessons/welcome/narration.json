@@ -6,14 +6,14 @@
    "id": "hello",
    "start": 0,
    "kicker": "Hello",
-   "headline": "Welcome to Buggle Learn.",
+   "headline": "Welcome to Buggle Learn",
    "end": 5.26
   },
   {
    "id": "heard",
    "start": 5.26,
-   "kicker": "Everyone's talking about AI",
-   "headline": "You've probably heard about it already.",
+   "kicker": "You've heard about it",
+   "headline": "AI is everywhere",
    "style": "chips",
    "items": [
     {
@@ -35,14 +35,14 @@
    "id": "where",
    "start": 21.52,
    "kicker": "So much information",
-   "headline": "It can be hard to know where to start.",
+   "headline": "Where do you start?",
    "end": 27.2
   },
   {
    "id": "why",
    "start": 27.2,
-   "kicker": "Why we made Buggle",
-   "headline": "Understanding AI shouldn't be reserved for people in tech.",
+   "kicker": "Why Buggle",
+   "headline": "AI is for everyone",
    "style": "chips",
    "items": [
     {
@@ -55,8 +55,8 @@
   {
    "id": "for-you",
    "start": 40.74,
-   "kicker": "There's something here for you",
-   "headline": "Whoever you are.",
+   "kicker": "Something for you",
+   "headline": "Whoever you are",
    "style": "chips",
    "items": [
     {
@@ -85,8 +85,8 @@
   {
    "id": "basics",
    "start": 50.14,
-   "kicker": "We'll start with the basics",
-   "headline": "Four simple questions.",
+   "kicker": "We'll begin here",
+   "headline": "Start with the basics",
    "style": "list",
    "items": [
     {
@@ -111,8 +111,8 @@
   {
    "id": "how",
    "start": 65.38,
-   "kicker": "How you'll learn",
-   "headline": "Learn by watching, exploring and trying.",
+   "kicker": "Two ways to learn",
+   "headline": "Learn your way",
    "style": "chips",
    "items": [
     {
@@ -141,15 +141,15 @@
   {
    "id": "pace",
    "start": 79.0,
-   "kicker": "Your pace",
-   "headline": "Take your time. Go back whenever you need to.",
+   "kicker": "No rush",
+   "headline": "Go at your own pace",
    "end": 84.18
   },
   {
    "id": "by-the-end",
    "start": 84.18,
    "kicker": "By the end",
-   "headline": "You'll feel more confident with AI.",
+   "headline": "Feel confident with AI",
    "style": "list",
    "items": [
     {
@@ -171,14 +171,14 @@
    "id": "ready",
    "start": 94.28,
    "kicker": "Ready?",
-   "headline": "So, are you ready?",
+   "headline": "Let's begin",
    "end": 96.78
   },
   {
    "id": "question",
    "start": 96.78,
    "kicker": "Lesson 1",
-   "headline": "What exactly is artificial intelligence?",
+   "headline": "What is AI?",
    "end": 102.53
   }
  ],
