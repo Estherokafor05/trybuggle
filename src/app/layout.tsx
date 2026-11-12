@@ -37,7 +37,7 @@ export default function RootLayout({
       lang="en"
       className={`${bricolage.variable} ${inter.variable} ${plexMono.variable}`}
     >
-      <body>{children}</body>
+      <body className="flex min-h-dvh flex-col">{children}</body>
     </html>
   );
 }

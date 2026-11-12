@@ -25,17 +25,16 @@ export function LessonPreview({
   const guide = exploreGuides[lesson.slug];
   return (
     <>
-      <div className="mt-8">
+      <div className="mt-6 sm:mt-8">
         <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
           Step 1 · Learn it
         </p>
-        <h2 className="mt-1 text-2xl font-bold">Choose how you want to learn</h2>
-        <p className="mt-1 text-sm text-muted">
-          Both cover the same ideas. Pick one, or switch at any time.
-        </p>
+        <h2 className="mt-1 text-xl font-bold sm:text-2xl">
+          Watch or read: both cover the same ideas
+        </h2>
       </div>
       <div
-        className="mt-4 grid gap-2 rounded-3xl border border-line bg-white p-2 sm:grid-cols-2"
+        className="mt-3 grid grid-cols-2 gap-2 rounded-3xl border border-line bg-white p-2"
         role="group"
         aria-label="Choose how to learn"
       >
@@ -56,7 +55,7 @@ export function LessonPreview({
             type="button"
             disabled={!learning.ready}
             aria-pressed={place.route === route.id}
-            className={`min-h-14 rounded-[1.25rem] px-5 py-3 text-center disabled:opacity-50 ${place.route === route.id ? "bg-navy text-white" : "hover:bg-lavender"}`}
+            className={`min-h-14 rounded-[1.25rem] px-2 py-3 text-center sm:px-5 disabled:opacity-50 ${place.route === route.id ? "bg-navy text-white" : "hover:bg-lavender"}`}
             onClick={() => update({ route: route.id })}
           >
             <span className="block font-semibold">{route.label}</span>

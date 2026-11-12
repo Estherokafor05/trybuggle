@@ -239,3 +239,9 @@ h3 {
 .wv-open-right {
   transform-origin: left;
 }
+
+/* The body is a column so the footer sits at the bottom of short pages.
+   Keep each page's centred, max-width main at full available width. */
+body > main {
+  width: 100%;
+}

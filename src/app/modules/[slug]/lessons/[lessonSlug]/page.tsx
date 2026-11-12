@@ -99,7 +99,7 @@ export default async function LessonPage({
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-[960px] px-4 py-8 sm:px-6 sm:py-12">
+      <main className="mx-auto max-w-[960px] px-4 pb-8 pt-3 sm:px-6 sm:py-12">
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
             <li>
@@ -120,7 +120,7 @@ export default async function LessonPage({
           </ol>
         </nav>
 
-        <header className="mt-3 flex items-center justify-between gap-6 rounded-[2rem] bg-hero-lavender p-6 sm:p-8">
+        <header className="mt-1 flex items-center justify-between gap-6 rounded-[1.75rem] bg-hero-lavender p-5 sm:mt-3 sm:rounded-[2rem] sm:p-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
               Foundations of Artificial Intelligence
@@ -128,10 +128,10 @@ export default async function LessonPage({
             <h1 className="mt-3 max-w-[23ch] text-[clamp(2rem,4.5vw,3.2rem)] font-bold leading-[1.08]">
               {lesson.title}
             </h1>
-            <p className="mt-3 max-w-[62ch] leading-relaxed text-ink sm:text-lg">
+            <p className="mt-2 max-w-[62ch] leading-relaxed text-ink sm:mt-3 sm:text-lg">
               {lesson.objective}
             </p>
-            <p className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy">
+            <p className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy sm:mt-4">
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 Lesson {lessonIndex + 1} of {mod.lessons.length}
               </span>
@@ -151,38 +151,9 @@ export default async function LessonPage({
           </div>
         </header>
 
-        <div className="mt-5">
+        <div className="mt-3 sm:mt-5">
           <JourneyProgress current={lessonSlug} />
         </div>
-
-        <ol
-          aria-label="How this lesson works"
-          className="mt-5 grid gap-2 text-sm sm:grid-cols-3"
-        >
-          {[
-            ["1", "Learn it", "Watch the film or read the guide"],
-            ["2", "Check it", "10 questions · pass with 7"],
-            ["3", "Move on", next ? `Then ${next.label}` : "Finish Module 1"],
-          ].map(([n, title, body]) => (
-            <li
-              key={n}
-              className="flex items-center gap-3 rounded-2xl bg-white/70 px-4 py-3"
-            >
-              <span
-                aria-hidden="true"
-                className="grid size-8 shrink-0 place-items-center rounded-full bg-lavender font-display font-bold text-navy"
-              >
-                {n}
-              </span>
-              <span>
-                <span className="block font-semibold text-ink">
-                  Step {n}: {title}
-                </span>
-                <span className="block text-muted">{body}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
 
         {session?.user && !session.user.id && (
           <p className="mt-5 rounded-2xl bg-mint p-5 leading-relaxed">
