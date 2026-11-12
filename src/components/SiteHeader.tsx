@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { signOutAction } from "@/app/actions/auth";
 
 const NAV = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
@@ -29,6 +30,23 @@ export function SiteHeader() {
   const [openOn, setOpenOn] = useState<string | null>(null);
   const open = openOn === pathname;
   const setOpen = (value: boolean) => setOpenOn(value ? pathname : null);
+  // Read the session in the browser so public pages can stay static.
+  // Re-checked on every navigation, so the header updates after signing out.
+  const [account, setAccount] = useState<{ name: string } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/auth/session", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((session) => {
+        if (alive) setAccount(session?.user ? { name: session.user.name ?? "" } : null);
+      })
+      .catch(() => {
+        if (alive) setAccount(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-20 border-b border-line/70 bg-canvas/95 backdrop-blur">
@@ -69,6 +87,18 @@ export function SiteHeader() {
           })}
         </nav>
 
+        {account && (
+          <form action={signOutAction} className="hidden md:block">
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
+            >
+              <SignOutIcon />
+              Sign out
+            </button>
+          </form>
+        )}
+
         <button
           type="button"
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender md:hidden"
@@ -108,7 +138,29 @@ export function SiteHeader() {
             );
           })}
         </ul>
+        {account && (
+          <form action={signOutAction} className="mt-3 border-t border-line/70 pt-3">
+            {account.name && (
+              <p className="px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
+            )}
+            <button
+              type="submit"
+              className="flex min-h-12 w-full items-center gap-2 rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
+            >
+              <SignOutIcon />
+              Sign out
+            </button>
+          </form>
+        )}
       </nav>
     </header>
+  );
+}
+
+function SignOutIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8" />
+    </svg>
   );
 }

@@ -158,7 +158,7 @@ export default async function ModulePage({
             </ol>
             {isFoundations && (
               <ol start={mod.lessons.length + 1} className="mt-3 grid gap-3 sm:grid-cols-2">
-                <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-hero-lavender p-5 hover:border-brand/35">
+                <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-lavender p-5 hover:border-brand/35">
                   <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
                     Then · 8 questions
                   </span>

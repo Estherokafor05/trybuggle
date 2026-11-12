@@ -771,3 +771,33 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   void id;
   await context.close();
 });
+
+test("signing out from the header ends the session on phone and desktop", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    await signIn(context);
+    const page = await context.newPage();
+    await page.goto(lesson("before-chatgpt"));
+    await expect(page.getByRole("heading", { name: "AI Did Not Start with ChatGPT", level: 1 })).toBeVisible();
+    const phone = viewport.width < 768;
+    if (phone) {
+      await page.getByRole("button", { name: "Menu" }).click();
+      await expect(page.getByText("Signed in as Test learner")).toBeVisible();
+    }
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page).toHaveURL(base + "/");
+    if (phone) await page.getByRole("button", { name: "Menu" }).click();
+    await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+    await page.goto(lesson("before-chatgpt"));
+    await expect(page).toHaveURL(/\/sign-in\?callbackUrl=/);
+    expect((await context.request.get(base + "/api/me/certificates/ai-foundations")).status()).toBe(401);
+    await context.close();
+  }
+  const guest = await browser.newPage();
+  await guest.goto("/");
+  await expect(guest.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+  await guest.close();
+});
