@@ -1,5 +1,5 @@
 // The single ordered path a new learner follows:
-// Welcome → Module 1 lessons, one after another.
+// Welcome → Module 1 lessons, one after another → final assessment.
 // Every page that is part of the path reads its position from here so the
 // "where am I / what's next" signposting stays consistent.
 import { getModule } from "./modules";
@@ -41,6 +41,15 @@ export const journey: JourneyStep[] = [
       duration: built?.duration,
     };
   }),
+  {
+    id: "final-assessment",
+    label: "Final assessment",
+    title: "Module 1 refresher",
+    href: `/modules/${foundations.slug}/final-assessment`,
+    available: true,
+    free: false,
+    duration: "8 questions",
+  },
 ];
 
 export function journeyPosition(id: string) {

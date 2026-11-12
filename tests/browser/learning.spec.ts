@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { encode } from "next-auth/jwt";
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
-import { assessmentBank } from "../../src/server/assessment-bank";
+import { assessmentBank, moduleAssessmentBank } from "../../src/server/assessment-bank";
 
 process.loadEnvFile(".env.local");
 const base = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
@@ -39,6 +39,8 @@ test.afterAll(async () => {
   const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
   try {
     await sql.begin(async (tx) => {
+      await tx`DELETE FROM certificates WHERE learner_id IN ${tx(users)}`;
+      await tx`DELETE FROM module_assessment_attempts WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM learning_checkpoints WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM assessment_attempts WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM learners WHERE id IN ${tx(users)}`;
@@ -681,4 +683,91 @@ test("Lessons 4 and 5: every activity, the previous-check notice and accessibili
       await expect(page.locator(`input[name="${q.id}"]`)).toHaveCount(q.options.length);
     await context.close();
   }
+});
+
+test("final assessment, certificate eligibility, naming and PDF download", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const id = await signIn(context);
+  const page = await context.newPage();
+  const final = moduleAssessmentBank["ai-foundations"];
+  expect(final).toHaveLength(8);
+
+  // Fail with 5 of 8, then pass with 6 of 8.
+  await page.goto("/modules/ai-foundations/final-assessment");
+  await expect(page.getByRole("heading", { name: "Final assessment", level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Open the final assessment" }).click();
+  const answer = async (correct: number) => {
+    for (const [i, q] of final.entries())
+      await page.locator(`input[name="${q.id}"][value="${i < correct ? q.correct : q.options.find((o) => o.id !== q.correct)!.id}"]`).check();
+    await page.getByRole("button", { name: "Submit final assessment" }).click();
+  };
+  await answer(5);
+  await expect(page.getByText("5 of 8 correct")).toBeVisible();
+  await expect(page.getByText("Review the feedback and try again")).toBeVisible();
+  await page.getByRole("button", { name: "Retry this assessment" }).click();
+  await answer(6);
+  await expect(page.getByText("Final assessment passed")).toBeVisible();
+  await expect(page.getByText("6 of 8 correct")).toBeVisible();
+  await page.waitForTimeout(800);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // Not eligible yet: no lesson checks passed, and the server refuses to issue.
+  await page.goto("/modules/ai-foundations/certificate");
+  await expect(page.getByText("You're nearly there.")).toBeVisible();
+  await expect(page.getByText("1 of 6 done")).toBeVisible();
+  const refused = await context.request.post(base + "/api/me/certificates/ai-foundations", {
+    headers: { Origin: base },
+    data: { name: "Test learner" },
+  });
+  expect(refused.status()).toBe(403);
+
+  // Pass every lesson check through the official API.
+  for (const slug of ["what-counts-as-ai", "ai-in-your-day", "before-chatgpt", "ai-or-software", "what-ai-can-do"]) {
+    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
+    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
+      headers: { Origin: base },
+      data: { version: 1, submissionKey: randomUUID(), answers },
+    });
+    expect(response.status()).toBe(200);
+  }
+
+  // Eligible: the name starts as the profile name and can be changed before creating.
+  await page.reload();
+  await expect(page.getByText("6 of 6 done")).toBeVisible();
+  const nameField = page.getByLabel("Name on your certificate");
+  await expect(nameField).toHaveValue("Test learner");
+  await nameField.fill("Ada Testwoman");
+  await page.getByRole("button", { name: "Create my certificate" }).click();
+  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
+  await expect(page.getByText("Ada Testwoman")).toBeVisible();
+  const code = (await page.locator("dd.font-mono").textContent())!;
+  expect(code).toMatch(/^BL-M1-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
+
+  // Edit the name: ID stays the same.
+  await page.getByRole("button", { name: "Edit name" }).click();
+  await page.getByLabel("Name on your certificate").fill("Ada T. Learner");
+  await page.getByRole("button", { name: "Save name" }).click();
+  await expect(page.getByText(/Name updated/)).toBeVisible();
+  await expect(page.locator("dd.font-mono")).toHaveText(code);
+  expect(
+    (await (await context.request.post(base + "/api/me/certificates/ai-foundations", { headers: { Origin: base }, data: { name: "Someone Else" } })).json())
+      .certificate.code,
+  ).toBe(code);
+
+  // The PDF downloads for the owner only.
+  const pdf = await context.request.get(base + "/api/me/certificates/ai-foundations/pdf");
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toBe("application/pdf");
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  const other = await browser.newContext();
+  await signIn(other);
+  expect((await other.request.get(base + "/api/me/certificates/ai-foundations/pdf")).status()).toBe(404);
+  expect((await (await other.request.get(base + "/api/me/certificates/ai-foundations")).json()).certificate).toBeNull();
+  await other.close();
+
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.waitForTimeout(800);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  void id;
+  await context.close();
 });

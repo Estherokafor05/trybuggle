@@ -34,7 +34,7 @@ export function JourneyProgress({ current }: { current?: string }) {
                   ? "border-2 border-brand bg-white text-navy"
                   : "border-2 border-dashed border-line bg-white text-muted"
           }`;
-          const symbol = i === 0 ? "★" : String(i);
+          const symbol = i === 0 ? "★" : step.id === "final-assessment" ? "⚑" : String(i);
           const label = (
             <span
               className={`mt-1.5 block text-center text-[11px] leading-tight sm:text-xs ${
