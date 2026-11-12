@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
 import { TRACK_LABELS, getModule, modules } from "@/content/modules";
+import { getBuiltLesson } from "@/content/preview-lessons";
 import { auth } from "@/auth";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 
@@ -111,13 +112,14 @@ export default async function ModulePage({
             {session?.user && isFoundations && (
               <p className="mb-4 rounded-2xl bg-mint p-4 text-sm leading-relaxed text-ink">
                 You&apos;re signed in, so your progress and knowledge check
-                results are saved. Lessons 3 to 5 are coming soon.
+                results are saved. Lessons 4 and 5 are coming soon.
               </p>
             )}
             <ol className="grid gap-3 sm:grid-cols-2">
               {mod.lessons.map((lesson, index) => {
-                const preview = isFoundations && index < 2;
-                const tone = index === 0 ? "bg-lavender" : "bg-peach";
+                const built = isFoundations ? getBuiltLesson(lesson.slug) : undefined;
+                const preview = Boolean(built);
+                const tone = ["bg-lavender", "bg-peach", "bg-mint"][index % 3];
 
                 return (
                   <li
@@ -129,7 +131,7 @@ export default async function ModulePage({
                         {mod.order}.{index + 1}
                       </span>
                       <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                        {preview ? "Free" : "Coming soon"}
+                        {!built ? "Coming soon" : built.preview ? "Free" : "Free account"}
                       </span>
                     </div>
                     <h3 className="mt-4 text-lg font-bold text-ink">

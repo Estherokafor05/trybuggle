@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getModule } from "@/content/modules";
 import { journeyPosition } from "@/content/journey";
-import { getPreviewLesson } from "@/content/preview-lessons";
+import { getBuiltLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 
 export async function generateMetadata({
@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { slug, lessonSlug } = await params;
   const mod = getModule(slug);
   const lessonMeta = mod?.lessons.find((item) => item.slug === lessonSlug);
-  const lesson = getPreviewLesson(lessonSlug);
+  const lesson = getBuiltLesson(lessonSlug);
   if (!mod || !lessonMeta || slug !== "ai-foundations") {
     return { title: "Lesson not found | Buggle Learn" };
   }
@@ -38,12 +38,17 @@ export default async function LessonPage({
   const { slug, lessonSlug } = await params;
   const mod = getModule(slug);
   const lessonMeta = mod?.lessons.find((item) => item.slug === lessonSlug);
-  const lesson = getPreviewLesson(lessonSlug);
+  const lesson = getBuiltLesson(lessonSlug);
   if (!mod || !lessonMeta || slug !== "ai-foundations") notFound();
 
   const lessonIndex = mod.lessons.findIndex((item) => item.slug === lessonSlug);
   if (lessonIndex < 0) notFound();
   const session = googleAuthConfigured ? await auth() : null;
+  const returnTo = `/modules/${slug}/lessons/${lessonSlug}`;
+
+  if (lesson && !lesson.preview && !session?.user) {
+    redirect(`/sign-in?callbackUrl=${encodeURIComponent(googleAuthConfigured ? returnTo : `/modules/${slug}`)}`);
+  }
 
   if (!lesson) {
     if (!googleAuthConfigured) {
@@ -51,9 +56,7 @@ export default async function LessonPage({
         `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`,
       );
     }
-    const session = await auth();
     if (!session?.user) {
-      const returnTo = `/modules/${slug}/lessons/${lessonSlug}`;
       redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
     }
     return (
@@ -68,7 +71,7 @@ export default async function LessonPage({
               This lesson is being prepared
             </h1>
             <p className="mt-4 leading-relaxed text-ink">
-              You can revisit the first two lessons from the Module 1 overview.
+              You can revisit the earlier lessons from the Module 1 overview.
             </p>
             <Link
               href={`/modules/${slug}`}
@@ -92,9 +95,14 @@ export default async function LessonPage({
         label: next.label,
         title: next.title,
         available: next.available,
+        ...(next.free || session?.user
+          ? {}
+          : { href: `/sign-in?callbackUrl=${encodeURIComponent(next.href)}` }),
       }
     : undefined;
-  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}`)}`;
+  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`;
+  // Guests who reach the end of a free lesson sign in on their way to the next one.
+  const nextNeedsSignIn = Boolean(next?.available && !next.free && !session?.user);
 
   return (
     <>
@@ -138,9 +146,11 @@ export default async function LessonPage({
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 About {lesson.duration}
               </span>
-              <span className="rounded-full bg-mint px-3 py-1.5">
-                Free preview
-              </span>
+              {lesson.preview && (
+                <span className="rounded-full bg-mint px-3 py-1.5">
+                  Free preview
+                </span>
+              )}
             </p>
           </div>
           <div
@@ -186,7 +196,24 @@ export default async function LessonPage({
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
             Step 3 · Move on
           </p>
-          {next?.available ? (
+          {next?.available && nextNeedsSignIn ? (
+            <>
+              <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
+                Up next: {next.label}, {next.title}
+              </h2>
+              <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
+                The first two lessons are free to preview. Sign in with Google
+                to continue with {next.label}. It&apos;s free, and your
+                progress and knowledge check results are saved.
+              </p>
+              <Link
+                href={`/sign-in?callbackUrl=${encodeURIComponent(next.href)}`}
+                className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Continue with Google
+              </Link>
+            </>
+          ) : next?.available ? (
             <>
               <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
                 Up next: {next.label}, {next.title}

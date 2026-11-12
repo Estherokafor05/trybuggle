@@ -12,11 +12,11 @@ import { Animal, RouteMap, TaskIcon } from "./Illustrations";
 export const activityButton =
   "min-h-11 rounded-xl border border-line bg-white px-4 py-3 text-left font-semibold hover:bg-lavender focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
 const button = activityButton;
-const primary =
+export const primaryButton =
   "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-3 font-semibold text-white hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep disabled:opacity-40";
 
-type Change = (value: ActivityState) => void;
-type Props = {
+export type Change = (value: ActivityState) => void;
+export type Props = {
   id: string;
   state: ActivityState;
   all: Record<string, ActivityState>;
@@ -36,7 +36,7 @@ function subscribeMotion(callback: () => void) {
   query.addEventListener("change", callback);
   return () => query.removeEventListener("change", callback);
 }
-function useReducedMotion() {
+export function useReducedMotion() {
   return useSyncExternalStore(
     subscribeMotion,
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -91,19 +91,27 @@ function MayaFace() {
   );
 }
 
-function Story({ children }: { children: ReactNode }) {
+export function Story({
+  children,
+  who = "Maya",
+  face = <MayaFace />,
+}: {
+  children: ReactNode;
+  who?: string;
+  face?: ReactNode;
+}) {
   return (
     <div className="rounded-2xl bg-canvas p-5">
       <p className="flex items-center gap-3 font-semibold">
-        <MayaFace />
-        Maya&apos;s story
+        {face}
+        {who}&apos;s story
       </p>
       <div className="mt-3 space-y-2 text-lg leading-relaxed">{children}</div>
     </div>
   );
 }
 
-function Idea({
+export function Idea({
   title = "New idea",
   children,
 }: {
@@ -126,7 +134,7 @@ function Idea({
   );
 }
 
-function Instruction({ children }: { children: ReactNode }) {
+export function Instruction({ children }: { children: ReactNode }) {
   return (
     <p className="mt-6 flex items-center gap-2 font-semibold text-navy">
       <span
@@ -140,7 +148,7 @@ function Instruction({ children }: { children: ReactNode }) {
   );
 }
 
-function Feedback({
+export function Feedback({
   tone = "info",
   title,
   children,
@@ -169,9 +177,9 @@ function Feedback({
   );
 }
 
-type Option = { id: string; text: string; correct?: boolean; feedback: string };
+export type Option = { id: string; text: string; correct?: boolean; feedback: string };
 
-function Choice({
+export function Choice({
   name,
   question,
   options,
@@ -223,10 +231,10 @@ function Choice({
   );
 }
 
-function answer(state: ActivityState, key: string) {
+export function answer(state: ActivityState, key: string) {
   return state.matches?.[key];
 }
-function withAnswer(state: ActivityState, key: string, value: string) {
+export function withAnswer(state: ActivityState, key: string, value: string) {
   return { ...state, matches: { ...state.matches, [key]: value } };
 }
 function correctAnswer(options: Option[], value?: string) {
@@ -499,7 +507,7 @@ function Automatic({
           {stage >= 1 ? (
             <p className="text-xl font-bold text-teal">⏰ Ring ring! Time&apos;s up.</p>
           ) : (
-            <button type="button" className={primary} onClick={startTimer}>
+            <button type="button" className={primaryButton} onClick={startTimer}>
               ▶ Start the timer
             </button>
           )}
@@ -534,7 +542,7 @@ function Automatic({
             {stage < 3 && speech.phase === 0 ? (
               <button
                 type="button"
-                className={primary}
+                className={primaryButton}
                 onClick={() => {
                   change({ ...state, stage: 2 });
                   speech.play();
@@ -642,7 +650,7 @@ function Learn({ state, change }: { state: ActivityState; change: Change }) {
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-4">
           {!trained && training.phase === 0 && (
-            <button type="button" className={primary} onClick={training.play}>
+            <button type="button" className={primaryButton} onClick={training.play}>
               Train the computer with these examples
             </button>
           )}
@@ -793,7 +801,7 @@ function Request({ state, change }: { state: ActivityState; change: Change }) {
       {stage === 0 && (
         <button
           type="button"
-          className={`${primary} mt-5`}
+          className={`${primaryButton} mt-5`}
           onClick={() => {
             setTried(true);
             if (ready && !hasPrivate) change({ ...state, stage: 1 });
@@ -976,7 +984,7 @@ function Investigate({
       {checked.length === 4 && !fixed && (
         <button
           type="button"
-          className={`${primary} mt-5`}
+          className={`${primaryButton} mt-5`}
           onClick={() => change({ ...state, revised: true })}
         >
           ✏️ Fix the draft: change the day and remove the parking claim
@@ -1515,7 +1523,7 @@ function PlaceActivity({
               </div>
               <div>
                 {shownPhase === 0 ? (
-                  <button type="button" className={`${primary} w-full justify-center py-8`} onClick={anim.play}>
+                  <button type="button" className={`${primaryButton} w-full justify-center py-8`} onClick={anim.play}>
                     ▶ Watch it work
                   </button>
                 ) : (
@@ -1781,6 +1789,14 @@ function Note({ name, label }: { name: string; label: string }) {
     </label>
   );
 }
+const exampleAnswers: Record<string, string> = {
+  "what-counts-as-ai":
+    "AI is a name for computer systems that can recognise patterns, make predictions or create things like text. A writing tool could help me start an email. Before sending it, I would check the dates and names against my own notes.",
+  "ai-in-your-day":
+    "My music app suggests songs. It uses what I've listened to before. It gives me a playlist. Before playing it at a club event, I would listen to check the songs suit the audience.",
+  "before-chatgpt":
+    "AI didn't start with ChatGPT because people have been building and studying it since the 1950s. My email's spam filter is an older AI tool I've used without noticing. What surprised me most was that the name artificial intelligence is about seventy years old.",
+};
 export function Reflection({
   prompts,
   slug,
@@ -1803,9 +1819,7 @@ export function Reflection({
           See an example answer
         </summary>
         <p className="mt-2 leading-relaxed">
-          {slug === "what-counts-as-ai"
-            ? "AI is a name for computer systems that can recognise patterns, make predictions or create things like text. A writing tool could help me start an email. Before sending it, I would check the dates and names against my own notes."
-            : "My music app suggests songs. It uses what I've listened to before. It gives me a playlist. Before playing it at a club event, I would listen to check the songs suit the audience."}
+          {exampleAnswers[slug] ?? exampleAnswers["ai-in-your-day"]}
         </p>
       </details>
     </div>

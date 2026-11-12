@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS learning_lessons (
 );
 INSERT INTO learning_lessons(slug,title) VALUES
  ('what-counts-as-ai','What is AI?'),
- ('ai-in-your-day','AI Is Already in Your Day')
+ ('ai-in-your-day','AI Is Already in Your Day'),
+ ('before-chatgpt','AI Did Not Start with ChatGPT')
 ON CONFLICT(slug) DO UPDATE SET title=EXCLUDED.title;
 CREATE TABLE IF NOT EXISTS learning_checkpoints (
  learner_id text NOT NULL REFERENCES learners(id),

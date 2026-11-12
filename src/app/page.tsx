@@ -109,10 +109,11 @@ export default function Home() {
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted">
               Follow these steps in order. No account is needed for the
-              welcome and the first two lessons.
+              welcome and the first two lessons. Lesson 3 onwards needs a
+              free Google sign-in.
             </p>
           </div>
-          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {startSteps.map((step, index) => (
               <li key={step.id}>
                 <Link
@@ -129,7 +130,7 @@ export default function Home() {
                       {index + 1}
                     </span>
                     <span className="text-xs font-semibold text-muted">
-                      {step.duration}
+                      {step.free ? step.duration : "Free account"}
                     </span>
                   </span>
                   <span className="mt-4 block text-xs font-semibold uppercase tracking-[0.08em] text-brand-deep">
@@ -162,7 +163,7 @@ export default function Home() {
                   The rest of Module 1
                 </span>
                 <span className="mt-1 block text-sm text-muted">
-                  {comingSoon} more lessons are coming soon.
+                  {comingSoon} more {comingSoon === 1 ? "lesson is" : "lessons are"} coming soon.
                 </span>
                 <span className="mt-auto flex items-center gap-2 pt-4 text-sm font-semibold text-navy">
                   See all Module 1 lessons <Arrow />

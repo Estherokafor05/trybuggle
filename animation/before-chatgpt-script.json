@@ -1,0 +1,99 @@
+{
+  "voice": "User's ElevenLabs voice (ELEVENLABS_VOICE_ID), generated 12 November 2026 from the approved script",
+  "scenes": [
+    {
+      "id": "surprise",
+      "title": "The surprise",
+      "description": "At a pharmacy team meeting, Sarah's manager says AI has been around for decades. Sarah is surprised: she thought it started with ChatGPT. A clock spins backwards to begin the journey.",
+      "lines": [
+        "This is Sarah.",
+        "She works as a pharmacist.",
+        "At this morning’s team meeting, her manager said that AI has been around for decades.",
+        "Sarah was surprised.",
+        "Didn’t all of this start with ChatGPT?",
+        "Like many people, Sarah first heard about AI when chat tools appeared in the news.",
+        "So let’s travel back in time and see where the story really begins."
+      ]
+    },
+    {
+      "id": "early-questions",
+      "title": "The early questions",
+      "description": "A room-sized 1950s computer. Alan Turing's 1950 question about whether machines could think, shown as a chat between a person and a hidden machine. The 1956 Dartmouth summer workshop gives the field its name.",
+      "lines": [
+        "In the 1950s, computers filled whole rooms and cost a fortune.",
+        "Most were used for calculations.",
+        "But some researchers began asking a bigger question: could a computer do things we normally link with human intelligence, like solving problems or using language?",
+        "In 1950, the mathematician Alan Turing wrote about this question.",
+        "He suggested a test: if you chatted with a machine and couldn’t tell it apart from a person, what would that tell us?",
+        "Then, in 1956, researchers gathered for a summer workshop at Dartmouth College in the United States.",
+        "It was called the Dartmouth Summer Research Project on Artificial Intelligence, and the name stuck.",
+        "So the term “artificial intelligence” is about seventy years old."
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Teaching computers rules",
+      "description": "An expert's knowledge becomes if-then rules. A printer help checklist works step by step until it meets a problem with no rule. A cold, quiet lab shows an AI winter.",
+      "lines": [
+        "For many years, a popular approach was to give computers rules.",
+        "Researchers sat with experts, like doctors or engineers, and wrote down how they made decisions.",
+        "Then they turned that knowledge into long lists of “if this, then that” rules.",
+        "Imagine a help system for a broken printer.",
+        "It asks: is the printer switched on?",
+        "If not, switch it on.",
+        "If it is, is there paper in the tray?",
+        "If not, add paper.",
+        "Systems like this, often called expert systems, could be useful for narrow jobs.",
+        "But they were also fragile.",
+        "Every rule had to be written by hand, the lists grew huge and hard to update, and when something happened that nobody had written a rule for, the system got stuck.",
+        "When results fell short of big promises, interest and funding dropped for a while.",
+        "People later called these quiet periods “AI winters”.",
+        "But the research carried on."
+      ]
+    },
+    {
+      "id": "new-challenges",
+      "title": "Machines take on new challenges",
+      "description": "In 1997 Deep Blue beats Garry Kasparov at chess by searching through moves. Later, machine learning finds patterns in many examples, helping with images, speech and predictions.",
+      "lines": [
+        "In 1997, a computer called Deep Blue, built by IBM, beat the world chess champion, Garry Kasparov.",
+        "Deep Blue didn’t learn chess the way a person does.",
+        "It checked millions of possible moves every second, guided by rules and scoring that people had written.",
+        "Over the following years, a different approach grew: machine learning.",
+        "Instead of writing every rule by hand, people gave computers lots of examples and let them find patterns, like the idea you met in Lesson 1.",
+        "Machine learning helped computers get much better at recognising images, recognising speech and making predictions.",
+        "That’s how AI found its way into everyday tools."
+      ]
+    },
+    {
+      "id": "chatgpt",
+      "title": "Then came ChatGPT",
+      "description": "Everyday tools from Lesson 2 already use AI: spam filters, photo search and route suggestions. In November 2022 a chat window appears, and anyone can type a question and get a written reply.",
+      "lines": [
+        "By the 2010s, AI was already part of daily life.",
+        "Remember Maya’s day in Lesson 2?",
+        "Spam filters, photo search and route suggestions were already using it, often without anyone noticing.",
+        "Then, in November 2022, a company called OpenAI released ChatGPT, and similar tools from other companies soon followed.",
+        "For the first time, almost anyone could type a question in plain words and get a written reply on almost any topic.",
+        "People could talk to AI directly.",
+        "AI wasn’t new.",
+        "What changed was how visible and easy to use it became."
+      ]
+    },
+    {
+      "id": "bigger-picture",
+      "title": "The bigger picture",
+      "description": "A timeline gathers every milestone from 1950 to 2022. Back at the pharmacy, Sarah smiles. The next lesson, AI or ordinary software, is introduced.",
+      "lines": [
+        "So, did AI start with ChatGPT?",
+        "No.",
+        "It grew from decades of work: big questions in the 1950s, rule-based systems, quiet periods when progress stalled, and the rise of machine learning.",
+        "ChatGPT is one recent chapter in a much longer story.",
+        "Back at work, Sarah smiles.",
+        "AI has been around for decades.",
+        "It just became much easier to see.",
+        "Next, we’ll look at how to tell AI apart from ordinary software."
+      ]
+    }
+  ]
+}

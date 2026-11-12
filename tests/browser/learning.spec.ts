@@ -472,3 +472,111 @@ test("an interrupted account save resumes from the device and retries safely", a
   ).json();
   expect(saved.checkpoint.step).toBe(1);
 });
+
+test("Lesson 3 needs sign-in, then both routes, every activity and the check work", async ({
+  browser,
+}) => {
+  const guest = await browser.newContext();
+  const guestPage = await guest.newPage();
+  await guestPage.goto(lesson("before-chatgpt"));
+  await expect(guestPage).toHaveURL(/\/sign-in\?callbackUrl=/);
+  await guestPage.goto(lesson("before-chatgpt") + "/reading");
+  await expect(guestPage).toHaveURL(/\/sign-in\?callbackUrl=/);
+  await guestPage.goto(lesson("ai-in-your-day"));
+  await expect(
+    guestPage.getByRole("heading", { name: /Up next: Lesson 3/ }),
+  ).toBeVisible();
+  await expect(
+    guestPage.getByRole("link", { name: "Continue with Google" }).first(),
+  ).toHaveAttribute("href", /callbackUrl=%2Fmodules%2Fai-foundations%2Flessons%2Fbefore-chatgpt/);
+  await guest.close();
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    await signIn(context);
+    const page = await context.newPage();
+    await page.goto(lesson("before-chatgpt"));
+    await expect(
+      page.getByRole("heading", { name: "AI Did Not Start with ChatGPT", level: 1 }),
+    ).toBeVisible();
+    await expect(page.getByText("Free preview")).toHaveCount(0);
+    const video = page.locator("video");
+    await expect(video).toHaveAttribute("src", /before-chatgpt\/story/);
+    await expect
+      .poll(() => video.evaluate((v: HTMLVideoElement) => v.duration), { timeout: 15000 })
+      .toBeGreaterThan(250);
+
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    // 1950: Turing's game
+    await page.getByRole("button", { name: /Partner A/ }).click();
+    await expect(page.getByText("You can't be sure, and that's the point")).toBeVisible();
+    await page.getByLabel(/Whether machines could show intelligent behaviour/).check();
+    await expect(page.getByText("You got it!")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    // 1956: the name
+    await page.getByLabel("Artificial intelligence").check();
+    await expect(page.getByText("Older than you might think")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    // Rules: a wrong path offers a restart, the right one gets stuck
+    await page.getByRole("button", { name: "No", exact: true }).click();
+    await expect(page.getByText("Good advice, wrong printer")).toBeVisible();
+    await page.getByRole("button", { name: "Start again" }).click();
+    for (const reply of ["Yes", "Yes", "No"])
+      await page.getByRole("button", { name: reply, exact: true }).click();
+    await expect(page.getByText("Sorry, I don't have a rule for this problem.")).toBeVisible();
+    await page.getByLabel("Nobody had written a rule for this problem").check();
+    await expect(page.getByText("AI winters", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    // Sorting
+    const kinds = ["Rules and searching", "Learning from examples", "Rules and searching", "Learning from examples"];
+    const groups = page.locator("fieldset");
+    for (const [i, kind] of kinds.entries())
+      await groups.nth(i).getByLabel(kind).check();
+    await expect(page.getByText("All four sorted!")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    // Ordering, with one early mistake
+    await page.getByRole("button", { name: "ChatGPT lets almost anyone chat with AI" }).click();
+    await expect(page.getByText("↺ Not yet")).toBeVisible();
+    for (const text of [
+      "Turing asks whether machines can think",
+      "A Dartmouth workshop names the field",
+      "Rule-based expert systems spread",
+      "Deep Blue beats Kasparov at chess",
+      "Machine learning powers everyday tools",
+      "ChatGPT lets almost anyone chat with AI",
+    ])
+      await page.getByRole("button", { name: text }).click();
+    await expect(page.getByText("The story is in order")).toBeVisible();
+    await page.getByLabel(/Almost anyone could type a question/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    // Back to today
+    await page.getByLabel(/People have worked on AI since the 1950s/).check();
+    await expect(page.getByText("You got it!")).toBeVisible();
+
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+    await page.waitForTimeout(900);
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+
+    await page.getByRole("link", { name: "Take the knowledge check →" }).click();
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["before-chatgpt"];
+    expect(questions).toHaveLength(10);
+    for (const q of questions)
+      await expect(page.locator(`input[name="${q.id}"]`)).toHaveCount(q.options.length);
+    await context.close();
+  }
+
+  const reader = await browser.newContext();
+  await signIn(reader);
+  const readingPage = await reader.newPage();
+  await readingPage.goto(lesson("before-chatgpt") + "/reading");
+  await expect(readingPage.getByRole("heading", { name: "The AI Time Machine" })).toBeVisible();
+  await expect(readingPage.getByRole("heading", { level: 2 })).toHaveCount(7);
+  await reader.close();
+});

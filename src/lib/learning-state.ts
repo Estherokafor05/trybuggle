@@ -53,6 +53,14 @@ const ids: Record<string, string[]> = {
     "shopping",
     "day-reflect",
   ],
+  "before-chatgpt": [
+    "time-1950",
+    "time-1956",
+    "time-rules",
+    "time-1997",
+    "time-2022",
+    "time-reflect",
+  ],
 };
 // Step ids from earlier guide versions. Saved places that mention them are
 // still accepted; the retired entries are dropped instead of rejecting the
@@ -60,6 +68,13 @@ const ids: Record<string, string[]> = {
 const retired: Record<string, string[]> = {
   "what-counts-as-ai": ["match", "repair"],
   "ai-in-your-day": ["messages", "tasks"],
+  "before-chatgpt": [],
+};
+/** Longest film in seconds, so a saved video position can be validated. */
+const filmLength: Record<string, number> = {
+  "what-counts-as-ai": 242,
+  "ai-in-your-day": 193,
+  "before-chatgpt": 258,
 };
 export function parseCheckpoint(
   value: unknown,
@@ -99,7 +114,7 @@ export function parseCheckpoint(
     typeof v.videoTime !== "number" ||
     !Number.isFinite(v.videoTime) ||
     v.videoTime < 0 ||
-    v.videoTime > (slug === "ai-in-your-day" ? 193 : 242)
+    v.videoTime > filmLength[slug]
   )
     return null;
   const known = (x: unknown) =>
