@@ -1,0 +1,292 @@
+{
+ "voice": "User-supplied ElevenLabs recording, 12 November 2026",
+ "duration": 102.53,
+ "scenes": [
+  {
+   "id": "hello",
+   "start": 0,
+   "kicker": "Hello",
+   "headline": "Welcome to Buggle Learn.",
+   "end": 5.26
+  },
+  {
+   "id": "heard",
+   "start": 5.26,
+   "kicker": "Everyone's talking about AI",
+   "headline": "You've probably heard about it already.",
+   "style": "chips",
+   "items": [
+    {
+     "text": "At work",
+     "at": 13.8
+    },
+    {
+     "text": "On the news",
+     "at": 15.32
+    },
+    {
+     "text": "Someone using ChatGPT",
+     "at": 17.3
+    }
+   ],
+   "end": 21.52
+  },
+  {
+   "id": "where",
+   "start": 21.52,
+   "kicker": "So much information",
+   "headline": "It can be hard to know where to start.",
+   "end": 27.2
+  },
+  {
+   "id": "why",
+   "start": 27.2,
+   "kicker": "Why we made Buggle",
+   "headline": "Understanding AI shouldn't be reserved for people in tech.",
+   "style": "chips",
+   "items": [
+    {
+     "text": "It's for everyone",
+     "at": 37.14
+    }
+   ],
+   "end": 40.74
+  },
+  {
+   "id": "for-you",
+   "start": 40.74,
+   "kicker": "There's something here for you",
+   "headline": "Whoever you are.",
+   "style": "chips",
+   "items": [
+    {
+     "text": "Teacher",
+     "at": 41.92
+    },
+    {
+     "text": "Nurse",
+     "at": 42.86
+    },
+    {
+     "text": "Student",
+     "at": 43.74
+    },
+    {
+     "text": "Business owner",
+     "at": 44.9
+    },
+    {
+     "text": "Simply curious",
+     "at": 46.1
+    }
+   ],
+   "end": 50.14
+  },
+  {
+   "id": "basics",
+   "start": 50.14,
+   "kicker": "We'll start with the basics",
+   "headline": "Four simple questions.",
+   "style": "list",
+   "items": [
+    {
+     "text": "What exactly is AI?",
+     "at": 52.34
+    },
+    {
+     "text": "How does it work?",
+     "at": 54.44
+    },
+    {
+     "text": "Where do we come across it?",
+     "at": 55.94
+    },
+    {
+     "text": "How can we use it helpfully, safely and responsibly?",
+     "at": 58.68
+    }
+   ],
+   "end": 65.38
+  },
+  {
+   "id": "how",
+   "start": 65.38,
+   "kicker": "How you'll learn",
+   "headline": "Learn by watching, exploring and trying.",
+   "style": "chips",
+   "items": [
+    {
+     "text": "Animated stories",
+     "at": 66.84
+    },
+    {
+     "text": "Real-life situations",
+     "at": 68.5
+    },
+    {
+     "text": "Simple activities",
+     "at": 70.82
+    },
+    {
+     "text": "Watch & Listen",
+     "at": 75.02
+    },
+    {
+     "text": "Interactive guides",
+     "at": 77.24
+    }
+   ],
+   "end": 79.0
+  },
+  {
+   "id": "pace",
+   "start": 79.0,
+   "kicker": "Your pace",
+   "headline": "Take your time. Go back whenever you need to.",
+   "end": 84.18
+  },
+  {
+   "id": "by-the-end",
+   "start": 84.18,
+   "kicker": "By the end",
+   "headline": "You'll feel more confident with AI.",
+   "style": "list",
+   "items": [
+    {
+     "text": "Understanding what AI is",
+     "at": 86.68
+    },
+    {
+     "text": "Knowing what it can and cannot do",
+     "at": 88.34
+    },
+    {
+     "text": "Knowing when to check what it tells you",
+     "at": 91.3
+    }
+   ],
+   "end": 94.28
+  },
+  {
+   "id": "ready",
+   "start": 94.28,
+   "kicker": "Ready?",
+   "headline": "So, are you ready?",
+   "end": 96.78
+  },
+  {
+   "id": "question",
+   "start": 96.78,
+   "kicker": "Lesson 1",
+   "headline": "What exactly is artificial intelligence?",
+   "end": 102.53
+  }
+ ],
+ "cues": [
+  {
+   "text": "Hello, and welcome to Buggle Learn!",
+   "start": 0.0,
+   "end": 2.46
+  },
+  {
+   "text": "I'm really glad you're here.",
+   "start": 3.04,
+   "end": 4.54
+  },
+  {
+   "text": "Now, you've probably heard people talking about artificial intelligence, or AI, as it's commonly called.",
+   "start": 5.26,
+   "end": 11.86
+  },
+  {
+   "text": "Maybe you've heard about it at work, seen it on the news, or watched someone use ChatGPT and wondered what all the excitement is about.",
+   "start": 12.46,
+   "end": 20.8
+  },
+  {
+   "text": "And with so much information out there, it can sometimes be difficult to know where to start.",
+   "start": 21.52,
+   "end": 26.34
+  },
+  {
+   "text": "Well, that's exactly why we created Buggle Learn.",
+   "start": 27.2,
+   "end": 30.74
+  },
+  {
+   "text": "We believe understanding AI shouldn't be something reserved for people who work in technology.",
+   "start": 31.52,
+   "end": 36.6
+  },
+  {
+   "text": "It's something everyone should have the opportunity to learn.",
+   "start": 37.14,
+   "end": 40.14
+  },
+  {
+   "text": "So whether you're a teacher, a nurse, a student, a business owner, or simply someone who's curious, there's something here for you.",
+   "start": 40.74,
+   "end": 49.48
+  },
+  {
+   "text": "We'll start with the basics.",
+   "start": 50.14,
+   "end": 51.5
+  },
+  {
+   "text": "What exactly is AI?",
+   "start": 52.34,
+   "end": 53.78
+  },
+  {
+   "text": "How does it work?",
+   "start": 54.44,
+   "end": 55.24
+  },
+  {
+   "text": "Where do we come across it in everyday life?",
+   "start": 55.94,
+   "end": 58.0
+  },
+  {
+   "text": "And most importantly, how can we use it in ways that are helpful, safe, and responsible?",
+   "start": 58.68,
+   "end": 64.4
+  },
+  {
+   "text": "Along the way, you'll watch animated stories, explore real-life situations, and try simple activities that help everything make sense.",
+   "start": 65.38,
+   "end": 73.92
+  },
+  {
+   "text": "You can watch and listen, or learn through our interactive guides.",
+   "start": 74.64,
+   "end": 78.18
+  },
+  {
+   "text": "Take your time, go back whenever you need to, and learn at your own pace.",
+   "start": 79.0,
+   "end": 83.54
+  },
+  {
+   "text": "By the end, we hope you'll feel more confident understanding AI, recognising what it can and cannot do, and knowing when to check the information it gives you.",
+   "start": 84.18,
+   "end": 93.84
+  },
+  {
+   "text": "So, are you ready?",
+   "start": 94.28,
+   "end": 95.92
+  },
+  {
+   "text": "Let's start with a simple question.",
+   "start": 96.78,
+   "end": 98.7
+  },
+  {
+   "text": "What exactly is artificial intelligence?",
+   "start": 99.46,
+   "end": 101.96
+  }
+ ]
+}

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomeIntro } from "@/components/welcome/WelcomeIntro";
-import { welcomeScenes } from "@/content/welcome";
+import { welcome } from "@/content/welcome";
 
 export const metadata: Metadata = {
   title: "Welcome | Buggle Learn",
   description:
-    "A short welcome to Buggle Learn: AI in plain language, with no technical experience needed.",
+    "A short narrated welcome to Buggle Learn: AI in plain language, with no technical experience needed.",
 };
 
 export default function WelcomePage() {
@@ -21,8 +21,13 @@ export default function WelcomePage() {
             Read the whole welcome
           </summary>
           <div className="mt-3 space-y-3 leading-relaxed">
-            {welcomeScenes.map((scene) => (
-              <p key={scene.id}>{scene.text}</p>
+            {welcome.scenes.map((scene) => (
+              <p key={scene.id}>
+                {welcome.cues
+                  .filter((c) => c.start >= scene.start && c.start < scene.end)
+                  .map((c) => c.text)
+                  .join(" ")}
+              </p>
             ))}
           </div>
         </details>

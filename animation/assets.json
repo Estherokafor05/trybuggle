@@ -36,5 +36,10 @@
     "path": "public/lessons/what-is-ai/kitchen.png",
     "provenance": "Original background generated with the built-in image generation tool, 12 November 2026.",
     "prompt": "Warm editorial 2D home kitchen, ivory, sage, teal and navy. Clear foreground for animated Maya, timer and phone. No people, text or logos."
+  },
+  "welcomeNarration": {
+    "path": "public/lessons/welcome/narration.mp3",
+    "provenance": "User-supplied ElevenLabs recording, 12 November 2026 at 02:29:35. Voice recording unchanged. Captions and scene timings aligned to the spoken words with a local transcription.",
+    "sha256": "ae97441304bff76fe156d5cef58aba049d83489524f42fc0d950527a909644b5"
   }
 }
