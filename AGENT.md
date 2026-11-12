@@ -48,10 +48,12 @@ If requirements are missing, ambiguous, or contradictory:
 
 ### Narration production rule
 
-- Before producing any new lesson film, present its narration script for review and request the user's narration recording. Wait for the recording before rendering the narrated film.
-- Use the supplied recording unchanged as the voice source. Check that its content matches the intended lesson, then align the animation, captions and transcript to the words actually spoken.
-- Do not generate a replacement voice, clone a voice, or use browser speech as the primary narration. Generate a voice preview only when the user explicitly requests one for that lesson. A preview does not authorise its publication.
-- Reuse existing approved recordings for their own lessons without requesting them again. When the user supplies a replacement, use the latest file for the requested lesson after checking its content. Clarify any mismatch before changing the published lesson.
+- All Buggle Learn narration audio uses the user's own ElevenLabs voice. The welcome, Lesson 1 and Lesson 2 already use it.
+- The credentials are `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`. Both have already been added to `.env.local`, which is never committed. Never print, log, commit or copy their values anywhere else. If either is missing, ask the user to add it; do not substitute another voice.
+- Use only `ELEVENLABS_VOICE_ID` for narration. Do not use any other ElevenLabs voice, another text-to-speech service, or browser speech.
+- Before producing any new lesson narration, present its script for review. Generate the audio only after the user approves the script.
+- Check that the generated audio matches the approved script, then align the animation, captions and transcript to the words actually spoken.
+- Reuse existing approved narration for its own lesson without regenerating it. When the user supplies or approves a replacement, use the latest version for that lesson after checking its content. Clarify any mismatch before changing the published lesson.
 
 ### Assessments
 
