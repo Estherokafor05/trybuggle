@@ -87,6 +87,14 @@ export default async function LessonPage({
   const nextPath = next
     ? `/modules/${slug}/lessons/${next.slug}`
     : `/modules/${slug}`;
+  const nextStep = next
+    ? {
+        href: nextPath,
+        label: `Lesson ${lessonIndex + 2}`,
+        title: next.title,
+        available: Boolean(getPreviewLesson(next.slug)),
+      }
+    : undefined;
 
   return (
     <>
@@ -112,7 +120,7 @@ export default async function LessonPage({
             </p>
             <p className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy">
               <span className="rounded-full bg-white/80 px-3 py-1.5">
-                Lesson {lessonIndex + 1}
+                Lesson {lessonIndex + 1} of {mod.lessons.length}
               </span>
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 About {lesson.duration}
@@ -144,6 +152,7 @@ export default async function LessonPage({
         )}
         <LessonPreview
           key={lesson.slug}
+          next={nextStep}
           lesson={lesson}
           signedIn={Boolean(session?.user?.id)}
           scope={
@@ -175,7 +184,7 @@ export default async function LessonPage({
               href={nextPath}
               className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              Preview Lesson 2 <span aria-hidden="true">→</span>
+              Next: {next.title} <span aria-hidden="true">→</span>
             </Link>
           )}
         </nav>

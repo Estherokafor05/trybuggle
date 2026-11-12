@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { PreviewLesson } from "@/content/preview-lessons";
 import { stories } from "@/content/stories";
 import { exploreGuides } from "@/content/explore-guides";
-import { StoryPlayer } from "./story/StoryPlayer";
+import { StoryPlayer, type NextStep } from "./story/StoryPlayer";
 import { ExploreJourney } from "./explore/ExploreJourney";
 import { Reflection } from "./explore/Activities";
 import { useLearningPlace } from "./explore/useLearningPlace";
@@ -13,10 +13,12 @@ export function LessonPreview({
   lesson,
   scope = "guest",
   signedIn = false,
+  next,
 }: {
   lesson: PreviewLesson;
   scope?: string;
   signedIn?: boolean;
+  next?: NextStep;
 }) {
   const learning = useLearningPlace(lesson.slug, scope, signedIn);
   const { place, update } = learning;
@@ -75,6 +77,7 @@ export function LessonPreview({
               {...stories[lesson.slug]}
               initialTime={place.videoTime}
               onPlace={(videoTime) => update({ videoTime })}
+              next={next}
             />
             <details className="mt-4 rounded-2xl border border-line bg-white p-5">
               <summary className="cursor-pointer py-2 font-semibold">

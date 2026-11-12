@@ -1,6 +1,14 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { StoryNarration } from "@/content/stories";
+
+export type NextStep = {
+  href: string;
+  label: string;
+  title: string;
+  available: boolean;
+};
 
 const control =
   "min-h-11 rounded-full border border-navy/25 bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-lavender focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
@@ -24,6 +32,7 @@ export function StoryPlayer({
   introduction,
   initialTime = 0,
   onPlace,
+  next,
 }: {
   active: boolean;
   root: string;
@@ -33,6 +42,7 @@ export function StoryPlayer({
   introduction: string;
   initialTime?: number;
   onPlace: (time: number) => void;
+  next?: NextStep;
 }) {
   const mobile = useSyncExternalStore(
     subscribeWidth,
@@ -54,6 +64,7 @@ export function StoryPlayer({
   const [time, setTime] = useState(initialTime);
   const [captions, setCaptions] = useState(true);
   const [failed, setFailed] = useState(false);
+  const [ended, setEnded] = useState(false);
   const cue = narration.cues.find((c) => time >= c.start && time < c.end);
   useEffect(() => {
     if (!active) video.current?.pause();
@@ -118,6 +129,7 @@ export function StoryPlayer({
         }}
         onPlay={() => {
           setPlaying(true);
+          setEnded(false);
           setFailed(false);
         }}
         onPause={(e) => {
@@ -137,6 +149,7 @@ export function StoryPlayer({
         }
         onEnded={() => {
           setPlaying(false);
+          setEnded(true);
           onPlace(narration.duration);
         }}
         onError={() => {
@@ -218,6 +231,41 @@ export function StoryPlayer({
               (playing ? "" : "Narration appears here as the film plays."))
             : "Captions are hidden."}
         </div>
+        {ended && (
+          <div
+            role="status"
+            className="welcome-rise mt-4 rounded-2xl bg-mint p-5 sm:p-6"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
+              Film complete
+            </p>
+            <p className="mt-2 text-xl font-bold">Nice work. What next?</p>
+            <p className="mt-2 max-w-[60ch] leading-relaxed text-ink">
+              Take the knowledge check to see what stuck, then carry on.
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <a
+                href="#knowledge-check"
+                className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Take the knowledge check
+              </a>
+              {next &&
+                (next.available ? (
+                  <Link
+                    href={next.href}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-navy/25 bg-white px-5 py-2.5 text-sm font-semibold text-navy hover:bg-lavender"
+                  >
+                    {next.label}: {next.title} <span aria-hidden="true">→</span>
+                  </Link>
+                ) : (
+                  <span className="text-sm text-muted">
+                    {next.label}: {next.title} (coming soon)
+                  </span>
+                ))}
+            </div>
+          </div>
+        )}
         {failed && (
           <p role="alert" className="mt-3 rounded-xl bg-peach p-3">
             The film could not play. Try again or read the guide or transcript

@@ -69,10 +69,10 @@ export default function Home() {
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
               <Link
-                href={foundationsPath}
+                href="/welcome"
                 className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
               >
-                Explore Module 1 <Arrow />
+                Start learning <Arrow />
               </Link>
               <Link
                 href="/curriculum"

@@ -34,7 +34,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <Link
-          href="/modules/ai-foundations"
+          href="/welcome"
           className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-navy px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-deep sm:px-5"
         >
           Start learning
