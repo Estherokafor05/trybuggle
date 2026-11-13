@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getModule } from "@/content/modules";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { getCertificate, hasFinalAssessment, moduleRequirements } from "@/server/certificates";
+import { claimGuest, guestId, openToGuests } from "@/server/guest";
 
 export const metadata: Metadata = { title: "Your certificate | Buggle Learn" };
 
@@ -17,9 +18,17 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
   const mod = getModule(slug);
   if (!mod || !hasFinalAssessment(slug)) notFound();
   const session = googleAuthConfigured ? await auth() : null;
-  if (!session?.user?.id) redirect(`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/certificate`)}`);
-  const learner = session.user.id;
-  const loaded = await Promise.all([moduleRequirements(learner, slug), getCertificate(learner, slug)]).catch(() => null);
+  const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/certificate`)}`;
+  const account = session?.user?.id ?? null;
+  const guest = await guestId();
+  if (!account && !openToGuests(slug)) redirect(signUpHref);
+  // Results earned as a guest on this device count once the learner signs up.
+  if (account && guest) await claimGuest(guest, account).catch(() => undefined);
+  const learner = account ?? guest;
+  const loaded = learner
+    ? await Promise.all([moduleRequirements(learner, slug), account ? getCertificate(account, slug) : null]).catch(() => null)
+    : null;
+  const guestRequirements = !learner ? moduleRequirementsPlaceholder(slug) : null;
 
   return (
     <>
@@ -35,17 +44,39 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
             Pass every lesson&apos;s knowledge check and the final assessment to receive your certificate from Buggle Learn.
           </p>
         </header>
-        {!loaded ? (
+        {!account && (
+          <section aria-labelledby="sign-up-title" className="mt-6 rounded-[1.75rem] bg-lavender p-5 sm:p-6">
+            <h2 id="sign-up-title" className="text-xl font-bold">
+              {loaded?.[0].eligible ? "You've done it! Sign up to get your certificate" : "Sign up to get your certificate"}
+            </h2>
+            <p className="mt-2 leading-relaxed text-ink">
+              {loaded?.[0].eligible
+                ? "You've passed everything in Module 1. Create a free account to collect your certificate. Your results come with you."
+                : "You don't need an account to learn. When you've passed everything below, create a free account to collect your certificate. Results you earn on this device come with you."}
+            </p>
+            <Link
+              href={signUpHref}
+              className="mt-4 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              Sign up to get your certificate
+            </Link>
+          </section>
+        )}
+        {guestRequirements ? (
+          <div className="mt-7">
+            <Requirements requirements={guestRequirements} />
+          </div>
+        ) : !loaded ? (
           <p role="alert" className="mt-6 rounded-xl bg-peach p-4">
             Your certificate details couldn&apos;t load right now. Please refresh in a moment.
           </p>
         ) : (
           <>
-            {loaded[1] || loaded[0].eligible ? (
+            {!account ? null : loaded[1] || loaded[0].eligible ? (
               <CertificatePanel
                 slug={slug}
                 moduleTitle={mod.title}
-                profileName={session.user.name ?? ""}
+                profileName={session?.user?.name ?? ""}
                 initial={loaded[1]}
               />
             ) : (
@@ -62,4 +93,25 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
       <SiteFooter />
     </>
   );
+}
+
+/** The checklist for a visitor who has not taken anything yet. */
+function moduleRequirementsPlaceholder(slug: string) {
+  const mod = getModule(slug)!;
+  return [
+    ...mod.lessons.map((l, i) => ({
+      id: l.slug,
+      label: `Lesson ${i + 1} knowledge check`,
+      title: l.title,
+      href: `/modules/${slug}/lessons/${l.slug}#knowledge-check`,
+      passedAt: null,
+    })),
+    {
+      id: "final-assessment",
+      label: "Final assessment",
+      title: `Module ${mod.order} refresher`,
+      href: `/modules/${slug}/final-assessment`,
+      passedAt: null,
+    },
+  ];
 }

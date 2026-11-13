@@ -12,6 +12,7 @@ import { journeyPosition } from "@/content/journey";
 import { getBuiltLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { db } from "@/server/database";
+import { guestId } from "@/server/guest";
 
 /** Whether a signed-in learner has passed a lesson's knowledge check. Never blocks: null when unknown. */
 async function passedCheck(learner: string, lessonSlug: string) {
@@ -115,10 +116,10 @@ export default async function LessonPage({
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`;
   // Passing each check is encouraged, but learners can always carry on.
   const previousLesson = previous && previous.id !== "welcome" ? previous : undefined;
+  // Guests who have started taking checks get the same gentle reminder.
+  const checker = session?.user?.id ?? (await guestId());
   const previousPassed =
-    previousLesson && session?.user?.id
-      ? await passedCheck(session.user.id, previousLesson.id)
-      : null;
+    previousLesson && checker ? await passedCheck(checker, previousLesson.id) : null;
   // Guests who reach the end of a free lesson sign in on their way to the next one.
   const nextNeedsSignIn = Boolean(next?.available && !next.free && !session?.user);
 
@@ -164,11 +165,9 @@ export default async function LessonPage({
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 About {lesson.duration}
               </span>
-              {lesson.preview && (
-                <span className="rounded-full bg-mint px-3 py-1.5">
-                  Free preview
-                </span>
-              )}
+              <span className="rounded-full bg-mint px-3 py-1.5">
+                No account needed
+              </span>
             </p>
           </div>
           <div

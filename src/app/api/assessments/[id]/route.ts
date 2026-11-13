@@ -1,22 +1,34 @@
 import { assessmentBank } from "@/server/assessment-bank";
-import { learnerId, privateHeaders } from "@/server/request";
+import { privateHeaders } from "@/server/request";
+import { assessmentLearner, lessonOpenToGuests } from "@/server/guest";
 import { db } from "@/server/database";
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const user = await learnerId();
-  if (!user)
+  const { id } = await params;
+  const learner = await assessmentLearner({ create: false });
+  if (!learner && !lessonOpenToGuests(id))
     return Response.json(
       { error: "Sign in to take the knowledge check." },
       { status: 401, headers: privateHeaders },
     );
-  const { id } = await params;
+  const user = learner?.id;
   const questions = Object.hasOwn(assessmentBank, id)
     ? assessmentBank[id]
     : null;
   if (!questions)
     return Response.json({ error: "Assessment not found" }, { status: 404 });
+  if (!user)
+    return Response.json(
+      {
+        version: 1,
+        questions: questions.map(({ id, prompt, options }) => ({ id, prompt, options })),
+        latest: null,
+        passed: false,
+      },
+      { headers: privateHeaders },
+    );
   try {
     const attempts =
       await db()`SELECT id,correct_count,passed,feedback,created_at FROM assessment_attempts WHERE learner_id=${user} AND lesson_slug=${id} ORDER BY created_at DESC LIMIT 1`;

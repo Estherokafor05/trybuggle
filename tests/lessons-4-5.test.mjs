@@ -39,10 +39,10 @@ for (const { slug, scenes, firstStep } of lessons) {
     }
   });
 
-  test(`${slug}: built, behind sign-in, with sources and a six-step guide`, () => {
+  test(`${slug}: built, open to everyone, with sources and a six-step guide`, () => {
     const lesson = getBuiltLesson(slug);
-    assert.ok(lesson && !lesson.preview);
-    assert.equal(getPreviewLesson(slug), undefined);
+    assert.ok(lesson && lesson.preview, "open without an account");
+    assert.equal(getPreviewLesson(slug), lesson);
     assert.ok(lesson.sources.length >= 3);
     lesson.sources.forEach((s) => assert.equal(new URL(s.url).protocol, "https:"));
     const guide = exploreGuides[slug];

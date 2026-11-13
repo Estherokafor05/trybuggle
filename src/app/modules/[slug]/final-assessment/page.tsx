@@ -12,6 +12,7 @@ import { googleAuthConfigured } from "@/lib/auth-configured";
 import { passMark } from "@/lib/assessment-scoring";
 import { moduleAssessmentBank } from "@/server/assessment-bank";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
+import { guestId, openToGuests } from "@/server/guest";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const mod = getModule((await params).slug);
@@ -24,8 +25,12 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   if (!mod || !hasFinalAssessment(slug)) notFound();
   const returnTo = `/modules/${slug}/final-assessment`;
   const session = googleAuthConfigured ? await auth() : null;
-  if (!session?.user) redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
-  const status = session.user.id ? await moduleRequirements(session.user.id, slug).catch(() => null) : null;
+  if (!session?.user && !openToGuests(slug)) redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
+  const signedIn = Boolean(session?.user?.id);
+  const learner = session?.user?.id ?? (await guestId());
+  const status = learner ? await moduleRequirements(learner, slug).catch(() => null) : null;
+  const certificateHref = `/modules/${slug}/certificate`;
+  const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(certificateHref)}`;
   const count = moduleAssessmentBank[slug].length;
   const lastLesson = mod.lessons.at(-1)!;
 
@@ -65,19 +70,19 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
         )}
         <KnowledgeCheck
           slug={slug}
-          signedIn={Boolean(session.user.id)}
+          signedIn={signedIn}
           endpoint={`/api/modules/${slug}/final-assessment`}
           kicker={`Module ${mod.order} · Final assessment`}
           title="Your refresher"
           intro={`${count} questions covering every lesson in this module. Get ${passMark(count)} or more right to pass. There is no time limit, and you can try again as many times as you need.`}
           noun="final assessment"
-          returnTo={returnTo}
           afterPass={
             <Link
-              href={`/modules/${slug}/certificate`}
+              href={signedIn ? certificateHref : signUpHref}
               className="mt-3 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              Go to your certificate <span aria-hidden="true" className="ml-2">→</span>
+              {signedIn ? "Go to your certificate" : "Sign up to get your certificate"}{" "}
+              <span aria-hidden="true" className="ml-2">→</span>
             </Link>
           }
         />
@@ -86,7 +91,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
             <Requirements requirements={status.requirements} />
             <p className="mt-3 text-sm leading-relaxed text-muted">
               Your Certificate of Completion is ready once every item is ticked.{" "}
-              <Link className="font-semibold text-navy underline underline-offset-4" href={`/modules/${slug}/certificate`}>
+              <Link className="font-semibold text-navy underline underline-offset-4" href={certificateHref}>
                 View your certificate page
               </Link>
             </p>

@@ -7,16 +7,14 @@
 
 > **Drafting note:** Proposed decisions are identified as such. Open decisions need review before they become commitments. Every open decision is marked **⚠ OPEN DECISION** in the text and listed in full in section 12.
 
-> **⚠ Open decisions at a glance** (decided on 13 November 2026: 5-question checks, Google plus email-and-password sign-in, a global audience, a certificate for every module and path, and a feedback pop-up after each lesson; see section 12)
+> **⚠ Open decisions at a glance** (decisions to 13 November 2026 are recorded in section 12; these stay open and are researched as we build)
 >
-> 1. **Lesson length:** episodes are planned at 3 to 4 minutes. Keep eight minutes as the hard limit?
-> 2. **Outside chat tools in Module 2:** Module 2 has learners use ChatGPT, Claude, Gemini or Copilot, which are made by other companies and need their own sign-up. What happens for learners who cannot or will not create an account?
-> 3. **Sign-up question:** what it asks (proposed: the job paths plus "Something else"), and how the answer is stored and removed.
-> 4. **Everyday life track:** an optional track (not Module 2) for learners who do not fit a job path, covering money, side hustles and phones. Drop it, or keep it as a later path?
-> 5. **Overlaps and duplicates:** 16 items to resolve before scripts are written (section 6.1D).
-> 6. **Expert reviewers:** who checks each job path is accurate and safe, for example a qualified nurse for the Nurses and Carers path.
-> 7. **Employer offering:** should there ever be a version of the safety content sold to companies? It would reverse the decision that Buggle Learn is completely free.
-> 8. **Success measures:** the numbers that show Buggle Learn is working, such as how many learners finish a module, pass rates and feedback ratings.
+> 1. **Overlaps and duplicates:** 4 of 16 still open (items 10, 11, 14 and 16 in section 6.1D).
+> 2. **Path reviewers:** the rule is decided; the names are open, starting with Path B, and the qualified nurse for Path E.
+> 3. **Employer offering:** whether to offer anything to companies, such as staff training on safe AI use. Buggle Learn is currently completely free.
+> 4. **Success measures:** how we know the platform is working, for example how many learners finish Module 1 or share the safety checklist.
+> 5. **Path G (Everyday Life):** its character, story and episodes.
+> 6. **How "Which best describes you?" answers are stored and removed.**
 
 ## 1. Product overview
 
@@ -32,11 +30,11 @@ The learning experience moves from understanding AI to using it. It explains the
 
 Supporting pillars:
 
-1. **Learning paths by job, not by topic.** After the fundamentals, learners can follow paths such as AI for students, office and admin staff, small business owners, sales and customer service, nurses and carers, or teachers, using examples from their real work (section 6.1C). This answers the question learners actually have: "What does this mean for me?"
+1. **Learning paths by job, not by topic.** After the fundamentals, learners can follow paths such as AI for students, office and admin staff, small business owners, sales and customer service, nurses, or teachers, using examples from their real work (section 6.1C). This answers the question learners actually have: "What does this mean for me?"
 2. **Protect yourself and your family.** Learners recognise voice-clone scams, deepfakes and fake investment bots. The topic is emotionally meaningful, easy to share ("send this to your mum") and clearly about safety in society.
 3. **What not to paste into an AI tool.** Simple rules for using AI at work without leaking client, company or personal data. This content is free like everything else on Buggle Learn. Whether a separate employer offering should exist is an open decision (see section 12), because the approved product decision is that Buggle Learn is completely free.
 4. **Built for everyone, everywhere.** People use AI in every part of the world, so Buggle Learn is for a global audience. Stories use a diverse cast, names, places, prices and tools from many countries, and keep examples neutral rather than tied to one market. Lessons are phone-first and light on data, with plain-text versions, short videos and, where possible, audio versions, so they work on cheap phones and slow connections. Local-language versions can follow learner demand.
-5. **Proof learners can show.** Every module and every job path awards its own Certificate of Completion from Buggle Learn, so learners have something to show at each step. Adding a partner organisation's name to certificates may come later.
+5. **Proof learners can show.** Modules 1 to 3 together earn the main Certificate of Completion. Module 3 also gives its own shareable "AI Safety" badge, and optional Module 4 and each job path give a separate badge, so learners have something to show at each step and nobody is blocked by optional content. The AI Safety badge is the one people are most likely to share. Adding a partner organisation's name may come later.
 
 ## 2. Product goal
 
@@ -48,7 +46,7 @@ Help a beginner build enough understanding and confidence to:
 - Catch AI when it is confidently wrong, and know what information never to share with an AI tool.
 - Use an accessible AI tool or workflow for a relevant task, assess the result, and make an informed choice about whether to use it.
 - Recognize basic concerns such as inaccurate output, privacy, bias, and over-reliance.
-- Demonstrate learning through mandatory knowledge checks and assessments, with a Certificate of Completion for every module and job path, starting with Module 1.
+- Demonstrate learning through mandatory knowledge checks and assessments, earning the main Certificate of Completion for Modules 1 to 3 and badges for the AI Safety module, optional Module 4 and job paths.
 
 The platform supports understanding and informed use. It does not promise employment outcomes or imply that AI will replace or solve a learner’s work.
 
@@ -92,11 +90,13 @@ The curriculum is written with specific everyday learners in mind, for example a
 | 8. Complete Module 1            | “Can I show what I have learned so far?”         | Module assessment follows all Module 1 lessons and knowledge checks. Passing makes the learner eligible for the Module 1 Certificate of Completion. | Learner earns an early, clearly scoped recognition of learning.                              |
 | 9. Continue                     | “What can I learn next?”                         | The next module is presented, with the learner’s progress retained. The full path concludes with a final assessment.                                | Learner continues through the curriculum and can demonstrate learning across the programme.  |
 
-**Approved account decision:** The first two lessons are public previews. Visitors can resume a learning place on their device. An account is required for progress saved across devices, official assessment results and certificate eligibility. Preview access does not count as a verified pass.
+**Approved account decision (13 November 2026): no account needed for Module 1.** All of Module 1 (every lesson, guide, knowledge check and the final assessment) is open without an account. Learners are asked to sign up only once they want their certificate: after passing the final assessment they see "Sign up to get your certificate". Signing up collects the Module 1 certificate and lets them go on to Module 2, and their progress is saved to their account from then on.
 
 **Approved change (13 November 2026): two ways to sign in.** Learners can sign in with Google or with an email address and password. Email and password is added for now, while the platform is being tested, for learners without a Google account or who prefer not to use one. Passwords are stored only as secure one-way hashes, never in plain text, with a way to reset a forgotten password. (Not yet built.)
 
-**Approved change: guests can take knowledge checks.** On the free preview lessons, a visitor can take the knowledge check without an account, see their score and the feedback, and retry. Sign-in is asked for only to save the result, count it towards the certificate and keep progress across devices. A guest's result is never treated as an official pass until they sign in and pass while signed in. (Not yet built: today the check asks for sign-in first.)
+**How guest results count.** Knowledge checks and the final assessment are still marked on the server, never in the browser. A visitor's results are stored against an anonymous ID kept in a secure cookie on their device, with no personal details. When they sign up, those results move into their new account, so the certificate is earned fairly. Signing out forgets the anonymous ID on that device. A guest who changes device before signing up starts again on the new device.
+
+**Decided (13 November 2026): the same rule for every module.** In Module 2 and later modules too, sign-in is needed only to save progress or get a certificate or badge. Knowledge checks stay open to everyone.
 
 ## 5. Learning Experience and Delivery Requirements
 
@@ -155,12 +155,12 @@ Every learner takes Modules 1 to 3, then picks a path for their job. Module 1 is
 | Module | What it is | Who takes it | Status |
 | ------ | ---------- | ------------ | ------ |
 | 1. Foundations of Artificial Intelligence | What AI is, where it shows up, why you check it. | Everyone | **Live** (five lessons, final assessment, certificate) |
-| 2. Talking to AI | Using free chat tools (ChatGPT, Claude, Gemini, Copilot) for real tasks. | Everyone | To build next |
+| 2. Talking to AI | Using chat tools for real tasks, practised on scripted chats inside the app. | Everyone | To build next |
 | 3. Staying Safe with AI | Privacy, voice clones, deepfakes, scams, fair use. | Everyone | To build |
 | 4. Go Deeper: How AI Works | Machine learning, bias, types of AI, agents. | Optional, for curious learners | To build |
-| Your Path | AI for your job, ending in a hands-on project. | Learner picks one | Students, Office and Admin, Small Business first |
+| Your Path | AI for your job or everyday life, ending in a hands-on project. | Learner picks one | Office and Admin, Students, Small Business, then Everyday Life |
 
-**Build order:** Module 2, then Module 3, then Paths A, B and C. Module 4 and the later paths follow.
+**Build order:** Module 2, then Module 3, then Path B (Maya, quickest because it reuses her), Path A (Ada), Path C (Bisi) and Path G (Everyday Life). Module 4 and Paths D to F follow.
 
 What changed from the earlier plan, and why:
 
@@ -169,7 +169,7 @@ What changed from the earlier plan, and why:
 - **Old Module 4 (Generative AI) becomes the core of the new Module 2.** Most people meet AI through ChatGPT, Claude or Gemini, so this comes straight after Foundations.
 - **Safety gets its own module.** The earlier plan had no lessons on scams, deepfakes or data, yet safety is the platform's main selling point.
 - **Old Modules 5 and 6 (agents and workflows) are split up.** Agents become an optional episode in Module 4 (4.4). Building a workflow becomes the final project of each job path, tied to real work.
-- **The Everyday life track from the previous draft is not in this plan.** **⚠ OPEN DECISION:** drop it, or keep it as a later path (see 6.1D, item 15).
+- **The Everyday life track returns as Path G** (13 November 2026), for people who do not fit a job path.
 
 ### 6.1A The story model
 
@@ -182,6 +182,8 @@ Every module is one story, and every lesson is an episode in it. Each episode ha
 
 Episodes stay 3 to 4 minutes, as a narrated film or an interactive guide, with a plain-text version and a knowledge check, as in Module 1. Characters carry over between modules so learners get to know them, and each module ends on a hook into the next. Each core module ends with a short refresher final assessment, as in Module 1.
 
+**No AI tool runs inside the app.** Buggle Learn shows and teaches; it does not connect to ChatGPT, Gemini, Claude or any other tool. Learners watch the character's chats as scripted screens, then practise on those same scripted chats: choosing the better request, spotting the error, deciding what to check. Screens show a generic "AI chat tool", and real tools are named only as examples. What learners take away are cards and checklists they can use later in whichever tool they choose. This keeps the app free to run, tool-neutral, and safe from learners typing private data into it.
+
 Storytelling rules for every episode:
 
 - **Write the story first, then fit the lesson into it.** If the lesson cannot be told through something happening to the character, it probably belongs in optional Module 4.
@@ -190,24 +192,25 @@ Storytelling rules for every episode:
 - **Keep a recurring cast.** Maya, her mum, Sam and the centre's members appear across modules, so learners care what happens to them.
 - **End each module on a hook.** The open day's success leads into the week of close calls, and the job scam leads into Sam's computing course.
 - **Give every path someone who looks like its learners.** A student should see a student, and a shop owner should see a shop owner.
+- **Keep every story country-neutral.** No currencies, place names, local institutions or slang, so a learner anywhere recognises the situation. Vary characters' names and backgrounds across the paths. Real historical facts (for example the 1956 Dartmouth workshop) are fine.
 - **End every lesson with something the learner does.** Module 1's "Put it in your own words" prompts already do this; keep them.
 
 ### 6.1B Core and optional modules
 
 #### Module 2: Talking to AI
 
-Learners use free AI chat tools (ChatGPT, Claude, Gemini, Copilot) for real tasks and learn how to get answers worth using.
+Learners watch Maya use an AI chat tool for real tasks and practise on her scripted chats, so they know how to ask well and check answers before they ever open a tool themselves.
 
-**You leave with:** a message, a summary and a plan you made with AI and checked yourself.
+**You leave with:** a one-page "ask well, then check" card to use with any AI chat tool.
 
 **The story: Maya's open day.** Maya's manager asks her to organise the community centre's open day in three weeks, on top of her normal work. A colleague suggests trying an AI chat tool. Over five episodes Maya learns to use it, and nearly gets caught out at the end.
 
 | Episode | What happens to Maya | What the learner learns | The learner's choice |
 | ------- | -------------------- | ----------------------- | -------------------- |
-| 2.1 A New Helper | A colleague shows Maya a chat tool. She asks it about the centre's history and it answers confidently, but some details are wrong. | What chat tools are and the main free ones. They write by predicting the next likely words, which makes them fluent but not always right. | Which of its claims should Maya trust? |
-| 2.2 The Email That Said Nothing | Maya types "write an email about the open day" and gets a bland email with a made-up date. She tries again with who it is for, what, when, and the tone. | How to ask well. Keep private details out (builds on Lesson 1.1). | Pick the request that will get the better email, then rewrite a weak one. |
+| 2.1 A New Helper | A colleague shows Maya a chat tool. She asks it to describe the centre for a newsletter, and it writes something polished and confident in seconds. | What chat tools are and the main free ones. They write by predicting the next likely words, which makes them smooth and confident, but fluency is not the same as being right. (The made-up fact is saved for 2.5.) | What makes the answer sound so sure, and does that mean it is correct? |
+| 2.2 The Email That Said Nothing | Maya types "write an email about the open day" and gets a bland email with a made-up date. She tries again with who it is for, what, when, and the tone. | How to ask well, with a one-line reminder to keep private details out that points ahead to 3.1. | Pick the request that will get the better email, then rewrite a weak one. |
 | 2.3 Three Tries at the Flyer | The flyer text comes back too long and too formal. Maya asks for shorter, then friendlier, then a version in another language spoken at the centre. | A chat is a back and forth. Follow-up messages improve the result. | Choose Maya's next follow-up message. |
-| 2.4 Thirty Pages by Friday | The council sends a 30-page guide for public events. Maya asks for a summary and a checklist, then checks it against the guide and finds it left out the first-aid rule. | Summarising, explaining jargon and planning, and checking against the original. | Spot what the summary missed. |
+| 2.4 Thirty Pages by Friday | The local authority sends a 30-page guide for public events. Maya asks for a summary and a checklist, then checks it against the guide and finds it left out the first-aid rule. | Summarising, explaining jargon and planning, and checking against the original. | Spot what the summary missed. |
 | 2.5 The Grant That Didn't Exist | The tool suggests a small grant for open days, with a name and a website. Maya almost puts it in her report, then checks: the grant does not exist. | Made-up facts and sources, out-of-date information, agreeing with you to please you. Where not to rely on AI: health, law, money. | How should Maya check the grant, and who should she ask? |
 
 **How the story ends:** the open day goes well. Word gets round that Maya "uses AI", which sets up Module 3. **Final assessment:** a short refresher across the five episodes.
@@ -226,7 +229,7 @@ Learners protect their information, their money and the people they care about, 
 | 3.2 Mum, It's Me | Maya's mum gets a voice note in Maya's voice asking for money for an urgent hospital bill. | AI can copy a voice from a short clip. Hang up and call back on a number you know, agree a family code word, slow down. | What should Mum do next? |
 | 3.3 The Video in the Group Chat | A video of a famous TV presenter promoting a trading app spreads in the centre's WhatsApp group, and several members want to invest. | Deepfakes and fake endorsements. How to check: who posted it, whether reliable outlets report it, a reverse image search, the "too good to be true" test. | Real, fake or unclear? Judge three posts. |
 | 3.4 The Perfect Job Offer | Maya's nephew Sam gets a polished job offer after a chat with an "AI recruiter". Then they ask for a training fee. | How AI makes scams look professional. Red flags: urgency, secrecy, unusual payment methods, guaranteed returns. | Find the red flags in Sam's messages. |
-| 3.5 The Job Advert | The centre is hiring. Maya uses AI to draft the advert, and it adds wording that would put off older applicants. Her manager asks whether to say AI helped. | Bias in AI answers. Being honest about AI help and following workplace rules. Never making fake images or audio of real people. | What is acceptable? Decide in five short situations. |
+| 3.5 The Summer Flyer | Maya uses AI to make a flyer for the summer programme. Every picture shows the same kind of family, and she asks Amina (from Lesson 1.5) how to make it fair. Her manager asks whether to say AI helped. | Bias in AI-made content and pictures, and how to make it represent everyone. Being honest about AI help and following workplace rules. Never making fake images or audio of real people. | What is acceptable? Decide in five short situations. |
 
 **How the story ends:** Maya writes a one-page safety checklist for the centre, which is what learners download. **Final assessment:** the refresher, then the checklist download. The checklist should be easy to share on WhatsApp, because this module is the most likely to bring in new learners.
 
@@ -240,16 +243,16 @@ For learners who want to know what happens inside AI tools. It reuses the planne
 
 | Episode | What happens | What the learner learns | Comes from |
 | ------- | ------------ | ----------------------- | ---------- |
-| 4.1 How Did My Phone Learn Dogs? | Sam explains how Maya's photo app learned to find dogs, and why it once mistook a cat for one. | Training and testing, building on Lesson 1.1. | Old Module 3 |
-| 4.2 Why Did It Pick Him? | A friend's company used an AI tool to shortlist job applicants, and it kept favouring one kind of person. | How gaps or unfairness in the training examples lead to biased results, with examples from hiring, loans and face recognition. | Old Module 3 |
-| 4.3 Which Tool for Which Job? | Sam sorts every tool from Maya's story into rules, predictions and new content. | Telling the kinds of AI apart, and which kind fits which job. | Old Module 2, condensed |
+| 4.1 How Did My Keyboard Learn My Words? | Sam explains how Maya's phone keyboard learned to suggest the words she types most, and why it sometimes suggests the wrong one. | Training and testing, going beyond Lesson 1.1's photo example. | Old Module 3 |
+| 4.2 Why Was She Turned Down? | A friend is refused a loan by an automated system, and nobody can explain why. | How gaps or unfairness in the training examples lead to biased results, with examples from loans and face recognition. | Old Module 3 |
+| 4.3 Which Tool for Which Job? | Sam gives a short recap of the kinds of tools in Maya's story, then helps her choose the right kind of tool for a new job. | A brief recap of rules, predictions and new content (building on Lesson 1.4), then choosing the right kind of tool for a task. | Old Module 2, condensed |
 | 4.4 The Assistant That Booked the Wrong Hall | Sam's classmate lets an AI agent book a venue. It books the wrong hall and pays the deposit. | How assistants, automated workflows and agents differ, and why a person must check before anything is sent, paid or deleted. | Old Module 5 |
 
-The knowledge checks stay. **Decided:** like every module, Module 4 awards its own certificate. Because it is optional, it never blocks learners from Module 1 to 3 certificates or a job path.
+The knowledge checks stay. **Decided:** Module 4 gives its own badge and does not count towards the main certificate, so it never blocks anyone.
 
 ### 6.1C Your Path: job paths
 
-After Module 3, learners pick a path for their job. Each path is its own story: four episodes following one character through a busy stretch of their life, ending with a project where the learner builds the same kind of helper the character did. That project replaces old Module 6. Names and settings are placeholders to adapt to the audience.
+After Module 3, learners pick a path for their job. Each path is its own story: four episodes following one character through a busy stretch of their life. It ends with a project where the learner writes a **helper card**: a reusable request, with a list of what to check, that they can copy into whichever AI tool they use outside the app. That project replaces old Module 6. Names and settings are placeholders to adapt to the audience.
 
 #### Path A: AI for Students
 
@@ -262,7 +265,7 @@ After Module 3, learners pick a path for their job. Each path is its own story: 
 | A3 Write It for Me? | A friend submits an essay written entirely by AI and gets flagged. Ada uses AI to brainstorm, outline and get feedback, and says that she did. | Writing honestly: what your school allows, and saying when AI helped. |
 | A4 The Internship Application | AI makes Ada's CV sound like experience she does not have. She rewrites it to be truthful, then practises the interview with AI. | CVs, cover letters and interview practice that stay truthful. |
 
-**Final project:** a revision helper that quizzes the learner and explains wrong answers, for a subject of their own.
+**Final project:** Ada writes a revision helper card: a request that makes any chat tool quiz her and explain her wrong answers. The learner writes one for a subject of their own.
 
 #### Path B: AI for Office and Admin Staff
 
@@ -270,12 +273,12 @@ After Module 3, learners pick a path for their job. Each path is its own story: 
 
 | Episode | What happens to Maya | What the learner learns |
 | ------- | -------------------- | ----------------------- |
-| B1 Forty Unread Emails | Maya clears a backlog of replies, including one to a family who speak another language. | Drafting and replying, getting the tone right, translating. |
+| B1 The Confusing Booking Form | Members keep filling in the centre's booking form wrongly. Maya uses AI to rewrite it, and the standard letters, in plain words. | Rewriting forms and standard letters in plain words, and checking nothing important was lost. |
 | B2 The Board Meeting | Maya prepares the agenda and turns rough notes into minutes. A board member objects to being recorded. | Agendas, notes and minutes. Get everyone's consent before recording. |
 | B3 The Annual Report | Maya turns the year's figures into a report and has AI explain a spreadsheet formula. She uses only the approved work tool for member data. | Reports, letters and spreadsheets. Workplace rules on data. |
-| B4 The Summer Rota | AI drafts the volunteer rota but puts one volunteer on two shifts at once. Maya catches it. | Rotas, plans and checklists, checked before they go out. |
+| B4 The Summer Rota | AI drafts the volunteer rota but puts one volunteer on two shifts at once. Maya catches it. | Checking a plan for errors before it goes out. |
 
-**Final project:** a helper that turns rough notes into minutes, or one routine task from the learner's own job.
+**Final project:** Maya writes a helper card for turning rough notes into minutes, with a list of what to check before sending. The learner writes one for a routine task in their own job.
 
 #### Path C: AI for Small Business Owners
 
@@ -285,47 +288,51 @@ After Module 3, learners pick a path for their job. Each path is its own story: 
 | ------- | -------------------- | ----------------------- |
 | C1 The Sale Post | AI writes great product posts, but calls a polyester dress "100% silk". | Marketing posts, product descriptions and simple images, with claims that stay honest. |
 | C2 Two Hundred Messages a Day | Customer messages pile up, and one customer is angry about a late delivery. | Customer replies, common questions and answers, handling complaints calmly. |
-| C3 The Supplier Who Was Too Cheap | A new "supplier" offers prices that are too good and wants payment upfront to a personal account. Bisi also gets a tax letter she does not understand. | Invoices, price lists and budgets. Spotting supplier scams. Checking anything about tax with an accountant. |
+| C3 The Supplier Who Was Too Cheap | A new "supplier" offers prices that are too good and wants payment upfront to a personal account. Bisi also gets a tax letter she does not understand. | Invoices, price lists and budgets. Applying the Module 3 red flags to a supplier, without re-teaching them. Checking anything about tax with an accountant. |
 | C4 Planning January | After the rush, Bisi looks at what competitors did and plans her next promotion. | Looking at competitors, planning a promotion, writing a one-page business plan. |
 
-**Final project:** a customer-reply helper that knows the learner's prices, opening hours and policies.
+**Final project:** Bisi writes a customer-reply helper card that includes her prices, opening hours and policies. The learner writes one for their own business.
+
+#### Path G: Everyday Life
+
+A path for people who do not fit a job path, such as a parent or a retiree, covering money, side hustles and getting more from their phone. It is built after Path C and before Paths D to F. Its story, character and episodes are still to be written, following the story model and the overlap rules in section 6.1D (scams are taught in Module 3, so this path only refers back to them).
 
 #### Later paths
 
-These follow once the first three paths are live. Each needs someone who works in that job to write or review it.
+These follow after Path G. The product owner writes every story, and one person who does that job reviews each path before it goes live.
 
 | Path | The story | Likely episodes | Safety focus | Final project |
 | ---- | --------- | --------------- | ------------ | ------------- |
-| D. Sales and Customer Service | A sales rep chasing her monthly target while handling a difficult customer. | Replies and follow-ups; call and visit notes; a complaint that escalates; preparing for a big sales meeting. | Customer privacy; not promising what the business cannot deliver. | A follow-up message helper for your products. |
-| E. Nurses and Carers | A carer's week of night shifts, with a new resident and worried relatives. | Handover notes; explaining care to a family in plain words; shift admin; the moment AI must not decide. | Patient confidentiality; never trusting AI on doses, diagnoses or care decisions. | A plain-language explainer for one common care topic, checked by a senior colleague. |
+| D. Sales and Customer Service | Daniel (the receptionist from Lesson 1.4) moves into a customer service role, chasing his monthly target while handling a difficult customer. | Replies and follow-ups; call and visit notes; a complaint that escalates; preparing for a big sales meeting. | Customer privacy; not promising what the business cannot deliver. | A follow-up message helper card for your products. |
+| E. Nurses | A nurse's week of night shifts, with a new patient and worried relatives. Sarah, the pharmacist from Lesson 1.3, appears in the episode on doses. | Handover notes; explaining care to a family in plain words; shift admin; the moment AI must not decide, including a question about doses that Sarah helps answer. | Patient confidentiality; never trusting AI on doses, diagnoses or care decisions. | A plain-language explainer for one common care topic, checked by a senior colleague. |
 | F. Teachers | A teacher's first term after the school allows AI. | Lesson plans and worksheets; marking support and feedback; messages to parents; an essay that might be AI-written. | Student data; judging AI-written work fairly; bias in AI material. | A lesson resource made with AI and adapted for your class. |
 
-The Nurses and Carers path has the highest stakes and must be reviewed by a qualified nurse or care manager before it goes live. Trades such as construction and driving can come later still.
+The Nurses path has the highest stakes. It does not go live without review by a qualified nurse. Trades such as construction and driving can come later still.
 
 ### 6.1D Overlaps and duplicates to resolve
 
-Checked against the five live Module 1 lessons and across the new plan. Reinforcing an idea in a new situation is useful; repeating the same story or activity is not. Each item needs a decision before scripts are written.
+Checked on 13 November 2026 against the five live Module 1 lessons and across the 12 November plan, by comparing every planned episode with every live lesson and with each other. (The earlier overlaps between old Module 2 and Lessons 1.1, 1.2 and 1.4 are not counted here, because the plan already resolves them by folding old Module 2 into Module 4.) Reinforcing an idea in a new situation is useful; repeating the same story or activity is not. Each item needs a decision before scripts are written.
 
-| # | Overlap or duplicate | Where | Recommendation |
-| - | -------------------- | ----- | -------------- |
-| 1 | **4.1 repeats Lesson 1.1 almost exactly.** | Lesson 1.1's guide already trains a pretend system on cat and dog photos, then a partly hidden cat fools it into guessing "dog". 4.1 is "how my phone learned dogs, and why it mistook a cat". | Give 4.1 a different example (for example how a phone keyboard learns your words), or go beyond 1.1 into why test data must differ from training data. |
-| 2 | **Hiring bias appears three times.** | Lesson 1.5 (Amina: unfair interview questions, a CV ranking that favoured past hires), 3.5 (a job advert putting off older applicants) and 4.2 (a shortlisting tool favouring one kind of person). | Keep one hiring story. Use loans or face recognition for 4.2, and a non-hiring setting (for example a public notice or flyer) for 3.5, or reuse Amina as its character. |
-| 3 | **4.3 repeats Lesson 1.4.** | Lesson 1.4 already sorts tools into "ordinary software" and "AI", including rules-based expert systems; Lesson 1.2 names recognise, predict, recommend, classify. | Condense 4.3 into a recap with one new idea (choosing the right kind of tool for a job), not another sorting exercise. |
-| 4 | **"What never to share" is taught four times.** | Lesson 1.1 (keep private details out of a request), Lesson 1.5 (applicants' names and CVs), 2.2 (keep private details out), 3.1 (the volunteer list). Path B (approved tools for member data) repeats it again. | Make 3.1 the full lesson. 2.2 gives a one-line reminder that links ahead; Path B applies it only to workplace rules. |
-| 5 | **Made-up facts appear twice inside Module 2,** and again in every path. | 2.1 (wrong details about the centre's history) and 2.5 (an invented grant), plus Lesson 1.1 (the wrong day) and 1.5 (an invented driving licence); then A2, C1 and others. | Within Module 2, make 2.1 about fluency and prediction and keep the "catch the made-up fact" reveal for 2.5. Paths apply it to their own sources only. |
-| 6 | **Path B repeats Module 2 with the same character and tasks.** | Module 2 has Maya writing an open-day email, a flyer in another language and a checklist; Path B has Maya replying to emails, translating for a family and making checklists. | Give Path B new tasks only (minutes, reports, spreadsheets, rotas), or give Path B a different office character so it does not feel like a rerun. |
-| 7 | **Scam red flags are taught twice.** | 3.4 (job scam: urgency, secrecy, payment methods, guaranteed returns) and C3 (a too-cheap supplier wanting upfront payment), plus Path C's "AI business coaches", which repeats 3.3's fake trading app. | Module 3 teaches the red flags; C3 applies them to suppliers in one short scene and refers back. |
-| 8 | **Translation appears twice.** | 2.3 (a flyer in another language) and B1 (a reply to a family who speak another language). | Keep translation in 2.3; B1 focuses on tone and backlog. |
-| 9 | **Summaries and checklists appear twice.** | 2.4 (summary and checklist of a 30-page guide) and B4 (rotas, plans and checklists). | Keep summarising in 2.4; B4 is about checking a plan for errors, which is new. |
-| 10 | **Academic honesty is told from two sides.** | Path A (A3, writing honestly) and Path F (judging AI-written work fairly). | Write them to give one consistent message when Path F is built. |
-| 11 | **Health, law and money advice appears in several places.** | Lesson 1.1's guide (a medicine question), Lesson 1.5's knowledge check (medicine doses), 2.5 (health, law, money), C3 (tax), Path E (doses and diagnoses). | Keep 2.5 as the main lesson; Path E goes deeper with care-specific examples reviewed by a care professional. |
-| 12 | **The recurring cast leaves out three live characters.** | Lessons 1.3, 1.4 and 1.5 introduced Sarah (pharmacist), Daniel (receptionist) and Amina (HR); the plan's cast is Maya, her mum, Sam and the centre's members. | Reuse them where they fit: Amina for 3.5, Daniel in Path B or D, Sarah in a health scene. |
-| 13 | **Maya leads Module 2, Module 3 and Path B.** | One character carries most of the programme. | Fine for continuity, but it weakens "give every path someone who looks like its learners". Consider a different lead for Path B. |
-| 14 | **Two different voice-note scams are possible.** | 3.2 (a voice clone of Maya asking for hospital money) and the earlier "that voice note might not be your uncle" example in section 6.2. | Use one: keep 3.2 and update the example in 6.2 to match. |
-| 15 | **The Everyday life track has disappeared.** | The previous draft offered it for learners who do not fit a job (money, scams, school, side hustles, your phone). Module 3 now covers scams, and Path A covers school. | Drop it, or keep "money, side hustles and your phone" as a later path. |
-| 16 | **Setting and diversity.** | The audience is global. Maya's world reads as a UK community centre, and Bisi sells on WhatsApp and Instagram. | Keep Maya as one character among a diverse cast from different countries; vary names, places, prices and tools across modules and paths, and keep scams and examples neutral. |
+| # | Overlap or duplicate | Where | Recommendation | Status |
+| - | -------------------- | ----- | -------------- | ------ |
+| 1 | **4.1 repeats Lesson 1.1 almost exactly.** | Lesson 1.1's guide already trains a pretend system on cat and dog photos, then a partly hidden cat fools it into guessing "dog". 4.1 is "how my phone learned dogs, and why it mistook a cat". | Give 4.1 a different example (for example how a phone keyboard learns your words), or go beyond 1.1 into why test data must differ from training data. | ✅ Resolved: 4.1 now uses the phone keyboard. |
+| 2 | **Hiring bias appears three times.** | Lesson 1.5 (Amina: unfair interview questions, a CV ranking that favoured past hires), 3.5 (a job advert putting off older applicants) and 4.2 (a shortlisting tool favouring one kind of person). | Keep one hiring story. Use loans or face recognition for 4.2, and a non-hiring setting (for example a public notice or flyer) for 3.5, or reuse Amina as its character. | ✅ Resolved: 3.5 is now the Summer Flyer (fair pictures, with Amina) and 4.2 a refused loan. |
+| 3 | **4.3 repeats Lesson 1.4.** | Lesson 1.4 already sorts tools into "ordinary software" and "AI", including rules-based expert systems; Lesson 1.2 names recognise, predict, recommend, classify. | Condense 4.3 into a recap with one new idea (choosing the right kind of tool for a job), not another sorting exercise. | ✅ Resolved: 4.3 is now a short recap plus choosing the right tool. |
+| 4 | **"What never to share" is taught four times.** | Lesson 1.1 (keep private details out of a request), Lesson 1.5 (applicants' names and CVs), 2.2 (keep private details out), 3.1 (the volunteer list). Path B (approved tools for member data) repeats it again. | Make 3.1 the full lesson. 2.2 gives a one-line reminder that links ahead; Path B applies it only to workplace rules. | ✅ Resolved: 3.1 is the full lesson; 2.2 gives a one-line reminder pointing to 3.1. |
+| 5 | **Made-up facts appear twice inside Module 2,** and again in every path. | 2.1 (wrong details about the centre's history) and 2.5 (an invented grant), plus Lesson 1.1 (the wrong day) and 1.5 (an invented driving licence); then A2, C1 and others. | Within Module 2, make 2.1 about fluency and prediction and keep the "catch the made-up fact" reveal for 2.5. Paths apply it to their own sources only. | ✅ Resolved: 2.1 is about fluency; the made-up fact is saved for 2.5. |
+| 6 | **Path B repeats Module 2 with the same character and tasks.** | Module 2 has Maya writing an open-day email, a flyer in another language and a checklist; Path B has Maya replying to emails, translating for a family and making checklists. | Give Path B new tasks only (minutes, reports, spreadsheets, rotas), or give Path B a different office character so it does not feel like a rerun. | ✅ Resolved: B1 is now the booking form and standard letters; B4 is only about checking a plan. |
+| 7 | **Scam red flags are taught twice.** | 3.4 (job scam: urgency, secrecy, payment methods, guaranteed returns) and C3 (a too-cheap supplier wanting upfront payment), plus Path C's "AI business coaches", which repeats 3.3's fake trading app. | Module 3 teaches the red flags; C3 applies them to suppliers in one short scene and refers back. | ✅ Resolved: C3 applies the Module 3 red flags without re-teaching them. |
+| 8 | **Translation appears twice.** | 2.3 (a flyer in another language) and B1 (a reply to a family who speak another language). | Keep translation in 2.3; B1 focuses on tone and backlog. | ✅ Resolved: translation stays in 2.3 only. |
+| 9 | **Summaries and checklists appear twice.** | 2.4 (summary and checklist of a 30-page guide) and B4 (rotas, plans and checklists). | Keep summarising in 2.4; B4 is about checking a plan for errors, which is new. | ✅ Resolved: summarising stays in 2.4; B4 is about checking. |
+| 10 | **Academic honesty is told from two sides.** | Path A (A3, writing honestly) and Path F (judging AI-written work fairly). | Write them to give one consistent message when Path F is built. | ⚠ Open: decide when Path F is written. |
+| 11 | **Health, law and money advice appears in several places.** | Lesson 1.1's guide (a medicine question), Lesson 1.5's knowledge check (medicine doses), 2.5 (health, law, money), C3 (tax), Path E (doses and diagnoses). | Keep 2.5 as the main lesson; Path E goes deeper with care-specific examples reviewed by a care professional. | ⚠ Open: Sarah now appears in Path E's dose episode; confirm 2.5 stays the main health, law and money lesson. |
+| 12 | **The recurring cast leaves out three live characters.** | Lessons 1.3, 1.4 and 1.5 introduced Sarah (pharmacist), Daniel (receptionist) and Amina (HR); the plan's cast is Maya, her mum, Sam and the centre's members. | Reuse them where they fit: Amina for 3.5, Daniel in Path B or D, Sarah in a health scene. | ✅ Resolved: Amina in 3.5, Daniel leads Path D, Sarah in Path E. |
+| 13 | **Maya leads Module 2, Module 3 and Path B.** | Path B is built first because it reuses Maya. | Accepted for speed (13 November). To avoid a rerun, give Path B only new tasks (see item 6). | ✅ Accepted for speed. |
+| 14 | **Two different voice-note scams are possible.** | 3.2 (a voice clone of Maya asking for hospital money) and the earlier "that voice note might not be your uncle" example in section 6.2. | Use one: keep 3.2 and update the example in 6.2 to match. | ⚠ Open: keep 3.2 and update the 6.2 example to match. |
+| 15 | **The Everyday life track has disappeared.** | The previous draft offered it for learners who do not fit a job (money, scams, school, side hustles, your phone). Module 3 now covers scams, and Path A covers school. | Drop it, or keep "money, side hustles and your phone" as a later path. | ✅ Resolved: added as Path G, Everyday Life. |
+| 16 | **Country-specific details in live lessons.** | The stories must now be country-neutral. Lesson 2's camera bag is priced in dollars ("$38" in the guide and "$40" in a knowledge check answer). | Remove the currency (for example "within her budget"). Historical facts such as Dartmouth and IBM stay. | ⚠ Open: a fix to the live Lesson 2. |
 
-**⚠ OPEN DECISION:** accept, change or reject each recommendation in 6.1D.
+**⚠ OPEN DECISION:** items 10, 11, 14 and 16 (the other twelve were resolved on 13 November 2026).
 
 ### 6.2 Relationship between concepts, lessons, activities, and assessments
 
@@ -334,13 +341,13 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 - Each **practical activity** applies one or more lesson concepts to a familiar, low-risk scenario. It is guided and does not require coding unless a future course explicitly states otherwise.
 - Each **knowledge check** assesses the outcomes of one lesson. It is mandatory and must be passed before the learner advances.
 - Each **module assessment** checks whether the learner can connect and apply concepts from the module. All lesson checks and the module assessment must be passed for module completion.
-- Each module ends with a **final assessment**: a short refresher across its episodes that opens after the last episode, as in Module 1. **Every module and every job path awards its own Certificate of Completion** once its knowledge checks and final assessment are passed.
+- Each module ends with a **final assessment**: a short refresher across its episodes that opens after the last episode, as in Module 1. Modules 1 to 3 together earn the main Certificate of Completion. Module 3 also gives its own shareable "AI Safety" badge, and optional Module 4 and each job path give a separate badge.
 - Responsible use, privacy, bias, verification, and human oversight appear in relevant lessons and activities across the sequence; they are not confined to a single end-of-course topic.
 - **Safety is part of the fundamentals.** "AI can be confidently wrong", "never share your bank details, ID numbers, passwords or PINs with a chatbot" and "that voice note might not be your uncle" are taught in the core modules, so every learner gets them, including those who never reach a specialisation.
 
 ### 6.3 Content design expectations
 
-- **Start with doing, then explain.** Early in a lesson, the learner does something they actually need, such as writing a WhatsApp message to a customer or summarising a school note, then the lesson explains what just happened. People care about how it works once they have seen it work.
+- **Start with doing, then explain.** Early in a lesson, the learner does something they actually need on a scripted chat, such as writing a WhatsApp message to a customer or summarising a school note, then the lesson explains what just happened. People care about how it works once they have seen it work.
 - New terms are defined in plain language and revisited in context.
 - Examples span different jobs, study, and everyday life; the curriculum is not centered on QA.
 - **Everyday examples, not tech examples.** Explain machine learning as "how your phone learned to suggest the next word" or "how a video app knows what you like". Avoid diagrams of neural networks.
@@ -402,6 +409,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 - A complete reading alternative works without JavaScript.
 - Guide activities and reflections are unscored and do not create official assessment attempts.
 - Route, activity state and film position are preserved; changing routes pauses the film.
+- The guide's step bar distinguishes steps that are **done**, steps that were **visited but not finished**, and steps **not started**, so skipping a step never makes it look complete. (Learner feedback, 13 November 2026.)
 - Use Remotion as isolated film production tooling and React for learning interactions.
 - Lesson 1 opens with a plain definition, ordinary automation contrast, capabilities, learning from examples, generative AI, errors and human checks. Move the four approaches to a later unit pending curriculum approval.
 - Preserve Lesson 2’s existing Maya film and supplied voice; its guide investigates objects and decisions through her day.
@@ -438,7 +446,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 
 - A clearly labelled **Sign out** control appears in the site header on every page while the learner is signed in: beside the main navigation on larger screens, and inside the menu on phones, with the signed-in name shown there.
 - Signing out ends the session on that device and returns the learner to the home page. The header then no longer offers Sign out.
-- After signing out, account-only pages (Lesson 3 onwards, the final assessment and the certificate) ask the learner to sign in again, and account APIs reject requests.
+- After signing out, the certificate page shows "Sign up to get your certificate" again and account APIs reject requests. Module 1 lessons stay open, because they never needed an account.
 - Signing out does not delete anything. Saved progress, assessment results and certificates remain on the learner's account and reappear when they sign in again.
 - Learning places and private notes kept in the browser stay filed under each learner's own account, so another person using the same device cannot see them by signing in themselves or browsing as a guest.
 - The control is keyboard accessible, has a visible focus state and works on phones and desktop.
@@ -465,7 +473,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 - The activity has a clear objective and enough context to complete it.
 - It teaches the learner to provide relevant context, review the response, and refine the request where appropriate.
 - It asks the learner to check output instead of treating a fluent response as proof of accuracy.
-- It provides an alternative using sample material if a third-party tool is unavailable.
+- Practice happens on scripted chats inside the app; no AI tool runs inside Buggle Learn. Learners take away a card or checklist to use in any tool they choose.
 - It does not ask learners to submit confidential workplace, personal, or sensitive information to a public AI tool.
 
 #### Story C3: See examples from my world
@@ -474,7 +482,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 
 **Acceptance criteria**
 
-- At sign-up, the learner is asked one optional question about who they are; proposed options are the job paths plus "Something else" (⚠ OPEN DECISION, section 12). They can skip it and change it later.
+- The learner is asked one optional question about who they are, after Module 3, when they pick a path, with no account needed (decided 13 November 2026). Proposed options are the job paths plus "Something else". They can skip it and change it later.
 - Lessons use examples matching that answer where alternatives exist; the concepts, knowledge checks and certificate stay the same for everyone.
 - Learners who skip the question see a general everyday-life example.
 - The answer is used only to choose examples. It is not shared or used for anything else, and the learner can remove it.
@@ -529,7 +537,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 - The learner checks the result against a short rubric and identifies at least one limitation or possible failure.
 - The learner can complete the activity without connecting a workplace account or sharing confidential data.
 
-**⚠ OPEN DECISION:** which outside chat tool, if any, learners use for the first practical activity, and the fallback for learners without an account (section 12, open decision 2).
+**Decided:** no AI tool runs inside the app; practical activities use scripted chats (section 6.1A).
 
 ### Epic E: Check understanding and progress
 
@@ -587,7 +595,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 8. The platform records assessment results and certificate issuance to prevent an award without satisfying the requirements.
 9. The certificate is described as a certificate of completion, not an accredited qualification or proof of professional competence.
 
-**Decided:** the first certificate is earned after Module 1, and every later module and job path awards its own. Public certificate verification is a later-release consideration; each certificate records a unique ID.
+**Decided:** Modules 1 to 3 together earn the main Certificate of Completion. Module 3 also gives its own shareable "AI Safety" badge, and optional Module 4 and each job path give a separate badge. Public certificate verification is a later-release consideration; each certificate and badge records a unique ID. **⚠ OPEN DECISION:** what happens to the Module 1 certificate that is live today (section 12).
 
 #### Story F2: Complete the full learning path
 
@@ -601,7 +609,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 - Passing the final assessment records full-path completion separately from the Module 1 certificate.
 - Any full-programme certificate requirements and name are clearly presented before the learner starts the full path.
 
-**Decided (13 November 2026):** every module and every job path awards its own Certificate of Completion. A separate certificate for the whole programme is not currently planned.
+**Decided (13 November 2026, updated):** Modules 1 to 3 together earn the main Certificate of Completion. Module 3 also gives its own shareable "AI Safety" badge, and optional Module 4 and each job path give a separate badge. A separate certificate for the whole programme is not currently planned.
 
 ### Epic G: Use AI thoughtfully
 
@@ -677,7 +685,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 | Module completion                | All lesson checks and the module assessment are passed.                                                                                              |
 | Certificate eligibility          | For each module or job path: all its lesson checks and its final assessment passed. Module 1 is live; the others follow as they are built.        |
 | Full-path final assessment       | Mandatory after completion of all modules; covers the full learning path.                                                                             |
-| Certificates                     | Every module and every job path awards its own digital Certificate of Completion, titled with the module or path name. Module 1 is the first.        |
+| Certificates                     | Modules 1 to 3 earn the main Certificate of Completion. Module 3 also gives an "AI Safety" badge; Module 4 and each path give a badge. Module 1's certificate is live today (see section 12). |
 | Certificate details              | Learner name, module title, completion date, and issuing organisation.                                                                               |
 | Certificate record               | Store learner completion, assessment results, certificate issue date, and a unique certificate ID.                                                   |
 | Public certificate verification  | Consider for a later release; do not expose learner information publicly without a separate privacy decision.                                        |
@@ -702,7 +710,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 
 - Public certificate verification.
 - A full-programme certificate at launch; this remains an open decision.
-- A custom AI chatbot, agent builder, or AI-powered tutor. (How learners "start with doing" with real AI in early lessons is an open decision in section 12.)
+- A custom AI chatbot, agent builder, AI-powered tutor, or any connection to outside AI tools. Learners "start with doing" on scripted chats.
 - Requiring learners to build a coded agent.
 - Paid plans, a discussion community, or workplace-system integrations.
 - A promise that learners will become AI experts or improve their employment prospects.
@@ -731,6 +739,7 @@ Checked against the five live Module 1 lessons and across the new plan. Reinforc
 Success measures should show whether learners understand and can apply the basics, not just whether they visit the site. Candidate measures include:
 
 - How many learners start and complete Module 1.
+- How often learners download or share the Module 3 safety checklist.
 - Pass rates and retry patterns for lesson checks and the Module 1 final assessment.
 - Whether learners report increased confidence in understanding AI terms and assessing AI output.
 - Which lessons learners find confusing or leave before completing.
@@ -746,14 +755,24 @@ Approved:
 
 - The unique selling proposition in section 1A, led by "Learn to check AI, not just use it".
 - The curriculum plan of 12 November 2026 (section 6.1): Modules 1 to 3 for everyone (Foundations of AI, Talking to AI, Staying Safe with AI), optional Module 4 (Go Deeper: How AI Works), then a job path ending in a hands-on project.
-- Build order: Module 2, Module 3, then Paths A (Students), B (Office and Admin) and C (Small Business). Module 4 and Paths D to F follow; Path E (Nurses and Carers) must be reviewed by a qualified nurse or care manager.
+- Build order: Module 2, Module 3, then Path B (Office and Admin, reusing Maya), Path A (Students) and Path C (Small Business). Module 4 and Paths D to F follow.
+- **No AI tool runs inside the app.** Lessons show scripted chats and teach safe use; learners use real tools on their own, outside the app, with cards and checklists they take away.
+- **Country-neutral stories:** no currencies, place names, local institutions or slang; a mix of names and backgrounds.
+- **Writing and review:** the product owner writes every story; one person who does that job reviews each path before it goes live. Path E (Nurses) does not go live without review by a qualified nurse.
 - The story model in section 6.1A: every module is one story, every lesson an episode (situation, choice, what happens, your turn), with a recurring cast and a hook into the next module.
 - No standalone machine learning module in the core; machine learning is explained where needed, with more in optional Module 4.
-- Guests can take knowledge checks on the free preview lessons; sign-in is needed only to save results, keep progress and earn certificates.
+- **13 November 2026:** all of Module 1, including every knowledge check and the final assessment, is open without an account. Learners sign up only to get their certificate ("Sign up to get your certificate"), which also lets them continue to Module 2 with progress saved from then on. Guest results are marked on the server against an anonymous ID and move into the account at sign-up.
+- **13 November 2026:** the Module 1 Certificate of Completion stays as the first milestone. The main certificate for Modules 1 to 3 is added when Modules 2 and 3 exist; learners who already hold a Module 1 certificate keep it.
+- **13 November 2026:** lessons never run longer than eight minutes; episodes aim for 3 to 4.
+- **13 November 2026:** in every module, sign-in is needed only to save progress or get a certificate or badge; knowledge checks stay open to everyone.
+- **13 November 2026:** the guide's step bar shows done, visited but not finished, and not started as separate states.
+- **13 November 2026:** twelve of the sixteen overlaps in section 6.1D are resolved through episode changes (2.1, 2.2, 3.5, 4.1, 4.2, 4.3, B1, B4, C3); Daniel leads Path D, Sarah appears in Path E, and Amina appears in 3.5.
+- **13 November 2026:** Everyday Life is added as Path G, built after Path C and before Paths D to F.
+- **13 November 2026:** "Which best describes you?" is asked after Module 3, when learners choose a path, with no account needed. Modules 1 to 3 are the general path for everyone and are built first.
 - **13 November 2026:** knowledge checks have 5 questions, with 4 correct to pass. The live 10-question Module 1 checks will be trimmed to 5.
-- **13 November 2026:** learners can sign in with Google or with email and password (added for the testing period).
-- **13 November 2026:** the audience is global and diverse, with neutral examples and a diverse cast, not one market.
-- **13 November 2026:** every module and every job path awards its own Certificate of Completion, including optional Module 4.
+- **13 November 2026:** learners can sign in with Google or with email and password (added for the testing period; not yet built).
+- **13 November 2026:** the audience is global and diverse, with country-neutral stories and a diverse cast, not one market.
+- **Certificates (updated):** Modules 1 to 3 together earn the main Certificate of Completion. Module 3 also gives its own shareable "AI Safety" badge, and optional Module 4 and each job path give a separate badge.
 - **13 November 2026:** after each lesson, an optional pop-up asks whether the lesson was helpful and whether it felt easy, about right or hard.
 - The first two lesson previews; two equivalent learning routes; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; WCAG 2.2 AA.
 - Buggle Learn is completely free, with no payments, paid tiers or subscriptions.
@@ -761,20 +780,18 @@ Approved:
 - Each core module ends with a short refresher final assessment; Module 1's has 8 questions (6 to pass, no time limit) and opens after the last lesson.
 - Narration recordings are supplied by the user before film production, as defined in LEARNING_EXPERIENCE.md.
 
-Resolved since earlier drafts: the remaining Module 1 lessons (all five are live), the Module 1 final assessment blueprint, the certificate ID format (such as BL-M1-XXXX-XXXX), where agents and workflows are taught (Module 4.4 and path projects), and which job paths come first.
+Resolved since earlier drafts: whether learners use AI tools inside the app (no), which country the stories are for (none in particular), who writes and reviews the paths; the remaining Module 1 lessons (all five are live), the Module 1 final assessment blueprint, the certificate ID format (such as BL-M1-XXXX-XXXX), where agents and workflows are taught (Module 4.4 and path projects), and which job paths come first.
 
-**⚠ OPEN DECISIONS**
+**⚠ OPEN DECISIONS** (kept open and researched as we build)
 
-1. **Lesson length.** Episodes are planned at 3 to 4 minutes. Confirm eight minutes stays the hard limit.
-2. **Outside chat tools in Module 2.** Module 2 has learners practise with ChatGPT, Claude, Gemini or Copilot. These are made by other companies, so learners need to sign up with them, and some may be unable or unwilling to. Options: (a) show the same exercise with ready-made sample answers inside Buggle Learn, so nobody needs an outside account; (b) recommend one tool and explain how to sign up safely; (c) both, with sample answers as the default. Recommended: (c).
-3. **Sign-up question.** What it asks (proposed: the job paths plus "Something else"), and how the answer is stored and removed.
-4. **Everyday life track.** Not Module 2: an optional track proposed in an earlier draft for learners who do not fit a job path, covering money, side hustles and getting more from their phone. Scams now sit in Module 3 and studying in Path A. Drop it, or keep it as a later path?
-5. **Overlaps and duplicates.** Accept, change or reject each of the 16 recommendations in section 6.1D before scripts are written.
-6. **Expert reviewers.** Each job path should be checked by someone who does that job, so the examples are realistic and the safety advice is right: for example a qualified nurse or care manager for Path E, and a teacher for Path F. Who are they?
-7. **Employer offering.** Should there ever be a version of the "what not to paste" safety training sold to companies for their staff? Any paid version would reverse the decision that Buggle Learn is completely free. Recommended: no, or only as a free resource employers can share.
-8. **Success measures.** The numbers that show Buggle Learn is working, for example how many people start and finish each module, knowledge check pass rates, and the feedback pop-up ratings. Choose which to track and set targets.
+1. **Overlaps and duplicates.** Four of the sixteen in section 6.1D remain: academic honesty across Paths A and F (10), where health, law and money advice is taught (11), the two voice-note scam examples (14), and the dollar prices in live Lesson 2 (16).
+2. **Path reviewers.** The rule is decided (one person who does that job reviews each path; a qualified nurse for Path E). Name the reviewers, starting with Path B.
+3. **Employer offering.** Whether to offer anything to companies, such as staff training on safe AI use. Buggle Learn is currently completely free; any paid offering would reverse that. Recommended: no, or only a free resource employers can share.
+4. **Success measures.** Choose which numbers to track and set targets. Candidates: learners who start and finish Module 1, knowledge check pass rates, feedback pop-up ratings, certificates issued, and how often the Module 3 safety checklist is downloaded or shared.
+5. **Path G (Everyday Life).** Its character, story, episodes and final project.
+6. **"Which best describes you?" storage.** How the answer is stored and removed.
 
-**Not yet reflected on the live site:** the site and AGENT.md still show the earlier six-module list; lesson checks still ask guests to sign in first and still have 10 questions; Google is the only sign-in option; and there is no feedback pop-up yet.
+**Not yet reflected on the live site:** the site still shows the earlier six-module list; lesson checks still have 10 questions; Google is the only sign-in option; there is no feedback pop-up yet; Lesson 2 still prices the camera bag in dollars; and the AI practice lab prototype (an in-app AI) is set aside and will not be built.
 
 ## 13. Working definition of done for the first release
 

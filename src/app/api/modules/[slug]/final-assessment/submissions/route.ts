@@ -3,18 +3,20 @@ import { scoreAssessment } from "@/lib/assessment-scoring";
 import { moduleAssessmentBank } from "@/server/assessment-bank";
 import { hasFinalAssessment } from "@/server/certificates";
 import { db } from "@/server/database";
-import { learnerId, privateHeaders, sameOrigin, smallJSON } from "@/server/request";
+import { privateHeaders, sameOrigin, smallJSON } from "@/server/request";
+import { assessmentLearner, openToGuests } from "@/server/guest";
 
 // Scores a final assessment on the server and stores it once per submission key.
 export async function POST(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   if (!sameOrigin(request))
     return Response.json({ error: "Invalid request origin" }, { status: 403 });
-  const user = await learnerId();
-  if (!user)
-    return Response.json({ error: "Please sign in again before submitting." }, { status: 401 });
   const { slug } = await params;
   if (!hasFinalAssessment(slug))
     return Response.json({ error: "Assessment not found" }, { status: 404 });
+  const learner = await assessmentLearner({ create: openToGuests(slug) });
+  if (!learner)
+    return Response.json({ error: "Please sign in again before submitting." }, { status: 401 });
+  const user = learner.id;
   const questions = moduleAssessmentBank[slug];
   let submissionKey: string, answers: Record<string, string>, result;
   try {

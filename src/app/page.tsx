@@ -108,9 +108,8 @@ export default function Home() {
               Start here
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted">
-              Follow these steps in order. No account is needed for the
-              welcome and the first two lessons. Lesson 3 onwards needs a
-              free Google sign-in.
+              Follow these steps in order. No account is needed for any of
+              Module 1. Sign up at the end to get your certificate.
             </p>
           </div>
           <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

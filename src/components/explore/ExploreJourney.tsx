@@ -6,6 +6,7 @@ import { Activity, activityButton } from "./Activities";
 import { HistoryActivity } from "./HistoryActivities";
 import { OfficeActivity } from "./OfficeActivities";
 import { HiringActivity } from "./HiringActivities";
+import { stepComplete } from "./completion";
 
 const primaryButton =
   "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-3 font-semibold text-white hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
@@ -65,29 +66,47 @@ export function ExploreJourney({
           {guide.title}
         </p>
         <p className="shrink-0 text-sm text-muted">
-          Step {place.step + 1} of {guide.steps.length}
+          Step {place.step + 1} of {guide.steps.length} ·{" "}
+          {guide.steps.filter((s) => stepComplete(s.id, place.activities)).length} done
         </p>
       </div>
       <nav aria-label="Guide steps" className="mt-4">
         <ol className="flex gap-1.5">
-          {guide.steps.map((s, i) => (
-            <li key={s.id} className="flex-1">
-              <button
-                type="button"
-                onClick={() => go(i)}
-                aria-current={i === place.step ? "step" : undefined}
-                aria-label={`Step ${i + 1}: ${s.title}${place.visited.includes(s.id) ? " (visited)" : ""}`}
-                title={s.title}
-                className="block w-full py-2"
-              >
-                <span
-                  className={`block h-2 rounded-full transition-colors ${i === place.step ? "bg-brand" : i < place.step || place.visited.includes(s.id) ? "bg-brand/40" : "bg-line"}`}
-                />
-              </button>
-            </li>
-          ))}
+          {guide.steps.map((s, i) => {
+            // Three distinct states: finished, opened but not finished, not opened.
+            const complete = stepComplete(s.id, place.activities);
+            const visited = place.visited.includes(s.id) || i === place.step;
+            const status = complete ? "done" : visited ? "visited, not finished" : "not started";
+            return (
+              <li key={s.id} className="flex-1">
+                <button
+                  type="button"
+                  onClick={() => go(i)}
+                  aria-current={i === place.step ? "step" : undefined}
+                  aria-label={`Step ${i + 1}: ${s.title} (${status})`}
+                  title={`${s.title}: ${status}`}
+                  className="block w-full py-2"
+                >
+                  <span
+                    className={`block h-2.5 rounded-full transition-colors ${
+                      complete
+                        ? "bg-teal"
+                        : visited
+                          ? "border-2 border-brand bg-white"
+                          : "bg-line"
+                    } ${i === place.step ? "ring-2 ring-navy ring-offset-2" : ""}`}
+                  />
+                </button>
+              </li>
+            );
+          })}
         </ol>
       </nav>
+      <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted" aria-hidden="true">
+        <span className="inline-flex items-center gap-1.5"><span className="inline-block h-2 w-4 rounded-full bg-teal" />Done</span>
+        <span className="inline-flex items-center gap-1.5"><span className="inline-block h-2 w-4 rounded-full border-2 border-brand bg-white" />Visited, not finished</span>
+        <span className="inline-flex items-center gap-1.5"><span className="inline-block h-2 w-4 rounded-full bg-line" />Not started</span>
+      </p>
       <h2
         id="explore-title"
         ref={heading}

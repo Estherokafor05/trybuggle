@@ -1,6 +1,5 @@
 "use client";
 import { useRef, useState, type ReactNode } from "react";
-import Link from "next/link";
 type Question = {
   id: string;
   prompt: string;
@@ -30,7 +29,6 @@ export function KnowledgeCheck({
   title = "Your knowledge check",
   intro = "10 quick questions about this lesson. Get 7 or more right to pass. You can try again as many times as you need.",
   noun = "knowledge check",
-  returnTo = `/modules/ai-foundations/lessons/${slug}#knowledge-check`,
   afterPass,
 }: {
   slug: string;
@@ -41,7 +39,6 @@ export function KnowledgeCheck({
   title?: string;
   intro?: string;
   noun?: string;
-  returnTo?: string;
   /** Shown once the learner has passed, e.g. a link to their certificate. */
   afterPass?: ReactNode;
 }) {
@@ -133,15 +130,13 @@ export function KnowledgeCheck({
         {title}
       </h2>
       <p className="mt-3 leading-relaxed">{intro}</p>
-      {!signedIn ? (
-        <Link
-          className={button + " mt-5"}
-          href={`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`}
-        >
-          Sign in with Google to take the {noun}
-        </Link>
-      ) : (
-        <>
+      {!signedIn && (
+        <p className="mt-3 rounded-xl bg-canvas px-4 py-3 text-sm leading-relaxed">
+          No account needed. Your results are kept for you on this device, and
+          you can sign up when you finish Module 1 to get your certificate.
+        </p>
+      )}
+      <>
           {!questions.length && (
             <button
               className={button + " mt-5"}
@@ -248,8 +243,7 @@ export function KnowledgeCheck({
               </form>
             )
           )}
-        </>
-      )}
+      </>
       {message && (
         <p role="alert" className="mt-4 rounded-xl bg-peach p-4">
           {message}
