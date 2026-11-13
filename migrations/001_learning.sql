@@ -14,7 +14,8 @@ INSERT INTO learning_lessons(slug,title) VALUES
  ('ai-or-software','AI or Ordinary Software?'),
  ('what-ai-can-do','What AI Can Do, and Where You Stay in Charge'),
  ('a-new-helper','A New Helper'),
- ('the-email-that-said-nothing','The Email That Said Nothing')
+ ('the-email-that-said-nothing','The Email That Said Nothing'),
+ ('three-tries-at-the-flyer','Three Tries at the Flyer')
 ON CONFLICT(slug) DO UPDATE SET title=EXCLUDED.title;
 CREATE TABLE IF NOT EXISTS learning_checkpoints (
  learner_id text NOT NULL REFERENCES learners(id),

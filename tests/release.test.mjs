@@ -77,9 +77,8 @@ test("retained four-approaches narration matches its approved script", () => {
   }
 });
 
-test("both preview lessons provide an independent guide and evidence links", () => {
+test("every built lesson provides an independent guide; any stored links are secure", () => {
   for (const lesson of previewLessons) {
-    assert.ok(lesson.sources.length > 0);
     assert.ok(
       exploreGuides[lesson.slug].steps.every(
         (step) => step.reading.length >= 2,

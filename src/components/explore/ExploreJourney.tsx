@@ -8,6 +8,7 @@ import { OfficeActivity } from "./OfficeActivities";
 import { HiringActivity } from "./HiringActivities";
 import { HelperActivity } from "./HelperActivities";
 import { EmailActivity } from "./EmailActivities";
+import { FlyerActivity } from "./FlyerActivities";
 import { stepComplete } from "./completion";
 
 const primaryButton =
@@ -19,6 +20,7 @@ const activityFor: Record<string, typeof Activity> = {
   "what-ai-can-do": HiringActivity,
   "a-new-helper": HelperActivity,
   "the-email-that-said-nothing": EmailActivity,
+  "three-tries-at-the-flyer": FlyerActivity,
 };
 function StepActivity(props: Parameters<typeof Activity>[0]) {
   const Component = activityFor[props.slug] ?? Activity;

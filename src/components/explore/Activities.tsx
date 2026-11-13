@@ -1798,6 +1798,8 @@ const exampleAnswers: Record<string, string> = {
     "My phone's alarm follows set instructions. My music app's suggestions might learn from what I play. Before I call something AI, I would ask what it actually does and how it decides.",
   "what-ai-can-do":
     "AI could help me draft emails. I would always check names, dates and prices. A decision about someone's job or health is one I would keep for a person.",
+  "three-tries-at-the-flyer":
+    "My CV summary is close but too long. I would type: keep my job titles and dates, make it no more than three lines. To change how it sounds, I would type: make it sound confident but friendly.",
   "the-email-that-said-nothing":
     "I might ask AI to write a message to my child's teacher. I would tell it who it is for, that I want to ask about a parents' evening, when I am free, and that it should sound short and polite.",
   "a-new-helper":

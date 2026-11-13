@@ -690,6 +690,63 @@ export const assessmentBank: Record<string, Question[]> = {
       "Even with a clear request, check the details someone will rely on against a reliable source.",
     ),
   ],
+  "three-tries-at-the-flyer": [
+    q(
+      "close-draft",
+      "Maya's first flyer draft has all the right details, but it is too long and formal. What is the best next step?",
+      [
+        "Give up and write it herself.",
+        "Start a new chat and type the same request again.",
+        "Stay in the same chat and tell the tool what to keep and what to change.",
+      ],
+      2,
+      "When a draft is close, keep the conversation going. The tool can build on what it already wrote.",
+    ),
+    q(
+      "useful-follow-up",
+      "Which follow-up message is most useful?",
+      [
+        "Make it better.",
+        "Keep the date, time and place. Make it no more than fifty words.",
+        "Try again.",
+      ],
+      1,
+      "It says exactly what to keep and what to change, so the tool has less to guess.",
+    ),
+    q(
+      "change-tone",
+      "The shorter flyer still sounds stiff. What could Maya type to change how it sounds?",
+      [
+        "Make it sound like I\u2019m inviting a neighbour.",
+        "Make it longer.",
+        "Add more about the community centre.",
+      ],
+      0,
+      "Describing the tone you want, like inviting a neighbour, changes how it sounds without losing the details.",
+    ),
+    q(
+      "translation",
+      "Maya cannot read the translated flyer the chat tool gave her. What should she do before putting it up?",
+      [
+        "Put it up, because chat tools are always right about languages.",
+        "Ask the chat tool whether its translation is correct.",
+        "Ask someone who speaks the language to read it.",
+      ],
+      2,
+      "If you cannot check something yourself, ask someone who can. The volunteer changed two words that sounded odd.",
+    ),
+    q(
+      "main-lesson",
+      "What is the main lesson from Maya's three tries?",
+      [
+        "The first draft is always the best one.",
+        "If a draft is close, tell the tool what to keep and what to change.",
+        "Chat tools only work if you ask three times.",
+      ],
+      1,
+      "There is nothing special about three tries. Keep going until the draft is right, saying what to keep and what to change.",
+    ),
+  ],
 };
 
 // Module final assessments: short refreshers across the module's lessons.

@@ -1,0 +1,77 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 13 November 2026",
+  "scenes": [
+    {
+      "id": "noticeboard",
+      "title": "A few seconds at the noticeboard",
+      "description": "With the invitations ready, Maya turns to the open day flyer and imagines someone walking past the noticeboard with only a few seconds to look.",
+      "lines": [
+        "With the invitations ready, Maya turns to the flyer.",
+        "She imagines someone walking past the noticeboard on their way out.",
+        "They’ve got a few seconds to see what’s happening and decide if they want to come."
+      ]
+    },
+    {
+      "id": "first-draft",
+      "title": "The first draft",
+      "description": "Maya gives the chat tool who, what, when and where, and a friendly tone. The draft has the right details but opens with a long, formal sentence.",
+      "lines": [
+        "She tells the chat tool who the flyer is for, what’s happening, when and where, and asks for a friendly tone.",
+        "The draft comes back with all the right details.",
+        "It also starts with, “We are delighted to announce that the community centre will be hosting its forthcoming open day.”",
+        "“Nobody’s reading all that on their way out.”",
+        "Maya’s about to write it herself."
+      ]
+    },
+    {
+      "id": "choice",
+      "title": "What would you say next?",
+      "description": "The learner is asked to choose Maya's next message to the chat tool.",
+      "lines": [
+        "What would you say to the chat tool next?",
+        "Choose Maya’s next message, then carry on."
+      ]
+    },
+    {
+      "id": "tries",
+      "title": "Two more tries",
+      "description": "In the same chat, Maya asks the tool to keep the date, time and place and use no more than fifty words, then to sound like she is inviting a neighbour. The third version sounds like her.",
+      "lines": [
+        "Maya stays in the same chat.",
+        "She types, “Keep the date, time and place. Make it no more than fifty words.”",
+        "The new version fits on the flyer.",
+        "But there’s still a line about “opportunities for community engagement.”",
+        "Maya tries one more time.",
+        "“Make it sound like I’m inviting a neighbour.”",
+        "This time, it starts with, “Come and see what’s happening at your community centre.”",
+        "That sounds like something she’d put on the noticeboard."
+      ]
+    },
+    {
+      "id": "translation",
+      "title": "A second language",
+      "description": "Maya asks for a translated flyer. She cannot check it herself, so a volunteer who speaks the language reads it and changes two words before both versions go up.",
+      "lines": [
+        "Then Maya thinks of the families who’d find the flyer easier to read in another language.",
+        "She asks for a translated version.",
+        "Since she can’t check the translation herself, she asks a volunteer who speaks the language to read it.",
+        "He changes two words that sounded odd.",
+        "Then both versions go up."
+      ]
+    },
+    {
+      "id": "keep-going",
+      "title": "Keep the conversation going",
+      "description": "If a draft is close, keep the conversation going: say what to keep and what to change, and ask someone who can check what you cannot. The learner thinks about a draft they would like to improve.",
+      "lines": [
+        "If a draft is close, you can keep the conversation going.",
+        "Tell the tool what to keep and what to change.",
+        "And if it gives you something you can’t check yourself, ask someone who can.",
+        "Your turn.",
+        "Think of a draft you’d like to improve.",
+        "What would you type to change its length?",
+        "What would you type to change how it sounds?"
+      ]
+    }
+  ]
+}
