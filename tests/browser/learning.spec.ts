@@ -856,3 +856,56 @@ test("guests take every Module 1 check, then sign up to collect the certificate 
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
   await context.close();
 });
+
+test("Episode 2.1: Module 2 page, every guide step, a 5-question check and accessibility", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai");
+    await expect(page.getByRole("heading", { name: "Talking to AI", level: 1 })).toBeVisible();
+    await page.getByRole("link", { name: /Start Episode 2\.1/ }).click();
+    await expect(page.getByRole("heading", { name: "A New Helper", level: 1 })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Your path through Module 2" })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /a-new-helper\/story/);
+
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    const fit = { newsletter: 0, rooms: 1, emails: 0, volunteers: 1, ideas: 0 };
+    for (const [id, i] of Object.entries(fit)) await page.locator(`input[name="job-${id}"]`).nth(i).check();
+    await expect(page.getByText("Chat tools help with words")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByRole("button", { name: "Send", exact: true }).click();
+    await expect(page.getByText("Warm, polished and quick")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByRole("button", { name: /Our community centre is a warm/ }).click();
+    await expect(page.getByText(/Look for a line with a specific fact/)).toBeVisible();
+    await page.getByRole("button", { name: /For over fifty years/ }).click();
+    await page.getByRole("button", { name: /Add Maya's note/ }).click();
+    await expect(page.getByText("Note added")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel("together").check();
+    await page.getByLabel("fifty").check();
+    await expect(page.getByText("Smooth is not the same as right")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Use it as a first draft/).check();
+    await expect(page.getByText("You got it!")).toBeVisible();
+    await expect(page.getByText("Step 5 of 5 · 5 done")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // Five questions, four correct to pass, no account needed.
+    await expect(page.getByText("5 quick questions about this episode. Get 4 or more right to pass.")).toBeVisible();
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["a-new-helper"];
+    expect(questions).toHaveLength(5);
+    for (const [i, q] of questions.entries())
+      await page.locator(`input[name="${q.id}"][value="${i < 4 ? q.correct : q.options.find((o) => o.id !== q.correct)!.id}"]`).check();
+    await page.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(page.getByText("Knowledge check passed")).toBeVisible();
+    await expect(page.getByText("4 of 5 correct · 80%")).toBeVisible();
+    await context.close();
+  }
+});

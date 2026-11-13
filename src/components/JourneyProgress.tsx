@@ -1,19 +1,31 @@
 import Link from "next/link";
-import { journey, journeyPosition } from "@/content/journey";
+import { journeyFor } from "@/content/journey";
+import { getModule } from "@/content/modules";
 
-// Shows the learner where they are on the path from the welcome through
-// Module 1, and lets them jump to any step that is ready.
-export function JourneyProgress({ current }: { current?: string }) {
-  const { index } = current ? journeyPosition(current) : { index: -1 };
+// Shows the learner where they are on a module's path, and lets them jump
+// to any step that is ready.
+export function JourneyProgress({
+  current,
+  moduleSlug = "ai-foundations",
+}: {
+  current?: string;
+  moduleSlug?: string;
+}) {
+  const journey = journeyFor(moduleSlug);
+  const order = getModule(moduleSlug)?.order ?? 1;
+  const index = current ? journey.findIndex((s) => s.id === current) : -1;
+  // Number only the lessons or episodes; the welcome and final assessment get symbols.
+  const numberOf = (i: number) =>
+    journey.slice(0, i + 1).filter((s) => s.id !== "welcome" && s.id !== "final-assessment").length;
 
   return (
     <nav
-      aria-label="Your path through Module 1"
+      aria-label={`Your path through Module ${order}`}
       className="rounded-3xl border border-line/80 bg-white px-4 py-4 sm:px-6"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="text-sm font-semibold text-navy">
-          Your path through Module 1
+          Your path through Module {order}
         </p>
         {index >= 0 && (
           <p className="text-xs text-muted">
@@ -34,7 +46,7 @@ export function JourneyProgress({ current }: { current?: string }) {
                   ? "border-2 border-brand bg-white text-navy"
                   : "border-2 border-dashed border-line bg-white text-muted"
           }`;
-          const symbol = i === 0 ? "★" : step.id === "final-assessment" ? "⚑" : String(i);
+          const symbol = step.id === "welcome" ? "★" : step.id === "final-assessment" ? "⚑" : String(numberOf(i));
           const label = (
             <span
               className={`mt-1.5 block text-center text-[11px] leading-tight sm:text-xs ${

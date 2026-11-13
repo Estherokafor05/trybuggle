@@ -77,6 +77,7 @@ const ids: Record<string, string[]> = {
     "hr-ranking",
     "hr-checking",
   ],
+  "a-new-helper": ["chat-busy", "chat-ask", "chat-check", "chat-why", "chat-turn"],
 };
 // Step ids from earlier guide versions. Saved places that mention them are
 // still accepted; the retired entries are dropped instead of rejecting the
@@ -87,6 +88,7 @@ const retired: Record<string, string[]> = {
   "before-chatgpt": [],
   "ai-or-software": [],
   "what-ai-can-do": [],
+  "a-new-helper": [],
 };
 /** Longest film in seconds, so a saved video position can be validated. */
 const filmLength: Record<string, number> = {
@@ -95,6 +97,7 @@ const filmLength: Record<string, number> = {
   "before-chatgpt": 256,
   "ai-or-software": 237,
   "what-ai-can-do": 185,
+  "a-new-helper": 156,
 };
 export function parseCheckpoint(
   value: unknown,

@@ -576,6 +576,63 @@ export const assessmentBank: Record<string, Question[]> = {
       "The more serious the consequences, the more careful the check. Health questions need a qualified person.",
     ),
   ],
+  "a-new-helper": [
+    q(
+      "what-is-a-chat-tool",
+      "What is an AI chat tool?",
+      [
+        "A website or app where you type a request in ordinary words and it types an answer back.",
+        "A search engine that only shows links to other websites.",
+        "A tool that books rooms and calls people for you.",
+      ],
+      0,
+      "Chat tools such as ChatGPT, Gemini, Claude and Copilot answer requests in ordinary words. They help with words, not with doing tasks like booking rooms.",
+    ),
+    q(
+      "how-it-writes",
+      "How does a chat tool write its answers?",
+      [
+        "It looks up each fact in a trusted database first.",
+        "It predicts which words are most likely to come next, based on patterns in text it learned from.",
+        "It copies the answer from one website.",
+      ],
+      1,
+      "Chat tools predict likely next words. That is why their writing flows smoothly, but it is not checking facts as it goes.",
+    ),
+    q(
+      "confident",
+      "A chat tool's answer sounds polished and confident. What does that tell you?",
+      [
+        "It is definitely correct.",
+        "It has been checked by an expert.",
+        "Not much about whether it is correct: it can sound just as sure when it is wrong.",
+      ],
+      2,
+      "Fluent, confident writing is what chat tools are built to produce. It is not a sign that the details are true.",
+    ),
+    q(
+      "fifty-years",
+      "The draft says the centre has served the community \u201cfor over fifty years\u201d. Maya never mentioned this. What should she do?",
+      [
+        "Check when the centre actually opened before printing it.",
+        "Keep it, because it sounds good.",
+        "Ask the chat tool if it is sure.",
+      ],
+      0,
+      "Specific details the tool was not given, such as dates and numbers, need checking with a reliable source. Asking the same tool is not an independent check.",
+    ),
+    q(
+      "first-draft",
+      "What is the best way to use what a chat tool writes?",
+      [
+        "Paste it straight into the newsletter.",
+        "Treat it as a first draft, and check the details someone else might rely on.",
+        "Ignore it and start again from scratch.",
+      ],
+      1,
+      "Let AI give you a quick first draft, then check the details before you use them.",
+    ),
+  ],
 };
 
 // Module final assessments: short refreshers across the module's lessons.

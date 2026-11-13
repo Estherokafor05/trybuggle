@@ -1,0 +1,95 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 13 November 2026",
+  "scenes": [
+    {
+      "id": "open-day",
+      "title": "An open day in three weeks",
+      "description": "Maya is answering emails at the community centre when her manager, Rosa, asks her to organise an open day in three weeks. By lunch Maya has a long list: book rooms, call volunteers, write the newsletter, and the emails are still waiting.",
+      "lines": [
+        "Remember Maya from Module 1?",
+        "She runs the office at a busy community centre.",
+        "This morning, she’s halfway through answering emails when her manager, Rosa, stops by her desk.",
+        "“We’re holding an open day,” Rosa says.",
+        "“Could you organise it?”",
+        "“Of course. When is it?”",
+        "“Three weeks from Saturday.”",
+        "“Three weeks?”",
+        "By lunch, Maya’s made a list.",
+        "Book the rooms.",
+        "Call the volunteers.",
+        "Get something into the newsletter.",
+        "And she still has those emails to answer."
+      ]
+    },
+    {
+      "id": "new-helper",
+      "title": "Leo suggests a chat tool",
+      "description": "Her colleague Leo sees the list and shows her an AI chat tool on his phone. Examples such as ChatGPT, Gemini, Claude and Copilot appear as names, and most have a free version.",
+      "lines": [
+        "Her colleague Leo sees the list.",
+        "“Why don’t you try an AI chat tool for the newsletter?”",
+        "He pulls out his phone.",
+        "“There’s ChatGPT, Gemini, Claude, Copilot.",
+        "Most have a free version.",
+        "Just ask for what you need, like you’d ask me.”"
+      ]
+    },
+    {
+      "id": "first-draft",
+      "title": "A polished first draft",
+      "description": "Maya types a request into a generic AI chat tool and a warm, professional paragraph appears in seconds. Her finger hovers over Copy.",
+      "lines": [
+        "So Maya types, “Write a short, welcoming paragraph about our community centre for the open day newsletter.”",
+        "A few seconds later, there it is.",
+        "It’s warm.",
+        "It sounds professional.",
+        "Maya can already picture it in the newsletter.",
+        "“I could actually use this.”",
+        "Her finger hovers over Copy."
+      ]
+    },
+    {
+      "id": "choice",
+      "title": "Is confident enough?",
+      "description": "The scene pauses and asks the learner whether an answer that sounds this confident is enough to trust.",
+      "lines": [
+        "Before Maya pastes it in, what do you think?",
+        "If an answer sounds this confident, is that enough to trust what it says?"
+      ]
+    },
+    {
+      "id": "fifty-years",
+      "title": "Fifty years?",
+      "description": "Maya rereads the draft and spots a claim that the centre has served the community for over fifty years. An animation shows the tool choosing likely next words rather than checking facts.",
+      "lines": [
+        "When Maya reads it again, one line catches her eye.",
+        "“For over fifty years, our centre has brought people together.”",
+        "“Fifty years? Where did it get that from?”",
+        "An AI writes by predicting which words are most likely to come next, based on patterns it learned from an enormous amount of text.",
+        "That is why its writing flows so smoothly.",
+        "It has seen millions of well-written paragraphs.",
+        "But it is not checking facts as it goes.",
+        "It is choosing words that sound right.",
+        "So it can sound exactly as confident when it is wrong as when it is right.",
+        "A line about serving the community for fifty years fits the kind of newsletter Maya asked for.",
+        "To know whether it’s true, she needs to check when the centre actually opened."
+      ]
+    },
+    {
+      "id": "habit",
+      "title": "Draft first, then check",
+      "description": "Maya keeps the parts she likes and adds a note to check the opening date with Rosa. The learner is invited to think of something to ask a chat tool this week and one detail they would check.",
+      "lines": [
+        "So she keeps the parts she likes and puts a note next to that line.",
+        "“Check opening date with Rosa before printing.”",
+        "That’s the habit we’ll practise in this module.",
+        "Let AI help you get a first draft.",
+        "Before you use it, check the details someone else might rely on.",
+        "Now it’s your turn.",
+        "Think of one thing you could ask an AI chat tool to help with this week.",
+        "Maybe a message, a short description, or a list of ideas.",
+        "What’s one detail you’d check before using the answer?"
+      ]
+    }
+  ]
+}

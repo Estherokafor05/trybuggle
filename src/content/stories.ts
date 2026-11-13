@@ -3,6 +3,7 @@ import foundations from "../../public/lessons/what-is-ai/narration.json";
 import history from "../../public/lessons/before-chatgpt/narration.json";
 import software from "../../public/lessons/ai-or-software/narration.json";
 import charge from "../../public/lessons/what-ai-can-do/narration.json";
+import helper from "../../public/lessons/a-new-helper/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -57,5 +58,13 @@ export const stories: Record<
     title: "Where you stay in charge",
     introduction:
       "Amina, who works in HR, uses an approved AI assistant to prepare for interviews. See what it does well, and what she checks.",
+  },
+  "a-new-helper": {
+    root: "/lessons/a-new-helper/",
+    mediaVersion: "?v=20261113-1",
+    narration: helper,
+    title: "A new helper",
+    introduction:
+      "Maya has three weeks to organise an open day. Her colleague Leo shows her an AI chat tool, and its first draft sounds perfect.",
   },
 };

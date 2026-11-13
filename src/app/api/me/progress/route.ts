@@ -9,7 +9,7 @@ export async function GET() {
     );
   try {
     const lessons =
-      await db()`SELECT l.slug,COALESCE(bool_or(a.passed),false) AS passed,COALESCE(max(a.correct_count)*10,0) AS best_score,count(a.id)::int AS attempts FROM learning_lessons l LEFT JOIN assessment_attempts a ON a.lesson_slug=l.slug AND a.learner_id=${user} GROUP BY l.slug ORDER BY l.slug`;
+      await db()`SELECT l.slug,COALESCE(bool_or(a.passed),false) AS passed,COALESCE(max(round(a.correct_count*100.0/a.question_count)),0)::int AS best_score,count(a.id)::int AS attempts FROM learning_lessons l LEFT JOIN assessment_attempts a ON a.lesson_slug=l.slug AND a.learner_id=${user} GROUP BY l.slug ORDER BY l.slug`;
     return Response.json({ lessons }, { headers: privateHeaders });
   } catch {
     return Response.json(

@@ -1,0 +1,387 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 13 November 2026",
+  "duration": 156,
+  "audioDuration": 154.04,
+  "scenes": [
+    {
+      "id": "open-day",
+      "title": "An open day in three weeks",
+      "description": "Maya is answering emails at the community centre when her manager, Rosa, asks her to organise an open day in three weeks. By lunch Maya has a long list: book rooms, call volunteers, write the newsletter, and the emails are still waiting.",
+      "start": 0,
+      "end": 31.42
+    },
+    {
+      "id": "new-helper",
+      "title": "Leo suggests a chat tool",
+      "description": "Her colleague Leo sees the list and shows her an AI chat tool on his phone. Examples such as ChatGPT, Gemini, Claude and Copilot appear as names, and most have a free version.",
+      "start": 31.42,
+      "end": 47.43
+    },
+    {
+      "id": "first-draft",
+      "title": "A polished first draft",
+      "description": "Maya types a request into a generic AI chat tool and a warm, professional paragraph appears in seconds. Her finger hovers over Copy.",
+      "start": 47.43,
+      "end": 68.05
+    },
+    {
+      "id": "choice",
+      "title": "Is confident enough?",
+      "description": "The scene pauses and asks the learner whether an answer that sounds this confident is enough to trust.",
+      "start": 68.05,
+      "end": 75.87
+    },
+    {
+      "id": "fifty-years",
+      "title": "Fifty years?",
+      "description": "Maya rereads the draft and spots a claim that the centre has served the community for over fifty years. An animation shows the tool choosing likely next words rather than checking facts.",
+      "start": 75.87,
+      "end": 123.25
+    },
+    {
+      "id": "habit",
+      "title": "Draft first, then check",
+      "description": "Maya keeps the parts she likes and adds a note to check the opening date with Rosa. The learner is invited to think of something to ask a chat tool this week and one detail they would check.",
+      "start": 123.25,
+      "end": 156
+    }
+  ],
+  "cues": [
+    {
+      "scene": "open-day",
+      "text": "Remember Maya from Module 1?",
+      "start": 0.16,
+      "end": 1.94,
+      "index": 0
+    },
+    {
+      "scene": "open-day",
+      "text": "She runs the office at a busy community centre.",
+      "start": 2.54,
+      "end": 5.34,
+      "index": 1
+    },
+    {
+      "scene": "open-day",
+      "text": "This morning, she’s halfway through answering emails when her manager, Rosa, stops by her desk.",
+      "start": 5.96,
+      "end": 11.68,
+      "index": 2
+    },
+    {
+      "scene": "open-day",
+      "text": "“We’re holding an open day,” Rosa says.",
+      "start": 12.32,
+      "end": 14.42,
+      "index": 3
+    },
+    {
+      "scene": "open-day",
+      "text": "“Could you organise it?”",
+      "start": 14.84,
+      "end": 15.86,
+      "index": 4
+    },
+    {
+      "scene": "open-day",
+      "text": "“Of course. When is it?”",
+      "start": 16.4,
+      "end": 17.78,
+      "index": 5
+    },
+    {
+      "scene": "open-day",
+      "text": "“Three weeks from Saturday.”",
+      "start": 18.34,
+      "end": 19.62,
+      "index": 6
+    },
+    {
+      "scene": "open-day",
+      "text": "“Three weeks?”",
+      "start": 20.08,
+      "end": 21.04,
+      "index": 7
+    },
+    {
+      "scene": "open-day",
+      "text": "By lunch, Maya’s made a list.",
+      "start": 21.72,
+      "end": 23.74,
+      "index": 8
+    },
+    {
+      "scene": "open-day",
+      "text": "Book the rooms.",
+      "start": 24.3,
+      "end": 25.04,
+      "index": 9
+    },
+    {
+      "scene": "open-day",
+      "text": "Call the volunteers.",
+      "start": 25.4,
+      "end": 26.4,
+      "index": 10
+    },
+    {
+      "scene": "open-day",
+      "text": "Get something into the newsletter.",
+      "start": 26.8,
+      "end": 28.24,
+      "index": 11
+    },
+    {
+      "scene": "open-day",
+      "text": "And she still has those emails to answer.",
+      "start": 28.74,
+      "end": 31.06,
+      "index": 12
+    },
+    {
+      "scene": "new-helper",
+      "text": "Her colleague Leo sees the list.",
+      "start": 31.78,
+      "end": 33.58,
+      "index": 13
+    },
+    {
+      "scene": "new-helper",
+      "text": "“Why don’t you try an AI chat tool for the newsletter?”",
+      "start": 34.14,
+      "end": 36.82,
+      "index": 14
+    },
+    {
+      "scene": "new-helper",
+      "text": "He pulls out his phone.",
+      "start": 37.3,
+      "end": 38.38,
+      "index": 15
+    },
+    {
+      "scene": "new-helper",
+      "text": "“There’s ChatGPT, Gemini, Claude, Copilot.",
+      "start": 38.9,
+      "end": 42.86,
+      "index": 16
+    },
+    {
+      "scene": "new-helper",
+      "text": "Most have a free version.",
+      "start": 43.28,
+      "end": 44.44,
+      "index": 17
+    },
+    {
+      "scene": "new-helper",
+      "text": "Just ask for what you need, like you’d ask me.”",
+      "start": 44.86,
+      "end": 47.1,
+      "index": 18
+    },
+    {
+      "scene": "first-draft",
+      "text": "So Maya types, “Write a short, welcoming paragraph about our community centre for the open day newsletter.”",
+      "start": 47.76,
+      "end": 54.58,
+      "index": 19
+    },
+    {
+      "scene": "first-draft",
+      "text": "A few seconds later, there it is.",
+      "start": 55.32,
+      "end": 57.46,
+      "index": 20
+    },
+    {
+      "scene": "first-draft",
+      "text": "It’s warm.",
+      "start": 57.94,
+      "end": 58.68,
+      "index": 21
+    },
+    {
+      "scene": "first-draft",
+      "text": "It sounds professional.",
+      "start": 59,
+      "end": 60.16,
+      "index": 22
+    },
+    {
+      "scene": "first-draft",
+      "text": "Maya can already picture it in the newsletter.",
+      "start": 60.7,
+      "end": 63.06,
+      "index": 23
+    },
+    {
+      "scene": "first-draft",
+      "text": "“I could actually use this.”",
+      "start": 63.68,
+      "end": 65.28,
+      "index": 24
+    },
+    {
+      "scene": "first-draft",
+      "text": "Her finger hovers over Copy.",
+      "start": 65.84,
+      "end": 67.7,
+      "index": 25
+    },
+    {
+      "scene": "choice",
+      "text": "Before Maya pastes it in, what do you think?",
+      "start": 68.4,
+      "end": 70.94,
+      "index": 26
+    },
+    {
+      "scene": "choice",
+      "text": "If an answer sounds this confident, is that enough to trust what it says?",
+      "start": 71.46,
+      "end": 75.52,
+      "index": 27
+    },
+    {
+      "scene": "fifty-years",
+      "text": "When Maya reads it again, one line catches her eye.",
+      "start": 76.22,
+      "end": 79.4,
+      "index": 28
+    },
+    {
+      "scene": "fifty-years",
+      "text": "“For over fifty years, our centre has brought people together.”",
+      "start": 80.02,
+      "end": 83.94,
+      "index": 29
+    },
+    {
+      "scene": "fifty-years",
+      "text": "“Fifty years? Where did it get that from?”",
+      "start": 84.66,
+      "end": 87.12,
+      "index": 30
+    },
+    {
+      "scene": "fifty-years",
+      "text": "An AI writes by predicting which words are most likely to come next, based on patterns it learned from an enormous amount of text.",
+      "start": 87.8,
+      "end": 95.62,
+      "index": 31
+    },
+    {
+      "scene": "fifty-years",
+      "text": "That is why its writing flows so smoothly.",
+      "start": 96.2,
+      "end": 98.82,
+      "index": 32
+    },
+    {
+      "scene": "fifty-years",
+      "text": "It has seen millions of well-written paragraphs.",
+      "start": 99.32,
+      "end": 102.02,
+      "index": 33
+    },
+    {
+      "scene": "fifty-years",
+      "text": "But it is not checking facts as it goes.",
+      "start": 102.56,
+      "end": 104.82,
+      "index": 34
+    },
+    {
+      "scene": "fifty-years",
+      "text": "It is choosing words that sound right.",
+      "start": 105.22,
+      "end": 107.38,
+      "index": 35
+    },
+    {
+      "scene": "fifty-years",
+      "text": "So it can sound exactly as confident when it is wrong as when it is right.",
+      "start": 107.86,
+      "end": 112.12,
+      "index": 36
+    },
+    {
+      "scene": "fifty-years",
+      "text": "A line about serving the community for fifty years fits the kind of newsletter Maya asked for.",
+      "start": 112.84,
+      "end": 118.16,
+      "index": 37
+    },
+    {
+      "scene": "fifty-years",
+      "text": "To know whether it’s true, she needs to check when the centre actually opened.",
+      "start": 118.74,
+      "end": 123,
+      "index": 38
+    },
+    {
+      "scene": "habit",
+      "text": "So she keeps the parts she likes and puts a note next to that line.",
+      "start": 123.5,
+      "end": 126.86,
+      "index": 39
+    },
+    {
+      "scene": "habit",
+      "text": "“Check opening date with Rosa before printing.”",
+      "start": 127.44,
+      "end": 130.12,
+      "index": 40
+    },
+    {
+      "scene": "habit",
+      "text": "That’s the habit we’ll practise in this module.",
+      "start": 130.7,
+      "end": 132.92,
+      "index": 41
+    },
+    {
+      "scene": "habit",
+      "text": "Let AI help you get a first draft.",
+      "start": 133.4,
+      "end": 135.74,
+      "index": 42
+    },
+    {
+      "scene": "habit",
+      "text": "Before you use it, check the details someone else might rely on.",
+      "start": 136.14,
+      "end": 139.94,
+      "index": 43
+    },
+    {
+      "scene": "habit",
+      "text": "Now it’s your turn.",
+      "start": 140.68,
+      "end": 141.84,
+      "index": 44
+    },
+    {
+      "scene": "habit",
+      "text": "Think of one thing you could ask an AI chat tool to help with this week.",
+      "start": 142.34,
+      "end": 146.16,
+      "index": 45
+    },
+    {
+      "scene": "habit",
+      "text": "Maybe a message, a short description, or a list of ideas.",
+      "start": 146.6,
+      "end": 150.12,
+      "index": 46
+    },
+    {
+      "scene": "habit",
+      "text": "What’s one detail you’d check before using the answer?",
+      "start": 150.78,
+      "end": 153.84,
+      "index": 47
+    }
+  ]
+}

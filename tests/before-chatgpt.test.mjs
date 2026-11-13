@@ -64,7 +64,7 @@ test("Lesson 3 is built and open without an account, with sources and a six-step
   assert.ok(lesson);
   assert.equal(lesson.preview, true);
   assert.equal(getPreviewLesson(slug), lesson, "all of Module 1 is open");
-  assert.equal(builtLessons.filter((l) => l.preview).length, 5);
+  assert.equal(builtLessons.filter((l) => l.preview).length, builtLessons.length);
   assert.ok(lesson.sources.length >= 4);
   for (const source of lesson.sources) {
     assert.equal(new URL(source.url).protocol, "https:");

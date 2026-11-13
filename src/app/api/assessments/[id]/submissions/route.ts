@@ -44,7 +44,7 @@ export async function POST(
       throw new Error("Invalid submission. Reload the knowledge check.");
     submissionKey = body.submissionKey;
     answers = body.answers;
-    result = scoreAssessment(questions, answers);
+    result = scoreAssessment(questions, answers, questions.length);
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : "Invalid answers" },
@@ -56,7 +56,7 @@ export async function POST(
     const attempt = await sql.begin(async (tx) => {
       await tx`INSERT INTO learners(id) VALUES(${user}) ON CONFLICT DO NOTHING`;
       const created =
-        await tx`INSERT INTO assessment_attempts(id,learner_id,lesson_slug,assessment_version,submission_key,answers,correct_count,feedback) VALUES(${randomUUID()},${user},${id},1,${submissionKey},${tx.json(answers)},${result.correct},${tx.json(result.feedback)}) ON CONFLICT(learner_id,lesson_slug,submission_key) DO NOTHING RETURNING id,correct_count,passed,feedback,created_at,answers`;
+        await tx`INSERT INTO assessment_attempts(id,learner_id,lesson_slug,assessment_version,submission_key,answers,question_count,correct_count,feedback) VALUES(${randomUUID()},${user},${id},1,${submissionKey},${tx.json(answers)},${questions.length},${result.correct},${tx.json(result.feedback)}) ON CONFLICT(learner_id,lesson_slug,submission_key) DO NOTHING RETURNING id,correct_count,passed,feedback,created_at,answers`;
       if (created.length) return created[0];
       const existing =
         await tx`SELECT id,correct_count,passed,feedback,created_at,answers FROM assessment_attempts WHERE learner_id=${user} AND lesson_slug=${id} AND submission_key=${submissionKey}`;

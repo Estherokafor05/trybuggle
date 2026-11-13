@@ -8,14 +8,19 @@ import { ExploreJourney } from "./explore/ExploreJourney";
 import { Reflection } from "./explore/Activities";
 import { useLearningPlace } from "./explore/useLearningPlace";
 import { KnowledgeCheck } from "./assessment/KnowledgeCheck";
+import { passMark } from "@/lib/assessment-scoring";
 
 export function LessonPreview({
   lesson,
+  moduleSlug = "ai-foundations",
+  questionCount = 10,
   scope = "guest",
   signedIn = false,
   next,
 }: {
   lesson: PreviewLesson;
+  moduleSlug?: string;
+  questionCount?: number;
   scope?: string;
   signedIn?: boolean;
   next?: NextStep;
@@ -90,7 +95,7 @@ export function LessonPreview({
         )}
         <Link
           className="inline-flex min-h-11 items-center underline underline-offset-4"
-          href={`/modules/ai-foundations/lessons/${lesson.slug}/reading`}
+          href={`/modules/${moduleSlug}/lessons/${lesson.slug}/reading`}
         >
           Prefer plain text? Read the text version
         </Link>
@@ -137,7 +142,11 @@ export function LessonPreview({
           covers everything in this lesson without it.
         </p>
       </noscript>
-      <KnowledgeCheck slug={lesson.slug} signedIn={signedIn} />
+      <KnowledgeCheck
+        slug={lesson.slug}
+        signedIn={signedIn}
+        intro={`${questionCount} quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get ${passMark(questionCount)} or more right to pass. You can try again as many times as you need.`}
+      />
     </>
   );
 }

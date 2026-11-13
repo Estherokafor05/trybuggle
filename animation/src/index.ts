@@ -10,6 +10,8 @@ import { AiOrSoftware } from "./AiOrSoftware";
 import software from "../../public/lessons/ai-or-software/narration.json";
 import { WhatAiCanDo } from "./WhatAiCanDo";
 import charge from "../../public/lessons/what-ai-can-do/narration.json";
+import { ANewHelper } from "./ANewHelper";
+import helper from "../../public/lessons/a-new-helper/narration.json";
 function Root() {
   return React.createElement(
     React.Fragment,
@@ -42,6 +44,7 @@ function Root() {
       [
         ["AiOrSoftware", AiOrSoftware, software.duration],
         ["WhatAiCanDo", WhatAiCanDo, charge.duration],
+        ["ANewHelper", ANewHelper, helper.duration],
       ] as const
     ).flatMap(([id, component, duration]) =>
       [false, true].map((mobile) =>

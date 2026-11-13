@@ -132,8 +132,8 @@ export function KnowledgeCheck({
       <p className="mt-3 leading-relaxed">{intro}</p>
       {!signedIn && (
         <p className="mt-3 rounded-xl bg-canvas px-4 py-3 text-sm leading-relaxed">
-          No account needed. Your results are kept for you on this device, and
-          you can sign up when you finish Module 1 to get your certificate.
+          No account needed. Your results are kept for you on this device. Sign
+          up whenever you want to save your progress or get your certificate.
         </p>
       )}
       <>
