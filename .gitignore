@@ -12,3 +12,6 @@ next-env.d.ts
 *.tsbuildinfo
 .env*
 !.env.example
+
+# Reference material kept locally, never committed
+references/
