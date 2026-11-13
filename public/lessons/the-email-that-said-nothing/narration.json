@@ -1,0 +1,310 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 13 November 2026",
+  "duration": 126,
+  "audioDuration": 123.87,
+  "scenes": [
+    {
+      "id": "invite",
+      "title": "Inviting the clubs",
+      "description": "Maya plans to invite local clubs and groups to the open day: the gardening club could bring seedlings, and the chess club could run a quick game.",
+      "start": 0,
+      "end": 13.06
+    },
+    {
+      "id": "vague",
+      "title": "The email that said nothing",
+      "description": "Maya types a five-word request into the AI chat tool and gets a vague email about an exciting event, with a date she never gave.",
+      "start": 13.06,
+      "end": 37.99
+    },
+    {
+      "id": "choice",
+      "title": "What was missing?",
+      "description": "The learner is asked what Maya could add to her request to make the biggest difference.",
+      "start": 37.99,
+      "end": 45.12
+    },
+    {
+      "id": "better",
+      "title": "A better request",
+      "description": "Maya rewrites her request with who it is for, what she wants, where it happens and the tone, then adds the confirmed date and time. The new email invites groups to run a stall.",
+      "start": 45.12,
+      "end": 85.67
+    },
+    {
+      "id": "private",
+      "title": "Keep contact details out",
+      "description": "Maya almost pastes the group leaders' names and phone numbers into the chat, then stops: the tool only needs to know who the email is for.",
+      "start": 85.67,
+      "end": 102.77
+    },
+    {
+      "id": "four-questions",
+      "title": "Four questions before you ask",
+      "description": "Four questions appear: who it is for, what it should say or do, when and where, and how it should sound. The learner thinks of a message to ask AI to write this week.",
+      "start": 102.77,
+      "end": 126
+    }
+  ],
+  "cues": [
+    {
+      "scene": "invite",
+      "text": "Maya’s next job is to invite local clubs and groups to the open day.",
+      "start": 0.18,
+      "end": 4.14,
+      "index": 0
+    },
+    {
+      "scene": "invite",
+      "text": "She’s already got a few in mind.",
+      "start": 4.62,
+      "end": 6.22,
+      "index": 1
+    },
+    {
+      "scene": "invite",
+      "text": "The gardening club could bring some seedlings.",
+      "start": 6.72,
+      "end": 8.9,
+      "index": 2
+    },
+    {
+      "scene": "invite",
+      "text": "The chess club might run a quick game for anyone who wants to learn.",
+      "start": 9.38,
+      "end": 12.64,
+      "index": 3
+    },
+    {
+      "scene": "vague",
+      "text": "She opens the same chat tool and types, “Write an email about the open day.”",
+      "start": 13.48,
+      "end": 18.34,
+      "index": 4
+    },
+    {
+      "scene": "vague",
+      "text": "A few seconds later, she’s reading about “an exciting event” with “fun for all the family.”",
+      "start": 18.98,
+      "end": 25,
+      "index": 5
+    },
+    {
+      "scene": "vague",
+      "text": "It sounds friendly enough.",
+      "start": 25.58,
+      "end": 26.76,
+      "index": 6
+    },
+    {
+      "scene": "vague",
+      "text": "Then she gets to the date.",
+      "start": 27.4,
+      "end": 28.82,
+      "index": 7
+    },
+    {
+      "scene": "vague",
+      "text": "“The twelfth? I never said the twelfth.”",
+      "start": 29.3,
+      "end": 31.84,
+      "index": 8
+    },
+    {
+      "scene": "vague",
+      "text": "And if she sent it as it was, the chess club would have no idea she wanted them to run a stall.",
+      "start": 32.46,
+      "end": 37.64,
+      "index": 9
+    },
+    {
+      "scene": "choice",
+      "text": "Look at what Maya typed.",
+      "start": 38.34,
+      "end": 39.58,
+      "index": 10
+    },
+    {
+      "scene": "choice",
+      "text": "What could she add to make the biggest difference?",
+      "start": 40.04,
+      "end": 42.38,
+      "index": 11
+    },
+    {
+      "scene": "choice",
+      "text": "Make your choice, then carry on.",
+      "start": 42.92,
+      "end": 44.68,
+      "index": 12
+    },
+    {
+      "scene": "better",
+      "text": "Maya looks at her request again.",
+      "start": 45.56,
+      "end": 47.38,
+      "index": 13
+    },
+    {
+      "scene": "better",
+      "text": "She knows what the open day is for.",
+      "start": 47.9,
+      "end": 49.68,
+      "index": 14
+    },
+    {
+      "scene": "better",
+      "text": "She knows who she wants there.",
+      "start": 50.12,
+      "end": 51.54,
+      "index": 15
+    },
+    {
+      "scene": "better",
+      "text": "All she gave the tool was “write an email about the open day.”",
+      "start": 52.16,
+      "end": 55.82,
+      "index": 16
+    },
+    {
+      "scene": "better",
+      "text": "So she tries again.",
+      "start": 56.34,
+      "end": 57.54,
+      "index": 17
+    },
+    {
+      "scene": "better",
+      "text": "“Write a short, friendly email to the people who run local clubs and community groups.",
+      "start": 58.14,
+      "end": 63.14,
+      "index": 18
+    },
+    {
+      "scene": "better",
+      "text": "Invite them to run a stall at our open day in the main hall so they can meet people who might want to join.”",
+      "start": 63.62,
+      "end": 69.26,
+      "index": 19
+    },
+    {
+      "scene": "better",
+      "text": "Then she adds the confirmed date and time.",
+      "start": 69.94,
+      "end": 72.38,
+      "index": 20
+    },
+    {
+      "scene": "better",
+      "text": "This time, the invitation actually asks the groups to run a stall.",
+      "start": 73.1,
+      "end": 76.86,
+      "index": 21
+    },
+    {
+      "scene": "better",
+      "text": "It says where to go and when to be there.",
+      "start": 77.34,
+      "end": 79.6,
+      "index": 22
+    },
+    {
+      "scene": "better",
+      "text": "Maya checks both against the calendar, then tweaks the opening so it sounds like something she’d say.",
+      "start": 80.22,
+      "end": 85.36,
+      "index": 23
+    },
+    {
+      "scene": "private",
+      "text": "She almost pastes in the list of group leaders’ names and phone numbers, too.",
+      "start": 85.98,
+      "end": 89.74,
+      "index": 24
+    },
+    {
+      "scene": "private",
+      "text": "Then she stops.",
+      "start": 90.4,
+      "end": 91.44,
+      "index": 25
+    },
+    {
+      "scene": "private",
+      "text": "“Local club and group leaders” is all the tool needs to write the invitation.",
+      "start": 92.08,
+      "end": 96.38,
+      "index": 26
+    },
+    {
+      "scene": "private",
+      "text": "She keeps their contact details out of the chat.",
+      "start": 96.9,
+      "end": 99.32,
+      "index": 27
+    },
+    {
+      "scene": "private",
+      "text": "We’ll also come back to that detail in Module 3.",
+      "start": 99.84,
+      "end": 102.44,
+      "index": 28
+    },
+    {
+      "scene": "four-questions",
+      "text": "Before you send a request, ask yourself four things.",
+      "start": 103.1,
+      "end": 106.58,
+      "index": 29
+    },
+    {
+      "scene": "four-questions",
+      "text": "Who’s it for?",
+      "start": 107.22,
+      "end": 107.9,
+      "index": 30
+    },
+    {
+      "scene": "four-questions",
+      "text": "What do I want it to say or do?",
+      "start": 108.66,
+      "end": 110.68,
+      "index": 31
+    },
+    {
+      "scene": "four-questions",
+      "text": "When and where, if those details matter?",
+      "start": 111.46,
+      "end": 113.86,
+      "index": 32
+    },
+    {
+      "scene": "four-questions",
+      "text": "And how should it sound?",
+      "start": 114.44,
+      "end": 116,
+      "index": 33
+    },
+    {
+      "scene": "four-questions",
+      "text": "Your turn.",
+      "start": 116.78,
+      "end": 117.3,
+      "index": 34
+    },
+    {
+      "scene": "four-questions",
+      "text": "Think of a message you might ask AI to write this week.",
+      "start": 117.86,
+      "end": 120.8,
+      "index": 35
+    },
+    {
+      "scene": "four-questions",
+      "text": "What would you tell it so it has less to guess?",
+      "start": 121.34,
+      "end": 123.66,
+      "index": 36
+    }
+  ]
+}

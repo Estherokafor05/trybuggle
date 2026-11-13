@@ -34,6 +34,11 @@ async function signIn(
   ]);
   return id;
 }
+/** Remember a context's anonymous guest ID so its test results are cleaned up. */
+async function trackGuest(context: import("@playwright/test").BrowserContext) {
+  const guest = (await context.cookies(base)).find((c) => c.name === "buggle_guest");
+  if (guest && !users.includes(`guest:${guest.value}`)) users.push(`guest:${guest.value}`);
+}
 test.afterAll(async () => {
   if (!users.length) return;
   const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
@@ -676,6 +681,7 @@ test("Lessons 4 and 5: every activity, the previous-check notice and accessibili
     await page.getByRole("button", { name: "Open the knowledge check" }).click();
     for (const q of assessmentBank["what-ai-can-do"])
       await expect(page.locator(`input[name="${q.id}"]`)).toHaveCount(q.options.length);
+    await trackGuest(context);
     await context.close();
   }
 });
@@ -854,6 +860,7 @@ test("guests take every Module 1 check, then sign up to collect the certificate 
   await expect(page.getByText("6 of 6 done")).toBeVisible();
   await page.getByRole("button", { name: "Create my certificate" }).click();
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
+  await trackGuest(context);
   await context.close();
 });
 
@@ -906,6 +913,53 @@ test("Episode 2.1: Module 2 page, every guide step, a 5-question check and acces
     await page.getByRole("button", { name: "Submit knowledge check" }).click();
     await expect(page.getByText("Knowledge check passed")).toBeVisible();
     await expect(page.getByText("4 of 5 correct · 80%")).toBeVisible();
+    await trackGuest(context);
+    await context.close();
+  }
+});
+
+test("Episode 2.2: every guide step, the request builder, a 5-question check and accessibility", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai/lessons/the-email-that-said-nothing");
+    await expect(page.getByRole("heading", { name: "The Email That Said Nothing", level: 1 })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /the-email-that-said-nothing\/story/);
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    await page.getByRole("button", { name: /We can’t wait to see you there/ }).click();
+    await expect(page.getByText("↺ Not a problem.")).toBeVisible();
+    for (const part of [/an exciting event/, /fun for all the family/, /on the twelfth/])
+      await page.getByRole("button", { name: part }).click();
+    await expect(page.getByText("All three found")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Say who the email is for/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel("Everyone").check();
+    await expect(page.getByText(/Too vague/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Send the new request" })).toBeDisabled();
+    for (const label of [/people who run local clubs/, /Invite them to run a stall/, /Saturday the 21st/, "Short and friendly"])
+      await page.getByLabel(label).check();
+    await page.getByRole("button", { name: "Send the new request" }).click();
+    await expect(page.getByText("Now it actually invites them")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Just say “local club and group leaders”/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/leaking kitchen tap/).check();
+    await expect(page.getByText("Step 5 of 5 · 5 done")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["the-email-that-said-nothing"];
+    expect(questions).toHaveLength(5);
+    for (const q of questions) await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
+    await page.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(page.getByText("5 of 5 correct · 100%")).toBeVisible();
+    await trackGuest(context);
     await context.close();
   }
 });

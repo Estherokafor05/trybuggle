@@ -1,0 +1,84 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 13 November 2026",
+  "scenes": [
+    {
+      "id": "invite",
+      "title": "Inviting the clubs",
+      "description": "Maya plans to invite local clubs and groups to the open day: the gardening club could bring seedlings, and the chess club could run a quick game.",
+      "lines": [
+        "Maya’s next job is to invite local clubs and groups to the open day.",
+        "She’s already got a few in mind.",
+        "The gardening club could bring some seedlings.",
+        "The chess club might run a quick game for anyone who wants to learn."
+      ]
+    },
+    {
+      "id": "vague",
+      "title": "The email that said nothing",
+      "description": "Maya types a five-word request into the AI chat tool and gets a vague email about an exciting event, with a date she never gave.",
+      "lines": [
+        "She opens the same chat tool and types, “Write an email about the open day.”",
+        "A few seconds later, she’s reading about “an exciting event” with “fun for all the family.”",
+        "It sounds friendly enough.",
+        "Then she gets to the date.",
+        "“The twelfth? I never said the twelfth.”",
+        "And if she sent it as it was, the chess club would have no idea she wanted them to run a stall."
+      ]
+    },
+    {
+      "id": "choice",
+      "title": "What was missing?",
+      "description": "The learner is asked what Maya could add to her request to make the biggest difference.",
+      "lines": [
+        "Look at what Maya typed.",
+        "What could she add to make the biggest difference?",
+        "Make your choice, then carry on."
+      ]
+    },
+    {
+      "id": "better",
+      "title": "A better request",
+      "description": "Maya rewrites her request with who it is for, what she wants, where it happens and the tone, then adds the confirmed date and time. The new email invites groups to run a stall.",
+      "lines": [
+        "Maya looks at her request again.",
+        "She knows what the open day is for.",
+        "She knows who she wants there.",
+        "All she gave the tool was “write an email about the open day.”",
+        "So she tries again.",
+        "“Write a short, friendly email to the people who run local clubs and community groups.",
+        "Invite them to run a stall at our open day in the main hall so they can meet people who might want to join.”",
+        "Then she adds the confirmed date and time.",
+        "This time, the invitation actually asks the groups to run a stall.",
+        "It says where to go and when to be there.",
+        "Maya checks both against the calendar, then tweaks the opening so it sounds like something she’d say."
+      ]
+    },
+    {
+      "id": "private",
+      "title": "Keep contact details out",
+      "description": "Maya almost pastes the group leaders' names and phone numbers into the chat, then stops: the tool only needs to know who the email is for.",
+      "lines": [
+        "She almost pastes in the list of group leaders’ names and phone numbers, too.",
+        "Then she stops.",
+        "“Local club and group leaders” is all the tool needs to write the invitation.",
+        "She keeps their contact details out of the chat.",
+        "We’ll also come back to that detail in Module 3."
+      ]
+    },
+    {
+      "id": "four-questions",
+      "title": "Four questions before you ask",
+      "description": "Four questions appear: who it is for, what it should say or do, when and where, and how it should sound. The learner thinks of a message to ask AI to write this week.",
+      "lines": [
+        "Before you send a request, ask yourself four things.",
+        "Who’s it for?",
+        "What do I want it to say or do?",
+        "When and where, if those details matter?",
+        "And how should it sound?",
+        "Your turn.",
+        "Think of a message you might ask AI to write this week.",
+        "What would you tell it so it has less to guess?"
+      ]
+    }
+  ]
+}

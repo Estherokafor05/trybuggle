@@ -4,6 +4,7 @@ import history from "../../public/lessons/before-chatgpt/narration.json";
 import software from "../../public/lessons/ai-or-software/narration.json";
 import charge from "../../public/lessons/what-ai-can-do/narration.json";
 import helper from "../../public/lessons/a-new-helper/narration.json";
+import email from "../../public/lessons/the-email-that-said-nothing/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -66,5 +67,13 @@ export const stories: Record<
     title: "A new helper",
     introduction:
       "Maya has three weeks to organise an open day. Her colleague Leo shows her an AI chat tool, and its first draft sounds perfect.",
+  },
+  "the-email-that-said-nothing": {
+    root: "/lessons/the-email-that-said-nothing/",
+    mediaVersion: "?v=20261113-1",
+    narration: email,
+    title: "The email that said nothing",
+    introduction:
+      "Maya asks a chat tool to write an invitation and gets a friendly email that says almost nothing, with a date she never gave. What was missing?",
   },
 };

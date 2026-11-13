@@ -188,6 +188,31 @@ export const builtLessons: PreviewLesson[] = [
       },
     ],
   },
+  {
+    slug: "the-email-that-said-nothing",
+    title: "The Email That Said Nothing",
+    duration: "2 minutes to watch",
+    preview: true,
+    objective:
+      "Write a clear request by saying who it is for, what it should say or do, when and where, and how it should sound, while keeping private details out.",
+    sources: [
+      {
+        label: "Microsoft: Learn about Copilot prompts",
+        url: "https://support.microsoft.com/en-us/topic/learn-about-copilot-prompts-f6c3b467-f07c-4db1-ae54-ffac96184dd5",
+        claim: "A good request states the goal, the context, the information to use, and how the response should look.",
+      },
+      {
+        label: "Google: Prompt design strategies",
+        url: "https://ai.google.dev/gemini-api/docs/prompting-strategies",
+        claim: "Clear, specific instructions and relevant context help a model give the response you want.",
+      },
+      {
+        label: "ICO: Guidance on AI and data protection",
+        url: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/",
+        claim: "Personal information should only be shared with AI tools where it is necessary and appropriate.",
+      },
+    ],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {
