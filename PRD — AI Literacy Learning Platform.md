@@ -1,11 +1,22 @@
 # Product Requirements Document: AI Literacy Learning Platform
 
 **Status:** Approved learning decisions with remaining curriculum decisions identified below
-**Product:** Working title: AI Literacy Learning Platform
+**Product:** Buggle Learn
 **Audience:** People new to AI, including nontechnical workers and students
 **Purpose:** Define the learner journey, delivery experience, curriculum, assessments, and first certificate before redesigning or extending the codebase.
 
-> **Drafting note:** Proposed decisions are identified as such. Open decisions need review before they become commitments.
+> **Drafting note:** Proposed decisions are identified as such. Open decisions need review before they become commitments. Every open decision is marked **⚠ OPEN DECISION** in the text and listed in full in section 12.
+
+> **⚠ Open decisions at a glance** (decided on 13 November 2026: 5-question checks, Google plus email-and-password sign-in, a global audience, a certificate for every module and path, and a feedback pop-up after each lesson; see section 12)
+>
+> 1. **Lesson length:** episodes are planned at 3 to 4 minutes. Keep eight minutes as the hard limit?
+> 2. **Outside chat tools in Module 2:** Module 2 has learners use ChatGPT, Claude, Gemini or Copilot, which are made by other companies and need their own sign-up. What happens for learners who cannot or will not create an account?
+> 3. **Sign-up question:** what it asks (proposed: the job paths plus "Something else"), and how the answer is stored and removed.
+> 4. **Everyday life track:** an optional track (not Module 2) for learners who do not fit a job path, covering money, side hustles and phones. Drop it, or keep it as a later path?
+> 5. **Overlaps and duplicates:** 16 items to resolve before scripts are written (section 6.1D).
+> 6. **Expert reviewers:** who checks each job path is accurate and safe, for example a qualified nurse for the Nurses and Carers path.
+> 7. **Employer offering:** should there ever be a version of the safety content sold to companies? It would reverse the decision that Buggle Learn is completely free.
+> 8. **Success measures:** the numbers that show Buggle Learn is working, such as how many learners finish a module, pass rates and feedback ratings.
 
 ## 1. Product overview
 
@@ -15,16 +26,29 @@ The platform is for people who are curious about AI or feel pressure to keep up 
 
 The learning experience moves from understanding AI to using it. It explains the foundations, introduces current concepts such as generative AI and agents, and gives learners practical ways to try AI while checking its output and limits.
 
+## 1A. Unique selling proposition
+
+**Headline: Learn to check AI, not just use it.** Most AI courses teach prompts. Buggle Learn teaches people to catch AI when it is wrong. Learners regularly meet short exercises in which an AI gives a confident but wrong answer, and they practise spotting and fixing it. This is safety presented as a practical skill, and it is the one learners cannot easily get from a free video tutorial. It is the primary differentiator and should be visible in marketing, on the landing page and in every module.
+
+Supporting pillars:
+
+1. **Learning paths by job, not by topic.** After the fundamentals, learners can follow paths such as AI for students, office and admin staff, small business owners, sales and customer service, nurses and carers, or teachers, using examples from their real work (section 6.1C). This answers the question learners actually have: "What does this mean for me?"
+2. **Protect yourself and your family.** Learners recognise voice-clone scams, deepfakes and fake investment bots. The topic is emotionally meaningful, easy to share ("send this to your mum") and clearly about safety in society.
+3. **What not to paste into an AI tool.** Simple rules for using AI at work without leaking client, company or personal data. This content is free like everything else on Buggle Learn. Whether a separate employer offering should exist is an open decision (see section 12), because the approved product decision is that Buggle Learn is completely free.
+4. **Built for everyone, everywhere.** People use AI in every part of the world, so Buggle Learn is for a global audience. Stories use a diverse cast, names, places, prices and tools from many countries, and keep examples neutral rather than tied to one market. Lessons are phone-first and light on data, with plain-text versions, short videos and, where possible, audio versions, so they work on cheap phones and slow connections. Local-language versions can follow learner demand.
+5. **Proof learners can show.** Every module and every job path awards its own Certificate of Completion from Buggle Learn, so learners have something to show at each step. Adding a partner organisation's name to certificates may come later.
+
 ## 2. Product goal
 
 Help a beginner build enough understanding and confidence to:
 
 - Explain in plain language what people mean by AI and recognize that it includes different kinds of systems.
 - Describe, at a high level, how AI has developed and how common AI systems differ.
-- Understand machine learning, generative AI, large language models, assistants, configured workspaces, automated workflows, and AI agents.
+- Understand, through everyday examples, that many AI systems learn patterns from examples (machine learning), and understand generative AI, chat tools, assistants, configured workspaces, automated workflows and AI agents.
+- Catch AI when it is confidently wrong, and know what information never to share with an AI tool.
 - Use an accessible AI tool or workflow for a relevant task, assess the result, and make an informed choice about whether to use it.
 - Recognize basic concerns such as inaccurate output, privacy, bias, and over-reliance.
-- Demonstrate learning through mandatory knowledge checks and assessments, with a first Certificate of Completion available after Module 1.
+- Demonstrate learning through mandatory knowledge checks and assessments, with a Certificate of Completion for every module and job path, starting with Module 1.
 
 The platform supports understanding and informed use. It does not promise employment outcomes or imply that AI will replace or solve a learner’s work.
 
@@ -38,6 +62,10 @@ Someone who has little formal knowledge of AI. They may be asked to use AI at wo
 
 Someone studying or exploring AI who wants a clear introduction, practical examples, and a grounded account of the technology rather than hype or assumed technical knowledge.
 
+### Example learners
+
+The curriculum is written with specific everyday learners in mind, for example a sales assistant in a shop, a student, a teacher, a nurse, a small business owner and an office worker. Many will learn on a phone, in short moments at work or on a bus, with limited data.
+
 ### Shared needs
 
 - Plain language and clear definitions when new terms appear.
@@ -47,6 +75,8 @@ Someone studying or exploring AI who wants a clear introduction, practical examp
 - A balanced view that explains potential uses as well as limitations.
 - Flexible access to the same lesson through video or a written learning guide.
 - Clear feedback, visible progress, and a fair way to retry assessments.
+- Examples from their own world: their job, their studies or their everyday life.
+- Very short lessons that work on a phone and on limited data.
 
 ## 4. End-to-end customer journey
 
@@ -54,7 +84,7 @@ Someone studying or exploring AI who wants a clear introduction, practical examp
 | ------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | 1. Discover                     | “Is this for someone like me?”                   | Clear introduction that welcomes beginners, workers across roles, and students.                                                                     | Learner recognizes that no technical background is required.                                 |
 | 2. Understand the offer         | “What will I learn, and why should I trust it?”  | Learning-path overview, sample lesson, delivery explanation, and practical, balanced approach.                                                      | Learner knows what the course covers and what it does not promise.                           |
-| 3. Choose a starting point      | “Where do I begin?”                              | A recommended six-module path, starting with AI foundations.                                                                                        | Learner can begin without understanding jargon or selecting a profession-specific course.    |
+| 3. Choose a starting point      | “Where do I begin?”                              | Modules 1 to 3 for everyone, starting with AI foundations, then an optional Module 4 and a job path.                                                  | Learner can begin without understanding jargon or selecting a profession-specific course.    |
 | 4. Choose how to learn a lesson | “Would I rather watch or read?”                  | A short narrated visual lesson and a separate structured guide teach the same learning outcomes. The learner may use either or both.                | Learner chooses a suitable format without being required to consume the same material twice. |
 | 5. Check understanding          | “Have I understood the key idea?”                | A mandatory knowledge check follows every lesson, with explanatory feedback and an opportunity to retry.                                            | Learner receives feedback and demonstrates understanding before moving on.                   |
 | 6. Practise and apply           | “How does this work in a situation I recognize?” | Guided activities use familiar scenarios from work, study, and everyday life.                                                                       | Learner applies a concept and sees where human review matters.                               |
@@ -62,7 +92,11 @@ Someone studying or exploring AI who wants a clear introduction, practical examp
 | 8. Complete Module 1            | “Can I show what I have learned so far?”         | Module assessment follows all Module 1 lessons and knowledge checks. Passing makes the learner eligible for the Module 1 Certificate of Completion. | Learner earns an early, clearly scoped recognition of learning.                              |
 | 9. Continue                     | “What can I learn next?”                         | The next module is presented, with the learner’s progress retained. The full path concludes with a final assessment.                                | Learner continues through the curriculum and can demonstrate learning across the programme.  |
 
-**Approved account decision:** The first two lessons are public previews. Visitors can resume a learning place on their device. Google sign-in is required for progress saved to an account across devices, official assessment results and certificate eligibility. Preview access does not count as a verified pass.
+**Approved account decision:** The first two lessons are public previews. Visitors can resume a learning place on their device. An account is required for progress saved across devices, official assessment results and certificate eligibility. Preview access does not count as a verified pass.
+
+**Approved change (13 November 2026): two ways to sign in.** Learners can sign in with Google or with an email address and password. Email and password is added for now, while the platform is being tested, for learners without a Google account or who prefer not to use one. Passwords are stored only as secure one-way hashes, never in plain text, with a way to reset a forgotten password. (Not yet built.)
+
+**Approved change: guests can take knowledge checks.** On the free preview lessons, a visitor can take the knowledge check without an account, see their score and the feedback, and retry. Sign-in is asked for only to save the result, count it towards the certificate and keep progress across devices. A guest's result is never treated as an official pass until they sign in and pass while signed in. (Not yet built: today the check asks for sign-in first.)
 
 ## 5. Learning Experience and Delivery Requirements
 
@@ -75,7 +109,7 @@ Each lesson has two complementary formats that cover the same learning outcomes:
 
 Learners may use either format or both. Watching the video and reading the guide are alternatives, not two mandatory steps. The knowledge check remains mandatory regardless of the format chosen.
 
-**Approved duration:** Each lesson is no longer than eight minutes. Planned module content is 30 to 60 minutes with a one-hour cap; self-paced reading, accessibility needs and retries are not timed.
+**Approved duration:** Each lesson is no longer than eight minutes, and should aim for 5 to 8 minutes, phone-first, ending with something for the learner to do. Planned module content is 30 to 60 minutes with a one-hour cap; self-paced reading, accessibility needs and retries are not timed.
 
 ### 5.2 Lesson sequence
 
@@ -114,16 +148,184 @@ Each lesson follows this sequence:
 
 ### 6.1 Learning sequence
 
-The curriculum moves from broad concepts to practical use. Each module builds on the previous modules while repeating responsible-use principles throughout.
+*Source: "Buggle Learn: Curriculum Plan from Module 2", 12 November 2026.*
 
-| Module | Title                                       | Core concepts                                                                                                                | Practical application                                                                                                              | Assessment / completion                                                                                                                             |
-| ------ | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1      | Foundations of Artificial Intelligence      | What AI is, where it came from, how it has evolved, and why it matters in everyday life.                                     | Identify examples of AI in familiar work, study, and everyday settings; distinguish AI claims from ordinary software capabilities. | Mandatory check after each lesson and Module 1 final assessment. First Certificate of Completion is issued after passing all Module 1 requirements. |
-| 2      | Understanding Different Types of AI Systems | Rules-based systems, predictive AI, generative AI, and how these categories relate to one another.                           | Match example tasks to system types and discuss where labels can overlap.                                                          | Mandatory lesson checks and module assessment.                                                                                                      |
-| 3      | Understanding Machine Learning              | Learning patterns from data; supervised and unsupervised learning; training and testing; data quality.                       | Explore how a change in examples or data quality can affect a system’s output.                                                     | Mandatory lesson checks and module assessment.                                                                                                      |
-| 4      | Understanding Generative AI and LLMs        | What tools such as ChatGPT and Claude do; how language models generate responses; context; incorrect or unsupported outputs. | Use or review a guided example that improves a request and checks the response.                                                    | Mandatory lesson checks and module assessment.                                                                                                      |
-| 5      | Understanding AI Agents and Workflows       | Assistants, configured workspaces, automated workflows, and agents; instructions, context, tools, actions, and oversight.    | Classify familiar examples and trace how an agent can move from a request to an action.                                            | Mandatory lesson checks and module assessment.                                                                                                      |
-| 6      | Creating Your First AI-Assisted Workflow    | No-code interfaces, ChatGPT Projects, and other accessible ways to create reusable support for routine tasks.                | Create or follow a beginner-friendly workflow for a low-risk everyday task, then review and improve its output.                    | Mandatory lesson checks, module assessment, and final assessment covering the full learning path.                                                   |
+Every learner takes Modules 1 to 3, then picks a path for their job. Module 1 is live. Module 2 gets learners using AI tools, Module 3 covers safety, and the theory moves to an optional Module 4.
+
+| Module | What it is | Who takes it | Status |
+| ------ | ---------- | ------------ | ------ |
+| 1. Foundations of Artificial Intelligence | What AI is, where it shows up, why you check it. | Everyone | **Live** (five lessons, final assessment, certificate) |
+| 2. Talking to AI | Using free chat tools (ChatGPT, Claude, Gemini, Copilot) for real tasks. | Everyone | To build next |
+| 3. Staying Safe with AI | Privacy, voice clones, deepfakes, scams, fair use. | Everyone | To build |
+| 4. Go Deeper: How AI Works | Machine learning, bias, types of AI, agents. | Optional, for curious learners | To build |
+| Your Path | AI for your job, ending in a hands-on project. | Learner picks one | Students, Office and Admin, Small Business first |
+
+**Build order:** Module 2, then Module 3, then Paths A, B and C. Module 4 and the later paths follow.
+
+What changed from the earlier plan, and why:
+
+- **Old Module 2 (Types of AI Systems) is folded into Module 4.** All four planned lessons repeated Module 1 (Lessons 1.1, 1.2 and 1.4), so learners would feel they were starting over.
+- **Old Module 3 (Machine Learning) moves to Module 4.** Lesson 1.1 already covers the basics, so the deeper version becomes optional. Machine learning is still explained wherever the core modules need it, through everyday examples.
+- **Old Module 4 (Generative AI) becomes the core of the new Module 2.** Most people meet AI through ChatGPT, Claude or Gemini, so this comes straight after Foundations.
+- **Safety gets its own module.** The earlier plan had no lessons on scams, deepfakes or data, yet safety is the platform's main selling point.
+- **Old Modules 5 and 6 (agents and workflows) are split up.** Agents become an optional episode in Module 4 (4.4). Building a workflow becomes the final project of each job path, tied to real work.
+- **The Everyday life track from the previous draft is not in this plan.** **⚠ OPEN DECISION:** drop it, or keep it as a later path (see 6.1D, item 15).
+
+### 6.1A The story model
+
+Every module is one story, and every lesson is an episode in it. Each episode has the same shape:
+
+1. **The situation:** the character hits a real problem in their day.
+2. **The choice:** the learner decides what the character should do before seeing what happens.
+3. **What happens:** the story shows the result, good or bad, and the idea behind it.
+4. **Your turn:** the learner applies it to their own life.
+
+Episodes stay 3 to 4 minutes, as a narrated film or an interactive guide, with a plain-text version and a knowledge check, as in Module 1. Characters carry over between modules so learners get to know them, and each module ends on a hook into the next. Each core module ends with a short refresher final assessment, as in Module 1.
+
+Storytelling rules for every episode:
+
+- **Write the story first, then fit the lesson into it.** If the lesson cannot be told through something happening to the character, it probably belongs in optional Module 4.
+- **Let characters get things wrong.** Maya nearly sends the fake grant and Mum nearly pays the voice clone. The mistake is what people remember.
+- **The learner decides before the reveal.** Every episode pauses for the learner to choose what the character should do.
+- **Keep a recurring cast.** Maya, her mum, Sam and the centre's members appear across modules, so learners care what happens to them.
+- **End each module on a hook.** The open day's success leads into the week of close calls, and the job scam leads into Sam's computing course.
+- **Give every path someone who looks like its learners.** A student should see a student, and a shop owner should see a shop owner.
+- **End every lesson with something the learner does.** Module 1's "Put it in your own words" prompts already do this; keep them.
+
+### 6.1B Core and optional modules
+
+#### Module 2: Talking to AI
+
+Learners use free AI chat tools (ChatGPT, Claude, Gemini, Copilot) for real tasks and learn how to get answers worth using.
+
+**You leave with:** a message, a summary and a plan you made with AI and checked yourself.
+
+**The story: Maya's open day.** Maya's manager asks her to organise the community centre's open day in three weeks, on top of her normal work. A colleague suggests trying an AI chat tool. Over five episodes Maya learns to use it, and nearly gets caught out at the end.
+
+| Episode | What happens to Maya | What the learner learns | The learner's choice |
+| ------- | -------------------- | ----------------------- | -------------------- |
+| 2.1 A New Helper | A colleague shows Maya a chat tool. She asks it about the centre's history and it answers confidently, but some details are wrong. | What chat tools are and the main free ones. They write by predicting the next likely words, which makes them fluent but not always right. | Which of its claims should Maya trust? |
+| 2.2 The Email That Said Nothing | Maya types "write an email about the open day" and gets a bland email with a made-up date. She tries again with who it is for, what, when, and the tone. | How to ask well. Keep private details out (builds on Lesson 1.1). | Pick the request that will get the better email, then rewrite a weak one. |
+| 2.3 Three Tries at the Flyer | The flyer text comes back too long and too formal. Maya asks for shorter, then friendlier, then a version in another language spoken at the centre. | A chat is a back and forth. Follow-up messages improve the result. | Choose Maya's next follow-up message. |
+| 2.4 Thirty Pages by Friday | The council sends a 30-page guide for public events. Maya asks for a summary and a checklist, then checks it against the guide and finds it left out the first-aid rule. | Summarising, explaining jargon and planning, and checking against the original. | Spot what the summary missed. |
+| 2.5 The Grant That Didn't Exist | The tool suggests a small grant for open days, with a name and a website. Maya almost puts it in her report, then checks: the grant does not exist. | Made-up facts and sources, out-of-date information, agreeing with you to please you. Where not to rely on AI: health, law, money. | How should Maya check the grant, and who should she ask? |
+
+**How the story ends:** the open day goes well. Word gets round that Maya "uses AI", which sets up Module 3. **Final assessment:** a short refresher across the five episodes.
+
+#### Module 3: Staying Safe with AI
+
+Learners protect their information, their money and the people they care about, now that AI makes scams and fake content easier to produce.
+
+**You leave with:** a one-page safety checklist to use yourself and share with family and colleagues.
+
+**The story: a week of close calls.** In the week after the open day, Maya, her family and people at the centre run into five risks that AI makes easier. Some of them nearly go wrong.
+
+| Episode | What happens | What the learner learns | The learner's choice |
+| ------- | ------------ | ----------------------- | -------------------- |
+| 3.1 The Volunteer List | A keen volunteer pastes the full members list, phone numbers included, into a free chat tool to "tidy it up". | Where chats are stored and how they may be used to train AI. What never to share. How to turn off chat history where the tool allows it. | Sort 10 items into "fine to share", "remove first" and "never". |
+| 3.2 Mum, It's Me | Maya's mum gets a voice note in Maya's voice asking for money for an urgent hospital bill. | AI can copy a voice from a short clip. Hang up and call back on a number you know, agree a family code word, slow down. | What should Mum do next? |
+| 3.3 The Video in the Group Chat | A video of a famous TV presenter promoting a trading app spreads in the centre's WhatsApp group, and several members want to invest. | Deepfakes and fake endorsements. How to check: who posted it, whether reliable outlets report it, a reverse image search, the "too good to be true" test. | Real, fake or unclear? Judge three posts. |
+| 3.4 The Perfect Job Offer | Maya's nephew Sam gets a polished job offer after a chat with an "AI recruiter". Then they ask for a training fee. | How AI makes scams look professional. Red flags: urgency, secrecy, unusual payment methods, guaranteed returns. | Find the red flags in Sam's messages. |
+| 3.5 The Job Advert | The centre is hiring. Maya uses AI to draft the advert, and it adds wording that would put off older applicants. Her manager asks whether to say AI helped. | Bias in AI answers. Being honest about AI help and following workplace rules. Never making fake images or audio of real people. | What is acceptable? Decide in five short situations. |
+
+**How the story ends:** Maya writes a one-page safety checklist for the centre, which is what learners download. **Final assessment:** the refresher, then the checklist download. The checklist should be easy to share on WhatsApp, because this module is the most likely to bring in new learners.
+
+#### Module 4: Go Deeper: How AI Works (optional)
+
+For learners who want to know what happens inside AI tools. It reuses the planned content from old Modules 2, 3 and 5, cut down so it builds on Module 1 rather than repeating it.
+
+**You leave with:** a simple picture of how AI learns, why it can be unfair, and where a person must stay in control.
+
+**The story: behind the scenes.** Sam, Maya's nephew from the job scam, has started a computing course. Maya finally asks him the questions she has been wondering about since Module 1, and he answers using things that happened in her own story.
+
+| Episode | What happens | What the learner learns | Comes from |
+| ------- | ------------ | ----------------------- | ---------- |
+| 4.1 How Did My Phone Learn Dogs? | Sam explains how Maya's photo app learned to find dogs, and why it once mistook a cat for one. | Training and testing, building on Lesson 1.1. | Old Module 3 |
+| 4.2 Why Did It Pick Him? | A friend's company used an AI tool to shortlist job applicants, and it kept favouring one kind of person. | How gaps or unfairness in the training examples lead to biased results, with examples from hiring, loans and face recognition. | Old Module 3 |
+| 4.3 Which Tool for Which Job? | Sam sorts every tool from Maya's story into rules, predictions and new content. | Telling the kinds of AI apart, and which kind fits which job. | Old Module 2, condensed |
+| 4.4 The Assistant That Booked the Wrong Hall | Sam's classmate lets an AI agent book a venue. It books the wrong hall and pays the deposit. | How assistants, automated workflows and agents differ, and why a person must check before anything is sent, paid or deleted. | Old Module 5 |
+
+The knowledge checks stay. **Decided:** like every module, Module 4 awards its own certificate. Because it is optional, it never blocks learners from Module 1 to 3 certificates or a job path.
+
+### 6.1C Your Path: job paths
+
+After Module 3, learners pick a path for their job. Each path is its own story: four episodes following one character through a busy stretch of their life, ending with a project where the learner builds the same kind of helper the character did. That project replaces old Module 6. Names and settings are placeholders to adapt to the audience.
+
+#### Path A: AI for Students
+
+**The story: Ada's exam season.** Ada is a second-year student with a part-time job, four weeks from exams with an essay due. **Safety focus:** academic honesty, made-up references, relying on AI instead of learning.
+
+| Episode | What happens to Ada | What the learner learns |
+| ------- | ------------------- | ----------------------- |
+| A1 Lost in Statistics | Ada cannot follow a topic. AI explains it at her level and sets practice questions, and she realises reading its answers is not the same as learning. | Study smarter: explanations, flashcards, quizzing yourself. |
+| A2 Twelve References | AI gives Ada 12 references for her essay. In the library database she finds 4 of them do not exist. | Research: chat tools invent sources, so check every one. |
+| A3 Write It for Me? | A friend submits an essay written entirely by AI and gets flagged. Ada uses AI to brainstorm, outline and get feedback, and says that she did. | Writing honestly: what your school allows, and saying when AI helped. |
+| A4 The Internship Application | AI makes Ada's CV sound like experience she does not have. She rewrites it to be truthful, then practises the interview with AI. | CVs, cover letters and interview practice that stay truthful. |
+
+**Final project:** a revision helper that quizzes the learner and explains wrong answers, for a subject of their own.
+
+#### Path B: AI for Office and Admin Staff
+
+**The story: Maya's busiest month.** The centre's annual report, a board meeting and the summer programme all land in the same month. **Safety focus:** keeping company and client data out of personal AI tools, and following workplace rules.
+
+| Episode | What happens to Maya | What the learner learns |
+| ------- | -------------------- | ----------------------- |
+| B1 Forty Unread Emails | Maya clears a backlog of replies, including one to a family who speak another language. | Drafting and replying, getting the tone right, translating. |
+| B2 The Board Meeting | Maya prepares the agenda and turns rough notes into minutes. A board member objects to being recorded. | Agendas, notes and minutes. Get everyone's consent before recording. |
+| B3 The Annual Report | Maya turns the year's figures into a report and has AI explain a spreadsheet formula. She uses only the approved work tool for member data. | Reports, letters and spreadsheets. Workplace rules on data. |
+| B4 The Summer Rota | AI drafts the volunteer rota but puts one volunteer on two shifts at once. Maya catches it. | Rotas, plans and checklists, checked before they go out. |
+
+**Final project:** a helper that turns rough notes into minutes, or one routine task from the learner's own job.
+
+#### Path C: AI for Small Business Owners
+
+**The story: Bisi's festive season.** Bisi runs a small fashion shop and sells on WhatsApp and Instagram, with the busiest season coming. **Safety focus:** fake suppliers, payment scams, AI "business coaches" selling get-rich schemes, and trusting AI on tax or legal questions.
+
+| Episode | What happens to Bisi | What the learner learns |
+| ------- | -------------------- | ----------------------- |
+| C1 The Sale Post | AI writes great product posts, but calls a polyester dress "100% silk". | Marketing posts, product descriptions and simple images, with claims that stay honest. |
+| C2 Two Hundred Messages a Day | Customer messages pile up, and one customer is angry about a late delivery. | Customer replies, common questions and answers, handling complaints calmly. |
+| C3 The Supplier Who Was Too Cheap | A new "supplier" offers prices that are too good and wants payment upfront to a personal account. Bisi also gets a tax letter she does not understand. | Invoices, price lists and budgets. Spotting supplier scams. Checking anything about tax with an accountant. |
+| C4 Planning January | After the rush, Bisi looks at what competitors did and plans her next promotion. | Looking at competitors, planning a promotion, writing a one-page business plan. |
+
+**Final project:** a customer-reply helper that knows the learner's prices, opening hours and policies.
+
+#### Later paths
+
+These follow once the first three paths are live. Each needs someone who works in that job to write or review it.
+
+| Path | The story | Likely episodes | Safety focus | Final project |
+| ---- | --------- | --------------- | ------------ | ------------- |
+| D. Sales and Customer Service | A sales rep chasing her monthly target while handling a difficult customer. | Replies and follow-ups; call and visit notes; a complaint that escalates; preparing for a big sales meeting. | Customer privacy; not promising what the business cannot deliver. | A follow-up message helper for your products. |
+| E. Nurses and Carers | A carer's week of night shifts, with a new resident and worried relatives. | Handover notes; explaining care to a family in plain words; shift admin; the moment AI must not decide. | Patient confidentiality; never trusting AI on doses, diagnoses or care decisions. | A plain-language explainer for one common care topic, checked by a senior colleague. |
+| F. Teachers | A teacher's first term after the school allows AI. | Lesson plans and worksheets; marking support and feedback; messages to parents; an essay that might be AI-written. | Student data; judging AI-written work fairly; bias in AI material. | A lesson resource made with AI and adapted for your class. |
+
+The Nurses and Carers path has the highest stakes and must be reviewed by a qualified nurse or care manager before it goes live. Trades such as construction and driving can come later still.
+
+### 6.1D Overlaps and duplicates to resolve
+
+Checked against the five live Module 1 lessons and across the new plan. Reinforcing an idea in a new situation is useful; repeating the same story or activity is not. Each item needs a decision before scripts are written.
+
+| # | Overlap or duplicate | Where | Recommendation |
+| - | -------------------- | ----- | -------------- |
+| 1 | **4.1 repeats Lesson 1.1 almost exactly.** | Lesson 1.1's guide already trains a pretend system on cat and dog photos, then a partly hidden cat fools it into guessing "dog". 4.1 is "how my phone learned dogs, and why it mistook a cat". | Give 4.1 a different example (for example how a phone keyboard learns your words), or go beyond 1.1 into why test data must differ from training data. |
+| 2 | **Hiring bias appears three times.** | Lesson 1.5 (Amina: unfair interview questions, a CV ranking that favoured past hires), 3.5 (a job advert putting off older applicants) and 4.2 (a shortlisting tool favouring one kind of person). | Keep one hiring story. Use loans or face recognition for 4.2, and a non-hiring setting (for example a public notice or flyer) for 3.5, or reuse Amina as its character. |
+| 3 | **4.3 repeats Lesson 1.4.** | Lesson 1.4 already sorts tools into "ordinary software" and "AI", including rules-based expert systems; Lesson 1.2 names recognise, predict, recommend, classify. | Condense 4.3 into a recap with one new idea (choosing the right kind of tool for a job), not another sorting exercise. |
+| 4 | **"What never to share" is taught four times.** | Lesson 1.1 (keep private details out of a request), Lesson 1.5 (applicants' names and CVs), 2.2 (keep private details out), 3.1 (the volunteer list). Path B (approved tools for member data) repeats it again. | Make 3.1 the full lesson. 2.2 gives a one-line reminder that links ahead; Path B applies it only to workplace rules. |
+| 5 | **Made-up facts appear twice inside Module 2,** and again in every path. | 2.1 (wrong details about the centre's history) and 2.5 (an invented grant), plus Lesson 1.1 (the wrong day) and 1.5 (an invented driving licence); then A2, C1 and others. | Within Module 2, make 2.1 about fluency and prediction and keep the "catch the made-up fact" reveal for 2.5. Paths apply it to their own sources only. |
+| 6 | **Path B repeats Module 2 with the same character and tasks.** | Module 2 has Maya writing an open-day email, a flyer in another language and a checklist; Path B has Maya replying to emails, translating for a family and making checklists. | Give Path B new tasks only (minutes, reports, spreadsheets, rotas), or give Path B a different office character so it does not feel like a rerun. |
+| 7 | **Scam red flags are taught twice.** | 3.4 (job scam: urgency, secrecy, payment methods, guaranteed returns) and C3 (a too-cheap supplier wanting upfront payment), plus Path C's "AI business coaches", which repeats 3.3's fake trading app. | Module 3 teaches the red flags; C3 applies them to suppliers in one short scene and refers back. |
+| 8 | **Translation appears twice.** | 2.3 (a flyer in another language) and B1 (a reply to a family who speak another language). | Keep translation in 2.3; B1 focuses on tone and backlog. |
+| 9 | **Summaries and checklists appear twice.** | 2.4 (summary and checklist of a 30-page guide) and B4 (rotas, plans and checklists). | Keep summarising in 2.4; B4 is about checking a plan for errors, which is new. |
+| 10 | **Academic honesty is told from two sides.** | Path A (A3, writing honestly) and Path F (judging AI-written work fairly). | Write them to give one consistent message when Path F is built. |
+| 11 | **Health, law and money advice appears in several places.** | Lesson 1.1's guide (a medicine question), Lesson 1.5's knowledge check (medicine doses), 2.5 (health, law, money), C3 (tax), Path E (doses and diagnoses). | Keep 2.5 as the main lesson; Path E goes deeper with care-specific examples reviewed by a care professional. |
+| 12 | **The recurring cast leaves out three live characters.** | Lessons 1.3, 1.4 and 1.5 introduced Sarah (pharmacist), Daniel (receptionist) and Amina (HR); the plan's cast is Maya, her mum, Sam and the centre's members. | Reuse them where they fit: Amina for 3.5, Daniel in Path B or D, Sarah in a health scene. |
+| 13 | **Maya leads Module 2, Module 3 and Path B.** | One character carries most of the programme. | Fine for continuity, but it weakens "give every path someone who looks like its learners". Consider a different lead for Path B. |
+| 14 | **Two different voice-note scams are possible.** | 3.2 (a voice clone of Maya asking for hospital money) and the earlier "that voice note might not be your uncle" example in section 6.2. | Use one: keep 3.2 and update the example in 6.2 to match. |
+| 15 | **The Everyday life track has disappeared.** | The previous draft offered it for learners who do not fit a job (money, scams, school, side hustles, your phone). Module 3 now covers scams, and Path A covers school. | Drop it, or keep "money, side hustles and your phone" as a later path. |
+| 16 | **Setting and diversity.** | The audience is global. Maya's world reads as a UK community centre, and Bisi sells on WhatsApp and Instagram. | Keep Maya as one character among a diverse cast from different countries; vary names, places, prices and tools across modules and paths, and keep scams and examples neutral. |
+
+**⚠ OPEN DECISION:** accept, change or reject each recommendation in 6.1D.
 
 ### 6.2 Relationship between concepts, lessons, activities, and assessments
 
@@ -132,14 +334,18 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - Each **practical activity** applies one or more lesson concepts to a familiar, low-risk scenario. It is guided and does not require coding unless a future course explicitly states otherwise.
 - Each **knowledge check** assesses the outcomes of one lesson. It is mandatory and must be passed before the learner advances.
 - Each **module assessment** checks whether the learner can connect and apply concepts from the module. All lesson checks and the module assessment must be passed for module completion.
-- The **final assessment** checks learning across the full six-module path. It becomes available after all required modules are complete.
+- Each module ends with a **final assessment**: a short refresher across its episodes that opens after the last episode, as in Module 1. **Every module and every job path awards its own Certificate of Completion** once its knowledge checks and final assessment are passed.
 - Responsible use, privacy, bias, verification, and human oversight appear in relevant lessons and activities across the sequence; they are not confined to a single end-of-course topic.
+- **Safety is part of the fundamentals.** "AI can be confidently wrong", "never share your bank details, ID numbers, passwords or PINs with a chatbot" and "that voice note might not be your uncle" are taught in the core modules, so every learner gets them, including those who never reach a specialisation.
 
 ### 6.3 Content design expectations
 
-- Concepts are introduced before learners are asked to apply them.
+- **Start with doing, then explain.** Early in a lesson, the learner does something they actually need, such as writing a WhatsApp message to a customer or summarising a school note, then the lesson explains what just happened. People care about how it works once they have seen it work.
 - New terms are defined in plain language and revisited in context.
 - Examples span different jobs, study, and everyday life; the curriculum is not centered on QA.
+- **Everyday examples, not tech examples.** Explain machine learning as "how your phone learned to suggest the next word" or "how a video app knows what you like". Avoid diagrams of neural networks.
+- **Examples from the learner's world.** The modules stay the same for everyone; only the examples change. A sales assistant sees a customer-message example, a student sees an assignment example.
+- **Every lesson ends with something to do.**
 - Examples do not imply that every task should use AI or that AI output can be accepted without review.
 - Lesson outcomes, activities, and assessment questions align; each assessed concept is taught in the lesson.
 
@@ -164,7 +370,8 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 
 **Acceptance criteria**
 
-- The overview presents the six modules in sequence and describes the learning formats and assessment approach.
+- The overview presents the modules in sequence and describes the learning formats and assessment approach.
+- It leads with the promise to learn to check AI, not just use it.
 - It explains that reliability, privacy, bias, verification, and human oversight recur throughout the curriculum.
 - It does not promise employment outcomes or imply a professional qualification.
 - A learner can identify the recommended first step without understanding AI terminology first.
@@ -261,7 +468,31 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - It provides an alternative using sample material if a third-party tool is unavailable.
 - It does not ask learners to submit confidential workplace, personal, or sensitive information to a public AI tool.
 
+#### Story C3: See examples from my world
+
+**As a learner,** I want the examples in each lesson to come from my own life, so I can see straight away what AI means for me.
+
+**Acceptance criteria**
+
+- At sign-up, the learner is asked one optional question about who they are; proposed options are the job paths plus "Something else" (⚠ OPEN DECISION, section 12). They can skip it and change it later.
+- Lessons use examples matching that answer where alternatives exist; the concepts, knowledge checks and certificate stay the same for everyone.
+- Learners who skip the question see a general everyday-life example.
+- The answer is used only to choose examples. It is not shared or used for anything else, and the learner can remove it.
+
+#### Story C4: Learn in short moments on my phone
+
+**As a learner with a busy day and limited data,** I want short lessons that work well on my phone, so I can learn during a quiet moment at work or on a bus.
+
+**Acceptance criteria**
+
+- Lessons aim for 5 to 8 minutes and never exceed the eight-minute maximum.
+- Every lesson ends with something for the learner to do.
+- Lessons work on common phones and slower connections, with audio-only and text options that use less data.
+- Offline access, sharing through messaging apps such as WhatsApp, and local-language versions are proposed, driven by learner demand from a global audience.
+
 ### Epic D: Understand assistants, workspaces, workflows, and agents
+
+> Agents are now taught in optional Module 4 (episode 4.4), and building a workflow is the final project of each job path (section 6.1C).
 
 #### Story D1: Distinguish types of AI-supported interaction
 
@@ -298,7 +529,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - The learner checks the result against a short rubric and identifies at least one limitation or possible failure.
 - The learner can complete the activity without connecting a workplace account or sharing confidential data.
 
-**Open decision:** Select the specific interface for the first activity after reviewing availability, privacy terms, accessibility, and whether the exercise can be completed without a paid subscription.
+**⚠ OPEN DECISION:** which outside chat tool, if any, learners use for the first practical activity, and the fallback for learners without an account (section 12, open decision 2).
 
 ### Epic E: Check understanding and progress
 
@@ -356,7 +587,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 8. The platform records assessment results and certificate issuance to prevent an award without satisfying the requirements.
 9. The certificate is described as a certificate of completion, not an accredited qualification or proof of professional competence.
 
-**Proposed decision:** The first certificate is earned after Module 1, allowing early recognition. A later full-programme certificate may require completion of all six modules and passing the final assessment across the learning path. Public certificate verification is a later-release consideration; a unique certificate ID should be recorded if certificates are issued.
+**Decided:** the first certificate is earned after Module 1, and every later module and job path awards its own. Public certificate verification is a later-release consideration; each certificate records a unique ID.
 
 #### Story F2: Complete the full learning path
 
@@ -365,12 +596,12 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 **Acceptance criteria**
 
 - The final assessment becomes available only after all required modules and their assessments are complete.
-- It covers the stated outcomes across the six modules, including appropriate use, evaluation, and oversight.
+- It covers the stated outcomes across all modules, including appropriate use, evaluation, and oversight.
 - The learner receives explanatory feedback and can review relevant lessons before retrying if unsuccessful.
 - Passing the final assessment records full-path completion separately from the Module 1 certificate.
 - Any full-programme certificate requirements and name are clearly presented before the learner starts the full path.
 
-**Open decision:** Confirm whether a full-programme certificate will be part of the initial launch or a later release. The Module 1 Certificate of Completion is the first certificate milestone in either case.
+**Decided (13 November 2026):** every module and every job path awards its own Certificate of Completion. A separate certificate for the whole programme is not currently planned.
 
 ### Epic G: Use AI thoughtfully
 
@@ -386,6 +617,39 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - Responsible use, privacy, bias, verification, and oversight recur across relevant modules.
 - Content avoids fear-based messaging and does not present AI output as inherently trustworthy or inherently harmful.
 
+#### Story G2: Catch AI when it is wrong
+
+**As a learner,** I want to practise spotting AI mistakes, so I can rely on my own judgment rather than on how confident an answer sounds.
+
+**Acceptance criteria**
+
+- Every module includes at least one short exercise in which an AI gives a confident but wrong or unsuitable answer and the learner must find and fix the problem.
+- Exercises cover made-up facts, wrong numbers or dates, unfair suggestions and advice that needs a qualified person.
+- Feedback explains how the learner could have checked, using an independent source rather than asking the same AI.
+- The exercises are formative and unscored unless they form part of an official knowledge check.
+
+#### Story G3: Protect myself and my family from AI scams
+
+**As a learner,** I want to recognise scams that use AI, so I can protect myself and the people I care about.
+
+**Acceptance criteria**
+
+- Learners learn to recognise voice-clone calls and voice notes, deepfake videos and fake investment or trading bots.
+- Each scam type comes with simple, practical steps, such as calling back on a known number or agreeing a family code word.
+- The content is easy to share with family and friends.
+- It informs without frightening, and never asks learners for real personal or financial details.
+
+#### Story G4: Know what not to paste into an AI tool
+
+**As a worker,** I want simple rules about what I must never share with an AI tool, so I can use AI at work without leaking information.
+
+**Acceptance criteria**
+
+- Learners get a short, memorable list of what never to share: passwords, PINs, bank details and ID numbers, client and customer details, company confidential information and other people's personal data.
+- They practise deciding what is safe to share in realistic work examples.
+- The content explains how to check whether a tool is approved by their employer.
+- The content is free, like all of Buggle Learn.
+
 ### Epic H: Share feedback
 
 #### Story H1: Share feedback on the learning experience
@@ -398,20 +662,22 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 - The learner is told what information is collected and why before submitting it.
 - Feedback does not request unnecessary personal or sensitive information.
 
-**Open decision:** Decide whether feedback is anonymous and what channel will receive it before adding a feedback form.
+- **Decided (13 November 2026):** after each lesson, a short pop-up asks "Did you find this lesson helpful?" and "How did it feel: easy, about right or hard?" One tap answers each; the learner can close it or skip it.
+- Answers are stored by lesson so the team can see which lessons are unhelpful or too hard, and are not used for anything else.
+- The pop-up appears at most once per lesson and never interrupts the film, the guide or the knowledge check.
 
 ## 8. Assessment and certification requirements
 
 | Requirement                      | Proposed decision                                                                                                                                    |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Knowledge checks                 | Mandatory after every lesson.                                                                                                                        |
-| Passing score                    | At least 70% for each lesson check and assessment. Each lesson check has 10 questions.                                                               |
+| Passing score                    | At least 70% for each lesson check and assessment. Each lesson check has **5 questions; 4 correct to pass.**                                        |
 | Failed assessment                | Learner reviews feedback and relevant material, then retries that assessment only. No restart of completed lessons or modules; no fixed retry limit. |
 | Lesson progression               | Next lesson unlocks only after passing the current lesson check.                                                                                     |
 | Module completion                | All lesson checks and the module assessment are passed.                                                                                              |
-| Module 1 certificate eligibility | All Module 1 lessons and checks completed, and Module 1 final assessment passed.                                                                     |
-| Full-path final assessment       | Mandatory after completion of all six modules; covers the full learning path.                                                                        |
-| First certificate                | Digital certificate titled "Foundations of Artificial Intelligence, Certificate of Completion", issued after Module 1.                               |
+| Certificate eligibility          | For each module or job path: all its lesson checks and its final assessment passed. Module 1 is live; the others follow as they are built.        |
+| Full-path final assessment       | Mandatory after completion of all modules; covers the full learning path.                                                                             |
+| Certificates                     | Every module and every job path awards its own digital Certificate of Completion, titled with the module or path name. Module 1 is the first.        |
 | Certificate details              | Learner name, module title, completion date, and issuing organisation.                                                                               |
 | Certificate record               | Store learner completion, assessment results, certificate issue date, and a unique certificate ID.                                                   |
 | Public certificate verification  | Consider for a later release; do not expose learner information publicly without a separate privacy decision.                                        |
@@ -422,7 +688,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 ### In scope for the initial learning release
 
 - A clear landing page that describes the platform and intended learners.
-- The six-module curriculum structure, with Module 1 fully authored and assessed as the first release milestone.
+- Modules 1 to 3 for everyone, optional Module 4 and job paths, with Module 1 fully authored and assessed as the first release milestone.
 - For each published lesson, a narrated visual lesson and a separate structured written guide.
 - A mandatory knowledge check after every published lesson, with feedback, retries, and progression gating.
 - A Module 1 final assessment and first Certificate of Completion.
@@ -436,7 +702,7 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 
 - Public certificate verification.
 - A full-programme certificate at launch; this remains an open decision.
-- A custom AI chatbot, agent builder, or AI-powered tutor.
+- A custom AI chatbot, agent builder, or AI-powered tutor. (How learners "start with doing" with real AI in early lessons is an open decision in section 12.)
 - Requiring learners to build a coded agent.
 - Paid plans, a discussion community, or workplace-system integrations.
 - A promise that learners will become AI experts or improve their employment prospects.
@@ -444,10 +710,13 @@ The curriculum moves from broad concepts to practical use. Each module builds on
 
 ## 10. Experience and content principles
 
-- **Start with understanding:** Explain the concept before asking the learner to use a tool.
+- **Start with doing, then explain:** Let the learner try something useful first, then explain what happened and how it works.
+- **Teach checking, not just using:** Every module helps learners catch AI when it is wrong.
+- **Put safety in the fundamentals:** Scams, privacy and confident mistakes are core content, not an optional extra.
 - **Use plain language:** Define necessary terminology and avoid using jargon as a test of belonging.
 - **Respect the learner:** Treat lack of prior access to AI education as an education gap, not a personal failing.
-- **Show more than one context:** Do not build the whole course around a single profession.
+- **Show more than one context:** Do not build the whole course around a single profession. Use the learner's own world where possible.
+- **Keep it short and phone-first:** Lessons of 5 to 8 minutes that work on limited data.
 - **Be balanced:** Explain capabilities, limits, risks, and uncertainty.
 - **Keep human judgment visible:** Show where a person should verify, decide, or decline to use AI.
 - **Teach through visuals:** Use narration, demonstrations, diagrams, and motion to make concepts easier to understand.
@@ -469,21 +738,43 @@ Success measures should show whether learners understand and can apply the basic
 - Whether learners from different intended audiences find the examples relevant.
 - Whether learners can distinguish an assistant, configured workspace, automated workflow, and agent in a knowledge check or practical task.
 
-**Open decision:** Set numerical targets, collection methods, retention periods, and privacy expectations after deciding what analytics and account data will be used. No numerical targets are assumed in this draft.
+**⚠ OPEN DECISION:** which of these to track, with targets, collection methods, retention periods and privacy expectations (section 12, open decision 8). The lesson feedback pop-up (Story H1) provides the first helpfulness and difficulty ratings.
 
 ## 12. Approved decisions and remaining review
 
-Approved: Google sign-in; the first two lesson previews; two equivalent learning routes; 10-question official lesson checks; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; 30 to 60 minutes of planned module content; Buggle Learn completely free, with no payments, paid tiers or subscriptions; WCAG 2.2 AA; Module 1 Certificate of Completion subject to all requirements being satisfied. Narration recordings are requested from the user before film production, as defined in LEARNING_EXPERIENCE.md.
+Approved:
 
-Remaining decisions:
+- The unique selling proposition in section 1A, led by "Learn to check AI, not just use it".
+- The curriculum plan of 12 November 2026 (section 6.1): Modules 1 to 3 for everyone (Foundations of AI, Talking to AI, Staying Safe with AI), optional Module 4 (Go Deeper: How AI Works), then a job path ending in a hands-on project.
+- Build order: Module 2, Module 3, then Paths A (Students), B (Office and Admin) and C (Small Business). Module 4 and Paths D to F follow; Path E (Nurses and Carers) must be reviewed by a qualified nurse or care manager.
+- The story model in section 6.1A: every module is one story, every lesson an episode (situation, choice, what happens, your turn), with a recurring cast and a hook into the next module.
+- No standalone machine learning module in the core; machine learning is explained where needed, with more in optional Module 4.
+- Guests can take knowledge checks on the free preview lessons; sign-in is needed only to save results, keep progress and earn certificates.
+- **13 November 2026:** knowledge checks have 5 questions, with 4 correct to pass. The live 10-question Module 1 checks will be trimmed to 5.
+- **13 November 2026:** learners can sign in with Google or with email and password (added for the testing period).
+- **13 November 2026:** the audience is global and diverse, with neutral examples and a diverse cast, not one market.
+- **13 November 2026:** every module and every job path awards its own Certificate of Completion, including optional Module 4.
+- **13 November 2026:** after each lesson, an optional pop-up asks whether the lesson was helpful and whether it felt easy, about right or hard.
+- The first two lesson previews; two equivalent learning routes; 70% minimum passing score; unlimited assessment-only retries; eight-minute lesson maximum; WCAG 2.2 AA.
+- Buggle Learn is completely free, with no payments, paid tiers or subscriptions.
+- Module 1 Certificate of Completion, issued by Buggle Learn, using the learner's editable profile name, after all Module 1 lesson checks and the Module 1 final assessment are passed.
+- Each core module ends with a short refresher final assessment; Module 1's has 8 questions (6 to pass, no time limit) and opens after the last lesson.
+- Narration recordings are supplied by the user before film production, as defined in LEARNING_EXPERIENCE.md.
 
-1. Which historical milestones and remaining lessons belong in Module 1, including the later home for the four classical approaches?
-2. What is the Module 1 final assessment blueprint and question count?
-3. Which no-code interface and tool-independent alternative should support the first practical workflow activity, usable without a paid subscription?
-4. What certificate ID, retention policy and later public verification experience should be used?
-5. Which outcome measures define a successful complete first release?
+Resolved since earlier drafts: the remaining Module 1 lessons (all five are live), the Module 1 final assessment blueprint, the certificate ID format (such as BL-M1-XXXX-XXXX), where agents and workflows are taught (Module 4.4 and path projects), and which job paths come first.
 
-The current implementation slice covers Lessons 1 and 2, their separate official checks and saved learning places. It does not imply that all Module 1 lessons, the final assessment or certificate issuance are ready. Buggle Learn is free throughout; there are no payments.
+**⚠ OPEN DECISIONS**
+
+1. **Lesson length.** Episodes are planned at 3 to 4 minutes. Confirm eight minutes stays the hard limit.
+2. **Outside chat tools in Module 2.** Module 2 has learners practise with ChatGPT, Claude, Gemini or Copilot. These are made by other companies, so learners need to sign up with them, and some may be unable or unwilling to. Options: (a) show the same exercise with ready-made sample answers inside Buggle Learn, so nobody needs an outside account; (b) recommend one tool and explain how to sign up safely; (c) both, with sample answers as the default. Recommended: (c).
+3. **Sign-up question.** What it asks (proposed: the job paths plus "Something else"), and how the answer is stored and removed.
+4. **Everyday life track.** Not Module 2: an optional track proposed in an earlier draft for learners who do not fit a job path, covering money, side hustles and getting more from their phone. Scams now sit in Module 3 and studying in Path A. Drop it, or keep it as a later path?
+5. **Overlaps and duplicates.** Accept, change or reject each of the 16 recommendations in section 6.1D before scripts are written.
+6. **Expert reviewers.** Each job path should be checked by someone who does that job, so the examples are realistic and the safety advice is right: for example a qualified nurse or care manager for Path E, and a teacher for Path F. Who are they?
+7. **Employer offering.** Should there ever be a version of the "what not to paste" safety training sold to companies for their staff? Any paid version would reverse the decision that Buggle Learn is completely free. Recommended: no, or only as a free resource employers can share.
+8. **Success measures.** The numbers that show Buggle Learn is working, for example how many people start and finish each module, knowledge check pass rates, and the feedback pop-up ratings. Choose which to track and set targets.
+
+**Not yet reflected on the live site:** the site and AGENT.md still show the earlier six-module list; lesson checks still ask guests to sign in first and still have 10 questions; Google is the only sign-in option; and there is no feedback pop-up yet.
 
 ## 13. Working definition of done for the first release
 
