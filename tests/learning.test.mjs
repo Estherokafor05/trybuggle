@@ -36,23 +36,25 @@ test("Google learning identity stays stable across sign-ins and ignores client p
   });
   assert.equal(legacy.user.id, undefined);
 });
-test("knowledge checks score 6/10 as fail and 7/10 as pass", () => {
+test("knowledge checks pass at 70%: 7 of 10, 4 of 5", () => {
   for (const questions of Object.values(assessmentBank)) {
-    assert.equal(questions.length, 10);
-    assert.equal(new Set(questions.map((q) => q.id)).size, 10);
-    for (const count of [0, 6, 7, 10]) {
+    const n = questions.length;
+    assert.ok(n === 10 || n === 5, "checks have 10 questions, or 5 from Module 2");
+    assert.equal(new Set(questions.map((q) => q.id)).size, n);
+    const pass = n === 10 ? 7 : 4;
+    for (const count of [0, pass - 1, pass, n]) {
       const answers = Object.fromEntries(
         questions.map((q, i) => [
           q.id,
           i < count ? q.correct : q.options.find((o) => o.id !== q.correct).id,
         ]),
       );
-      const result = scoreAssessment(questions, answers);
+      const result = scoreAssessment(questions, answers, n);
       assert.equal(result.correct, count);
-      assert.equal(result.passed, count >= 7);
-      assert.equal(result.feedback.length, 10);
+      assert.equal(result.passed, count >= pass);
+      assert.equal(result.feedback.length, n);
     }
-    assert.throws(() => scoreAssessment(questions, {}));
+    assert.throws(() => scoreAssessment(questions, {}, n));
     assert.throws(() =>
       scoreAssessment(questions, {
         ...Object.fromEntries(questions.map((q) => [q.id, q.correct])),

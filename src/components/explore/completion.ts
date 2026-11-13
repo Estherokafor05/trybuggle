@@ -47,6 +47,12 @@ const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean>
   "hr-privacy": (s) => m(s, "q") === "approved",
   "hr-ranking": (s) => s?.stage === 1,
   "hr-checking": (s) => allMatch(s, { s1: "light", s2: "check", s3: "check", s4: "person", s5: "person" }),
+  // Episode 2.1
+  "chat-busy": (s) => allMatch(s, { newsletter: "yes", rooms: "no", emails: "yes", volunteers: "no", ideas: "yes" }),
+  "chat-ask": (s) => (s?.stage ?? 0) >= 2,
+  "chat-check": (s) => m(s, "q") === "fifty" && Boolean(s?.revised),
+  "chat-why": (s) => Boolean(m(s, "w1")) && Boolean(m(s, "w2")),
+  "chat-turn": (s) => m(s, "q") === "draft-check",
 };
 
 /** True once the learner has done what the step asks, not merely opened it. */

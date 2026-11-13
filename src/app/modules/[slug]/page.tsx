@@ -42,6 +42,8 @@ export default async function ModulePage({
   const session = googleAuthConfigured ? await auth() : null;
   const next = modules.find((m) => m.order === mod.order + 1);
   const isFoundations = mod.order === 1;
+  const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));
+  const unit = isFoundations ? "lessons" : "episodes";
 
   return (
     <>
@@ -71,6 +73,16 @@ export default async function ModulePage({
             <p className="mt-4 max-w-[58ch] text-base leading-relaxed text-ink sm:text-lg">
               {mod.summary}
             </p>
+            {!isFoundations && firstBuilt && (
+              <div className="mt-6">
+                <Link
+                  href={`/modules/${slug}/lessons/${firstBuilt.slug}`}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                >
+                  Start Episode {mod.order}.{mod.lessons.indexOf(firstBuilt) + 1} <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            )}
             {isFoundations && (
               <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
                 <Link
@@ -95,18 +107,18 @@ export default async function ModulePage({
           )}
         </header>
 
-        {isFoundations && (
+        {(isFoundations || firstBuilt) && (
           <div className="mt-5">
-            <JourneyProgress />
+            <JourneyProgress moduleSlug={slug} />
           </div>
         )}
 
         <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.42fr)]">
           <section aria-labelledby="module-lessons">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <h2 id="module-lessons" className="text-2xl font-bold text-ink">Lessons, in order</h2>
+              <h2 id="module-lessons" className="text-2xl font-bold text-ink">{isFoundations ? "Lessons" : "Episodes"}, in order</h2>
               <p className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-muted">
-                {mod.lessons.length} lessons
+                {mod.lessons.length} {unit}
               </p>
             </div>
             {session?.user && isFoundations && (
@@ -117,7 +129,7 @@ export default async function ModulePage({
             )}
             <ol className="grid gap-3 sm:grid-cols-2">
               {mod.lessons.map((lesson, index) => {
-                const built = isFoundations ? getBuiltLesson(lesson.slug) : undefined;
+                const built = getBuiltLesson(lesson.slug);
                 const preview = Boolean(built);
                 const tone = ["bg-lavender", "bg-peach", "bg-mint"][index % 3];
 
@@ -149,7 +161,7 @@ export default async function ModulePage({
                     <p className="mt-2 text-sm leading-relaxed text-muted">{lesson.summary}</p>
                     {preview && (
                       <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                        Start lesson →
+                        Start {isFoundations ? "lesson" : "episode"} →
                       </span>
                     )}
                   </li>

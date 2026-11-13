@@ -21,9 +21,9 @@ export interface Module {
 }
 
 export const TRACK_LABELS: Record<Track, string> = {
-  foundations: "AI foundations",
-  systems: "How AI systems work",
-  practice: "Using AI in practice",
+  foundations: "For everyone",
+  systems: "Go deeper (optional)",
+  practice: "Your path",
 };
 
 export const modules: Module[] = [
@@ -72,178 +72,75 @@ export const modules: Module[] = [
   },
   {
     order: 2,
-    slug: "types-of-ai-systems",
-    title: "Understanding Different Types of AI Systems",
+    slug: "talking-to-ai",
+    title: "Talking to AI",
     summary:
-      "Explore rules-based, predictive, and generative systems, and how their capabilities differ.",
-    outcome: "A practical way to tell different AI systems apart.",
+      "Watch Maya use an AI chat tool for real tasks, and practise asking well and checking answers before you open a tool yourself.",
+    outcome: "A one-page \u201cask well, then check\u201d card to use with any AI chat tool.",
     track: "foundations",
     status: "next",
-    handsOn: false,
+    handsOn: true,
     lessons: [
       {
-        slug: "not-one-kind",
-        title: "AI Is Not Just One Thing",
-        summary:
-          "Why one label can describe systems that work in very different ways.",
+        slug: "a-new-helper",
+        title: "A New Helper",
+        summary: "What AI chat tools are, and why sounding confident is not the same as being right.",
       },
       {
-        slug: "rules-and-predictions",
-        title: "Rules, Patterns, and Predictions",
-        summary:
-          "Compare systems that follow instructions with systems that learn from examples.",
+        slug: "the-email-that-said-nothing",
+        title: "The Email That Said Nothing",
+        summary: "How to ask well: who it is for, what it is about, when and where, and the tone.",
       },
       {
-        slug: "generating-new-things",
-        title: "When AI Makes Something New",
-        summary:
-          "Meet generative systems and see how they differ from predictive tools.",
+        slug: "three-tries-at-the-flyer",
+        title: "Three Tries at the Flyer",
+        summary: "A chat is a back and forth. Follow-up messages improve the result.",
       },
       {
-        slug: "choose-the-right-tool",
-        title: "Which Kind Fits the Job?",
-        summary:
-          "Match everyday tasks with the kinds of systems that may support them.",
+        slug: "thirty-pages-by-friday",
+        title: "Thirty Pages by Friday",
+        summary: "Summarising, explaining jargon and planning, then checking against the original.",
+      },
+      {
+        slug: "the-grant-that-didnt-exist",
+        title: "The Grant That Didn't Exist",
+        summary: "Made-up facts and sources, and where not to rely on AI: health, law and money.",
       },
     ],
   },
   {
     order: 3,
-    slug: "machine-learning-foundations",
-    title: "Understanding Machine Learning",
+    slug: "staying-safe-with-ai",
+    title: "Staying Safe with AI",
     summary:
-      "Learn how computers find patterns in data, and why the examples they learn from matter.",
-    outcome: "A simple mental model of how machine learning works.",
-    track: "systems",
+      "Protect your information, your money and the people you care about, now that AI makes scams and fake content easier to produce.",
+    outcome: "A one-page safety checklist to use yourself and share with family and colleagues.",
+    track: "foundations",
     status: "planned",
     handsOn: false,
     lessons: [
-      {
-        slug: "learning-from-examples",
-        title: "Learning from Examples",
-        summary:
-          "How a computer can learn patterns instead of following only hand-written rules.",
-      },
-      {
-        slug: "training-and-testing",
-        title: "Practice, Then a Fair Test",
-        summary:
-          "What training and testing mean, using an everyday comparison.",
-      },
-      {
-        slug: "data-quality",
-        title: "When the Examples Miss the Mark",
-        summary: "How gaps and bias in data can shape a system's results.",
-      },
-      {
-        slug: "supervised-unsupervised",
-        title: "Learning with and without Answer Keys",
-        summary:
-          "A plain-language introduction to supervised and unsupervised learning.",
-      },
+      { slug: "the-volunteer-list", title: "The Volunteer List", summary: "What happens to what you type into a chat tool, and what never to share." },
+      { slug: "mum-its-me", title: "Mum, It's Me", summary: "Voice-clone scams, and how to check before you act." },
+      { slug: "the-video-in-the-group-chat", title: "The Video in the Group Chat", summary: "Deepfakes and fake endorsements, and how to check them." },
+      { slug: "the-perfect-job-offer", title: "The Perfect Job Offer", summary: "How AI makes scams look professional, and the red flags to spot." },
+      { slug: "the-summer-flyer", title: "The Summer Flyer", summary: "Bias in AI-made content, being honest about AI help, and fair use." },
     ],
   },
   {
     order: 4,
-    slug: "generative-ai-and-llms",
-    title: "Understanding Generative AI and Large Language Models",
+    slug: "go-deeper",
+    title: "Go Deeper: How AI Works",
     summary:
-      "Make sense of tools such as ChatGPT and Claude, how they respond, and why they can get things wrong.",
-    outcome: "Confidence to use and check generative AI responses.",
+      "Optional, for curious learners: how AI learns, why it can be unfair, and where a person must stay in control.",
+    outcome: "A simple picture of how AI learns, why it can be unfair, and where people stay in control.",
     track: "systems",
     status: "planned",
     handsOn: false,
     lessons: [
-      {
-        slug: "what-generative-means",
-        title: "What Does Generative AI Generate?",
-        summary:
-          "How tools create text, images, and other outputs from a request.",
-      },
-      {
-        slug: "inside-a-language-model",
-        title: "A Language Model, in Everyday Terms",
-        summary:
-          "A beginner-friendly picture of how a large language model produces a response.",
-      },
-      {
-        slug: "context-matters",
-        title: "Give It Context, Get a Better Answer",
-        summary:
-          "Why the information around a request can change the response.",
-      },
-      {
-        slug: "check-the-answer",
-        title: "Fluent Does Not Always Mean True",
-        summary:
-          "Why generative tools can be wrong and how to check important information.",
-      },
-    ],
-  },
-  {
-    order: 5,
-    slug: "ai-agents-and-workflows",
-    title: "Understanding AI Agents and Workflows",
-    summary:
-      "Tell an assistant, a configured workspace, an automated workflow, and an agent apart.",
-    outcome:
-      "A clear picture of what agents can do and where oversight belongs.",
-    track: "practice",
-    status: "planned",
-    handsOn: true,
-    lessons: [
-      {
-        slug: "assistant-workspace-workflow-agent",
-        title: "Assistant, Workspace, Workflow, or Agent?",
-        summary:
-          "Compare four ideas that are often described with the same words.",
-      },
-      {
-        slug: "how-agents-work",
-        title: "How an Agent Gets from Request to Action",
-        summary:
-          "See how instructions, context, tools, and actions can work together.",
-      },
-      {
-        slug: "keep-a-person-in-the-loop",
-        title: "Where You Stay in Control",
-        summary:
-          "Recognize when an action needs a person's review or confirmation.",
-      },
-    ],
-  },
-  {
-    order: 6,
-    slug: "creating-ai-assisted-workflows",
-    title: "Creating Your First AI-Assisted Workflow",
-    summary:
-      "Use accessible no-code tools to make a reusable helper for a routine, low-risk task.",
-    outcome: "A simple workflow you can review and improve.",
-    track: "practice",
-    status: "planned",
-    handsOn: true,
-    lessons: [
-      {
-        slug: "choose-a-routine-task",
-        title: "Start with a Task You Know Well",
-        summary: "Choose a routine task that is suitable for a first workflow.",
-      },
-      {
-        slug: "set-up-a-reusable-workspace",
-        title: "Give Your Helper a Clear Home",
-        summary: "Configure a project or workspace with a clear purpose.",
-      },
-      {
-        slug: "write-useful-instructions",
-        title: "Instructions That Make Sense",
-        summary: "Write reusable guidance and provide safe, relevant context.",
-      },
-      {
-        slug: "review-and-improve",
-        title: "Check It, Then Make It Better",
-        summary:
-          "Review the result, notice a limitation, and refine the workflow.",
-      },
+      { slug: "how-did-my-keyboard-learn", title: "How Did My Keyboard Learn My Words?", summary: "Training and testing, through the phone keyboard." },
+      { slug: "why-was-she-turned-down", title: "Why Was She Turned Down?", summary: "How gaps in training examples lead to unfair results." },
+      { slug: "which-tool-for-which-job", title: "Which Tool for Which Job?", summary: "A short recap of kinds of AI, then choosing the right one." },
+      { slug: "the-assistant-that-booked-the-wrong-hall", title: "The Assistant That Booked the Wrong Hall", summary: "Assistants, workflows and agents, and why a person checks before anything is sent, paid or deleted." },
     ],
   },
 ];

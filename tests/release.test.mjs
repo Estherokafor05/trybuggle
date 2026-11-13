@@ -44,11 +44,11 @@ test("the retained four-approaches material has bundled audio and ordered cues f
   }
 });
 
-test("all five Module 1 lessons are open without an account and have independent guides", () => {
-  assert.equal(previewLessons.length, 5);
+test("every built lesson is open without an account and has an independent guide", () => {
+  assert.equal(previewLessons.length, 6);
   for (const lesson of previewLessons) {
     assert.equal(getPreviewLesson(lesson.slug), lesson);
-    assert.ok(exploreGuides[lesson.slug].steps.length >= 6);
+    assert.ok(exploreGuides[lesson.slug].steps.length >= 5);
   }
   assert.equal(getPreviewLesson("not-a-lesson"), undefined);
 });

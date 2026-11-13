@@ -1798,6 +1798,8 @@ const exampleAnswers: Record<string, string> = {
     "My phone's alarm follows set instructions. My music app's suggestions might learn from what I play. Before I call something AI, I would ask what it actually does and how it decides.",
   "what-ai-can-do":
     "AI could help me draft emails. I would always check names, dates and prices. A decision about someone's job or health is one I would keep for a person.",
+  "a-new-helper":
+    "I could ask a chat tool to draft a short message to a customer. Before sending it, I would check the dates, prices and names, because those are things someone else will rely on.",
   "before-chatgpt":
     "AI didn't start with ChatGPT because people have been building and studying it since the 1950s. My email's spam filter is an older AI tool I've used without noticing. What surprised me most was that the name artificial intelligence is about seventy years old.",
 };

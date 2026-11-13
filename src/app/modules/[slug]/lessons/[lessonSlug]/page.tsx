@@ -13,6 +13,7 @@ import { getBuiltLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { db } from "@/server/database";
 import { guestId } from "@/server/guest";
+import { assessmentBank } from "@/server/assessment-bank";
 
 /** Whether a signed-in learner has passed a lesson's knowledge check. Never blocks: null when unknown. */
 async function passedCheck(learner: string, lessonSlug: string) {
@@ -34,7 +35,7 @@ export async function generateMetadata({
   const mod = getModule(slug);
   const lessonMeta = mod?.lessons.find((item) => item.slug === lessonSlug);
   const lesson = getBuiltLesson(lessonSlug);
-  if (!mod || !lessonMeta || slug !== "ai-foundations") {
+  if (!mod || !lessonMeta) {
     return { title: "Lesson not found | Buggle Learn" };
   }
   return {
@@ -52,7 +53,7 @@ export default async function LessonPage({
   const mod = getModule(slug);
   const lessonMeta = mod?.lessons.find((item) => item.slug === lessonSlug);
   const lesson = getBuiltLesson(lessonSlug);
-  if (!mod || !lessonMeta || slug !== "ai-foundations") notFound();
+  if (!mod || !lessonMeta) notFound();
 
   const lessonIndex = mod.lessons.findIndex((item) => item.slug === lessonSlug);
   if (lessonIndex < 0) notFound();
@@ -84,13 +85,13 @@ export default async function LessonPage({
               This lesson is being prepared
             </h1>
             <p className="mt-4 leading-relaxed text-ink">
-              You can revisit the earlier lessons from the Module 1 overview.
+              You can revisit the earlier lessons from the Module {mod.order} overview.
             </p>
             <Link
               href={`/modules/${slug}`}
               className="mt-6 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              Return to Module 1
+              Return to Module {mod.order}
             </Link>
           </section>
         </main>
@@ -99,7 +100,8 @@ export default async function LessonPage({
     );
   }
 
-  const position = journeyPosition(lessonSlug);
+  const position = journeyPosition(lessonSlug, slug);
+  const lessonLabel = mod.order === 1 ? `Lesson ${lessonIndex + 1}` : `Episode ${mod.order}.${lessonIndex + 1}`;
   const previous = position.previous;
   const next = position.next;
   const nextStep = next
@@ -137,12 +139,12 @@ export default async function LessonPage({
             <li aria-hidden="true">›</li>
             <li>
               <Link className="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href={`/modules/${slug}`}>
-                Module 1
+                Module {mod.order}
               </Link>
             </li>
             <li aria-hidden="true">›</li>
             <li aria-current="page" className="font-semibold text-navy">
-              Lesson {lessonIndex + 1}
+              {lessonLabel}
             </li>
           </ol>
         </nav>
@@ -150,7 +152,7 @@ export default async function LessonPage({
         <header className="mt-1 flex items-center justify-between gap-6 rounded-[1.75rem] bg-hero-lavender p-5 sm:mt-3 sm:rounded-[2rem] sm:p-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
-              Foundations of Artificial Intelligence
+              {mod.title}
             </p>
             <h1 className="mt-3 max-w-[23ch] text-[clamp(2rem,4.5vw,3.2rem)] font-bold leading-[1.08]">
               {lesson.title}
@@ -160,7 +162,7 @@ export default async function LessonPage({
             </p>
             <p className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy sm:mt-4">
               <span className="rounded-full bg-white/80 px-3 py-1.5">
-                Lesson {lessonIndex + 1} of {mod.lessons.length}
+                {lessonLabel} of {mod.lessons.length}
               </span>
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 About {lesson.duration}
@@ -174,12 +176,12 @@ export default async function LessonPage({
             aria-hidden="true"
             className="hidden size-24 shrink-0 items-center justify-center rounded-[1.75rem] bg-white/65 font-display text-4xl font-bold text-navy sm:flex lg:size-28"
           >
-            {String(lessonIndex + 1).padStart(2, "0")}
+            {mod.order === 1 ? String(lessonIndex + 1).padStart(2, "0") : `${mod.order}.${lessonIndex + 1}`}
           </div>
         </header>
 
         <div className="mt-3 sm:mt-5">
-          <JourneyProgress current={lessonSlug} />
+          <JourneyProgress current={lessonSlug} moduleSlug={slug} />
         </div>
 
         {previousLesson && previousPassed === false && (
@@ -191,7 +193,7 @@ export default async function LessonPage({
               You haven&apos;t passed {previousLesson.label}&apos;s knowledge check yet
             </h2>
             <p className="mt-1 leading-relaxed text-ink">
-              Passing every knowledge check is part of completing Module 1. You
+              Passing every knowledge check is part of completing Module {mod.order}. You
               can take it now, or carry on with this lesson and come back to it
               later.
             </p>
@@ -223,6 +225,8 @@ export default async function LessonPage({
         )}
         <LessonPreview
           key={lesson.slug}
+          moduleSlug={slug}
+          questionCount={assessmentBank[lesson.slug]?.length ?? 10}
           next={nextStep}
           lesson={lesson}
           signedIn={Boolean(session?.user?.id)}
@@ -281,17 +285,17 @@ export default async function LessonPage({
               <h2 id="up-next-title" className="mt-2 text-2xl font-bold">
                 {next
                   ? `${next.label}, ${next.title}, is being prepared`
-                  : "You have reached the end of Module 1"}
+                  : `You have reached the end of Module ${mod.order}`}
               </h2>
               <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
                 Your account is ready. You can revisit these lessons or
-                return to the Module 1 overview.
+                return to the Module {mod.order} overview.
               </p>
               <Link
                 href={`/modules/${slug}`}
                 className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
               >
-                Return to Module 1
+                Return to Module {mod.order}
               </Link>
             </>
           ) : (
@@ -335,7 +339,7 @@ export default async function LessonPage({
             href={`/modules/${slug}`}
             className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4"
           >
-            All Module 1 lessons
+            All Module {mod.order} {mod.order === 1 ? "lessons" : "episodes"}
           </Link>
         </nav>
       </main>

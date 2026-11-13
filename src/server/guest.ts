@@ -20,7 +20,7 @@ const cookieOptions = {
 };
 
 /** Modules whose lessons and assessments are open without an account. */
-const openModules = new Set(["ai-foundations"]);
+const openModules = new Set(["ai-foundations", "talking-to-ai"]);
 export function openToGuests(moduleSlug: string) {
   return openModules.has(moduleSlug);
 }

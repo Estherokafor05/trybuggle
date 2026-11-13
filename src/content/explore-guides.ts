@@ -402,4 +402,64 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "a-new-helper": {
+    slug: "a-new-helper",
+    title: "Maya's new helper",
+    reflections: [
+      "One thing I could ask an AI chat tool to help with this week is…",
+      "One detail I would check before using its answer is…",
+    ],
+    steps: [
+      {
+        id: "chat-busy",
+        title: "Three weeks to an open day",
+        goal: "Look at Maya's list and pick the jobs a chat tool could help with.",
+        reading: [
+          "Maya runs the office at a busy community centre. Her manager, Rosa, asks her to organise an open day in three weeks, on top of her normal work. By lunch her list is long: book the rooms, call the volunteers, get something into the newsletter, and answer a pile of emails.",
+          "Her colleague Leo suggests an AI chat tool. There are several, such as ChatGPT, Gemini, Claude and Copilot, and most have a free version. You type a request in ordinary words, and it types an answer back. Chat tools are good with words: drafting, rewording and listing ideas. They cannot book a room or call a volunteer for you.",
+        ],
+        takeaway: "Chat tools help with words: drafts, rewording and ideas.",
+      },
+      {
+        id: "chat-ask",
+        title: "Ask the chat tool",
+        goal: "Choose Maya's request and watch the chat tool answer.",
+        reading: [
+          "Maya types: \u201cWrite a short, welcoming paragraph about our community centre for the open day newsletter.\u201d A few seconds later, a warm, polished paragraph appears. It sounds professional, and Maya can already picture it in the newsletter.",
+          "In this course, the chats are shown as examples inside the lesson. Nothing you type here is sent to any AI tool.",
+        ],
+        takeaway: "A chat tool can give you a polished first draft in seconds.",
+      },
+      {
+        id: "chat-check",
+        title: "Which line needs checking?",
+        goal: "Read the draft and pick the line Maya should check before printing.",
+        reading: [
+          "Most of the paragraph is general and friendly: a welcoming place, something for everyone, come and say hello. But one line makes a specific claim: \u201cFor over fifty years, our centre has brought people together.\u201d",
+          "Maya never told the tool when the centre opened. The line fits the kind of newsletter she asked for, but that does not make it true. She keeps the parts she likes and adds a note: check the opening date with Rosa before printing.",
+        ],
+        takeaway: "Check specific details, such as dates, numbers and names, before you use them.",
+      },
+      {
+        id: "chat-why",
+        title: "Why it sounds so sure",
+        goal: "Build a sentence the way a chat tool does, one likely word at a time.",
+        reading: [
+          "A chat tool writes by predicting which words are most likely to come next, based on patterns it learned from an enormous amount of text. That is why its writing flows so smoothly: it has seen millions of well-written paragraphs.",
+          "But it is not checking facts as it goes. It is choosing words that sound right. So it can sound exactly as confident when it is wrong as when it is right.",
+        ],
+        takeaway: "Sounding confident is not the same as being right.",
+      },
+      {
+        id: "chat-turn",
+        title: "Your turn",
+        goal: "Think of something to ask a chat tool, and one detail you would check.",
+        reading: [
+          "The habit this module builds is simple: let AI help you get a first draft, then check the details someone else might rely on before you use it.",
+          "Think of one thing you could ask an AI chat tool to help with this week, such as a message, a short description or a list of ideas, and one detail you would check in its answer. Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "Draft with AI, then check the details before you use them.",
+      },
+    ],
+  },
 };

@@ -6,6 +6,7 @@ import { Activity, activityButton } from "./Activities";
 import { HistoryActivity } from "./HistoryActivities";
 import { OfficeActivity } from "./OfficeActivities";
 import { HiringActivity } from "./HiringActivities";
+import { HelperActivity } from "./HelperActivities";
 import { stepComplete } from "./completion";
 
 const primaryButton =
@@ -15,6 +16,7 @@ const activityFor: Record<string, typeof Activity> = {
   "before-chatgpt": HistoryActivity,
   "ai-or-software": OfficeActivity,
   "what-ai-can-do": HiringActivity,
+  "a-new-helper": HelperActivity,
 };
 function StepActivity(props: Parameters<typeof Activity>[0]) {
   const Component = activityFor[props.slug] ?? Activity;

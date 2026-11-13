@@ -167,6 +167,27 @@ export const builtLessons: PreviewLesson[] = [
       },
     ],
   },
+  {
+    slug: "a-new-helper",
+    title: "A New Helper",
+    duration: "3 minutes to watch",
+    preview: true,
+    objective:
+      "Explain what an AI chat tool is, and why a confident, polished answer still needs checking before you rely on it.",
+    sources: [
+      {
+        label: "Google: Introduction to large language models",
+        url: "https://developers.google.com/machine-learning/crash-course/llm",
+        claim:
+          "Language models estimate how likely each word is to come next in a sequence, which is how they generate text.",
+      },
+      {
+        label: "NIST: Generative AI risk profile",
+        url: "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+        claim: "Generative AI can produce confident but false content, so its output needs checking.",
+      },
+    ],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {

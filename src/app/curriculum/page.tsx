@@ -14,10 +14,20 @@ export const metadata: Metadata = {
 const TRACK_ORDER: Track[] = ["foundations", "systems", "practice"];
 
 const TRACK_NOTES: Record<Track, string> = {
-  foundations: "Begin with what AI means and how different systems fit into the picture.",
-  systems: "Explore how systems learn from data and generate responses.",
-  practice: "Understand assistants and agents, then create a reusable workflow.",
+  foundations: "Modules 1 to 3 are for everyone: understand AI, talk to it well, and stay safe with it.",
+  systems: "An optional module for curious learners who want to know what happens inside AI tools.",
+  practice: "After Module 3, choose a path for your job or everyday life. Each ends with a helper card you can use in any AI tool.",
 };
+
+const PATHS = [
+  { name: "Office and Admin", note: "Forms, minutes, reports and rotas" },
+  { name: "Students", note: "Study, research and honest writing" },
+  { name: "Small Business", note: "Posts, customer replies and planning" },
+  { name: "Everyday Life", note: "Money, side hustles and your phone" },
+  { name: "Sales and Customer Service", note: "Replies, follow-ups and complaints" },
+  { name: "Nurses", note: "Handovers, families and safe care" },
+  { name: "Teachers", note: "Lesson plans, feedback and fair marking" },
+];
 
 const TRACK_COLOURS: Record<Track, string> = {
   foundations: "bg-lavender",
@@ -40,8 +50,8 @@ export default function CurriculumPage() {
               Learn the basics, then put them to use.
             </h1>
             <p className="mt-4 max-w-[48ch] leading-relaxed sm:text-lg">
-              Six modules take you from understanding AI to using it thoughtfully.
-              No coding experience is required.
+              Three modules for everyone take you from understanding AI to using it
+              safely, then you choose a path for your job. No coding experience is required.
             </p>
             <p className="mt-4 max-w-[52ch] text-sm leading-relaxed">
               <strong className="font-semibold">Everything on Buggle Learn is free.</strong>{" "}
@@ -124,13 +134,25 @@ export default function CurriculumPage() {
                   {TRACK_NOTES[track]}
                 </p>
               </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {modules
-                  .filter((module) => module.track === track)
-                  .map((module) => (
-                    <ModuleCard key={module.slug} module={module} />
+              {track === "practice" ? (
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {PATHS.map((path) => (
+                    <li key={path.name} className="rounded-3xl border border-line bg-white p-5">
+                      <p className="text-xs font-semibold text-muted">Coming after Module 3</p>
+                      <p className="mt-2 text-lg font-bold text-ink">{path.name}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted">{path.note}</p>
+                    </li>
                   ))}
-              </div>
+                </ul>
+              ) : (
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {modules
+                    .filter((module) => module.track === track)
+                    .map((module) => (
+                      <ModuleCard key={module.slug} module={module} />
+                    ))}
+                </div>
+              )}
             </section>
           ))}
         </div>
