@@ -5,6 +5,7 @@ import software from "../../public/lessons/ai-or-software/narration.json";
 import charge from "../../public/lessons/what-ai-can-do/narration.json";
 import helper from "../../public/lessons/a-new-helper/narration.json";
 import email from "../../public/lessons/the-email-that-said-nothing/narration.json";
+import flyer from "../../public/lessons/three-tries-at-the-flyer/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -75,5 +76,13 @@ export const stories: Record<
     title: "The email that said nothing",
     introduction:
       "Maya asks a chat tool to write an invitation and gets a friendly email that says almost nothing, with a date she never gave. What was missing?",
+  },
+  "three-tries-at-the-flyer": {
+    root: "/lessons/three-tries-at-the-flyer/",
+    mediaVersion: "?v=20261113-1",
+    narration: flyer,
+    title: "Three tries at the flyer",
+    introduction:
+      "Maya's open day flyer has all the right details, but nobody will read it on their way out. Instead of starting again, she keeps the conversation going.",
   },
 };

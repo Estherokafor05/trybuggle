@@ -10,6 +10,7 @@ const noEmDash = (text) => assert.ok(!text.includes("—"), `No em dash: ${text}
 const episodes = [
   { slug: "a-new-helper", label: "2.1", steps: 5, place: { step: 2, visited: ["chat-busy", "chat-ask"], activities: { "chat-check": { matches: { q: "fifty" }, revised: true } } } },
   { slug: "the-email-that-said-nothing", label: "2.2", steps: 5, place: { step: 2, visited: ["email-first", "email-missing"], activities: { "email-build": { matches: { who: "leaders" }, stage: 1 } } } },
+  { slug: "three-tries-at-the-flyer", label: "2.3", steps: 5, place: { step: 2, visited: ["flyer-first", "flyer-next"], activities: { "flyer-tone": { matches: { q: "neighbour" }, stage: 1 } } } },
 ];
 for (const episode of episodes) {
   const { slug, label } = episode;
@@ -38,7 +39,7 @@ for (const episode of episodes) {
     }
   });
 
-  test(`Episode ${label} is open to everyone, with sources, a guide and a saved place`, () => {
+  test(`Episode ${label} is open to everyone, with a guide and a saved place`, () => {
     const lesson = getBuiltLesson(slug);
     assert.ok(lesson && lesson.preview);
     lesson.sources.forEach((s) => assert.equal(new URL(s.url).protocol, "https:"));

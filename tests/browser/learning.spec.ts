@@ -963,3 +963,48 @@ test("Episode 2.2: every guide step, the request builder, a 5-question check and
     await context.close();
   }
 });
+
+test("Episode 2.3: keep or change, follow-ups in the same chat, a 5-question check and accessibility", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai/lessons/three-tries-at-the-flyer");
+    await expect(page.getByRole("heading", { name: "Three Tries at the Flyer", level: 1 })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /three-tries-at-the-flyer\/story/);
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    await page.getByRole("group", { name: /on Saturday the 21st/ }).getByLabel("Change").check();
+    await expect(page.getByText("↺ Think again.")).toBeVisible();
+    for (const [part, choice] of [[/We are delighted/, "Change"], [/on Saturday the 21st/, "Keep"], [/^“in the main hall/, "Keep"], [/presenting their activities/, "Change"]] as const)
+      await page.getByRole("group", { name: part }).getByLabel(choice).check();
+    await expect(page.getByText("Keep the details, change the wording")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Make it no more than fifty words/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Fix it/).check();
+    await expect(page.getByText(/Try another/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Send the follow-up" })).toBeDisabled();
+    await page.getByLabel(/inviting a neighbour/).check();
+    await page.getByRole("button", { name: "Send the follow-up" }).click();
+    await expect(page.getByText("Now it sounds like Maya")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Ask a volunteer who speaks the language/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/watering my plants/).check();
+    await expect(page.getByText("Step 5 of 5 · 5 done")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["three-tries-at-the-flyer"];
+    expect(questions).toHaveLength(5);
+    for (const q of questions) await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
+    await page.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(page.getByText("5 of 5 correct · 100%")).toBeVisible();
+    await trackGuest(context);
+    await context.close();
+  }
+});

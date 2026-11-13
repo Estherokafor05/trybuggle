@@ -7,6 +7,8 @@ const m = (s: ActivityState | undefined, key: string) => s?.matches?.[key];
 const allMatch = (s: ActivityState | undefined, expected: Record<string, string>) =>
   Object.entries(expected).every(([k, v]) => m(s, k) === v);
 const dayPlaces = ["home", "journey", "centre", "shopping"];
+/** Episode 2.3: which parts of Maya's first flyer draft to keep or change. */
+export const flyerSort: Record<string, "keep" | "change"> = { opening: "change", date: "keep", place: "keep", ending: "change" };
 
 const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean> = {
   // Lesson 1
@@ -59,6 +61,11 @@ const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean>
   "email-build": (s) => (s?.stage ?? 0) >= 2,
   "email-private": (s) => m(s, "q") === "describe",
   "email-turn": (s) => m(s, "q") === "clear",
+  "flyer-first": (s) => allMatch(s, flyerSort),
+  "flyer-next": (s) => m(s, "q") === "keep-change",
+  "flyer-tone": (s) => (s?.stage ?? 0) >= 2,
+  "flyer-check": (s) => m(s, "q") === "volunteer",
+  "flyer-turn": (s) => m(s, "q") === "keep-change",
 };
 
 /** True once the learner has done what the step asks, not merely opened it. */

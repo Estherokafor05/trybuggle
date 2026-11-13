@@ -213,6 +213,15 @@ export const builtLessons: PreviewLesson[] = [
       },
     ],
   },
+  {
+    slug: "three-tries-at-the-flyer",
+    title: "Three Tries at the Flyer",
+    duration: "2 minutes to watch",
+    preview: true,
+    objective:
+      "Improve a close draft by telling the chat tool what to keep and what to change, and get someone who can check it to review anything you cannot check yourself.",
+    sources: [],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {

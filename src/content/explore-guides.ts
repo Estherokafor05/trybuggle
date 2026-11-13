@@ -522,4 +522,65 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "three-tries-at-the-flyer": {
+    slug: "three-tries-at-the-flyer",
+    title: "Maya's flyer",
+    reflections: [
+      "A draft I would like to improve is…",
+      "To change its length, I would type…",
+      "To change how it sounds, I would type…",
+    ],
+    steps: [
+      {
+        id: "flyer-first",
+        title: "The first draft",
+        goal: "Decide which parts of Maya's first draft to keep and which to change.",
+        reading: [
+          "With the invitations ready, Maya turns to the flyer. She imagines someone walking past the noticeboard on their way out. They have a few seconds to see what is happening and decide if they want to come.",
+          "She tells the chat tool who the flyer is for, what is happening, when and where, and asks for a friendly tone. The draft comes back with all the right details, but it starts with \u201cWe are delighted to announce that the community centre will be hosting its forthcoming open day.\u201d Nobody is reading all that on their way out.",
+        ],
+        takeaway: "A close draft can keep its details and change its wording.",
+      },
+      {
+        id: "flyer-next",
+        title: "What would you say next?",
+        goal: "Choose Maya's next message to the chat tool.",
+        reading: [
+          "Maya is about to write it herself. Instead, she stays in the same chat and types: \u201cKeep the date, time and place. Make it no more than fifty words.\u201d",
+          "In the same chat, the tool can build on the draft it already wrote. Telling it what to keep and what to change gives it far less to guess than starting again or saying \u201cmake it better\u201d.",
+        ],
+        takeaway: "Tell the tool what to keep and what to change.",
+      },
+      {
+        id: "flyer-tone",
+        title: "Change how it sounds",
+        goal: "Choose a follow-up that changes the tone, then send it.",
+        reading: [
+          "The new version fits on the flyer, but there is still a line about \u201copportunities for community engagement\u201d. Maya tries one more time: \u201cMake it sound like I\u2019m inviting a neighbour.\u201d",
+          "This time it starts with \u201cCome and see what\u2019s happening at your community centre.\u201d That sounds like something she would put on the noticeboard.",
+        ],
+        takeaway: "You can ask for a different length, a different tone, or both.",
+      },
+      {
+        id: "flyer-check",
+        title: "Ask someone who can check",
+        goal: "Decide what Maya should do with a translation she cannot read.",
+        reading: [
+          "Maya thinks of the families who would find the flyer easier to read in another language, and asks for a translated version. Since she cannot check the translation herself, she asks a volunteer who speaks the language to read it.",
+          "He changes two words that sounded odd. Then both versions go up.",
+        ],
+        takeaway: "If the tool gives you something you cannot check yourself, ask someone who can.",
+      },
+      {
+        id: "flyer-turn",
+        title: "Your turn",
+        goal: "Pick the most useful follow-up, then plan one of your own.",
+        reading: [
+          "If a draft is close, you can keep the conversation going. Tell the tool what to keep and what to change. And if it gives you something you cannot check yourself, ask someone who can.",
+          "Think of a draft you would like to improve. What would you type to change its length? What would you type to change how it sounds? Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "Keep the conversation going: say what to keep and what to change.",
+      },
+    ],
+  },
 };
