@@ -475,22 +475,17 @@ test("an interrupted account save resumes from the device and retries safely", a
   expect(saved.checkpoint.step).toBe(1);
 });
 
-test("Lesson 3 needs sign-in, then both routes, every activity and the check work", async ({
+test("Lesson 3 is open to guests, then both routes, every activity and the check work", async ({
   browser,
 }) => {
   const guest = await browser.newContext();
   const guestPage = await guest.newPage();
   await guestPage.goto(lesson("before-chatgpt"));
-  await expect(guestPage).toHaveURL(/\/sign-in\?callbackUrl=/);
+  await expect(guestPage.getByRole("heading", { name: "AI Did Not Start with ChatGPT", level: 1 })).toBeVisible();
   await guestPage.goto(lesson("before-chatgpt") + "/reading");
-  await expect(guestPage).toHaveURL(/\/sign-in\?callbackUrl=/);
+  await expect(guestPage.getByRole("heading", { name: "The AI Time Machine" })).toBeVisible();
   await guestPage.goto(lesson("ai-in-your-day"));
-  await expect(
-    guestPage.getByRole("heading", { name: /Up next: Lesson 3/ }),
-  ).toBeVisible();
-  await expect(
-    guestPage.getByRole("link", { name: "Continue with Google" }).first(),
-  ).toHaveAttribute("href", /callbackUrl=%2Fmodules%2Fai-foundations%2Flessons%2Fbefore-chatgpt/);
+  await expect(guestPage.getByRole("link", { name: /Start Lesson 3/ })).toHaveAttribute("href", lesson("before-chatgpt"));
   await guest.close();
 
   for (const viewport of [
@@ -791,8 +786,8 @@ test("signing out from the header ends the session on phone and desktop", async 
     await expect(page).toHaveURL(base + "/");
     if (phone) await page.getByRole("button", { name: "Menu" }).click();
     await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
-    await page.goto(lesson("before-chatgpt"));
-    await expect(page).toHaveURL(/\/sign-in\?callbackUrl=/);
+    await page.goto("/modules/ai-foundations/certificate");
+    await expect(page.getByRole("link", { name: "Sign up to get your certificate" })).toBeVisible();
     expect((await context.request.get(base + "/api/me/certificates/ai-foundations")).status()).toBe(401);
     await context.close();
   }
@@ -800,4 +795,64 @@ test("signing out from the header ends the session on phone and desktop", async 
   await guest.goto("/");
   await expect(guest.getByRole("button", { name: "Sign out" })).toHaveCount(0);
   await guest.close();
+});
+
+test("guests take every Module 1 check, then sign up to collect the certificate with their passes", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+
+  // Guide steps show done, visited-but-not-finished and not-started distinctly.
+  await page.goto(lesson("ai-or-software"));
+  await page.getByRole("button", { name: /^Read & Explore/ }).click();
+  await page.getByRole("button", { name: "Continue →" }).click();
+  await expect(page.getByRole("button", { name: /Step 1: Daniel's desk \(visited, not finished\)/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Step 3: .*\(not started\)/ })).toBeVisible();
+  await page.getByRole("button", { name: /Step 1:/ }).click();
+  for (const tool of ["Calendar", "Check-in tablet", "Shared inbox", "Badge printer"])
+    await page.getByRole("button", { name: new RegExp(tool) }).click();
+  for (const tool of ["calendar", "tablet", "inbox", "badge"])
+    await page.locator(`input[name="guess-${tool}"]`).first().check();
+  await expect(page.getByRole("button", { name: /Step 1: Daniel's desk \(done\)/ })).toBeVisible();
+
+  // A guest can open and take a knowledge check without an account.
+  await page.goto(lesson());
+  await expect(page.getByText(/No account needed\. Your results are kept/)).toBeVisible();
+  await page.getByRole("button", { name: "Open the knowledge check" }).click();
+  await expect(page.locator(`input[name="${assessmentBank["what-counts-as-ai"][0].id}"]`).first()).toBeVisible();
+
+  // Pass every lesson check and the final assessment as a guest, through the official API.
+  for (const slug of ["what-counts-as-ai", "ai-in-your-day", "before-chatgpt", "ai-or-software", "what-ai-can-do"]) {
+    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
+    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
+      headers: { Origin: base },
+      data: { version: 1, submissionKey: randomUUID(), answers },
+    });
+    expect(response.status()).toBe(200);
+  }
+  await page.goto("/modules/ai-foundations/final-assessment");
+  await page.getByRole("button", { name: "Open the final assessment" }).click();
+  for (const q of moduleAssessmentBank["ai-foundations"])
+    await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
+  await page.getByRole("button", { name: "Submit final assessment" }).click();
+  await expect(page.getByText("Final assessment passed")).toBeVisible();
+  await expect(page.getByRole("link", { name: /Sign up to get your certificate/ }).first()).toHaveAttribute(
+    "href",
+    /\/sign-in\?callbackUrl=%2Fmodules%2Fai-foundations%2Fcertificate/,
+  );
+
+  // The certificate page asks a guest to sign up, and the API never issues one to a guest.
+  await page.goto("/modules/ai-foundations/certificate");
+  await expect(page.getByRole("heading", { name: "You've done it! Sign up to get your certificate" })).toBeVisible();
+  await expect(page.getByText("6 of 6 done")).toBeVisible();
+  expect((await context.request.post(base + "/api/me/certificates/ai-foundations", { headers: { Origin: base }, data: { name: "Guest" } })).status()).toBe(401);
+  await page.waitForTimeout(800);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // After signing up, the guest's passes belong to the account and the certificate can be created.
+  await signIn(context);
+  await page.reload();
+  await expect(page.getByText("6 of 6 done")).toBeVisible();
+  await page.getByRole("button", { name: "Create my certificate" }).click();
+  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
+  await context.close();
 });

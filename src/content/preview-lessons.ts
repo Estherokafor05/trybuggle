@@ -3,7 +3,7 @@ export interface PreviewLesson {
   title: string;
   duration: string;
   objective: string;
-  /** Free to open before Google sign-in. Only Lessons 1 and 2 are. */
+  /** Open without an account. All of Module 1 is; sign-up is only needed for the certificate. */
   preview: boolean;
   sources: { label: string; url: string; claim: string }[];
 }
@@ -74,7 +74,7 @@ export const builtLessons: PreviewLesson[] = [
     slug: "before-chatgpt",
     title: "AI Did Not Start with ChatGPT",
     duration: "4 minutes to watch",
-    preview: false,
+    preview: true,
     objective:
       "Describe how AI developed over decades and explain why chat tools made it feel new in 2022.",
     sources: [
@@ -113,7 +113,7 @@ export const builtLessons: PreviewLesson[] = [
     slug: "ai-or-software",
     title: "AI or Ordinary Software?",
     duration: "4 minutes to watch",
-    preview: false,
+    preview: true,
     objective:
       "Tell ordinary software apart from AI, and explain why automatic does not always mean AI.",
     sources: [
@@ -140,7 +140,7 @@ export const builtLessons: PreviewLesson[] = [
     slug: "what-ai-can-do",
     title: "What AI Can Do, and Where You Stay in Charge",
     duration: "3 minutes to watch",
-    preview: false,
+    preview: true,
     objective:
       "Use AI as a helper while checking its output, protecting personal information and keeping people responsible for decisions.",
     sources: [

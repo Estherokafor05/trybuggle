@@ -45,8 +45,9 @@ export default async function SignInPage({
           </p>
           <h1 className="mt-3 text-3xl font-bold">Create your free account</h1>
           <p className="mt-3 leading-relaxed text-muted">
-            You can explore the first two lessons without an account. Sign in with
-            Google when you are ready to continue through the learning path.
+            Get your Module 1 certificate and keep your progress safe on any
+            device. Any knowledge checks you have already passed on this device
+            come with you.
           </p>
 
           {googleAuthConfigured ? (

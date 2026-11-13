@@ -89,17 +89,17 @@ The detailed curriculum and scope of later modules require approval.
 
 - Minimum passing score: 70%, including the Module 1 final assessment.
 - Maximum lesson duration: eight minutes. Module planned content: 30 to 60 minutes, with a one-hour cap.
-- The first two lessons can be previewed before Google sign-in. Sign-in is required for account progress and official results.
+- All of Module 1 (lessons, guides, knowledge checks and the final assessment) is open without an account. Learners sign up only to get their certificate. Guest results are still scored on the server against an anonymous cookie ID and move into the account at sign-up; never trust browser-submitted scores.
 - Accessibility target: WCAG 2.2 AA.
 - Buggle Learn is completely free. Every module, lesson, knowledge check, assessment and certificate is free, with no payments, paid tiers, subscriptions or paywalls. Do not add pricing, payment, upgrade or subscription prompts, and do not integrate a payment provider.
-- Questions per knowledge check: 10.
+- Questions per knowledge check: 5, with 4 correct to pass (decided 13 November 2026; the live Module 1 checks still have 10 until they are trimmed).
 - No fixed retry limit. After a failed assessment, learners review feedback and retry that assessment only; they do not restart lessons or modules, and completed progress is preserved.
 - All required Module 1 lessons and quizzes must be passed before certificate eligibility.
 - Module 1 awards the only certificate available at initial launch.
 - Certificate type: Foundations of Artificial Intelligence : Certificate of Completion.
 - Certificate uses the learner's confirmed name.
-- Google sign-up is the only authentication method at launch.
-- All modules are free. Google sign-in (free) is required for saved progress, official results and certificates; the first two lessons can be previewed without it.
+- Sign-in: Google, plus email and password for the testing period (email and password not yet built).
+- All modules are free. A free account is needed for certificates and for saving progress across devices from Module 2 onwards.
 
 ### Recommended : Awaiting Approval
 

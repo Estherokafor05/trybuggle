@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { assessmentBank } from "@/server/assessment-bank";
+import { assessmentLearner, lessonOpenToGuests } from "@/server/guest";
 import {
-  learnerId,
   privateHeaders,
   sameOrigin,
   smallJSON,
@@ -14,13 +14,14 @@ export async function POST(
 ) {
   if (!sameOrigin(request))
     return Response.json({ error: "Invalid request origin" }, { status: 403 });
-  const user = await learnerId();
-  if (!user)
+  const { id } = await params;
+  const learner = await assessmentLearner({ create: lessonOpenToGuests(id) });
+  if (!learner)
     return Response.json(
       { error: "Please sign in again before submitting." },
       { status: 401 },
     );
-  const { id } = await params;
+  const user = learner.id;
   const questions = Object.hasOwn(assessmentBank, id)
     ? assessmentBank[id]
     : null;

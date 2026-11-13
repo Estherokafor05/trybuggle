@@ -12,7 +12,7 @@ export interface JourneyStep {
   title: string;
   href: string;
   available: boolean;
-  /** Open without signing in (Lessons 1 and 2). */
+  /** Open without signing in (all of Module 1). */
   free: boolean;
   duration?: string;
 }
@@ -47,7 +47,7 @@ export const journey: JourneyStep[] = [
     title: "Module 1 refresher",
     href: `/modules/${foundations.slug}/final-assessment`,
     available: true,
-    free: false,
+    free: true,
     duration: "8 questions",
   },
 ];
