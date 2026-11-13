@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import narration from "../../public/lessons/a-new-helper/narration.json";
-import { Maya } from "./Maya";
+import { Bubble, ChatWindow, MayaIn, Msg, typed } from "./chatKit";
 import {
   Card, Kicker, Office, beside, cueStart, font, ink, lavender, mint, muted, paper, pop, ramp, red,
   stage, teal, violet, type P,
@@ -11,53 +11,6 @@ import {
 // No real AI tool appears: chats are a generic "AI chat tool" screen.
 const at = cueStart(narration);
 
-function MayaIn({ t, mobile, checking = 0 }: P & { checking?: number }) {
-  return (
-    <div style={{ position: "absolute", left: mobile ? 560 : 70, top: mobile ? 610 : 130, width: mobile ? 380 : 450, height: mobile ? 665 : 790 }}>
-      <Maya time={t} checking={checking} />
-    </div>
-  );
-}
-function Avatar({ name, colour }: { name: string; colour: string }) {
-  return (
-    <span style={{ display: "inline-grid", placeItems: "center", width: 56, height: 56, borderRadius: 999, background: colour, color: "#fff", fontWeight: 900, fontSize: 26, flexShrink: 0 }}>
-      {name[0]}
-    </span>
-  );
-}
-function Bubble({ t, start, who, colour, children, f, right = false }: { t: number; start: number; who: string; colour: string; children: React.ReactNode; f: number; right?: boolean }) {
-  return (
-    <div style={{ display: "flex", gap: 14, alignItems: "flex-start", marginTop: 18, flexDirection: right ? "row-reverse" : "row", ...pop(t, start) }}>
-      <Avatar name={who} colour={colour} />
-      <div style={{ background: right ? lavender : paper, borderRadius: 24, padding: "16px 22px", boxShadow: "0 12px 30px #17243c1c", maxWidth: "80%" }}>
-        <div style={{ fontSize: 22 * f, color: muted, fontWeight: 700 }}>{who}</div>
-        <div style={{ fontSize: 36 * f, fontWeight: 700, marginTop: 4 }}>{children}</div>
-      </div>
-    </div>
-  );
-}
-/** A generic AI chat tool window. */
-function ChatWindow({ children, f }: { children: React.ReactNode; f: number }) {
-  return (
-    <div style={{ background: "#fff", border: `4px solid ${ink}`, borderRadius: 30, overflow: "hidden", boxShadow: "0 20px 50px #17243c26" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 22px", background: "#f3f1fb", borderBottom: "2px solid #e2ddf5" }}>
-        <span style={{ display: "inline-grid", placeItems: "center", width: 40, height: 40, borderRadius: 999, background: violet, color: "#fff", fontWeight: 900, fontSize: 18 }}>AI</span>
-        <span style={{ fontSize: 28 * f, fontWeight: 800 }}>AI chat tool</span>
-      </div>
-      <div style={{ padding: 24 }}>{children}</div>
-    </div>
-  );
-}
-function Msg({ you, children, f, style }: { you?: boolean; children: React.ReactNode; f: number; style?: React.CSSProperties }) {
-  return (
-    <div style={{ display: "flex", justifyContent: you ? "flex-end" : "flex-start", marginTop: 14, ...style }}>
-      <div style={{ maxWidth: "88%", background: you ? ink : lavender, color: you ? "#fff" : ink, borderRadius: 22, padding: "14px 20px", fontSize: 30 * f, lineHeight: 1.4 }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-const typed = (text: string, t: number, a: number, b: number) => text.slice(0, Math.round(ramp(t, a, b) * text.length));
 const request = "Write a short, welcoming paragraph about our community centre for the open day newsletter.";
 const draft = [
   "Our community centre is a warm, welcoming place for people of all ages.",

@@ -53,6 +53,12 @@ const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean>
   "chat-check": (s) => m(s, "q") === "fifty" && Boolean(s?.revised),
   "chat-why": (s) => Boolean(m(s, "w1")) && Boolean(m(s, "w2")),
   "chat-turn": (s) => m(s, "q") === "draft-check",
+  // Episode 2.2
+  "email-first": (s) => ["exciting", "family", "date"].every((id) => s?.items?.includes(id)),
+  "email-missing": (s) => m(s, "q") === "who-what",
+  "email-build": (s) => (s?.stage ?? 0) >= 2,
+  "email-private": (s) => m(s, "q") === "describe",
+  "email-turn": (s) => m(s, "q") === "clear",
 };
 
 /** True once the learner has done what the step asks, not merely opened it. */

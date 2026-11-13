@@ -633,6 +633,63 @@ export const assessmentBank: Record<string, Question[]> = {
       "Let AI give you a quick first draft, then check the details before you use them.",
     ),
   ],
+  "the-email-that-said-nothing": [
+    q(
+      "why-vague",
+      "Maya asked \u201cWrite an email about the open day\u201d and got a vague email with a date she never gave. Why?",
+      [
+        "The chat tool was broken.",
+        "It had almost nothing to go on, so it wrote something general and guessed the details.",
+        "Chat tools always add a date to emails.",
+      ],
+      1,
+      "The tool only knows what you tell it. With almost no detail, it fills the gaps with general wording and guesses.",
+    ),
+    q(
+      "better-request",
+      "Which request is most likely to get a useful email?",
+      [
+        "Write an email about our open day.",
+        "Write a really good email.",
+        "Write a short, friendly email inviting local club leaders to run a stall at our open day on Saturday the 21st in the main hall.",
+      ],
+      2,
+      "It says who the email is for, what it should do, when and where, and how it should sound.",
+    ),
+    q(
+      "four-questions",
+      "Which questions help most before you send a request?",
+      [
+        "Who is it for, what should it say or do, when and where, and how should it sound?",
+        "How long can my request be?",
+        "Which chat tool is the most popular?",
+      ],
+      0,
+      "Answering these four questions gives the tool what it needs, so it has less to guess.",
+    ),
+    q(
+      "contacts",
+      "Maya is about to paste the group leaders' names and phone numbers into the chat. What should she do?",
+      [
+        "Paste them, so the email feels personal.",
+        "Leave them out: \u201clocal club and group leaders\u201d is all the tool needs.",
+        "Paste only the phone numbers.",
+      ],
+      1,
+      "Give the tool what it needs to write the email, not other people's personal details.",
+    ),
+    q(
+      "check-details",
+      "The improved email includes a date, a time and a place. What should Maya do before sending it?",
+      [
+        "Send it straight away, because her request was clear.",
+        "Ask the chat tool to double-check itself.",
+        "Check the date, time and place against the calendar.",
+      ],
+      2,
+      "Even with a clear request, check the details someone will rely on against a reliable source.",
+    ),
+  ],
 };
 
 // Module final assessments: short refreshers across the module's lessons.

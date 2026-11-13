@@ -462,4 +462,64 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "the-email-that-said-nothing": {
+    slug: "the-email-that-said-nothing",
+    title: "Maya's invitation",
+    reflections: [
+      "A message I might ask AI to write this week is…",
+      "To give it less to guess, I would tell it…",
+    ],
+    steps: [
+      {
+        id: "email-first",
+        title: "Maya's first try",
+        goal: "Read the email the chat tool wrote and find what is wrong with it.",
+        reading: [
+          "Maya wants to invite local clubs and groups to the open day. The gardening club could bring seedlings, and the chess club might run a quick game for anyone who wants to learn. She opens the chat tool and types: \u201cWrite an email about the open day.\u201d",
+          "The reply talks about \u201can exciting event\u201d with \u201cfun for all the family\u201d, and says the open day is on the twelfth, a date Maya never gave. If she sent it as it was, the chess club would have no idea she wanted them to run a stall.",
+        ],
+        takeaway: "With almost nothing to go on, a chat tool writes something general and guesses the details.",
+      },
+      {
+        id: "email-missing",
+        title: "What was missing?",
+        goal: "Decide what Maya could add to her request to make the biggest difference.",
+        reading: [
+          "The problem was not the tool. It was the request. Maya knows what the open day is for and who she wants there, but all she gave the tool was \u201cwrite an email about the open day\u201d.",
+          "The tool only knows what you tell it. The more useful detail you give, the less it has to guess.",
+        ],
+        takeaway: "The tool only knows what you tell it.",
+      },
+      {
+        id: "email-build",
+        title: "Build a better request",
+        goal: "Choose who it is for, what it should do, when and where, and the tone, then send it.",
+        reading: [
+          "Maya tries again: \u201cWrite a short, friendly email to the people who run local clubs and community groups. Invite them to run a stall at our open day in the main hall so they can meet people who might want to join.\u201d Then she adds the confirmed date and time.",
+          "This time the invitation asks the groups to run a stall, and says where to go and when to be there. Maya checks both against the calendar, then tweaks the opening so it sounds like her.",
+        ],
+        takeaway: "Who, what, when and where, and tone: four details that make a request clear.",
+      },
+      {
+        id: "email-private",
+        title: "Keep contact details out",
+        goal: "Decide what Maya should do with the group leaders' names and phone numbers.",
+        reading: [
+          "Maya almost pastes in the list of group leaders' names and phone numbers too. Then she stops. \u201cLocal club and group leaders\u201d is all the tool needs to write the invitation, so she keeps their contact details out of the chat.",
+          "Module 3 explains what can happen to what you type into a chat tool.",
+        ],
+        takeaway: "Give the tool what it needs to write, not other people's personal details.",
+      },
+      {
+        id: "email-turn",
+        title: "Your turn",
+        goal: "Pick the clearest request, then plan one of your own.",
+        reading: [
+          "Before you send a request, ask yourself four things. Who is it for? What do I want it to say or do? When and where, if those details matter? And how should it sound?",
+          "Think of a message you might ask AI to write this week, and what you would tell it so it has less to guess. Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "Ask four questions before you send a request.",
+      },
+    ],
+  },
 };
