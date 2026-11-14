@@ -83,7 +83,7 @@ function FirstTry({ state, change }: { state: ActivityState; change: Change }) {
 }
 
 /* ---------- 2. What would you check? ---------- */
-const checks: Option[] = [
+export const checks: Option[] = [
   { id: "ask-tool", text: "Ask the chat tool “Is this grant real?”", feedback: "The tool checking itself is not a real check. It may simply say yes." },
   { id: "link", text: "Click the link, and keep the grant in the report if the page loads", feedback: "A good start, but a page loading is not enough. Maya needs to know it is the funder's own, official page." },
   { id: "official", text: "Look for the funder’s own official page, or ask someone who would know", correct: true, feedback: "Yes. Maya's link said “Page not found”, a search found nothing, and the local volunteer office had never heard of it." },

@@ -4,6 +4,7 @@ import type { PreviewLesson } from "@/content/preview-lessons";
 import { stories } from "@/content/stories";
 import { exploreGuides } from "@/content/explore-guides";
 import { StoryPlayer, type NextStep } from "./story/StoryPlayer";
+import { filmChoices } from "./story/filmChoices";
 import { ExploreJourney } from "./explore/ExploreJourney";
 import { Reflection } from "./explore/Activities";
 import { useLearningPlace } from "./explore/useLearningPlace";
@@ -112,6 +113,7 @@ export function LessonPreview({
               initialTime={place.videoTime}
               onPlace={(videoTime) => update({ videoTime })}
               next={next}
+              choice={filmChoices[lesson.slug]}
             />
             <details className="mt-4 rounded-2xl border border-line bg-white p-5">
               <summary className="cursor-pointer py-2 font-semibold">

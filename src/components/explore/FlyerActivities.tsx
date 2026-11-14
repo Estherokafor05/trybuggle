@@ -105,7 +105,7 @@ function FirstDraft({ state, change }: { state: ActivityState; change: Change })
 }
 
 /* ---------- 2. What would you say next? ---------- */
-const nextMessages: Option[] = [
+export const nextMessages: Option[] = [
   { id: "again", text: "Start a new chat and type the whole request again", feedback: "She would lose a draft that is already close, and might get the same long opening again." },
   { id: "keep-change", text: "“Keep the date, time and place. Make it no more than fifty words.”", correct: true, feedback: "It says what to keep and what to change, in the same chat, so the tool can build on the draft it already wrote." },
   { id: "better", text: "“Make it better.”", feedback: "Better how? The tool would have to guess what Maya wants to change." },

@@ -80,7 +80,7 @@ function FirstTry({ state, change }: { state: ActivityState; change: Change }) {
 }
 
 /* ---------- 2. What was missing? ---------- */
-const missing: Option[] = [
+export const missing: Option[] = [
   { id: "longer", text: "Ask it to make the email longer", feedback: "A longer email would just say more of nothing. The tool still would not know who it is for or what Maya wants." },
   { id: "who-what", text: "Say who the email is for and what she wants them to do", correct: true, feedback: "That is the biggest gap. The tool only knows what Maya tells it." },
   { id: "please", text: "Add “please” to the request", feedback: "Being polite is fine, but it gives the tool no information to work with." },
