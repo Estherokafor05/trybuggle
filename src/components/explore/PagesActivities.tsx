@@ -66,7 +66,7 @@ function Pages({ state, change }: { state: ActivityState; change: Change }) {
 }
 
 /* ---------- 2. Would you send it? ---------- */
-const sendOptions: Option[] = [
+export const sendOptions: Option[] = [
   { id: "send", text: "Send it to Rosa now. It looks complete.", feedback: "It does look complete. That is the problem: a list can look right and still leave something out." },
   { id: "ask", text: "Ask the chat tool “Is anything missing?” and send it if it says no", feedback: "The tool checking its own work is not a real check. It may simply say no." },
   { id: "check", text: "Open the guide and check the most important sections against the list first", correct: true, feedback: "That is what Maya does. She starts with the safety sections, because those matter most." },

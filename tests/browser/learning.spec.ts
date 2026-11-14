@@ -1247,3 +1247,46 @@ test("sign-in and unbuilt modules speak to where the learner is", async ({ page 
   await page.goto("/modules/talking-to-ai/lessons/the-grant-that-didnt-exist");
   await expect(page.getByText(/You've reached the end of the module/)).toBeVisible();
 });
+
+test("Module 2 films stop at the choice and ask, then carry on", async ({ browser }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
+    const video = page.locator("video");
+    await expect(video).toBeVisible();
+    // Simulate the film playing past the end of its "choice" scene (51.34 s).
+    const tick = (time: number) =>
+      video.evaluate((v, t) => {
+        Object.defineProperty(v, "currentTime", { configurable: true, get: () => t, set: () => undefined });
+        v.dispatchEvent(new Event("timeupdate"));
+      }, time);
+    await tick(50.9);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await tick(51.5);
+    const dialog = page.getByRole("dialog", { name: "Would you send it? What should Maya do?" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("heading")).toBeFocused();
+    await dialog.getByRole("button", { name: /Send it to Rosa now/ }).click();
+    await expect(dialog.getByText(/Not quite/)).toBeVisible();
+    await dialog.getByRole("button", { name: /Open the guide and check/ }).click();
+    await expect(dialog.getByText("✓ Right.")).toBeVisible();
+    await page.waitForTimeout(600);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await dialog.getByRole("button", { name: /Continue the film/ }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    // It does not ask again straight away, only after going back before the choice.
+    await tick(52.5);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await context.close();
+  }
+  // Module 1 films have no pop-up.
+  const page = await browser.newPage();
+  await page.goto("/modules/ai-foundations/lessons/what-counts-as-ai");
+  await page.locator("video").evaluate((v) => {
+    Object.defineProperty(v, "currentTime", { configurable: true, get: () => 236.5, set: () => undefined });
+    v.dispatchEvent(new Event("timeupdate"));
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.close();
+});
