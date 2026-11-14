@@ -106,13 +106,14 @@ export default function PrivacyPage() {
         <Section id="share" title="Who we share it with">
           <p>We use a small number of service providers to run Buggle Learn:</p>
           <ul className="list-disc space-y-1 pl-5">
-            <li><b>Vercel</b> hosts the website. Its servers that handle your requests are in the United States.</li>
+            <li><b>Vercel</b> hosts the website. The servers that handle your requests are in London, United Kingdom.</li>
             <li><b>Neon</b> runs our database, which is stored in London, United Kingdom.</li>
             <li><b>Google</b> handles sign-in, if you choose to sign in with Google.</li>
           </ul>
           <p>
-            They process your information only to provide their service to us. Because our
-            hosting servers are in the United States, your information may be transferred there.
+            They process your information only to provide their service to us. Our website
+            servers and database are both in the United Kingdom. Vercel and Neon are United States
+            companies, and Google may process sign-in information in other countries.
           </p>
         </Section>
 
