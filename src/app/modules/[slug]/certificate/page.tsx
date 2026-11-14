@@ -7,7 +7,8 @@ import { Requirements } from "@/components/certificate/Requirements";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { stepLabel } from "@/content/journey";
-import { getModule } from "@/content/modules";
+import { getModule, modules } from "@/content/modules";
+import { getBuiltLesson } from "@/content/preview-lessons";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { getCertificate, hasFinalAssessment, moduleRequirements } from "@/server/certificates";
 import { claimGuest, guestId, openToGuests } from "@/server/guest";
@@ -52,7 +53,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
             </h2>
             <p className="mt-2 leading-relaxed text-ink">
               {loaded?.[0].eligible
-                ? "You've passed everything in Module 1. Create a free account to collect your certificate. Your results come with you."
+                ? `You've passed everything in Module ${mod.order}. Create a free account to collect your certificate. Your results come with you.`
                 : "You don't need an account to learn. When you've passed everything below, create a free account to collect your certificate. Results you earn on this device come with you."}
             </p>
             <Link
@@ -85,6 +86,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
                 You&apos;re nearly there. Your certificate becomes available as soon as everything below is ticked.
               </p>
             )}
+            {account && (loaded[1] || loaded[0].eligible) && <NextModule order={mod.order} />}
             <div className="mt-7">
               <Requirements requirements={loaded[0].requirements} />
             </div>
@@ -115,4 +117,32 @@ function moduleRequirementsPlaceholder(slug: string) {
       passedAt: null,
     },
   ];
+}
+
+/** What to do after a certificate: start the next module, or hear that it is on its way. */
+function NextModule({ order }: { order: number }) {
+  const next = modules.find((m) => m.order === order + 1);
+  if (!next) return null;
+  const first = next.lessons.find((l) => getBuiltLesson(l.slug));
+  return (
+    <section aria-labelledby="next-module-title" className="mt-6 rounded-[1.75rem] bg-mint/70 p-5 sm:p-6">
+      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">What&apos;s next</p>
+      <h2 id="next-module-title" className="mt-2 text-xl font-bold">
+        Module {next.order}: {next.title}
+      </h2>
+      <p className="mt-2 leading-relaxed text-ink">{next.summary}</p>
+      {first ? (
+        <Link
+          href={`/modules/${next.slug}/lessons/${first.slug}`}
+          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+        >
+          Start Module {next.order} <span aria-hidden="true">→</span>
+        </Link>
+      ) : (
+        <p className="mt-3 text-sm font-semibold text-navy">
+          This module is being made. Its episodes will appear on the module page as soon as they are ready.
+        </p>
+      )}
+    </section>
+  );
 }

@@ -741,6 +741,8 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   await page.getByRole("button", { name: "Create my certificate" }).click();
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
   await expect(page.getByText("Ada Testwoman")).toBeVisible();
+  // The certificate points straight on to Module 2.
+  await expect(page.getByRole("link", { name: "Start Module 2" })).toHaveAttribute("href", "/modules/talking-to-ai/lessons/a-new-helper");
   const code = (await page.locator("dd.font-mono").textContent())!;
   expect(code).toMatch(/^BL-M1-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
 
@@ -1145,6 +1147,8 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   await page.getByRole("button", { name: "Create my certificate" }).click();
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
   expect(await page.locator("dd.font-mono").textContent()).toMatch(/^BL-M2-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
+  await expect(page.getByRole("heading", { name: "Module 3: Staying Safe with AI" })).toBeVisible();
+  await expect(page.getByText(/This module is being made/)).toBeVisible();
   const pdf = await context.request.get(base + "/api/me/certificates/talking-to-ai/pdf");
   expect(pdf.status()).toBe(200);
   expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
@@ -1202,4 +1206,44 @@ test("a signed-in learner can delete their account and everything stored for it"
 test("the guest clean-up refuses requests without the secret", async ({ request }) => {
   expect((await request.get(`${base}/api/cron/guest-cleanup`)).status()).toBe(401);
   expect((await request.get(`${base}/api/cron/guest-cleanup`, { headers: { Authorization: "Bearer wrong" } })).status()).toBe(401);
+});
+
+test("first-time journey: two ways in, then a returning guest is offered to continue", async ({ browser }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: /New to AI\?/ })).toHaveAttribute("href", "/welcome");
+    await expect(page.getByRole("link", { name: /Already use AI\?/ })).toHaveAttribute("href", "/modules/talking-to-ai");
+    await expect(page.getByText("Continue where you left off")).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(600);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // Pass Lesson 1's check as a guest: the home page now offers Lesson 2.
+    const answers = Object.fromEntries(assessmentBank["what-counts-as-ai"].map((q) => [q.id, q.correct]));
+    expect((await context.request.post(`${base}/api/assessments/what-counts-as-ai/submissions`, { headers: { Origin: base }, data: { version: 1, submissionKey: randomUUID(), answers } })).status()).toBe(200);
+    await trackGuest(context);
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: "Continue where you left off" })).toBeVisible();
+    await expect(page.getByText("Module 1 · Lesson 2: AI Is Already in Your Day")).toBeVisible();
+    await expect(page.getByRole("link", { name: /^Continue/ })).toHaveAttribute("href", "/modules/ai-foundations/lessons/ai-in-your-day");
+    await page.waitForTimeout(600);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await context.close();
+  }
+});
+
+test("sign-in and unbuilt modules speak to where the learner is", async ({ page }) => {
+  await page.goto("/sign-in?callbackUrl=%2Fmodules%2Ftalking-to-ai%2Fcertificate");
+  await expect(page.getByText(/Get your Module 2 certificate/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /Back to Module 2/ })).toHaveAttribute("href", "/modules/talking-to-ai/certificate");
+  await page.goto("/sign-in");
+  await expect(page.getByRole("link", { name: /Back to Module 1/ })).toBeVisible();
+  await page.goto("/modules/talking-to-ai");
+  await expect(page.getByRole("link", { name: /Next module · Staying Safe with AI \(coming soon\)/ })).toBeVisible();
+  await page.goto("/modules/staying-safe-with-ai");
+  await expect(page.getByText(/This module is being made/)).toBeVisible();
+  await page.goto("/modules/talking-to-ai/lessons/the-grant-that-didnt-exist");
+  await expect(page.getByText(/You've reached the end of the module/)).toBeVisible();
 });
