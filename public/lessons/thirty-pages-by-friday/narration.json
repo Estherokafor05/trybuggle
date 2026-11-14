@@ -1,0 +1,296 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "duration": 116,
+  "audioDuration": 113.55,
+  "scenes": [
+    {
+      "id": "monday",
+      "title": "Thirty pages by Friday",
+      "description": "Rosa forwards Maya a thirty-page local authority guide to running public events safely and asks for an open day checklist by Friday.",
+      "start": 0,
+      "end": 21.05
+    },
+    {
+      "id": "summary",
+      "title": "A twelve-point checklist",
+      "description": "Maya gives the public guide to the chat tool and asks for a plain-language summary and a checklist that shows where each item comes from. A twelve-point checklist appears, with jargon like risk assessment explained.",
+      "start": 21.05,
+      "end": 47.68
+    },
+    {
+      "id": "choice",
+      "title": "Would you send it?",
+      "description": "The learner is asked whether Maya should send the checklist to Rosa now.",
+      "start": 47.68,
+      "end": 51.62
+    },
+    {
+      "id": "check",
+      "title": "Checking against the guide",
+      "description": "Maya opens the guide beside the checklist and checks the safety requirements one by one. Fire exits and emergency contacts are there, but the first-aid requirement is missing.",
+      "start": 51.62,
+      "end": 83.39
+    },
+    {
+      "id": "fixed",
+      "title": "Fixed, and honest about it",
+      "description": "Maya adds the first-aid item, confirms a trained volunteer can cover the day, and gives Rosa the checklist with a note saying she used AI to draft it and checked the safety requirements against the guide.",
+      "start": 83.39,
+      "end": 96.83
+    },
+    {
+      "id": "takeaway",
+      "title": "Go back to what matters",
+      "description": "When a summary informs a decision, go back to the parts of the original that matter most and look for what is missing. The learner thinks of a long document they deal with.",
+      "start": 96.83,
+      "end": 116
+    }
+  ],
+  "cues": [
+    {
+      "scene": "monday",
+      "text": "On Monday morning, Rosa forwards Maya a guide from the local authority.",
+      "start": 0.12,
+      "end": 4.58,
+      "index": 0
+    },
+    {
+      "scene": "monday",
+      "text": "It’s about running public events safely.",
+      "start": 5.04,
+      "end": 7.12,
+      "index": 1
+    },
+    {
+      "scene": "monday",
+      "text": "“Could you turn this into a checklist for the open day?” Rosa asks.",
+      "start": 7.7,
+      "end": 11.22,
+      "index": 2
+    },
+    {
+      "scene": "monday",
+      "text": "“I’ll need it by Friday.”",
+      "start": 11.66,
+      "end": 12.82,
+      "index": 3
+    },
+    {
+      "scene": "monday",
+      "text": "Maya opens the attachment.",
+      "start": 13.66,
+      "end": 15.18,
+      "index": 4
+    },
+    {
+      "scene": "monday",
+      "text": "Thirty pages.",
+      "start": 15.66,
+      "end": 16.8,
+      "index": 5
+    },
+    {
+      "scene": "monday",
+      "text": "And she’s still waiting to hear how many tables the gardening club needs.",
+      "start": 17.26,
+      "end": 20.76,
+      "index": 6
+    },
+    {
+      "scene": "summary",
+      "text": "She gives the public guide to the chat tool and asks, “Summarise this in plain language, then turn it into a checklist.",
+      "start": 21.34,
+      "end": 27.98,
+      "index": 7
+    },
+    {
+      "scene": "summary",
+      "text": "Show me where each item comes from in the guide.”",
+      "start": 28.46,
+      "end": 30.88,
+      "index": 8
+    },
+    {
+      "scene": "summary",
+      "text": "A twelve-point checklist appears.",
+      "start": 31.46,
+      "end": 33.2,
+      "index": 9
+    },
+    {
+      "scene": "summary",
+      "text": "Even the jargon feels manageable.",
+      "start": 33.66,
+      "end": 35.32,
+      "index": 10
+    },
+    {
+      "scene": "summary",
+      "text": "A risk assessment, the tool explains, is where you work out what could go wrong and what you can do to reduce the risk.",
+      "start": 35.8,
+      "end": 42.38,
+      "index": 11
+    },
+    {
+      "scene": "summary",
+      "text": "Maya looks at the checklist.",
+      "start": 42.92,
+      "end": 44.32,
+      "index": 12
+    },
+    {
+      "scene": "summary",
+      "text": "It feels like something she could forward to Rosa right now.",
+      "start": 44.76,
+      "end": 47.44,
+      "index": 13
+    },
+    {
+      "scene": "choice",
+      "text": "Would you send it?",
+      "start": 47.92,
+      "end": 48.66,
+      "index": 14
+    },
+    {
+      "scene": "choice",
+      "text": "Choose what Maya should do, then carry on.",
+      "start": 49.18,
+      "end": 51.34,
+      "index": 15
+    },
+    {
+      "scene": "check",
+      "text": "Maya opens the guide alongside the checklist.",
+      "start": 51.9,
+      "end": 54.38,
+      "index": 16
+    },
+    {
+      "scene": "check",
+      "text": "She starts with the safety sections.",
+      "start": 54.78,
+      "end": 56.46,
+      "index": 17
+    },
+    {
+      "scene": "check",
+      "text": "As she reads each requirement in the guide, she checks that it’s on her list.",
+      "start": 56.94,
+      "end": 60.62,
+      "index": 18
+    },
+    {
+      "scene": "check",
+      "text": "Fire exits.",
+      "start": 61.12,
+      "end": 61.84,
+      "index": 19
+    },
+    {
+      "scene": "check",
+      "text": "There it is.",
+      "start": 62.2,
+      "end": 62.72,
+      "index": 20
+    },
+    {
+      "scene": "check",
+      "text": "Emergency contacts.",
+      "start": 63.22,
+      "end": 64.3,
+      "index": 21
+    },
+    {
+      "scene": "check",
+      "text": "Got those.",
+      "start": 64.68,
+      "end": 65.2,
+      "index": 22
+    },
+    {
+      "scene": "check",
+      "text": "Then she reaches the first-aid section.",
+      "start": 65.8,
+      "end": 67.8,
+      "index": 23
+    },
+    {
+      "scene": "check",
+      "text": "For this event, the guide says a trained first-aider has to be on site for the whole day.",
+      "start": 68.28,
+      "end": 73.08,
+      "index": 24
+    },
+    {
+      "scene": "check",
+      "text": "Maya scans the checklist again.",
+      "start": 73.62,
+      "end": 75.28,
+      "index": 25
+    },
+    {
+      "scene": "check",
+      "text": "There’s no first-aid item at all.",
+      "start": 75.86,
+      "end": 77.64,
+      "index": 26
+    },
+    {
+      "scene": "check",
+      "text": "Every line on the checklist can look right, and the list can still leave out something important.",
+      "start": 78.32,
+      "end": 83.14,
+      "index": 27
+    },
+    {
+      "scene": "fixed",
+      "text": "Maya adds the missing item and confirms that a trained volunteer can cover the whole day.",
+      "start": 83.64,
+      "end": 88.28,
+      "index": 28
+    },
+    {
+      "scene": "fixed",
+      "text": "On Friday, she gives Rosa the checklist with a note explaining that she used AI to draft it and checked the safety requirements against the guide.",
+      "start": 88.82,
+      "end": 96.62,
+      "index": 29
+    },
+    {
+      "scene": "takeaway",
+      "text": "When you’re using a summary to make a decision, go back to the parts of the original that matter most.",
+      "start": 97.04,
+      "end": 102.18,
+      "index": 30
+    },
+    {
+      "scene": "takeaway",
+      "text": "Look for what’s missing as well as what’s there.",
+      "start": 102.62,
+      "end": 104.86,
+      "index": 31
+    },
+    {
+      "scene": "takeaway",
+      "text": "Your turn.",
+      "start": 105.5,
+      "end": 106,
+      "index": 32
+    },
+    {
+      "scene": "takeaway",
+      "text": "Think of a long document you deal with.",
+      "start": 106.5,
+      "end": 108.38,
+      "index": 33
+    },
+    {
+      "scene": "takeaway",
+      "text": "Which part would you go back and read for yourself before acting on an AI summary?",
+      "start": 108.84,
+      "end": 113.26,
+      "index": 34
+    }
+  ]
+}

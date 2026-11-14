@@ -583,4 +583,64 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "thirty-pages-by-friday": {
+    slug: "thirty-pages-by-friday",
+    title: "Maya's safety checklist",
+    reflections: [
+      "A long document I deal with is…",
+      "Before acting on an AI summary of it, I would read this part myself…",
+    ],
+    steps: [
+      {
+        id: "pages-first",
+        title: "Thirty pages",
+        goal: "See what Maya asked the chat tool, and which part of her request will help her check the result.",
+        reading: [
+          "On Monday morning, Rosa forwards Maya a guide from the local authority about running public events safely. \u201cCould you turn this into a checklist for the open day? I\u2019ll need it by Friday.\u201d The guide is thirty pages long.",
+          "Maya gives the public guide to the chat tool and asks: \u201cSummarise this in plain language, then turn it into a checklist. Show me where each item comes from in the guide.\u201d A twelve-point checklist appears, and even the jargon is explained: a risk assessment is where you work out what could go wrong and what you can do to reduce the risk.",
+        ],
+        takeaway: "Ask the tool to show where each point comes from, so you can check it.",
+      },
+      {
+        id: "pages-send",
+        title: "Would you send it?",
+        goal: "Decide what Maya should do with a checklist that looks ready.",
+        reading: [
+          "The checklist feels like something Maya could forward to Rosa right now. It looks complete, and every item has a page number.",
+          "But looking complete is not the same as being complete. Rosa will rely on this list to keep people safe on the day, so Maya needs to know it covers what the guide actually requires.",
+        ],
+        takeaway: "A summary that looks complete still needs checking before you rely on it.",
+      },
+      {
+        id: "pages-check",
+        title: "Check against the guide",
+        goal: "Check the guide's safety requirements against the checklist, and find what is missing.",
+        reading: [
+          "Maya opens the guide alongside the checklist and starts with the safety sections. As she reads each requirement in the guide, she checks that it is on her list. Fire exits: there it is. Emergency contacts: got those.",
+          "Then she reaches the first-aid section. For this event, the guide says a trained first-aider has to be on site for the whole day. There is no first-aid item on the checklist at all. Every line on the checklist can look right, and the list can still leave out something important.",
+        ],
+        takeaway: "Look for what is missing, as well as what is there.",
+      },
+      {
+        id: "pages-fix",
+        title: "Fixed, and honest about it",
+        goal: "Decide what Maya should tell Rosa when she hands over the checklist.",
+        reading: [
+          "Maya adds the missing item and confirms that a trained volunteer can cover the whole day. The checklist is now hers: she has checked the parts that matter most, and she is responsible for what she sends.",
+          "On Friday, she gives Rosa the checklist with a note explaining that she used AI to draft it and checked the safety requirements against the guide.",
+        ],
+        takeaway: "Say how you used AI, and what you checked.",
+      },
+      {
+        id: "pages-turn",
+        title: "Your turn",
+        goal: "Choose which part of a long document to read for yourself, then plan one of your own.",
+        reading: [
+          "When you are using a summary to make a decision, go back to the parts of the original that matter most. Look for what is missing as well as what is there.",
+          "Think of a long document you deal with. Which part would you go back and read for yourself before acting on an AI summary? Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "Before acting on a summary, read the parts that matter most yourself.",
+      },
+    ],
+  },
 };

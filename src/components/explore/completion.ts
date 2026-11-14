@@ -8,6 +8,8 @@ const allMatch = (s: ActivityState | undefined, expected: Record<string, string>
   Object.entries(expected).every(([k, v]) => m(s, k) === v);
 const dayPlaces = ["home", "journey", "centre", "shopping"];
 /** Episode 2.3: which parts of Maya's first flyer draft to keep or change. */
+/** Episode 2.4: which of the guide's safety requirements the AI checklist covers. */
+export const pagesCheck: Record<string, "on" | "missing"> = { fire: "on", contacts: "on", firstaid: "missing" };
 export const flyerSort: Record<string, "keep" | "change"> = { opening: "change", date: "keep", place: "keep", ending: "change" };
 
 const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean> = {
@@ -66,6 +68,11 @@ const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean>
   "flyer-tone": (s) => (s?.stage ?? 0) >= 2,
   "flyer-check": (s) => m(s, "q") === "volunteer",
   "flyer-turn": (s) => m(s, "q") === "keep-change",
+  "pages-first": (s) => m(s, "q") === "where",
+  "pages-send": (s) => m(s, "q") === "check",
+  "pages-check": (s) => allMatch(s, pagesCheck),
+  "pages-fix": (s) => m(s, "q") === "honest",
+  "pages-turn": (s) => m(s, "q") === "money",
 };
 
 /** True once the learner has done what the step asks, not merely opened it. */

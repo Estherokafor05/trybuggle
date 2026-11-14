@@ -1008,3 +1008,44 @@ test("Episode 2.3: keep or change, follow-ups in the same chat, a 5-question che
     await context.close();
   }
 });
+
+test("Episode 2.4: request, send or check, find what is missing, a 5-question check and accessibility", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
+    await expect(page.getByRole("heading", { name: "Thirty Pages by Friday", level: 1 })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /thirty-pages-by-friday\/story/);
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    await page.getByLabel(/Show me where each item comes from/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Send it to Rosa now/).check();
+    await page.getByLabel(/Open the guide and check/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByRole("group", { name: /trained first-aider/ }).getByLabel("On the list").check();
+    await expect(page.getByText("↺ Look again.")).toBeVisible();
+    for (const [req, choice] of [[/Fire exits must be kept clear/, "On the list"], [/emergency contacts/, "On the list"], [/trained first-aider/, "Missing"]] as const)
+      await page.getByRole("group", { name: req }).getByLabel(choice).check();
+    await expect(page.getByText("Every line looked right")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/used AI to draft it/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/rent, deposit, notice/).check();
+    await expect(page.getByText("Step 5 of 5 · 5 done")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["thirty-pages-by-friday"];
+    expect(questions).toHaveLength(5);
+    for (const q of questions) await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
+    await page.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(page.getByText("5 of 5 correct · 100%")).toBeVisible();
+    await trackGuest(context);
+    await context.close();
+  }
+});

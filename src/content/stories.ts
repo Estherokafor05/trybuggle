@@ -6,6 +6,7 @@ import charge from "../../public/lessons/what-ai-can-do/narration.json";
 import helper from "../../public/lessons/a-new-helper/narration.json";
 import email from "../../public/lessons/the-email-that-said-nothing/narration.json";
 import flyer from "../../public/lessons/three-tries-at-the-flyer/narration.json";
+import pages from "../../public/lessons/thirty-pages-by-friday/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -84,5 +85,13 @@ export const stories: Record<
     title: "Three tries at the flyer",
     introduction:
       "Maya's open day flyer has all the right details, but nobody will read it on their way out. Instead of starting again, she keeps the conversation going.",
+  },
+  "thirty-pages-by-friday": {
+    root: "/lessons/thirty-pages-by-friday/",
+    mediaVersion: "?v=20261114-1",
+    narration: pages,
+    title: "Thirty pages by Friday",
+    introduction:
+      "Rosa needs a safety checklist from a thirty-page guide by Friday. The chat tool's checklist looks ready to send. Would you send it?",
   },
 };
