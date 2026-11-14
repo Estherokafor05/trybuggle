@@ -10,6 +10,7 @@ import { HelperActivity } from "./HelperActivities";
 import { EmailActivity } from "./EmailActivities";
 import { FlyerActivity } from "./FlyerActivities";
 import { PagesActivity } from "./PagesActivities";
+import { GrantActivity } from "./GrantActivities";
 import { stepComplete } from "./completion";
 
 const primaryButton =
@@ -23,6 +24,7 @@ const activityFor: Record<string, typeof Activity> = {
   "the-email-that-said-nothing": EmailActivity,
   "three-tries-at-the-flyer": FlyerActivity,
   "thirty-pages-by-friday": PagesActivity,
+  "the-grant-that-didnt-exist": GrantActivity,
 };
 function StepActivity(props: Parameters<typeof Activity>[0]) {
   const Component = activityFor[props.slug] ?? Activity;

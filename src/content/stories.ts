@@ -7,6 +7,7 @@ import helper from "../../public/lessons/a-new-helper/narration.json";
 import email from "../../public/lessons/the-email-that-said-nothing/narration.json";
 import flyer from "../../public/lessons/three-tries-at-the-flyer/narration.json";
 import pages from "../../public/lessons/thirty-pages-by-friday/narration.json";
+import grant from "../../public/lessons/the-grant-that-didnt-exist/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];
@@ -93,5 +94,13 @@ export const stories: Record<
     title: "Thirty pages by Friday",
     introduction:
       "Rosa needs a safety checklist from a thirty-page guide by Friday. The chat tool's checklist looks ready to send. Would you send it?",
+  },
+  "the-grant-that-didnt-exist": {
+    root: "/lessons/the-grant-that-didnt-exist/",
+    mediaVersion: "?v=20261114-1",
+    narration: grant,
+    title: "The grant that didn't exist",
+    introduction:
+      "The open day budget is almost gone. A chat tool finds Maya a grant that sounds made for them, with a name, an amount and a link. What would you check?",
   },
 };

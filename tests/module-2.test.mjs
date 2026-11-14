@@ -12,6 +12,7 @@ const episodes = [
   { slug: "the-email-that-said-nothing", label: "2.2", steps: 5, place: { step: 2, visited: ["email-first", "email-missing"], activities: { "email-build": { matches: { who: "leaders" }, stage: 1 } } } },
   { slug: "three-tries-at-the-flyer", label: "2.3", steps: 5, place: { step: 2, visited: ["flyer-first", "flyer-next"], activities: { "flyer-tone": { matches: { q: "neighbour" }, stage: 1 } } } },
   { slug: "thirty-pages-by-friday", label: "2.4", steps: 5, place: { step: 2, visited: ["pages-first", "pages-send"], activities: { "pages-check": { matches: { fire: "on" } } } } },
+  { slug: "the-grant-that-didnt-exist", label: "2.5", steps: 5, place: { step: 2, visited: ["grant-first", "grant-check"], activities: { "grant-steer": { matches: { q: "rules" }, stage: 1 } } } },
 ];
 for (const episode of episodes) {
   const { slug, label } = episode;

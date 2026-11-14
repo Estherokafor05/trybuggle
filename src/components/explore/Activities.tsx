@@ -1798,6 +1798,8 @@ const exampleAnswers: Record<string, string> = {
     "My phone's alarm follows set instructions. My music app's suggestions might learn from what I play. Before I call something AI, I would ask what it actually does and how it decides.",
   "what-ai-can-do":
     "AI could help me draft emails. I would always check names, dates and prices. A decision about someone's job or health is one I would keep for a person.",
+  "the-grant-that-didnt-exist":
+    "I might ask a chat tool whether I can claim back the cost of a cancelled train. I would use the answer to learn what to ask, then check the train company's own refund page or an official consumer advice service.",
   "thirty-pages-by-friday":
     "My phone contract is long. Before acting on an AI summary, I would read the parts about the monthly price, how long I am tied in and what it costs to leave early.",
   "three-tries-at-the-flyer":

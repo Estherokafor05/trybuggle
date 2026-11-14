@@ -1,0 +1,331 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "duration": 133,
+  "audioDuration": 130.77,
+  "scenes": [
+    {
+      "id": "budget",
+      "title": "The budget",
+      "description": "The flyer is up and the stalls are filling, but after printing and supplies there is hardly anything left in the open day budget.",
+      "start": 0,
+      "end": 9.75
+    },
+    {
+      "id": "grant",
+      "title": "A grant made for them",
+      "description": "Maya asks the chat tool about small grants for community open days. It gives a grant name, an amount and a link, and she starts adding it to her report for Rosa.",
+      "start": 9.75,
+      "end": 26.78
+    },
+    {
+      "id": "choice",
+      "title": "What would you check?",
+      "description": "The learner is asked what they would check before Maya sends her report.",
+      "start": 26.78,
+      "end": 31.77
+    },
+    {
+      "id": "checking",
+      "title": "Page not found",
+      "description": "The link leads to a missing page and a search finds nothing. The local volunteer office has never heard of the grant but offers two real schemes, so Maya takes the grant out of her report.",
+      "start": 31.77,
+      "end": 64.72
+    },
+    {
+      "id": "why",
+      "title": "Real-looking, not real",
+      "description": "AI answers can contain names, figures, quotes and links that look real, or information that is out of date. A leading question invites agreement; asking for the rules and where to check them gives you something to verify.",
+      "start": 64.72,
+      "end": 86.44
+    },
+    {
+      "id": "open-day",
+      "title": "Open day",
+      "description": "Maya checks the funders' own pages and applies for a real grant. On open day, visitors arrive, a child plays chess, the gardening club hands out seedlings and Rosa gives Maya a thumbs-up.",
+      "start": 86.44,
+      "end": 106.4
+    },
+    {
+      "id": "takeaway",
+      "title": "Money, health and the law",
+      "description": "For questions about money, health or legal rights, use AI to get familiar with the topic and work out what to ask, then check with a reliable source or a qualified person before acting. The learner thinks of a question and where they would check it.",
+      "start": 106.4,
+      "end": 133
+    }
+  ],
+  "cues": [
+    {
+      "scene": "budget",
+      "text": "The flyer’s up.",
+      "start": 0.16,
+      "end": 1.08,
+      "index": 0
+    },
+    {
+      "scene": "budget",
+      "text": "The stalls are filling.",
+      "start": 1.5,
+      "end": 2.74,
+      "index": 1
+    },
+    {
+      "scene": "budget",
+      "text": "Then Maya looks at the budget.",
+      "start": 3.32,
+      "end": 4.98,
+      "index": 2
+    },
+    {
+      "scene": "budget",
+      "text": "Once they’ve paid for printing and supplies, there’s hardly anything left.",
+      "start": 5.52,
+      "end": 9.5,
+      "index": 3
+    },
+    {
+      "scene": "grant",
+      "text": "She opens the chat tool.",
+      "start": 10,
+      "end": 11.28,
+      "index": 4
+    },
+    {
+      "scene": "grant",
+      "text": "“Are there any small grants for community open days?”",
+      "start": 11.78,
+      "end": 14.5,
+      "index": 5
+    },
+    {
+      "scene": "grant",
+      "text": "It comes back with a grant name, an amount and a link.",
+      "start": 15,
+      "end": 18.2,
+      "index": 6
+    },
+    {
+      "scene": "grant",
+      "text": "The grant sounds like it was made for events exactly like theirs.",
+      "start": 18.68,
+      "end": 22.04,
+      "index": 7
+    },
+    {
+      "scene": "grant",
+      "text": "“Rosa will want to see this.”",
+      "start": 22.56,
+      "end": 24.14,
+      "index": 8
+    },
+    {
+      "scene": "grant",
+      "text": "Maya starts adding it to her report.",
+      "start": 24.58,
+      "end": 26.58,
+      "index": 9
+    },
+    {
+      "scene": "choice",
+      "text": "Before she sends it, what would you check?",
+      "start": 26.98,
+      "end": 29.2,
+      "index": 10
+    },
+    {
+      "scene": "choice",
+      "text": "Make your choice, then carry on.",
+      "start": 29.7,
+      "end": 31.52,
+      "index": 11
+    },
+    {
+      "scene": "checking",
+      "text": "Maya clicks the link.",
+      "start": 32.02,
+      "end": 33.18,
+      "index": 12
+    },
+    {
+      "scene": "checking",
+      "text": "Page not found.",
+      "start": 33.72,
+      "end": 34.74,
+      "index": 13
+    },
+    {
+      "scene": "checking",
+      "text": "“Maybe they moved it,” she thinks.",
+      "start": 35.24,
+      "end": 37.08,
+      "index": 14
+    },
+    {
+      "scene": "checking",
+      "text": "She searches for the grant by name.",
+      "start": 37.56,
+      "end": 39.3,
+      "index": 15
+    },
+    {
+      "scene": "checking",
+      "text": "Still nothing.",
+      "start": 39.88,
+      "end": 40.62,
+      "index": 16
+    },
+    {
+      "scene": "checking",
+      "text": "So she calls the local volunteer office and reads out the name.",
+      "start": 41.08,
+      "end": 44.28,
+      "index": 17
+    },
+    {
+      "scene": "checking",
+      "text": "“Where did you hear about that one?” the person on the phone asks.",
+      "start": 44.66,
+      "end": 47.9,
+      "index": 18
+    },
+    {
+      "scene": "checking",
+      "text": "“We don’t know of a grant by that name.",
+      "start": 48.24,
+      "end": 50,
+      "index": 19
+    },
+    {
+      "scene": "checking",
+      "text": "But I can send you two schemes that are open right now.”",
+      "start": 50.38,
+      "end": 53.04,
+      "index": 20
+    },
+    {
+      "scene": "checking",
+      "text": "Maya takes the grant out of her report.",
+      "start": 53.58,
+      "end": 55.64,
+      "index": 21
+    },
+    {
+      "scene": "checking",
+      "text": "The name, the amount and the web address had all sounded convincing.",
+      "start": 56.1,
+      "end": 60.14,
+      "index": 22
+    },
+    {
+      "scene": "checking",
+      "text": "She couldn’t find a funder or an official application page to back them up.",
+      "start": 60.56,
+      "end": 64.52,
+      "index": 23
+    },
+    {
+      "scene": "why",
+      "text": "An AI answer can contain names, figures, quotes and links that look real.",
+      "start": 64.92,
+      "end": 70.12,
+      "index": 24
+    },
+    {
+      "scene": "why",
+      "text": "It can also give you information that was true once but is out of date.",
+      "start": 70.52,
+      "end": 74.44,
+      "index": 25
+    },
+    {
+      "scene": "why",
+      "text": "And the way you ask can steer the answer.",
+      "start": 74.82,
+      "end": 77.32,
+      "index": 26
+    },
+    {
+      "scene": "why",
+      "text": "“We qualify for this grant, right?” invites agreement.",
+      "start": 77.74,
+      "end": 80.98,
+      "index": 27
+    },
+    {
+      "scene": "why",
+      "text": "“What are the eligibility rules, and where can I check them?” gives you something to verify.",
+      "start": 81.36,
+      "end": 86.18,
+      "index": 28
+    },
+    {
+      "scene": "open-day",
+      "text": "Maya opens the funders’ own pages, checks the criteria and deadlines, and applies for one of the grants.",
+      "start": 86.7,
+      "end": 92.76,
+      "index": 29
+    },
+    {
+      "scene": "open-day",
+      "text": "On open-day morning, the first visitors come through the door.",
+      "start": 93.24,
+      "end": 96.4,
+      "index": 30
+    },
+    {
+      "scene": "open-day",
+      "text": "A child sits down for a game of chess.",
+      "start": 96.82,
+      "end": 98.94,
+      "index": 31
+    },
+    {
+      "scene": "open-day",
+      "text": "Someone from the gardening club hands out a seedling.",
+      "start": 99.38,
+      "end": 101.88,
+      "index": 32
+    },
+    {
+      "scene": "open-day",
+      "text": "Across the hall, Rosa catches Maya’s eye and gives her a thumbs-up.",
+      "start": 102.3,
+      "end": 106.22,
+      "index": 33
+    },
+    {
+      "scene": "takeaway",
+      "text": "When an answer could affect your money, your health or your legal rights, you can use AI to get familiar with the topic and work out what to ask.",
+      "start": 106.58,
+      "end": 114.96,
+      "index": 34
+    },
+    {
+      "scene": "takeaway",
+      "text": "Check the answer with a reliable source or a qualified person before you act on it.",
+      "start": 115.34,
+      "end": 120.04,
+      "index": 35
+    },
+    {
+      "scene": "takeaway",
+      "text": "Your turn.",
+      "start": 120.56,
+      "end": 121.08,
+      "index": 36
+    },
+    {
+      "scene": "takeaway",
+      "text": "Think of a question about money, health or the law you might ask an AI chat tool.",
+      "start": 121.54,
+      "end": 126.48,
+      "index": 37
+    },
+    {
+      "scene": "takeaway",
+      "text": "Where would you go, or who would you ask, to check the answer?",
+      "start": 126.92,
+      "end": 130.42,
+      "index": 38
+    }
+  ]
+}

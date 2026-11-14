@@ -73,6 +73,11 @@ const rules: Record<string, (s: ActivityState | undefined, all: All) => boolean>
   "pages-check": (s) => allMatch(s, pagesCheck),
   "pages-fix": (s) => m(s, "q") === "honest",
   "pages-turn": (s) => m(s, "q") === "money",
+  "grant-first": (s) => ["name", "amount", "link"].every((id) => s?.items?.includes(id)),
+  "grant-check": (s) => m(s, "q") === "official",
+  "grant-steer": (s) => (s?.stage ?? 0) >= 2,
+  "grant-funder": (s) => m(s, "q") === "criteria",
+  "grant-turn": (s) => m(s, "q") === "check",
 };
 
 /** True once the learner has done what the step asks, not merely opened it. */

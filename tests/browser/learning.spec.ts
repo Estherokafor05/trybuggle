@@ -1049,3 +1049,48 @@ test("Episode 2.4: request, send or check, find what is missing, a 5-question ch
     await context.close();
   }
 });
+
+test("Episode 2.5: spot what to check, ask without steering, a 5-question check and accessibility", async ({ browser }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    const context = await browser.newContext({ viewport });
+    const page = await context.newPage();
+    await page.goto("/modules/talking-to-ai/lessons/the-grant-that-didnt-exist");
+    await expect(page.getByRole("heading", { name: "The Grant That Didn't Exist", level: 1 })).toBeVisible();
+    await expect(page.locator("video")).toHaveAttribute("src", /the-grant-that-didnt-exist\/story/);
+    await page.getByRole("button", { name: /^Read & Explore/ }).click();
+    await page.getByRole("button", { name: /^Yes!$/ }).click();
+    await expect(page.getByText("↺ Nothing to check.")).toBeVisible();
+    for (const part of [/The Community Open Day Fund/, /up to 1,000/, /Apply here/])
+      await page.getByRole("button", { name: part }).click();
+    await expect(page.getByText("Name, amount and link")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/funder’s own official page/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/We qualify for this grant/).check();
+    await expect(page.getByText(/Try another/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Ask the question" })).toBeDisabled();
+    await page.getByLabel(/What are the eligibility rules/).check();
+    await page.getByRole("button", { name: "Ask the question" }).click();
+    await expect(page.getByText("✓ Something to verify")).toBeVisible();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/Who can apply and the deadline/).check();
+    await page.getByRole("button", { name: "Continue →" }).click();
+    await page.getByLabel(/official advice service/).check();
+    await expect(page.getByText("Step 5 of 5 · 5 done")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(900);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Open the knowledge check" }).click();
+    const questions = assessmentBank["the-grant-that-didnt-exist"];
+    expect(questions).toHaveLength(5);
+    for (const q of questions) await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
+    await page.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(page.getByText("5 of 5 correct · 100%")).toBeVisible();
+    await trackGuest(context);
+    await context.close();
+  }
+});

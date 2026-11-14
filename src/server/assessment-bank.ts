@@ -804,6 +804,63 @@ export const assessmentBank: Record<string, Question[]> = {
       "A summary is a starting point. Check the parts you will act on against the original.",
     ),
   ],
+  "the-grant-that-didnt-exist": [
+    q(
+      "why-check",
+      "The chat tool gave Maya a grant name, an amount and a link. Why did she need to check them?",
+      [
+        "AI answers can include names, figures and links that look real but are not.",
+        "Chat tools only make mistakes with numbers.",
+        "She did not need to. They sounded convincing.",
+      ],
+      0,
+      "Sounding convincing is not the same as being real. The grant had no funder and no official page.",
+    ),
+    q(
+      "page-not-found",
+      "The grant link says \u201cPage not found\u201d. What is the best next step?",
+      [
+        "Assume the page has moved and keep the grant in the report.",
+        "Ask the chat tool for a different link.",
+        "Look for the funder\u2019s official page, or ask someone who would know, like the local volunteer office.",
+      ],
+      2,
+      "Check with an official source or someone who would know. The volunteer office had never heard of the grant.",
+    ),
+    q(
+      "steer",
+      "Which question is least likely to steer the chat tool towards the answer you want?",
+      [
+        "We qualify for this grant, right?",
+        "What are the eligibility rules, and where can I check them?",
+        "This grant is perfect for us, isn\u2019t it?",
+      ],
+      1,
+      "Asking for the rules and where to check them gives you something to verify, instead of inviting agreement.",
+    ),
+    q(
+      "out-of-date",
+      "A chat tool tells you about a grant that was real a few years ago. What is the risk?",
+      [
+        "The details may be out of date, so check the current rules and deadlines.",
+        "There is no risk. Facts do not change.",
+        "The chat tool will always warn you if something is out of date.",
+      ],
+      0,
+      "AI answers can include information that was true once but is out of date. Check the official page for current details.",
+    ),
+    q(
+      "money-health-law",
+      "When should you check an AI answer with a reliable source or a qualified person?",
+      [
+        "Only if the answer sounds wrong.",
+        "Never. AI is usually right.",
+        "Before acting on anything that could affect your money, health or legal rights.",
+      ],
+      2,
+      "Use AI to get familiar with the topic and work out what to ask, then check before you act.",
+    ),
+  ],
 };
 
 // Module final assessments: short refreshers across the module's lessons.

@@ -16,7 +16,8 @@ INSERT INTO learning_lessons(slug,title) VALUES
  ('a-new-helper','A New Helper'),
  ('the-email-that-said-nothing','The Email That Said Nothing'),
  ('three-tries-at-the-flyer','Three Tries at the Flyer'),
- ('thirty-pages-by-friday','Thirty Pages by Friday')
+ ('thirty-pages-by-friday','Thirty Pages by Friday'),
+ ('the-grant-that-didnt-exist','The Grant That Didn''t Exist')
 ON CONFLICT(slug) DO UPDATE SET title=EXCLUDED.title;
 CREATE TABLE IF NOT EXISTS learning_checkpoints (
  learner_id text NOT NULL REFERENCES learners(id),
