@@ -1,0 +1,93 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "scenes": [
+    {
+      "id": "budget",
+      "title": "The budget",
+      "description": "The flyer is up and the stalls are filling, but after printing and supplies there is hardly anything left in the open day budget.",
+      "lines": [
+        "The flyer’s up.",
+        "The stalls are filling.",
+        "Then Maya looks at the budget.",
+        "Once they’ve paid for printing and supplies, there’s hardly anything left."
+      ]
+    },
+    {
+      "id": "grant",
+      "title": "A grant made for them",
+      "description": "Maya asks the chat tool about small grants for community open days. It gives a grant name, an amount and a link, and she starts adding it to her report for Rosa.",
+      "lines": [
+        "She opens the chat tool.",
+        "“Are there any small grants for community open days?”",
+        "It comes back with a grant name, an amount and a link.",
+        "The grant sounds like it was made for events exactly like theirs.",
+        "“Rosa will want to see this.”",
+        "Maya starts adding it to her report."
+      ]
+    },
+    {
+      "id": "choice",
+      "title": "What would you check?",
+      "description": "The learner is asked what they would check before Maya sends her report.",
+      "lines": [
+        "Before she sends it, what would you check?",
+        "Make your choice, then carry on."
+      ]
+    },
+    {
+      "id": "checking",
+      "title": "Page not found",
+      "description": "The link leads to a missing page and a search finds nothing. The local volunteer office has never heard of the grant but offers two real schemes, so Maya takes the grant out of her report.",
+      "lines": [
+        "Maya clicks the link.",
+        "Page not found.",
+        "“Maybe they moved it,” she thinks.",
+        "She searches for the grant by name.",
+        "Still nothing.",
+        "So she calls the local volunteer office and reads out the name.",
+        "“Where did you hear about that one?” the person on the phone asks.",
+        "“We don’t know of a grant by that name.",
+        "But I can send you two schemes that are open right now.”",
+        "Maya takes the grant out of her report.",
+        "The name, the amount and the web address had all sounded convincing.",
+        "She couldn’t find a funder or an official application page to back them up."
+      ]
+    },
+    {
+      "id": "why",
+      "title": "Real-looking, not real",
+      "description": "AI answers can contain names, figures, quotes and links that look real, or information that is out of date. A leading question invites agreement; asking for the rules and where to check them gives you something to verify.",
+      "lines": [
+        "An AI answer can contain names, figures, quotes and links that look real.",
+        "It can also give you information that was true once but is out of date.",
+        "And the way you ask can steer the answer.",
+        "“We qualify for this grant, right?” invites agreement.",
+        "“What are the eligibility rules, and where can I check them?” gives you something to verify."
+      ]
+    },
+    {
+      "id": "open-day",
+      "title": "Open day",
+      "description": "Maya checks the funders' own pages and applies for a real grant. On open day, visitors arrive, a child plays chess, the gardening club hands out seedlings and Rosa gives Maya a thumbs-up.",
+      "lines": [
+        "Maya opens the funders’ own pages, checks the criteria and deadlines, and applies for one of the grants.",
+        "On open-day morning, the first visitors come through the door.",
+        "A child sits down for a game of chess.",
+        "Someone from the gardening club hands out a seedling.",
+        "Across the hall, Rosa catches Maya’s eye and gives her a thumbs-up."
+      ]
+    },
+    {
+      "id": "takeaway",
+      "title": "Money, health and the law",
+      "description": "For questions about money, health or legal rights, use AI to get familiar with the topic and work out what to ask, then check with a reliable source or a qualified person before acting. The learner thinks of a question and where they would check it.",
+      "lines": [
+        "When an answer could affect your money, your health or your legal rights, you can use AI to get familiar with the topic and work out what to ask.",
+        "Check the answer with a reliable source or a qualified person before you act on it.",
+        "Your turn.",
+        "Think of a question about money, health or the law you might ask an AI chat tool.",
+        "Where would you go, or who would you ask, to check the answer?"
+      ]
+    }
+  ]
+}

@@ -643,4 +643,64 @@ export const exploreGuides: Record<string, ExploreGuide> = {
       },
     ],
   },
+  "the-grant-that-didnt-exist": {
+    slug: "the-grant-that-didnt-exist",
+    title: "Maya's grant",
+    reflections: [
+      "A question about money, health or the law I might ask a chat tool is…",
+      "To check the answer, I would go to or ask…",
+    ],
+    steps: [
+      {
+        id: "grant-first",
+        title: "A grant made for them",
+        goal: "Find the details in the chat tool's answer that Maya would need to check.",
+        reading: [
+          "The flyer is up and the stalls are filling. Then Maya looks at the budget: once they have paid for printing and supplies, there is hardly anything left. She asks the chat tool, \u201cAre there any small grants for community open days?\u201d",
+          "It comes back with a grant name, an amount and a link. The grant sounds like it was made for events exactly like theirs. \u201cRosa will want to see this,\u201d Maya thinks, and starts adding it to her report.",
+        ],
+        takeaway: "Names, figures and links can look real and still need checking.",
+      },
+      {
+        id: "grant-check",
+        title: "What would you check?",
+        goal: "Decide how Maya should check the grant before it goes in her report.",
+        reading: [
+          "Maya clicks the link: page not found. \u201cMaybe they moved it,\u201d she thinks. She searches for the grant by name. Still nothing. So she calls the local volunteer office and reads out the name.",
+          "\u201cWhere did you hear about that one?\u201d the person on the phone asks. \u201cWe don\u2019t know of a grant by that name. But I can send you two schemes that are open right now.\u201d Maya takes the grant out of her report. The name, the amount and the web address had all sounded convincing, but she could not find a funder or an official application page to back them up.",
+        ],
+        takeaway: "Check with the official source, or someone who would know.",
+      },
+      {
+        id: "grant-steer",
+        title: "The way you ask",
+        goal: "Choose a question that gives Maya something to verify, then ask it.",
+        reading: [
+          "An AI answer can contain names, figures, quotes and links that look real. It can also give you information that was true once but is out of date.",
+          "And the way you ask can steer the answer. \u201cWe qualify for this grant, right?\u201d invites agreement. \u201cWhat are the eligibility rules, and where can I check them?\u201d gives you something to verify.",
+        ],
+        takeaway: "Ask for the rules and where to check them, not for agreement.",
+      },
+      {
+        id: "grant-funder",
+        title: "The funder's own page",
+        goal: "Decide what Maya should check before she applies for a real grant.",
+        reading: [
+          "Maya opens the funders\u2019 own pages, checks the criteria and deadlines, and applies for one of the grants.",
+          "On open-day morning, the first visitors come through the door. A child sits down for a game of chess. Someone from the gardening club hands out a seedling. Across the hall, Rosa catches Maya\u2019s eye and gives her a thumbs-up.",
+        ],
+        takeaway: "Check the criteria and deadlines on the official page before you act.",
+      },
+      {
+        id: "grant-turn",
+        title: "Your turn",
+        goal: "Decide what to do with an AI answer about your rights, then plan one of your own.",
+        reading: [
+          "When an answer could affect your money, your health or your legal rights, you can use AI to get familiar with the topic and work out what to ask. Check the answer with a reliable source or a qualified person before you act on it.",
+          "Think of a question about money, health or the law you might ask an AI chat tool. Where would you go, or who would you ask, to check the answer? Any notes you write here are private and stay on this device.",
+        ],
+        takeaway: "For money, health and the law, check before you act.",
+      },
+    ],
+  },
 };

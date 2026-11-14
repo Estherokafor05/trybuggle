@@ -18,6 +18,8 @@ import { ThreeTriesAtTheFlyer } from "./ThreeTriesAtTheFlyer";
 import flyer from "../../public/lessons/three-tries-at-the-flyer/narration.json";
 import { ThirtyPagesByFriday } from "./ThirtyPagesByFriday";
 import pages from "../../public/lessons/thirty-pages-by-friday/narration.json";
+import { TheGrantThatDidntExist } from "./TheGrantThatDidntExist";
+import grant from "../../public/lessons/the-grant-that-didnt-exist/narration.json";
 function Root() {
   return React.createElement(
     React.Fragment,
@@ -54,6 +56,7 @@ function Root() {
         ["TheEmailThatSaidNothing", TheEmailThatSaidNothing, email.duration],
         ["ThreeTriesAtTheFlyer", ThreeTriesAtTheFlyer, flyer.duration],
         ["ThirtyPagesByFriday", ThirtyPagesByFriday, pages.duration],
+        ["TheGrantThatDidntExist", TheGrantThatDidntExist, grant.duration],
       ] as const
     ).flatMap(([id, component, duration]) =>
       [false, true].map((mobile) =>

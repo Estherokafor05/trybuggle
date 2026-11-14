@@ -231,6 +231,15 @@ export const builtLessons: PreviewLesson[] = [
       "Use AI to summarise a long document and explain its jargon, then check the parts that matter most against the original and look for what is missing.",
     sources: [],
   },
+  {
+    slug: "the-grant-that-didnt-exist",
+    title: "The Grant That Didn't Exist",
+    duration: "2 minutes to watch",
+    preview: true,
+    objective:
+      "Recognise that AI answers can include made-up or out-of-date names, figures and links, ask questions that give you something to verify, and check anything about money, health or the law before acting on it.",
+    sources: [],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {
