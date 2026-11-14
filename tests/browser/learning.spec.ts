@@ -280,14 +280,14 @@ test("authenticated API enforces account isolation, optimistic saves and officia
   const publicQuestions = await (
     await first.request.get(base + "/api/assessments/what-counts-as-ai")
   ).json();
-  expect(publicQuestions.questions).toHaveLength(10);
+  expect(publicQuestions.questions).toHaveLength(5);
   expect(
     publicQuestions.questions.every(
       (q: object) => !("correct" in q) && !("explanation" in q),
     ),
   ).toBe(true);
   const questions = assessmentBank["what-counts-as-ai"];
-  for (const numberCorrect of [6, 7]) {
+  for (const numberCorrect of [3, 4]) {
     const answers = Object.fromEntries(
       questions.map((q, i) => [
         q.id,
@@ -304,7 +304,7 @@ test("authenticated API enforces account isolation, optimistic saves and officia
     expect(response.status()).toBe(200);
     const result = await response.json();
     expect(result.correct_count).toBe(numberCorrect);
-    expect(result.passed).toBe(numberCorrect === 7);
+    expect(result.passed).toBe(numberCorrect === 4);
     const duplicate = await first.request.post(
       base + "/api/assessments/what-counts-as-ai/submissions",
       { headers: { Origin: base }, data },
@@ -345,7 +345,7 @@ test("signed-in learner can submit, review feedback and retry without restarting
     const q = questions[i];
     await page
       .locator(
-        `input[name="${q.id}"][value="${i < 6 ? q.correct : q.options.find((o) => o.id !== q.correct)!.id}"]`,
+        `input[name="${q.id}"][value="${i < 3 ? q.correct : q.options.find((o) => o.id !== q.correct)!.id}"]`,
       )
       .check();
   }
@@ -568,7 +568,7 @@ test("Lesson 3 is open to guests, then both routes, every activity and the check
     await page.getByRole("link", { name: "Take the knowledge check →" }).click();
     await page.getByRole("button", { name: "Open the knowledge check" }).click();
     const questions = assessmentBank["before-chatgpt"];
-    expect(questions).toHaveLength(10);
+    expect(questions).toHaveLength(5);
     for (const q of questions)
       await expect(page.locator(`input[name="${q.id}"]`)).toHaveCount(q.options.length);
     await context.close();

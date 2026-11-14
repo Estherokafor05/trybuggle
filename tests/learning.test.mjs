@@ -39,7 +39,7 @@ test("Google learning identity stays stable across sign-ins and ignores client p
 test("knowledge checks pass at 70%: 7 of 10, 4 of 5", () => {
   for (const questions of Object.values(assessmentBank)) {
     const n = questions.length;
-    assert.ok(n === 10 || n === 5, "checks have 10 questions, or 5 from Module 2");
+    assert.equal(n, 5, "every lesson check has 5 questions");
     assert.equal(new Set(questions.map((q) => q.id)).size, n);
     const pass = n === 10 ? 7 : 4;
     for (const count of [0, pass - 1, pass, n]) {
