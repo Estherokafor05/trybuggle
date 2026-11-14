@@ -22,7 +22,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <header className="rounded-[2rem] bg-hero-lavender p-6 sm:p-9">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Account</p>
           <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">Your account</h1>
-          <dl className="mt-4 grid gap-1 text-ink sm:text-lg">
+          <dl className="ph-mask mt-4 grid gap-1 text-ink sm:text-lg">
             {name && (
               <div>
                 <dt className="sr-only">Name</dt>

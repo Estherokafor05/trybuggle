@@ -76,7 +76,7 @@ export function CertificatePanel({
                 Certificate of Completion
               </p>
               <p className="mt-4 text-sm text-muted">This certifies that</p>
-              <p className="mx-auto mt-2 max-w-[28ch] break-words border-b-2 border-brand pb-2 font-display text-[clamp(1.5rem,4vw,2.2rem)] font-bold text-navy">
+              <p className="ph-mask mx-auto mt-2 max-w-[28ch] break-words border-b-2 border-brand pb-2 font-display text-[clamp(1.5rem,4vw,2.2rem)] font-bold text-navy">
                 {certificate.learnerName}
               </p>
               <p className="mt-3 text-sm text-muted">has completed</p>

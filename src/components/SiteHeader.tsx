@@ -150,7 +150,7 @@ export function SiteHeader() {
         {account && (
           <form action={signOutAction} className="mt-3 border-t border-line/70 pt-3">
             {account.name && (
-              <p className="px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
+              <p className="ph-mask px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
             )}
             <Link
               href="/account"

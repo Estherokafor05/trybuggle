@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { GUEST_RETENTION_MONTHS } from "@/server/accounts";
+import { AnalyticsChoiceControl } from "@/components/AnalyticsConsent";
 
 export const metadata: Metadata = {
   title: "Privacy policy | Buggle Learn",
@@ -97,7 +98,7 @@ export default function PrivacyPage() {
         <Section id="not" title="What we do not collect">
           <List>
             <li>We do not ask for payment details. Buggle Learn is free.</li>
-            <li>We do not show adverts or use advertising trackers, and we do not use analytics tools.</li>
+            <li>We do not show adverts or use advertising trackers. We only collect usage data if you agree (see “Usage data” below).</li>
             <li>No AI tool runs inside Buggle Learn, so nothing you type is sent to an AI company.</li>
           </List>
         </Section>
@@ -110,12 +111,29 @@ export default function PrivacyPage() {
           <p>We do not sell your information, and we do not use it for advertising.</p>
         </Section>
 
+        <Section id="analytics" title="Usage data (only if you agree)">
+          <p>
+            While Buggle Learn is in testing, we ask whether you are happy to share usage data. If
+            you agree, we use a service called PostHog to see which pages you visit, what you click,
+            where you get stuck, and any errors the site shows you. This includes recordings of your
+            visit, so we can see where the site is confusing.
+          </p>
+          <p>
+            Anything you type, such as notes, answers in text boxes and names, is hidden in these
+            recordings, and so is your name and email address on your account page. We use this
+            only to improve Buggle Learn. If you say no, none of this is collected.
+          </p>
+          <p>You can change your choice at any time:</p>
+          <AnalyticsChoiceControl />
+        </Section>
+
         <Section id="share" title="Who we share it with">
           <p>We share information only with the service providers that run Buggle Learn for us:</p>
           <List>
             <li>Google, for sign-in.</li>
             <li>Vercel, which hosts the website.</li>
             <li>Neon, which stores accounts and progress.</li>
+            <li>PostHog, for usage data and error reports, only if you agree. It stores this data in the European Union.</li>
           </List>
           <p>
             Our website and database run on servers in the United Kingdom. Our service providers
@@ -128,7 +146,8 @@ export default function PrivacyPage() {
           <p>
             We use only the cookies needed to run the site: the cookies that keep you signed in
             securely, and one anonymous ID for learners without an account. Signing out removes
-            the anonymous ID from that device.
+            the anonymous ID from that device. If you agree to share usage data, PostHog also
+            stores an ID in your browser to link your visits together.
           </p>
         </Section>
 
@@ -138,7 +157,8 @@ export default function PrivacyPage() {
             your account yourself on your account page, and everything linked to it is deleted
             straight away. If you ask us to delete it instead, we will do so within 30 days.
             Anonymous results that are never linked to an account are deleted automatically
-            after {GUEST_RETENTION_MONTHS} months without any activity.
+            after {GUEST_RETENTION_MONTHS} months without any activity. Usage data and recordings
+            are kept by PostHog for no longer than 12 months.
           </p>
         </Section>
 
