@@ -1152,3 +1152,54 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await context.close();
 });
+
+test("sign-in asks learners to confirm they are 16 or over", async ({ page }) => {
+  await page.goto("/sign-in");
+  const age = page.getByLabel("I am 16 or over");
+  await expect(age).toBeVisible();
+  await expect(age).toHaveAttribute("required", "");
+  await expect(page.getByRole("link", { name: "privacy policy" })).toHaveAttribute("href", "/privacy");
+  await page.goto("/sign-in?age=required");
+  await expect(page.getByText(/Buggle Learn is for people aged 16 and over/)).toBeVisible();
+  await page.waitForTimeout(600);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+test("a signed-in learner can delete their account and everything stored for it", async ({ browser }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+    const context = await browser.newContext({ viewport });
+    const id = await signIn(context);
+    // Store a result and a saved place for this learner.
+    const answers = Object.fromEntries(assessmentBank["a-new-helper"].map((q) => [q.id, q.correct]));
+    expect((await context.request.post(`${base}/api/assessments/a-new-helper/submissions`, { headers: { Origin: base }, data: { version: 1, submissionKey: randomUUID(), answers } })).status()).toBe(200);
+    const page = await context.newPage();
+    await page.goto("/");
+    if (viewport.width < 768) await page.getByRole("button", { name: "Menu" }).click();
+    await page.getByRole("link", { name: "Your account" }).click();
+    await expect(page.getByRole("heading", { name: "Your account", level: 1 })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.waitForTimeout(600);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    // The confirmation box is required.
+    await expect(page.getByLabel(/will be deleted for good/)).toHaveAttribute("required", "");
+    await page.getByLabel(/will be deleted for good/).check();
+    await page.getByRole("button", { name: "Delete my account" }).click();
+    await expect(page.getByRole("heading", { name: "Your account has been deleted" })).toBeVisible();
+    const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+    try {
+      const [{ n }] = await sql`SELECT (SELECT count(*) FROM learners WHERE id=${id}) + (SELECT count(*) FROM assessment_attempts WHERE learner_id=${id}) AS n`;
+      expect(Number(n)).toBe(0);
+    } finally {
+      await sql.end();
+    }
+    // Signed out: the account page now asks to sign in.
+    await page.goto("/account");
+    await expect(page).toHaveURL(/\/sign-in/);
+    await context.close();
+  }
+});
+
+test("the guest clean-up refuses requests without the secret", async ({ request }) => {
+  expect((await request.get(`${base}/api/cron/guest-cleanup`)).status()).toBe(401);
+  expect((await request.get(`${base}/api/cron/guest-cleanup`, { headers: { Authorization: "Bearer wrong" } })).status()).toBe(401);
+});

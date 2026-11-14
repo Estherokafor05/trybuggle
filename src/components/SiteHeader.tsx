@@ -88,6 +88,15 @@ export function SiteHeader() {
         </nav>
 
         {account && (
+          <Link
+            href="/account"
+            aria-current={pathname === "/account" ? "page" : undefined}
+            className="hidden min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender md:inline-flex"
+          >
+            Your account
+          </Link>
+        )}
+        {account && (
           <form action={signOutAction} className="hidden md:block">
             <button
               type="submit"
@@ -143,6 +152,13 @@ export function SiteHeader() {
             {account.name && (
               <p className="px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
             )}
+            <Link
+              href="/account"
+              onClick={() => setOpen(false)}
+              className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
+            >
+              Your account
+            </Link>
             <button
               type="submit"
               className="flex min-h-12 w-full items-center gap-2 rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"

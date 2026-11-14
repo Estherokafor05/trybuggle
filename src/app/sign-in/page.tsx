@@ -15,17 +15,21 @@ export const metadata: Metadata = {
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; age?: string }>;
 }) {
   const params = await searchParams;
+  const ageMissing = params.age === "required";
   const returnTo = safeReturnPath(params.callbackUrl);
   if (googleAuthConfigured) {
     const session = await auth();
     if (session?.user) redirect(returnTo);
   }
 
-  async function continueWithGoogle() {
+  async function continueWithGoogle(formData: FormData) {
     "use server";
+    // Buggle Learn is for people aged 16 and over (see the privacy policy).
+    if (formData.get("age") !== "16-plus")
+      redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}&age=required`);
     await signIn("google", { redirectTo: returnTo });
   }
 
@@ -52,6 +56,15 @@ export default async function SignInPage({
 
           {googleAuthConfigured ? (
             <form action={continueWithGoogle} className="mt-7">
+              <label className="mb-4 flex min-h-11 cursor-pointer items-start gap-3 leading-relaxed text-ink">
+                <input type="checkbox" name="age" value="16-plus" required className="mt-1 size-5 shrink-0 accent-brand" />
+                I am 16 or over
+              </label>
+              {ageMissing && (
+                <p role="alert" className="mb-4 rounded-xl bg-peach/60 p-3 text-sm">
+                  Buggle Learn is for people aged 16 and over. Tick the box to confirm your age.
+                </p>
+              )}
               <button
                 type="submit"
                 className="flex w-full items-center justify-center gap-3 rounded-xl border border-line bg-white px-5 py-3.5 font-semibold text-ink transition-colors hover:border-brand hover:bg-lavender focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
@@ -74,7 +87,11 @@ export default async function SignInPage({
 
           <p className="mt-6 text-xs leading-relaxed text-muted">
             Sign-in returns you to the page you chose. Buggle Learn only requests
-            the basic account details needed to identify your session.
+            the basic account details needed to identify your session. Read our{" "}
+            <Link href="/privacy" className="font-semibold text-navy underline underline-offset-4">
+              privacy policy
+            </Link>
+            .
           </p>
         </section>
       </main>
