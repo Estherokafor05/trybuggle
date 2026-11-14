@@ -3,15 +3,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { GUEST_RETENTION_MONTHS } from "@/server/accounts";
 
 export const metadata: Metadata = {
   title: "Privacy policy | Buggle Learn",
   description: "What Buggle Learn collects while it is in beta, why, who it is shared with, and your choices.",
 };
 
-// DRAFT: fill these in before this page goes live.
-const PRIVACY_EMAIL = "[privacy email address]";
-const GUEST_RETENTION = "[number] months";
+// TODO: add the privacy email address. Until then the page says it is coming soon.
+const PRIVACY_EMAIL = "";
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
@@ -27,7 +27,11 @@ function H3({ children }: { children: ReactNode }) {
 function List({ children }: { children: ReactNode }) {
   return <ul className="list-disc space-y-1 pl-5">{children}</ul>;
 }
-const email = <span className="font-semibold">{PRIVACY_EMAIL}</span>;
+const email = PRIVACY_EMAIL ? (
+  <span className="font-semibold">{PRIVACY_EMAIL}</span>
+) : (
+  <span className="font-semibold">our privacy email address (coming soon)</span>
+);
 
 export default function PrivacyPage() {
   return (
@@ -49,7 +53,11 @@ export default function PrivacyPage() {
             Buggle Learn is operated by Bugle Solutions, Inc., a Delaware corporation, 2261 Market
             Street, San Francisco, CA 94104, United States.
           </p>
-          <p>For any privacy question or request, email {email}.</p>
+          <p>
+            For any privacy question or request, email {email}. You can delete your account
+            yourself at any time from{" "}
+            <Link href="/account" className="font-semibold text-navy underline underline-offset-4">your account page</Link>.
+          </p>
         </Section>
 
         <Section id="collect" title="What we collect">
@@ -126,9 +134,11 @@ export default function PrivacyPage() {
 
         <Section id="keep" title="How long we keep it">
           <p>
-            We keep your account information for as long as you have an account. If you ask us to
-            delete your account, we delete your personal information within 30 days. Anonymous
-            results that are never linked to an account are deleted after {GUEST_RETENTION}.
+            We keep your account information for as long as you have an account. You can delete
+            your account yourself on your account page, and everything linked to it is deleted
+            straight away. If you ask us to delete it instead, we will do so within 30 days.
+            Anonymous results that are never linked to an account are deleted automatically
+            after {GUEST_RETENTION_MONTHS} months without any activity.
           </p>
         </Section>
 
@@ -140,6 +150,10 @@ export default function PrivacyPage() {
             <li>delete your account and the information linked to it.</li>
           </List>
           <p>
+            You can also delete your account yourself, straight away, from{" "}
+            <Link href="/account" className="font-semibold text-navy underline underline-offset-4">your account page</Link>.
+          </p>
+          <p>
             Email {email} and we will reply within 30 days. Depending on where you live, you may
             have further rights under your local privacy law, including the right to complain to
             your data protection regulator.
@@ -148,8 +162,9 @@ export default function PrivacyPage() {
 
         <Section id="age" title="Age">
           <p>
-            Buggle Learn is for people aged 16 and over. We do not knowingly collect information
-            from anyone younger. If you believe a younger person has created an account, email us
+            Buggle Learn is for people aged 16 and over. We ask you to confirm you are 16 or over
+            when you create an account, and we do not knowingly collect information from anyone
+            younger. If you believe a younger person has created an account, email us
             and we will delete it.
           </p>
         </Section>
