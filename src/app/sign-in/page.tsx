@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { safeReturnPath } from "@/lib/paths";
+import { getModule } from "@/content/modules";
 
 export const metadata: Metadata = {
   title: "Create your free account | Buggle Learn",
@@ -20,6 +21,9 @@ export default async function SignInPage({
   const params = await searchParams;
   const ageMissing = params.age === "required";
   const returnTo = safeReturnPath(params.callbackUrl);
+  // Speak to the module the learner came from (Module 1 if we cannot tell).
+  const fromModule = getModule(returnTo.match(/^\/modules\/([^/?#]+)/)?.[1] ?? "") ?? getModule("ai-foundations")!;
+  const forCertificate = returnTo.includes("/certificate");
   if (googleAuthConfigured) {
     const session = await auth();
     if (session?.user) redirect(returnTo);
@@ -39,19 +43,21 @@ export default async function SignInPage({
       <main className="mx-auto flex min-h-[70vh] max-w-[560px] items-center px-4 py-10 sm:px-6 sm:py-14">
         <section className="w-full rounded-3xl border border-line bg-white p-7 shadow-sm sm:p-10">
           <Link
-            href="/modules/ai-foundations"
+            href={returnTo.startsWith("/modules/") ? returnTo : `/modules/${fromModule.slug}`}
             className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-deep hover:underline"
           >
-            <span aria-hidden="true">←</span> Back to Module 1
+            <span aria-hidden="true">←</span> Back to Module {fromModule.order}
           </Link>
           <p className="mt-6 font-mono text-xs uppercase tracking-[0.12em] text-teal">
             Keep learning
           </p>
           <h1 className="mt-3 text-3xl font-bold">Create your free account</h1>
           <p className="mt-3 leading-relaxed text-muted">
-            Get your Module 1 certificate and keep your progress safe on any
-            device. Any knowledge checks you have already passed on this device
-            come with you.
+            {forCertificate
+              ? `Get your Module ${fromModule.order} certificate and keep your progress safe on any device.`
+              : "Keep your progress safe on any device and collect your certificates."}{" "}
+            Any knowledge checks you have already passed on this device come
+            with you.
           </p>
 
           {googleAuthConfigured ? (

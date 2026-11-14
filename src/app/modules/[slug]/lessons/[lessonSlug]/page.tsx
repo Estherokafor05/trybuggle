@@ -270,8 +270,9 @@ export default async function LessonPage({
                 Up next: {next.label}, {next.title}
               </h2>
               <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
-                When you&apos;re ready, carry on to the next lesson. You can
-                come back to this one at any time.
+                {next.id === "final-assessment"
+                  ? "You've reached the end of the module. When you're ready, take the final assessment: a short refresher with no time limit."
+                  : `When you're ready, carry on to ${next.label}. You can come back to this one at any time.`}
               </p>
               <Link
                 href={next.href}

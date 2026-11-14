@@ -75,6 +75,12 @@ export default async function ModulePage({
             <p className="mt-4 max-w-[58ch] text-base leading-relaxed text-ink sm:text-lg">
               {mod.summary}
             </p>
+            {!isFoundations && !firstBuilt && (
+              <p className="mt-6 max-w-[58ch] rounded-2xl bg-white/80 p-4 text-sm leading-relaxed text-ink">
+                <b>This module is being made.</b> Its episodes will appear here as soon as they are
+                ready. In the meantime, you can work through the modules that are already open.
+              </p>
+            )}
             {!isFoundations && firstBuilt && (
               <div className="mt-6">
                 <Link
@@ -252,7 +258,8 @@ export default async function ModulePage({
               href={`/modules/${next.slug}`}
               className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-deep hover:underline"
             >
-              Next module · {next.title} <span aria-hidden="true">→</span>
+              Next module · {next.title}
+              {!next.lessons.some((l) => getBuiltLesson(l.slug)) && " (coming soon)"} <span aria-hidden="true">→</span>
             </Link>
           )}
         </nav>

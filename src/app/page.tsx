@@ -1,9 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { modules } from "@/content/modules";
 import { journey } from "@/content/journey";
+import { googleAuthConfigured } from "@/lib/auth-configured";
+import { guestId } from "@/server/guest";
+import { continuePoint } from "@/server/progress";
+
+export const dynamic = "force-dynamic";
 
 const foundationsPath = "/modules/ai-foundations";
 
@@ -20,7 +26,7 @@ const learningMethods = [
   {
     number: "02",
     title: "Check it",
-    body: "Answer 10 quick questions. Get 7 right to pass, and retry as often as you need.",
+    body: "Answer a few quick questions. Get 7 in 10 right to pass, and retry as often as you need.",
     accent: "bg-peach",
   },
   {
@@ -50,11 +56,33 @@ function Arrow() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const session = googleAuthConfigured ? await auth().catch(() => null) : null;
+  const learner = session?.user?.id ?? (await guestId());
+  const resume = learner ? await continuePoint(learner).catch(() => null) : null;
   return (
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[1232px] px-4 pb-12 pt-6 sm:px-7 sm:pb-16 sm:pt-8">
+        {resume && (
+          <section aria-labelledby="resume-title" className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-[1.75rem] border-2 border-brand/30 bg-white p-5 sm:p-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-deep">Welcome back</p>
+              <h2 id="resume-title" className="mt-1 text-xl font-bold">
+                Continue where you left off
+              </h2>
+              <p className="mt-1 text-sm text-muted">
+                Module {resume.moduleOrder} · {resume.step.label}: {resume.step.title}
+              </p>
+            </div>
+            <Link
+              href={resume.step.href}
+              className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              Continue <Arrow />
+            </Link>
+          </section>
+        )}
         <section className="relative isolate grid overflow-hidden rounded-[2rem] bg-hero-lavender sm:rounded-[2.5rem] md:grid-cols-[1.15fr_0.85fr] md:items-center">
           <div className="relative z-10 px-6 pt-7 sm:px-9 sm:pt-9 md:py-10 lg:px-12 lg:py-12">
             <p className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3.5 py-2 text-xs font-semibold text-ink">
@@ -69,16 +97,30 @@ export default function Home() {
               See where AI shows up in work, study and everyday life. Learn how
               it works and how to use it thoughtfully, with no coding required.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <div className="mt-6 grid gap-3 sm:max-w-[34rem] sm:grid-cols-2">
               <Link
                 href="/welcome"
-                className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
+                className="group flex flex-col rounded-2xl bg-navy p-4 text-white transition-colors hover:bg-brand-deep"
               >
-                Start learning <Arrow />
+                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-white/80">New to AI?</span>
+                <span className="mt-1 flex items-center gap-2 text-base font-bold">
+                  Start with the basics <Arrow />
+                </span>
+                <span className="mt-1 text-xs text-white/85">Module 1 · begins with a 2-minute welcome</span>
+              </Link>
+              <Link
+                href="/modules/talking-to-ai"
+                className="group flex flex-col rounded-2xl border-2 border-navy/15 bg-white/85 p-4 text-ink transition-colors hover:border-brand"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-brand-deep">Already use AI?</span>
+                <span className="mt-1 flex items-center gap-2 text-base font-bold">
+                  Get better at using it <Arrow />
+                </span>
+                <span className="mt-1 text-xs text-muted">Module 2 · Talking to AI</span>
               </Link>
             </div>
             <p className="mt-3 text-xs text-ink/75">
-              Begins with a 2-minute welcome, then Lesson 1.
+              Free. No account needed to start.
             </p>
           </div>
 
@@ -108,8 +150,8 @@ export default function Home() {
               Start here
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted">
-              Follow these steps in order. No account is needed for any of
-              Module 1. Sign up at the end to get your certificate.
+              New to AI? Follow these steps in order. No account is needed to
+              learn. Sign up at the end of a module to get your certificate.
             </p>
           </div>
           <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -213,8 +255,9 @@ export default function Home() {
           <div>
             <h2 className="text-xl font-bold sm:text-2xl">Where it leads</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-              Module 1, Foundations of Artificial Intelligence, is the first of{" "}
-              {modules.length} modules, and every one of them is free.
+              Modules 1 and 2 are open now: the foundations of AI, then how to
+              talk to AI chat tools well. There are {modules.length} modules in
+              all, and every one of them is free.
             </p>
             <Link
               href="/curriculum"
