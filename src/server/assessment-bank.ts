@@ -747,6 +747,63 @@ export const assessmentBank: Record<string, Question[]> = {
       "There is nothing special about three tries. Keep going until the draft is right, saying what to keep and what to change.",
     ),
   ],
+  "thirty-pages-by-friday": [
+    q(
+      "show-where",
+      "Maya asked the chat tool to show where each checklist item comes from in the guide. Why does that help?",
+      [
+        "It makes the checklist longer.",
+        "It makes it easier to check each item against the original.",
+        "It means the checklist must be correct.",
+      ],
+      1,
+      "Page references let you go straight to that part of the original and check it. They do not prove the list is right or complete.",
+    ),
+    q(
+      "before-sending",
+      "The twelve-point checklist looks complete. What should Maya do before sending it to Rosa?",
+      [
+        "Check the most important sections of the guide against the checklist.",
+        "Send it, because it looks complete.",
+        "Ask the chat tool if anything is missing and trust its answer.",
+      ],
+      0,
+      "Go back to the parts of the original that matter most. Here, that was the safety sections.",
+    ),
+    q(
+      "what-was-wrong",
+      "Every item on the AI checklist was correct. What was the problem?",
+      [
+        "The page numbers were wrong.",
+        "It used too much jargon.",
+        "It left out the first-aid requirement.",
+      ],
+      2,
+      "Every line can look right, and the list can still leave out something important.",
+    ),
+    q(
+      "honest-note",
+      "What did Maya tell Rosa when she handed over the checklist?",
+      [
+        "Nothing about how she made it.",
+        "That she used AI to draft it and checked the safety requirements against the guide.",
+        "That the AI had checked it for her.",
+      ],
+      1,
+      "Being open about how you used AI, and what you checked, helps the person relying on your work.",
+    ),
+    q(
+      "using-summaries",
+      "You are using an AI summary to make a decision. What should you do?",
+      [
+        "Go back to the parts of the original that matter most, and look for what is missing.",
+        "Trust the summary if it sounds confident.",
+        "Read only the first point of the summary.",
+      ],
+      0,
+      "A summary is a starting point. Check the parts you will act on against the original.",
+    ),
+  ],
 };
 
 // Module final assessments: short refreshers across the module's lessons.

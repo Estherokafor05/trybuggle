@@ -1,0 +1,82 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "scenes": [
+    {
+      "id": "monday",
+      "title": "Thirty pages by Friday",
+      "description": "Rosa forwards Maya a thirty-page local authority guide to running public events safely and asks for an open day checklist by Friday.",
+      "lines": [
+        "On Monday morning, Rosa forwards Maya a guide from the local authority.",
+        "It’s about running public events safely.",
+        "“Could you turn this into a checklist for the open day?” Rosa asks.",
+        "“I’ll need it by Friday.”",
+        "Maya opens the attachment.",
+        "Thirty pages.",
+        "And she’s still waiting to hear how many tables the gardening club needs."
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "A twelve-point checklist",
+      "description": "Maya gives the public guide to the chat tool and asks for a plain-language summary and a checklist that shows where each item comes from. A twelve-point checklist appears, with jargon like risk assessment explained.",
+      "lines": [
+        "She gives the public guide to the chat tool and asks, “Summarise this in plain language, then turn it into a checklist.",
+        "Show me where each item comes from in the guide.”",
+        "A twelve-point checklist appears.",
+        "Even the jargon feels manageable.",
+        "A risk assessment, the tool explains, is where you work out what could go wrong and what you can do to reduce the risk.",
+        "Maya looks at the checklist.",
+        "It feels like something she could forward to Rosa right now."
+      ]
+    },
+    {
+      "id": "choice",
+      "title": "Would you send it?",
+      "description": "The learner is asked whether Maya should send the checklist to Rosa now.",
+      "lines": [
+        "Would you send it?",
+        "Choose what Maya should do, then carry on."
+      ]
+    },
+    {
+      "id": "check",
+      "title": "Checking against the guide",
+      "description": "Maya opens the guide beside the checklist and checks the safety requirements one by one. Fire exits and emergency contacts are there, but the first-aid requirement is missing.",
+      "lines": [
+        "Maya opens the guide alongside the checklist.",
+        "She starts with the safety sections.",
+        "As she reads each requirement in the guide, she checks that it’s on her list.",
+        "Fire exits.",
+        "There it is.",
+        "Emergency contacts.",
+        "Got those.",
+        "Then she reaches the first-aid section.",
+        "For this event, the guide says a trained first-aider has to be on site for the whole day.",
+        "Maya scans the checklist again.",
+        "There’s no first-aid item at all.",
+        "Every line on the checklist can look right, and the list can still leave out something important."
+      ]
+    },
+    {
+      "id": "fixed",
+      "title": "Fixed, and honest about it",
+      "description": "Maya adds the first-aid item, confirms a trained volunteer can cover the day, and gives Rosa the checklist with a note saying she used AI to draft it and checked the safety requirements against the guide.",
+      "lines": [
+        "Maya adds the missing item and confirms that a trained volunteer can cover the whole day.",
+        "On Friday, she gives Rosa the checklist with a note explaining that she used AI to draft it and checked the safety requirements against the guide."
+      ]
+    },
+    {
+      "id": "takeaway",
+      "title": "Go back to what matters",
+      "description": "When a summary informs a decision, go back to the parts of the original that matter most and look for what is missing. The learner thinks of a long document they deal with.",
+      "lines": [
+        "When you’re using a summary to make a decision, go back to the parts of the original that matter most.",
+        "Look for what’s missing as well as what’s there.",
+        "Your turn.",
+        "Think of a long document you deal with.",
+        "Which part would you go back and read for yourself before acting on an AI summary?"
+      ]
+    }
+  ]
+}

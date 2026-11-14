@@ -222,6 +222,15 @@ export const builtLessons: PreviewLesson[] = [
       "Improve a close draft by telling the chat tool what to keep and what to change, and get someone who can check it to review anything you cannot check yourself.",
     sources: [],
   },
+  {
+    slug: "thirty-pages-by-friday",
+    title: "Thirty Pages by Friday",
+    duration: "2 minutes to watch",
+    preview: true,
+    objective:
+      "Use AI to summarise a long document and explain its jargon, then check the parts that matter most against the original and look for what is missing.",
+    sources: [],
+  },
 ];
 export const previewLessons = builtLessons.filter((lesson) => lesson.preview);
 export function getPreviewLesson(slug: string): PreviewLesson | undefined {
