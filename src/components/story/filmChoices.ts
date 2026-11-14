@@ -14,12 +14,8 @@ const confident: Option[] = [
   { id: "polish", text: "Ask the chat tool to make it sound even better.", feedback: "Better wording does not make the facts any truer." },
 ];
 
-/** Episode 2.1's question is new wording, waiting for approval before it goes live. */
-export const pendingFilmChoices: Record<string, FilmChoice> = {
-  "a-new-helper": { question: "If an answer sounds this confident, is that enough to trust what it says?", options: confident },
-};
-
 export const filmChoices: Record<string, FilmChoice> = {
+  "a-new-helper": { question: "If an answer sounds this confident, is that enough to trust what it says?", options: confident },
   "the-email-that-said-nothing": { question: "What could Maya add to make the biggest difference?", options: missing },
   "three-tries-at-the-flyer": { question: "What would you say to the chat tool next?", options: nextMessages },
   "thirty-pages-by-friday": { question: "Would you send it? What should Maya do?", options: sendOptions },

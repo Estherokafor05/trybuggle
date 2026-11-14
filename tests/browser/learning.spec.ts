@@ -1290,3 +1290,18 @@ test("Module 2 films stop at the choice and ask, then carry on", async ({ browse
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.close();
 });
+
+test("Episode 2.1's film asks its approved question at 1:15", async ({ page }) => {
+  await page.goto("/modules/talking-to-ai/lessons/a-new-helper");
+  const tick = (time: number) =>
+    page.locator("video").evaluate((v, t) => {
+      Object.defineProperty(v, "currentTime", { configurable: true, get: () => t, set: () => undefined });
+      v.dispatchEvent(new Event("timeupdate"));
+    }, time);
+  await tick(75);
+  await tick(75.7);
+  const dialog = page.getByRole("dialog", { name: /enough to trust what it says/ });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("button", { name: /Check the details someone will rely on/ }).click();
+  await expect(dialog.getByText("✓ Right.")).toBeVisible();
+});
