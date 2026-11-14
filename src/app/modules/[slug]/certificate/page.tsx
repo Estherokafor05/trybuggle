@@ -6,6 +6,7 @@ import { CertificatePanel } from "@/components/certificate/CertificatePanel";
 import { Requirements } from "@/components/certificate/Requirements";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { stepLabel } from "@/content/journey";
 import { getModule } from "@/content/modules";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { getCertificate, hasFinalAssessment, moduleRequirements } from "@/server/certificates";
@@ -41,7 +42,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">{mod.title}</p>
           <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">Certificate of Completion</h1>
           <p className="mt-2 max-w-[62ch] leading-relaxed text-ink">
-            Pass every lesson&apos;s knowledge check and the final assessment to receive your certificate from Buggle Learn.
+            Pass every knowledge check in this module and the final assessment to receive your certificate from Buggle Learn.
           </p>
         </header>
         {!account && (
@@ -101,7 +102,7 @@ function moduleRequirementsPlaceholder(slug: string) {
   return [
     ...mod.lessons.map((l, i) => ({
       id: l.slug,
-      label: `Lesson ${i + 1} knowledge check`,
+      label: `${stepLabel(mod.order, i)} knowledge check`,
       title: l.title,
       href: `/modules/${slug}/lessons/${l.slug}#knowledge-check`,
       passedAt: null,
