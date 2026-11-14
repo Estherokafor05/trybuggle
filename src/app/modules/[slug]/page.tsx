@@ -230,8 +230,8 @@ export default async function ModulePage({
                 <h2 className="text-lg font-bold text-navy">How each lesson works</h2>
                 <ol className="mt-3 space-y-2 text-sm leading-relaxed text-ink">
                   <li>1. Watch a short film, or work through an interactive guide.</li>
-                  <li>2. Take a 10-question knowledge check.</li>
-                  <li>3. Pass with 7 or more. Retry as often as you need.</li>
+                  <li>2. Take a 5-question knowledge check.</li>
+                  <li>3. Pass with 4 or more. Retry as often as you need.</li>
                 </ol>
                 {!session?.user && (
                   <Link

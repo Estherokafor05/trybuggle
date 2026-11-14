@@ -40,28 +40,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "The timer can follow a fixed instruction using ordinary software. Automatic operation alone does not prove AI is involved.",
     ),
     q(
-      "methods",
-      "How can AI systems be built?",
-      [
-        "Only by learning from huge collections of images.",
-        "Only by copying a human brain.",
-        "Using knowledge and rules, learning patterns from examples, or combinations of approaches.",
-      ],
-      2,
-      "Machine learning is one way to build AI. Knowledge-based approaches also exist.",
-    ),
-    q(
-      "input",
-      "A speech tool turns a meeting recording into notes. What is its input?",
-      [
-        "The meeting recording.",
-        "The written notes it produces.",
-        "The person’s final decision to share the notes.",
-      ],
-      0,
-      "Input is information a system receives. The generated notes are its output.",
-    ),
-    q(
       "learning",
       "A system uses labelled cat and dog pictures to learn patterns. What is this an example of?",
       [
@@ -71,17 +49,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Learning patterns from examples is machine learning. It is one way to build AI and does not guarantee correct results.",
-    ),
-    q(
-      "testing",
-      "Why try pictures that were not used during training?",
-      [
-        "To avoid checking any predictions.",
-        "To prove the system thinks like a person.",
-        "To see how it handles new examples.",
-      ],
-      2,
-      "Testing with new examples helps reveal whether learned patterns are useful beyond the training examples.",
     ),
     q(
       "generative",
@@ -104,28 +71,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Compare the claim with a reliable source such as the actual calendar. Confidence is not evidence.",
-    ),
-    q(
-      "privacy",
-      "What should Maya include when requesting a fictional meeting invitation?",
-      [
-        "Every colleague’s private phone number.",
-        "Unrelated confidential staff records.",
-        "The relevant event details and tone, using a tool her workplace allows.",
-      ],
-      2,
-      "Share appropriate information needed for the task. Private or confidential details should not be added unnecessarily.",
-    ),
-    q(
-      "judgment",
-      "An AI result concerns a decision that could seriously affect someone’s health. What matters?",
-      [
-        "Involving an appropriately qualified person and checking suitable evidence.",
-        "Using it immediately if the wording sounds clear.",
-        "Assuming AI makes human judgment unnecessary.",
-      ],
-      0,
-      "The consequences of a mistake determine the level of checking. Serious decisions need suitable evidence and qualified human judgment.",
     ),
   ],
   "ai-in-your-day": [
@@ -152,17 +97,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "Some photo apps use AI to recognise image content. A likely match still needs checking.",
     ),
     q(
-      "choice",
-      "Several dog pictures appear. What makes one useful for the club poster?",
-      [
-        "Being the first result is enough.",
-        "Any dog picture is equally suitable.",
-        "Maya checks the picture against the poster’s actual needs.",
-      ],
-      2,
-      "Search relevance is not the same as task suitability. Maya checks the subject, clarity and permission to use the photo.",
-    ),
-    q(
       "route",
       "A map predicts a 20-minute journey. What does that mean?",
       [
@@ -172,28 +106,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Travel-time predictions can change with traffic and other conditions. Maya checks the route and allows for uncertainty.",
-    ),
-    q(
-      "update",
-      "New traffic information makes the alternative route slower. What should Maya do?",
-      [
-        "Reconsider the options and route suitability using the update.",
-        "Ignore the update because the first estimate was final.",
-        "Always choose whichever route has the shortest distance.",
-      ],
-      0,
-      "New information can change a prediction. The decision should also take the actual journey’s needs into account.",
-    ),
-    q(
-      "recommend",
-      "Why might a shop suggest another camera bag?",
-      [
-        "A recommendation proves the camera will fit.",
-        "Every shop uses the same AI system.",
-        "Some shops use patterns in browsing or purchases to suggest relevant items.",
-      ],
-      2,
-      "Recommendations can use activity patterns. Their relevance does not guarantee that they meet all the buyer’s needs.",
     ),
     q(
       "fit",
@@ -207,17 +119,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "A suitable price does not fix a size mismatch. Check each requirement against the product’s actual specifications.",
     ),
     q(
-      "classification",
-      "An email service puts a message in Spam. What task does that illustrate?",
-      [
-        "Classification: assigning something to a group.",
-        "Guaranteed verification of the sender.",
-        "Creating a new photograph.",
-      ],
-      0,
-      "Classification sorts information into categories. A folder label is not proof of safety.",
-    ),
-    q(
       "verify",
       "Maya is unsure whether a booking email is genuine. What is a sensible check?",
       [
@@ -227,17 +128,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       2,
       "A message can be misclassified. Check expected details and use a known contact if unsure.",
-    ),
-    q(
-      "evidence",
-      "A tool calls itself smart. How can you investigate whether a feature uses AI?",
-      [
-        "Assume every smart feature uses AI.",
-        "Look for reliable product documentation and say you are unsure if evidence is missing.",
-        "Judge it only by how modern its screen looks.",
-      ],
-      1,
-      "A name or appearance does not establish how a feature works. Product evidence matters, and uncertainty is an honest answer.",
     ),
   ],
   "before-chatgpt": [
@@ -253,28 +143,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "Turing's 1950 paper and the 1956 Dartmouth workshop mark the early days of AI research, decades before chat tools.",
     ),
     q(
-      "turing",
-      "What did Alan Turing suggest in 1950?",
-      [
-        "Judging a machine by whether its conversation could be told apart from a person's.",
-        "Building the first chat app for the public.",
-        "Stopping computers from doing calculations.",
-      ],
-      0,
-      "Turing asked whether machines could think and proposed a conversation test to judge a machine by its behaviour.",
-    ),
-    q(
-      "name",
-      "Where did the term artificial intelligence come from?",
-      [
-        "A 1997 chess match.",
-        "A 2022 product launch.",
-        "A 1956 summer workshop at Dartmouth College.",
-      ],
-      2,
-      "The Dartmouth Summer Research Project on Artificial Intelligence in 1956 gave the field its name.",
-    ),
-    q(
       "expert",
       "How did an expert system usually work?",
       [
@@ -284,39 +152,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Expert systems turned experts' knowledge into rules that the computer followed.",
-    ),
-    q(
-      "fragile",
-      "A rule-based helper meets a problem nobody wrote a rule for. What is most likely to happen?",
-      [
-        "It works out a new rule by itself.",
-        "It gets stuck or gives no useful answer.",
-        "It fixes the problem faster than usual.",
-      ],
-      1,
-      "A rule-based system can only follow the rules people gave it, which is why these systems were called fragile.",
-    ),
-    q(
-      "winter",
-      "What does the term AI winter describe?",
-      [
-        "The year AI research ended for good.",
-        "A season when computers run more slowly.",
-        "A period when interest and funding for AI dropped.",
-      ],
-      2,
-      "When results fell short of big promises, interest and funding dropped for a while. Research still carried on.",
-    ),
-    q(
-      "deep-blue",
-      "How did Deep Blue beat Garry Kasparov in 1997?",
-      [
-        "It learned chess by chatting with players.",
-        "It searched huge numbers of possible moves using rules and scoring written by people.",
-        "It copied Kasparov's earlier games move by move.",
-      ],
-      1,
-      "Deep Blue relied on search guided by human-written rules and scoring, not on learning the way people do.",
     ),
     q(
       "machine-learning",
@@ -365,17 +200,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "A reminder can come from a fixed instruction written in advance. Working automatically does not prove AI is involved.",
     ),
     q(
-      "check-in",
-      "A visitor types the host's name with a typo and the system says “host not found”. What does that suggest?",
-      [
-        "It follows set steps rather than working out what was meant.",
-        "It is an advanced AI that understands visitors.",
-        "It learns from every visitor who signs in.",
-      ],
-      0,
-      "The system only matches exact details. It follows its steps and cannot work out what someone meant.",
-    ),
-    q(
       "trained",
       "How was the smart inbox tool built?",
       [
@@ -385,17 +209,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "The tool learned patterns from examples that people had sorted, then uses them to suggest folders.",
-    ),
-    q(
-      "ml-name",
-      "What is it called when a system learns patterns from examples and uses them to make predictions?",
-      [
-        "Machine learning.",
-        "A spreadsheet formula.",
-        "A scheduled reminder.",
-      ],
-      0,
-      "Machine learning is one way of building AI: finding patterns in examples and using them to predict.",
     ),
     q(
       "prediction",
@@ -409,17 +222,6 @@ export const assessmentBank: Record<string, Question[]> = {
       "Learned patterns give a best guess. Predictions can be wrong, so important ones need checking.",
     ),
     q(
-      "matched-words",
-      "Why did the tool file “The visitor check-in tablet isn't working” under Visitor Information?",
-      [
-        "It matched words such as “visitor” and “check-in”.",
-        "It understood the message perfectly.",
-        "Daniel told it to file it there.",
-      ],
-      0,
-      "The tool matched familiar words. Daniel read the whole message and saw it was a technical problem for IT Support.",
-    ),
-    q(
       "human-check",
       "An AI tool's prediction could cause a problem if it is wrong. What should happen?",
       [
@@ -429,28 +231,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Predictions can be wrong. A person checks results that matter, rather than relying on the tool to check itself.",
-    ),
-    q(
-      "spreadsheet",
-      "A spreadsheet total updates when you change a number. Does that show it uses AI?",
-      [
-        "Yes, anything that updates itself is AI.",
-        "Yes, because the result is correct.",
-        "No, it can follow a formula someone set up.",
-      ],
-      2,
-      "A formula is an instruction set up in advance. Automatic and correct does not mean AI.",
-    ),
-    q(
-      "rules",
-      "Which statement about rules and AI is true?",
-      [
-        "AI never uses rules.",
-        "Some AI uses rules, such as expert systems built from experts' knowledge.",
-        "Anything that follows rules is AI.",
-      ],
-      1,
-      "Ordinary software follows rules, and some AI does too. Expert systems used rules captured from experts to make judgments.",
     ),
     q(
       "label",
@@ -465,28 +245,6 @@ export const assessmentBank: Record<string, Question[]> = {
     ),
   ],
   "what-ai-can-do": [
-    q(
-      "generative",
-      "Amina asks an AI assistant to draft interview questions. What kind of AI is she using?",
-      [
-        "Generative AI, which creates new text.",
-        "A spreadsheet formula.",
-        "A basic alarm.",
-      ],
-      0,
-      "Tools that create new text or pictures from a request are called generative AI.",
-    ),
-    q(
-      "draft",
-      "What is the best way to use an AI-generated draft?",
-      [
-        "Send it straight away.",
-        "Treat it as a starting point to review and improve.",
-        "Ask the AI to confirm it is correct.",
-      ],
-      1,
-      "A draft saves time, but a person reviews and improves it before it is used.",
-    ),
     q(
       "confident",
       "The AI summary says a driving licence is required, but the job description does not. What does this show?",
@@ -508,28 +266,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       2,
       "Checking against the source is an independent check. Asking the same tool is not.",
-    ),
-    q(
-      "fair-questions",
-      "An AI suggests asking candidates whether they plan to have children. What should Amina do?",
-      [
-        "Keep it, because the AI suggested it.",
-        "Remove it, because it is not about the job and could be unfair.",
-        "Ask only some of the candidates.",
-      ],
-      1,
-      "Questions about family plans are unrelated to the job and could treat candidates unfairly. Interview guidance says not to ask them.",
-    ),
-    q(
-      "brief",
-      "What should Amina give the AI assistant to draft interview questions?",
-      [
-        "The public job description and the role title.",
-        "Every applicant's CV.",
-        "Applicants' home addresses.",
-      ],
-      0,
-      "Give the tool what the task needs. Personal information about applicants is not needed and should be protected.",
     ),
     q(
       "privacy",
@@ -563,17 +299,6 @@ export const assessmentBank: Record<string, Question[]> = {
       ],
       1,
       "Decisions that affect people's jobs stay with responsible people using fair, agreed criteria.",
-    ),
-    q(
-      "stakes",
-      "Which situation needs the most careful human involvement?",
-      [
-        "AI drafts a reminder about a meeting.",
-        "AI suggests a font for a poster.",
-        "AI answers a question about medicine doses.",
-      ],
-      2,
-      "The more serious the consequences, the more careful the check. Health questions need a qualified person.",
     ),
   ],
   "a-new-helper": [

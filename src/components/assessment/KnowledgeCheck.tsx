@@ -27,7 +27,7 @@ export function KnowledgeCheck({
   endpoint = `/api/assessments/${slug}`,
   kicker = "Step 2 · Check it",
   title = "Your knowledge check",
-  intro = "10 quick questions about this lesson. Get 7 or more right to pass. You can try again as many times as you need.",
+  intro = "5 quick questions about this lesson. Get 4 or more right to pass. You can try again as many times as you need.",
   noun = "knowledge check",
   afterPass,
 }: {

@@ -26,7 +26,7 @@ const learningMethods = [
   {
     number: "02",
     title: "Check it",
-    body: "Answer a few quick questions. Get 7 in 10 right to pass, and retry as often as you need.",
+    body: "Answer 5 quick questions. Get 4 right to pass, and retry as often as you need.",
     accent: "bg-peach",
   },
   {
