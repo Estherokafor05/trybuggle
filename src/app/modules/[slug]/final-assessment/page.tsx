@@ -7,6 +7,7 @@ import { Requirements } from "@/components/certificate/Requirements";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { stepLabel } from "@/content/journey";
 import { getModule } from "@/content/modules";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { passMark } from "@/lib/assessment-scoring";
@@ -33,6 +34,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(certificateHref)}`;
   const count = moduleAssessmentBank[slug].length;
   const lastLesson = mod.lessons.at(-1)!;
+  const unit = mod.order === 1 ? "lesson" : "episode";
 
   return (
     <>
@@ -63,18 +65,16 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
             <span className="rounded-full bg-white/80 px-3 py-1.5">No time limit</span>
           </p>
         </header>
-        {slug === "ai-foundations" && (
-          <div className="mt-3 sm:mt-5">
-            <JourneyProgress current="final-assessment" />
-          </div>
-        )}
+        <div className="mt-3 sm:mt-5">
+          <JourneyProgress current="final-assessment" moduleSlug={slug} />
+        </div>
         <KnowledgeCheck
           slug={slug}
           signedIn={signedIn}
           endpoint={`/api/modules/${slug}/final-assessment`}
           kicker={`Module ${mod.order} · Final assessment`}
           title="Your refresher"
-          intro={`${count} questions covering every lesson in this module. Get ${passMark(count)} or more right to pass. There is no time limit, and you can try again as many times as you need.`}
+          intro={`${count} questions covering every ${unit} in this module. Get ${passMark(count)} or more right to pass. There is no time limit, and you can try again as many times as you need.`}
           noun="final assessment"
           afterPass={
             <Link
@@ -102,10 +102,10 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
             href={`/modules/${slug}/lessons/${lastLesson.slug}`}
             className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
           >
-            <span aria-hidden="true">←</span> Previous: Lesson {mod.lessons.length}
+            <span aria-hidden="true">←</span> Previous: {stepLabel(mod.order, mod.lessons.length - 1)}
           </Link>
           <Link href={`/modules/${slug}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
-            All Module {mod.order} lessons
+            All Module {mod.order} {unit}s
           </Link>
         </nav>
       </main>

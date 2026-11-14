@@ -64,3 +64,14 @@ test("5-question checks pass with 4 correct", () => {
   assert.equal(scoreAssessment(five, answers(4), 5).passed, true);
   assert.equal(scoreAssessment(five, answers(3), 5).passed, false);
 });
+
+test("Module 2 final assessment: 6 questions, 5 to pass, one or more per episode", async () => {
+  const { moduleAssessmentBank } = await import("../src/server/assessment-bank.ts");
+  const questions = moduleAssessmentBank["talking-to-ai"];
+  assert.equal(questions.length, 6);
+  const journey = readFileSync(new URL("../src/content/journey.ts", import.meta.url), "utf8");
+  assert.match(journey, /"ai-foundations": 8, "talking-to-ai": 6/, "journey question counts match the banks");
+  assert.equal(moduleAssessmentBank["ai-foundations"].length, 8);
+  assert.equal(passMark(6), 5);
+  for (const ep of ["2.1", "2.2", "2.3", "2.4", "2.5"]) assert.ok(questions.some((q) => q.explanation.includes(`Episode ${ep}`)), ep);
+});

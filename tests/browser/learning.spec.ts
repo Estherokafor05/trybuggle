@@ -1094,3 +1094,61 @@ test("Episode 2.5: spot what to check, ask without steering, a 5-question check 
     await context.close();
   }
 });
+
+test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certificate", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await signIn(context);
+  const page = await context.newPage();
+  const final = moduleAssessmentBank["talking-to-ai"];
+  expect(final).toHaveLength(6);
+
+  // The module page offers the final assessment and the certificate.
+  await page.goto("/modules/talking-to-ai");
+  await expect(page.getByText("Then · 6 questions")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Certificate of Completion" })).toBeVisible();
+
+  // Fail with 4 of 6, then pass with 5 of 6.
+  await page.goto("/modules/talking-to-ai/final-assessment");
+  await expect(page.getByRole("heading", { name: "Final assessment", level: 1 })).toBeVisible();
+  await expect(page.getByText("5 to pass")).toBeVisible();
+  await expect(page.getByRole("link", { name: /Previous: Episode 2.5/ })).toBeVisible();
+  await page.getByRole("button", { name: "Open the final assessment" }).click();
+  const answer = async (correct: number) => {
+    for (const [i, q] of final.entries())
+      await page.locator(`input[name="${q.id}"][value="${i < correct ? q.correct : q.options.find((o) => o.id !== q.correct)!.id}"]`).check();
+    await page.getByRole("button", { name: "Submit final assessment" }).click();
+  };
+  await answer(4);
+  await expect(page.getByText("4 of 6 correct")).toBeVisible();
+  await page.getByRole("button", { name: "Retry this assessment" }).click();
+  await answer(5);
+  await expect(page.getByText("Final assessment passed")).toBeVisible();
+  await expect(page.getByText("5 of 6 correct")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.waitForTimeout(800);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // Episodes are listed by their episode numbers; pass them all, then create the certificate.
+  await page.goto("/modules/talking-to-ai/certificate");
+  await expect(page.getByText("Episode 2.3 knowledge check", { exact: true })).toBeVisible();
+  await expect(page.getByText("1 of 6 done")).toBeVisible();
+  for (const slug of ["a-new-helper", "the-email-that-said-nothing", "three-tries-at-the-flyer", "thirty-pages-by-friday", "the-grant-that-didnt-exist"]) {
+    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
+    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
+      headers: { Origin: base },
+      data: { version: 1, submissionKey: randomUUID(), answers },
+    });
+    expect(response.status()).toBe(200);
+  }
+  await page.reload();
+  await expect(page.getByText("6 of 6 done")).toBeVisible();
+  await page.getByRole("button", { name: "Create my certificate" }).click();
+  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
+  expect(await page.locator("dd.font-mono").textContent()).toMatch(/^BL-M2-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
+  const pdf = await context.request.get(base + "/api/me/certificates/talking-to-ai/pdf");
+  expect(pdf.status()).toBe(200);
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  await page.waitForTimeout(800);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await context.close();
+});

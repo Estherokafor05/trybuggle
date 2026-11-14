@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
+import { finalQuestionCount } from "@/content/journey";
 import { TRACK_LABELS, getModule, modules } from "@/content/modules";
 import { getBuiltLesson } from "@/content/preview-lessons";
 import { auth } from "@/auth";
@@ -44,6 +45,7 @@ export default async function ModulePage({
   const isFoundations = mod.order === 1;
   const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));
   const unit = isFoundations ? "lessons" : "episodes";
+  const finalCount = finalQuestionCount[slug];
 
   return (
     <>
@@ -168,11 +170,11 @@ export default async function ModulePage({
                 );
               })}
             </ol>
-            {isFoundations && (
+            {finalCount && (
               <ol start={mod.lessons.length + 1} className="mt-3 grid gap-3 sm:grid-cols-2">
                 <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-lavender p-5 hover:border-brand/35">
                   <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                    Then · 8 questions
+                    Then · {finalCount} questions
                   </span>
                   <h3 className="mt-4 text-lg font-bold text-ink">
                     <Link
@@ -183,7 +185,7 @@ export default async function ModulePage({
                     </Link>
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">
-                    A short refresher across all five lessons. No time limit.
+                    A short refresher across all {mod.lessons.length} {unit}. No time limit.
                   </p>
                   <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
                     Take the refresher →

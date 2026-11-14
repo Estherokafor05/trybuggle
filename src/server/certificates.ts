@@ -1,6 +1,7 @@
 // Module completion and certificate rules. All checks run on the server
 // from stored assessment results; nothing the browser sends is trusted.
 import { randomInt, randomUUID } from "node:crypto";
+import { stepLabel } from "@/content/journey";
 import { getModule } from "@/content/modules";
 import { moduleAssessmentBank } from "./assessment-bank";
 import { db } from "./database";
@@ -37,7 +38,7 @@ export async function moduleRequirements(learner: string, moduleSlug: string) {
   const requirements: Requirement[] = [
     ...mod.lessons.map((l, i) => ({
       id: l.slug,
-      label: `Lesson ${i + 1} knowledge check`,
+      label: `${stepLabel(mod.order, i)} knowledge check`,
       title: l.title,
       href: `/modules/${moduleSlug}/lessons/${l.slug}#knowledge-check`,
       passedAt: iso(passedAt.get(l.slug)),

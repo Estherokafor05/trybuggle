@@ -955,4 +955,72 @@ export const moduleAssessmentBank: Record<string, Question[]> = {
       "People will rely on the summary, so check it against the source. Asking the same tool is not an independent check. (Lesson 5)",
     ),
   ],
+  "talking-to-ai": [
+    q(
+      "delivery-date",
+      "A chat tool writes a friendly reply to a customer that includes a delivery date. What should you do before sending it?",
+      [
+        "Send it, because it sounds confident.",
+        "Check the date and any other details someone will rely on.",
+        "Ask the chat tool if it is sure.",
+      ],
+      1,
+      "Sounding confident is not the same as being right. Check the details someone will rely on. (Episode 2.1)",
+    ),
+    q(
+      "least-to-guess",
+      "Which request gives a chat tool the least to guess?",
+      [
+        "Write a message about the meeting.",
+        "Write a really professional message.",
+        "Write a short, polite message to the parents\u2019 group moving Thursday\u2019s meeting to 6 pm in the school library.",
+      ],
+      2,
+      "It says who it is for, what it should say, when and where, and how it should sound. (Episode 2.2)",
+    ),
+    q(
+      "leave-out",
+      "You want help writing a reminder to your team. What should you leave out of the chat?",
+      [
+        "Your colleagues\u2019 phone numbers and home addresses.",
+        "What the reminder is about.",
+        "The tone you want.",
+      ],
+      0,
+      "Give the tool what it needs to write, not other people\u2019s personal details. (Episode 2.2)",
+    ),
+    q(
+      "close-draft",
+      "A draft is close but too long. What is the most useful next message?",
+      [
+        "Start again.",
+        "Keep the date and place. Make it no more than three sentences.",
+        "Make it better.",
+      ],
+      1,
+      "Keep the conversation going, and say what to keep and what to change. (Episode 2.3)",
+    ),
+    q(
+      "rental-summary",
+      "A chat tool summarises a 20-page rental agreement. Before signing, what should you do?",
+      [
+        "Trust it, because summaries cover everything.",
+        "Ask for an even shorter summary.",
+        "Read the parts about money, notice and your responsibilities in the original, and look for anything missing.",
+      ],
+      2,
+      "Go back to the parts of the original that matter most, and look for what is missing as well as what is there. (Episode 2.4)",
+    ),
+    q(
+      "benefit-claim",
+      "A chat tool tells you about a benefit you can claim, with an amount and a link. What should you do before applying?",
+      [
+        "Check the official website or ask a qualified adviser for the current rules.",
+        "Apply straight away, because the link looks real.",
+        "Ask the chat tool \u201cI qualify, right?\u201d",
+      ],
+      0,
+      "For anything about your money, health or legal rights, check with a reliable source or a qualified person before you act. (Episode 2.5)",
+    ),
+  ],
 };

@@ -18,8 +18,13 @@ export interface JourneyStep {
   duration?: string;
 }
 
-/** Modules that end with a final assessment page today. */
-const withFinal = new Set(["ai-foundations"]);
+/** Modules that end with a final assessment, and its number of questions. */
+export const finalQuestionCount: Record<string, number> = { "ai-foundations": 8, "talking-to-ai": 6 };
+
+/** "Lesson 3" in Module 1, "Episode 2.3" in later modules. */
+export function stepLabel(order: number, index: number) {
+  return order === 1 ? `Lesson ${index + 1}` : `Episode ${order}.${index + 1}`;
+}
 
 export function journeyFor(moduleSlug: string): JourneyStep[] {
   const mod = getModule(moduleSlug);
@@ -29,7 +34,7 @@ export function journeyFor(moduleSlug: string): JourneyStep[] {
     const built = getBuiltLesson(lesson.slug);
     return {
       id: lesson.slug,
-      label: first ? `Lesson ${index + 1}` : `Episode ${mod.order}.${index + 1}`,
+      label: stepLabel(mod.order, index),
       title: lesson.title,
       href: `/modules/${mod.slug}/lessons/${lesson.slug}`,
       available: Boolean(built),
@@ -47,7 +52,7 @@ export function journeyFor(moduleSlug: string): JourneyStep[] {
       free: true,
       duration: "2 minutes",
     });
-  if (withFinal.has(mod.slug))
+  if (finalQuestionCount[mod.slug])
     steps.push({
       id: "final-assessment",
       label: "Final assessment",
@@ -55,7 +60,7 @@ export function journeyFor(moduleSlug: string): JourneyStep[] {
       href: `/modules/${mod.slug}/final-assessment`,
       available: true,
       free: true,
-      duration: "8 questions",
+      duration: `${finalQuestionCount[mod.slug]} questions`,
     });
   return steps;
 }
