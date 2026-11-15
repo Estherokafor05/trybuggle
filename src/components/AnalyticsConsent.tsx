@@ -26,7 +26,7 @@ export function AnalyticsConsent() {
       <p className="mt-1 text-sm leading-relaxed text-muted">
         We&apos;re testing Buggle Learn. With your OK, we&apos;ll see which pages you use and where
         things go wrong, including recordings of your visit with anything you type hidden. No
-        adverts, ever.{" "}
+        adverts, ever. If you say no, we only count visits and errors anonymously, without cookies.{" "}
         <Link href="/privacy#analytics" className="font-semibold text-navy underline underline-offset-4">
           Learn more
         </Link>

@@ -111,17 +111,24 @@ export default function PrivacyPage() {
           <p>We do not sell your information, and we do not use it for advertising.</p>
         </Section>
 
-        <Section id="analytics" title="Usage data (only if you agree)">
+        <Section id="analytics" title="Usage data">
           <p>
-            While Buggle Learn is in testing, we ask whether you are happy to share usage data. If
-            you agree, we use a service called PostHog to see which pages you visit, what you click,
-            where you get stuck, and any errors the site shows you. This includes recordings of your
-            visit, so we can see where the site is confusing.
+            We use a service called PostHog to understand how Buggle Learn is used. For everyone,
+            we count which pages are visited and any errors the site shows, anonymously. This does
+            not use cookies or store anything in your browser, and it does not identify you:
+            PostHog counts visits using a code that changes every day and cannot be traced back to
+            you.
+          </p>
+          <p>
+            While Buggle Learn is in testing, we also ask whether you are happy to share more. If
+            you agree, we also see what you click and where you get stuck, linked across your
+            visits, including recordings of your visit so we can see where the site is confusing.
           </p>
           <p>
             Anything you type, such as notes, answers in text boxes and names, is hidden in these
             recordings, and so is your name and email address on your account page. We use this
-            only to improve Buggle Learn. If you say no, none of this is collected.
+            only to improve Buggle Learn. If you say no, only the anonymous counts above are
+            collected.
           </p>
           <p>You can change your choice at any time:</p>
           <AnalyticsChoiceControl />
@@ -133,7 +140,7 @@ export default function PrivacyPage() {
             <li>Google, for sign-in.</li>
             <li>Vercel, which hosts the website.</li>
             <li>Neon, which stores accounts and progress.</li>
-            <li>PostHog, for usage data and error reports, only if you agree. It stores this data in the European Union.</li>
+            <li>PostHog, for anonymous visit counts and error reports, and fuller usage data only if you agree. It stores this data in the European Union.</li>
           </List>
           <p>
             Our website and database run on servers in the United Kingdom. Our service providers

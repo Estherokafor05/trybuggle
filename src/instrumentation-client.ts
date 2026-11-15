@@ -1,9 +1,9 @@
-// Starts analytics before the app is interactive, but only for learners who
-// already agreed to it on a previous visit. See src/lib/analytics.ts.
-import { analyticsChoice, startAnalytics } from "./lib/analytics";
+// Starts analytics before the app is interactive: anonymous and cookieless for
+// everyone, full tracking only for learners who agreed. See src/lib/analytics.ts.
+import { startAnalytics } from "./lib/analytics";
 
 try {
-  if (analyticsChoice() === "yes") void startAnalytics();
+  void startAnalytics();
 } catch {
   // Analytics must never break the site.
 }
