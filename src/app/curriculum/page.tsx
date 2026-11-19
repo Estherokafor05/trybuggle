@@ -19,7 +19,7 @@ const TRACK_NOTES: Record<Track, string> = {
   practice: "After Module 3, choose a path for your job or everyday life. Each ends with a helper card you can use in any AI tool.",
 };
 
-const PATHS = [
+const PATHS: { name: string; note: string; href?: string; status?: string }[] = [
   { name: "Office and Admin", note: "Forms, minutes, reports and rotas" },
   { name: "Students", note: "Study, research and honest writing" },
   { name: "Small Business", note: "Posts, customer replies and planning" },
@@ -27,6 +27,7 @@ const PATHS = [
   { name: "Sales and Customer Service", note: "Replies, follow-ups and complaints" },
   { name: "Nurses", note: "Handovers, families and safe care" },
   { name: "Teachers", note: "Lesson plans, feedback and fair marking" },
+  { name: "AI for Testers", note: "Agents for QA work, and how to test AI features", href: "/testers", status: "Early access" },
 ];
 
 const TRACK_COLOURS: Record<Track, string> = {
@@ -137,9 +138,19 @@ export default function CurriculumPage() {
               {track === "practice" ? (
                 <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {PATHS.map((path) => (
-                    <li key={path.name} className="rounded-3xl border border-line bg-white p-5">
-                      <p className="text-xs font-semibold text-muted">Coming after Module 3</p>
-                      <p className="mt-2 text-lg font-bold text-ink">{path.name}</p>
+                    <li key={path.name} className="relative rounded-3xl border border-line bg-white p-5 has-[a:hover]:border-brand">
+                      <p className={`text-xs font-semibold ${path.status ? "text-brand-deep" : "text-muted"}`}>
+                        {path.status ?? "Coming after Module 3"}
+                      </p>
+                      <p className="mt-2 text-lg font-bold text-ink">
+                        {path.href ? (
+                          <Link href={path.href} className="after:absolute after:inset-0 after:rounded-3xl hover:underline">
+                            {path.name}
+                          </Link>
+                        ) : (
+                          path.name
+                        )}
+                      </p>
                       <p className="mt-1 text-sm leading-relaxed text-muted">{path.note}</p>
                     </li>
                   ))}

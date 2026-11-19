@@ -1169,6 +1169,31 @@ test("sign-in asks learners to confirm they are 16 or over", async ({ page }) =>
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 
+test("a sign-in from before saved learning reaches the sign-in form instead of looping", async ({ browser }) => {
+  // Older session cookies carry no learner ID. The account page sends them to sign-in,
+  // so sign-in must not bounce them straight back.
+  const context = await browser.newContext();
+  const cookie = await encode({
+    token: { sub: randomUUID(), name: "Older learner" },
+    secret: process.env.AUTH_SECRET!,
+    salt: "authjs.session-token",
+    maxAge: 3600,
+  });
+  await context.addCookies([
+    { name: "authjs.session-token", value: cookie, url: base, httpOnly: true, sameSite: "Lax" },
+  ]);
+  const page = await context.newPage();
+  await page.goto("/account");
+  await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Faccount/);
+  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  // The same from the privacy page link.
+  await page.goto("/privacy");
+  await page.getByRole("link", { name: "your account page" }).first().click();
+  await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Faccount/);
+  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  await context.close();
+});
+
 test("a signed-in learner can delete their account and everything stored for it", async ({ browser }) => {
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const context = await browser.newContext({ viewport });
@@ -1304,4 +1329,40 @@ test("Episode 2.1's film asks its approved question at 1:15", async ({ page }) =
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: /Check the details someone will rely on/ }).click();
   await expect(dialog.getByText("✓ Right.")).toBeVisible();
+});
+
+test("AI for Testers page shows the programme and saves early-access sign-ups", async ({ browser }) => {
+  const email = `qa-waitlist-${randomUUID()}@example.com`;
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  try {
+    for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+      const context = await browser.newContext({ viewport });
+      const page = await context.newPage();
+      // Reached from the "choose a path" list.
+      await page.goto("/curriculum");
+      await page.getByRole("link", { name: "AI for Testers" }).click();
+      await expect(page).toHaveURL(/\/testers$/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("You don't need Python to build with AI.");
+      await expect(page.getByRole("heading", { name: "Using AI and testing AI are two different jobs." })).toBeVisible();
+      await expect(page.locator("#curriculum ol > li")).toHaveCount(6);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      const consent = page.getByRole("button", { name: "No thanks" });
+      if (await consent.isVisible().catch(() => false)) await consent.click();
+      await page.waitForTimeout(600);
+      expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+      await page.getByRole("link", { name: "Get early access" }).click();
+      await page.getByLabel("Email").fill(email.toUpperCase());
+      await page.getByLabel("Where you're starting from").selectOption("QA lead or manager");
+      await page.getByRole("button", { name: "Get early access" }).click();
+      await expect(page.getByText("You're on the list.")).toBeVisible();
+      await context.close();
+    }
+    // Stored once, lower-cased; signing up again only updated the row.
+    const rows = await sql`SELECT role FROM waitlist_signups WHERE list='ai-for-testers' AND email=${email}`;
+    expect(rows).toEqual([{ role: "QA lead or manager" }]);
+  } finally {
+    await sql`DELETE FROM waitlist_signups WHERE email=${email}`;
+    await sql.end();
+  }
 });

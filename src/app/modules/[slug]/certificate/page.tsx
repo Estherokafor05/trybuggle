@@ -86,6 +86,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
                 You&apos;re nearly there. Your certificate becomes available as soon as everything below is ticked.
               </p>
             )}
+            {(loaded[1] || loaded[0].eligible) && <StartUsingAiCard slug={slug} />}
             {account && (loaded[1] || loaded[0].eligible) && <NextModule order={mod.order} />}
             <div className="mt-7">
               <Requirements requirements={loaded[0].requirements} />
@@ -143,6 +144,27 @@ function NextModule({ order }: { order: number }) {
           This module is being made. Its episodes will appear on the module page as soon as they are ready.
         </p>
       )}
+    </section>
+  );
+}
+
+/** After completing a module: a way into the free "start using AI" plans. */
+function StartUsingAiCard({ slug }: { slug: string }) {
+  return (
+    <section aria-labelledby="start-using-ai-title" className="mt-6 rounded-[1.75rem] bg-hero-lavender p-5 sm:p-6">
+      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Put it into practice</p>
+      <h2 id="start-using-ai-title" className="mt-2 text-xl font-bold">
+        Ready to use AI in your own life?
+      </h2>
+      <p className="mt-2 leading-relaxed text-ink">
+        Get a free, step-by-step plan for using AI in your job, your business or at home.
+      </p>
+      <Link
+        href={`/start-using-ai?from=${slug}`}
+        className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+      >
+        How can I start using AI? <span aria-hidden="true">→</span>
+      </Link>
     </section>
   );
 }

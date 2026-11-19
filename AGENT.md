@@ -6,7 +6,7 @@ Build a reliable, accessible AI literacy learning platform for people with littl
 
 The platform bridges the gap between technical AI knowledge and everyday understanding.
 
-This is a broad public education initiative, not a QA-specific or Testers Connect product.
+This is a broad public education initiative. One specialist programme sits alongside it: **AI for Testers** (`/testers`), an early-access course for software testers, open to Testers Connect members first (approved by the user, 16 Nov 2026). Its six-module outline lives in `src/content/testers.ts`; early-access sign-ups are stored in `waitlist_signups`. The rest of the platform stays general-audience.
 
 The primary goal is to help learners understand AI through plain-language explanations, visual learning, guided practice, and verified assessments.
 
@@ -92,6 +92,7 @@ The detailed curriculum and scope of later modules require approval.
 - All of Module 1 (lessons, guides, knowledge checks and the final assessment) is open without an account. Learners sign up only to get their certificate. Guest results are still scored on the server against an anonymous cookie ID and move into the account at sign-up; never trust browser-submitted scores.
 - Accessibility target: WCAG 2.2 AA.
 - Buggle Learn is completely free. Every module, lesson, knowledge check, assessment and certificate is free, with no payments, paid tiers, subscriptions or paywalls. Do not add pricing, payment, upgrade or subscription prompts, and do not integrate a payment provider.
+- Start using AI (approved 19 Nov 2026, from learner feedback): after completing a module, the certificate page links to `/start-using-ai`, which gives a free starter plan for job, business or home, then an interest list for personal AI setup help (a separate paid service, planned). The list stores email + situation in `waitlist_signups` (list `ai-setup-help`). No payment is taken in the app and courses stay free; building checkout needs separate approval. Starter-plan wording in `src/content/use-ai.ts` awaits the user's review.
 - Questions per knowledge check: 5, with 4 correct to pass (decided 13 November 2026; the live Module 1 checks still have 10 until they are trimmed).
 - No fixed retry limit. After a failed assessment, learners review feedback and retry that assessment only; they do not restart lessons or modules, and completed progress is preserved.
 - All required Module 1 lessons and quizzes must be passed before certificate eligibility.

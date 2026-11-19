@@ -1,0 +1,142 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "duration": 40,
+  "audioDuration": 38.43,
+  "scenes": [
+    {
+      "id": "morning",
+      "title": "Before she's out of bed",
+      "description": "Maya asks a chat tool whether a one-word reply means her friend is still annoyed.",
+      "start": 0,
+      "end": 6.45
+    },
+    {
+      "id": "lunch",
+      "title": "By lunch",
+      "description": "The chat tool helps Maya tackle a to-do list she has been avoiding since Monday.",
+      "start": 6.45,
+      "end": 11.7
+    },
+    {
+      "id": "six",
+      "title": "By six",
+      "description": "Maya texts the group chat that she has found a rooftop restaurant for dinner under £25.",
+      "start": 11.7,
+      "end": 17.56
+    },
+    {
+      "id": "car-park",
+      "title": "The rooftop",
+      "description": "The lift doors open onto a rooftop car park: parking bays and a Toyota.",
+      "start": 17.56,
+      "end": 21.53
+    },
+    {
+      "id": "next-time",
+      "title": "Next time",
+      "description": "Next time, Maya asks for three places with links to their menus.",
+      "start": 21.53,
+      "end": 28.88
+    },
+    {
+      "id": "end",
+      "title": "Buggle Learn",
+      "description": "Buggle Learn helps you ask better questions and know what to double-check. Short, free AI lessons.",
+      "start": 28.88,
+      "end": 40
+    }
+  ],
+  "cues": [
+    {
+      "scene": "morning",
+      "text": "Before she’s even out of bed, Maya’s asking ChatGPT, “Does ‘fine’ mean he’s still annoyed?”",
+      "start": 0.12,
+      "end": 6.2,
+      "index": 0
+    },
+    {
+      "scene": "lunch",
+      "text": "By lunch, it’s helping her figure out how to get through a to-do list she’s been avoiding since Monday.",
+      "start": 6.7,
+      "end": 11.46,
+      "index": 1
+    },
+    {
+      "scene": "six",
+      "text": "By six, she’s texted the group chat.",
+      "start": 11.94,
+      "end": 13.94,
+      "index": 2
+    },
+    {
+      "scene": "six",
+      "text": "“Found us a rooftop for dinner. Under £25!”",
+      "start": 14.3,
+      "end": 17.32,
+      "index": 3
+    },
+    {
+      "scene": "car-park",
+      "text": "The lift doors open.",
+      "start": 17.8,
+      "end": 18.82,
+      "index": 4
+    },
+    {
+      "scene": "car-park",
+      "text": "Parking bays.",
+      "start": 19.34,
+      "end": 20.08,
+      "index": 5
+    },
+    {
+      "scene": "car-park",
+      "text": "A Toyota.",
+      "start": 20.58,
+      "end": 21.24,
+      "index": 6
+    },
+    {
+      "scene": "next-time",
+      "text": "Next time the group chat asks where they’re eating, Maya adds one line to her prompt.",
+      "start": 21.82,
+      "end": 25.82,
+      "index": 7
+    },
+    {
+      "scene": "next-time",
+      "text": "“Give me three places and link me to their menus.”",
+      "start": 26.22,
+      "end": 28.64,
+      "index": 8
+    },
+    {
+      "scene": "end",
+      "text": "Already using AI to get through your day?",
+      "start": 29.12,
+      "end": 31.06,
+      "index": 9
+    },
+    {
+      "scene": "end",
+      "text": "Buggle Learn helps you ask better questions and know what to double-check.",
+      "start": 31.5,
+      "end": 34.8,
+      "index": 10
+    },
+    {
+      "scene": "end",
+      "text": "Short, free AI lessons.",
+      "start": 35.24,
+      "end": 36.86,
+      "index": 11
+    },
+    {
+      "scene": "end",
+      "text": "Try your first one today.",
+      "start": 37.16,
+      "end": 38.26,
+      "index": 12
+    }
+  ]
+}

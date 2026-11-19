@@ -26,7 +26,9 @@ export default async function SignInPage({
   const forCertificate = returnTo.includes("/certificate");
   if (googleAuthConfigured) {
     const session = await auth();
-    if (session?.user) redirect(returnTo);
+    // Sessions from before saved learning have no learner ID; let those sign in again
+    // (the account page sends them here, so redirecting back would loop).
+    if (session?.user?.id) redirect(returnTo);
   }
 
   async function continueWithGoogle(formData: FormData) {
