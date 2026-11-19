@@ -1,15 +1,11 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { db } from "@/server/database";
+import { WAITLIST_ROLES } from "@/content/testers";
+import { sendToSheet } from "@/server/waitlist-sheet";
 
 /**
- * Waitlist signup.
- *
- * Nothing is stored yet. This route validates the request and returns a
- * `stored: false` response so the form can tell the truth to whoever fills
- * it in. Swap the marked section for a real write when you pick a store:
- * Postgres, Supabase, Airtable, a Google Sheet, whatever you want to own.
- *
- * Keep the shape of the response: the form reads `stored` to decide what
- * message to show.
+ * Early-access sign-up for AI for Testers. Stores email + role, then copies the
+ * sign-up to the team's Google Sheet after responding. The form reads `stored`.
  */
 
 export interface WaitlistSignup {
@@ -23,13 +19,7 @@ export interface WaitlistResponse {
   message: string;
 }
 
-const ROLES = [
-  "Manual tester, no code",
-  "Automation engineer",
-  "QA lead or manager",
-  "Developer who tests",
-  "Something else",
-];
+const LIST = "ai-for-testers";
 
 function isValidEmail(value: unknown): value is string {
   return (
@@ -52,8 +42,9 @@ export async function POST(request: Request) {
   }
 
   const { email, role } = (body ?? {}) as Partial<WaitlistSignup>;
+  const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : email;
 
-  if (!isValidEmail(email)) {
+  if (!isValidEmail(cleanEmail)) {
     return NextResponse.json<WaitlistResponse>(
       {
         ok: false,
@@ -64,22 +55,31 @@ export async function POST(request: Request) {
     );
   }
 
-  const chosenRole = ROLES.includes(role ?? "") ? role! : ROLES[ROLES.length - 1];
+  const roles: readonly string[] = WAITLIST_ROLES;
+  const chosenRole = roles.includes(role ?? "") ? role! : roles[roles.length - 1];
 
-  // --- Replace this block with a real write. ---------------------------
-  // await db.insert(waitlist).values({ email, role: chosenRole });
-  // return NextResponse.json<WaitlistResponse>({
-  //   ok: true,
-  //   stored: true,
-  //   message: "You're on the list. We'll email you when module 1 opens.",
-  // });
-  void chosenRole;
-  // ---------------------------------------------------------------------
+  try {
+    const [row] = await db()<{ inserted: boolean }[]>`
+      INSERT INTO waitlist_signups (list, email, role)
+      VALUES (${LIST}, ${cleanEmail}, ${chosenRole})
+      ON CONFLICT (list, email) DO UPDATE SET role = EXCLUDED.role, updated_at = now()
+      RETURNING (xmax = 0) AS inserted
+    `;
+    after(() => sendToSheet({ list: LIST, email: cleanEmail, role: chosenRole, newSignup: Boolean(row?.inserted) }));
+  } catch {
+    return NextResponse.json<WaitlistResponse>(
+      {
+        ok: false,
+        stored: false,
+        message: "That did not go through on our side. Try again in a moment.",
+      },
+      { status: 503 },
+    );
+  }
 
   return NextResponse.json<WaitlistResponse>({
     ok: true,
-    stored: false,
-    message:
-      "Signups are not being stored yet. This form is not connected to anything.",
+    stored: true,
+    message: "You're on the list. We'll email you once, when Module 1 opens.",
   });
 }

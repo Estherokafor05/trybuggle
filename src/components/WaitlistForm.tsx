@@ -1,23 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import type { WaitlistResponse } from "@/app/api/waitlist/route";
-
-const ROLES = [
-  "Manual tester, no code",
-  "Automation engineer",
-  "QA lead or manager",
-  "Developer who tests",
-  "Something else",
-];
+import { WAITLIST_ROLES as ROLES } from "@/content/testers";
 
 const RESTING_NOTE = "One email when module 1 opens. Nothing else.";
 
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState(ROLES[0]);
+  const [role, setRole] = useState<string>(ROLES[0]);
   const [note, setNote] = useState(RESTING_NOTE);
   const [sending, setSending] = useState(false);
+  const [joined, setJoined] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  const doneRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // Move focus (and the view) to the confirmation so it can't be missed.
+    if (joined) doneRef.current?.focus();
+  }, [joined]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,12 +31,34 @@ export function WaitlistForm() {
         body: JSON.stringify({ email, role }),
       });
       const result: WaitlistResponse = await response.json();
-      setNote(result.message);
+      if (result.ok && result.stored) {
+        setJoined(email.trim());
+      } else {
+        setFailed(true);
+        setNote(result.message);
+      }
     } catch {
+      setFailed(true);
       setNote("That did not go through. Try again in a moment.");
     } finally {
       setSending(false);
     }
+  }
+
+  if (joined) {
+    return (
+      <div
+        ref={doneRef}
+        tabIndex={-1}
+        role="status"
+        className="scroll-mt-28 rounded-2xl border-2 border-teal bg-mint p-5 text-ink outline-none"
+      >
+        <p className="text-lg font-bold">You&apos;re on the list.</p>
+        <p className="mt-1.5 leading-relaxed">
+          We&apos;ll email <span className="font-semibold break-all">{joined}</span> once, when Module 1 opens.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -79,13 +102,23 @@ export function WaitlistForm() {
       <button
         type="submit"
         disabled={sending}
-        className="rounded-[9px] bg-brand px-5 py-2.5 text-[0.92rem] font-semibold text-white transition-colors hover:bg-brand-deep disabled:opacity-60"
+        className="min-h-11 rounded-[9px] bg-brand-deep px-5 py-2.5 text-[0.92rem] font-semibold text-white transition-colors hover:bg-navy disabled:opacity-60"
       >
         {sending ? "Sending…" : "Get early access"}
       </button>
 
-      <p className="text-[0.8rem] text-muted" aria-live="polite">
+      <p
+        className={failed ? "rounded-xl bg-peach/60 p-3 text-sm text-ink" : "text-[0.8rem] text-muted"}
+        aria-live="polite"
+      >
         {note}
+      </p>
+      <p className="text-[0.8rem] text-muted">
+        We keep your email and role only to send that email. See our{" "}
+        <Link href="/privacy#waitlist" className="font-semibold text-navy underline underline-offset-4">
+          privacy policy
+        </Link>
+        .
       </p>
     </form>
   );

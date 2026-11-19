@@ -1,0 +1,170 @@
+{
+  "voice": "User-supplied ElevenLabs recording, 14 November 2026",
+  "duration": 42,
+  "audioDuration": 40.28,
+  "scenes": [
+    {
+      "id": "monday",
+      "title": "Monday",
+      "description": "Sam is laid off on a Monday.",
+      "start": 0,
+      "end": 2.69
+    },
+    {
+      "id": "evening",
+      "title": "That evening",
+      "description": "Sam scrolls job ads in the evening and one line stops the scroll: comfortable using AI tools.",
+      "start": 2.69,
+      "end": 11.14
+    },
+    {
+      "id": "unsure",
+      "title": "Where do you start?",
+      "description": "Sam has never opened an AI chat tool and does not know where to start.",
+      "start": 11.14,
+      "end": 15.17
+    },
+    {
+      "id": "lesson",
+      "title": "One free lesson",
+      "description": "Sam starts with one free Buggle Learn lesson.",
+      "start": 15.17,
+      "end": 18.17
+    },
+    {
+      "id": "friday",
+      "title": "By Friday",
+      "description": "By Friday, Sam writes a first prompt to improve a CV summary, checks the draft, changes a line and applies.",
+      "start": 18.17,
+      "end": 29.7
+    },
+    {
+      "id": "end",
+      "title": "Not too late",
+      "description": "Feeling left behind by AI? You are not the only one, and it is not too late. Buggle Learn: short, free AI lessons for everyone.",
+      "start": 29.7,
+      "end": 42
+    }
+  ],
+  "cues": [
+    {
+      "scene": "monday",
+      "text": "Monday.",
+      "start": 0.22,
+      "end": 0.66,
+      "index": 0
+    },
+    {
+      "scene": "monday",
+      "text": "Sam gets laid off.",
+      "start": 1.36,
+      "end": 2.42,
+      "index": 1
+    },
+    {
+      "scene": "evening",
+      "text": "That evening, Sam finds a job that looks like a good fit.",
+      "start": 2.96,
+      "end": 5.74,
+      "index": 2
+    },
+    {
+      "scene": "evening",
+      "text": "Then one line stops the scroll.",
+      "start": 6.22,
+      "end": 8.24,
+      "index": 3
+    },
+    {
+      "scene": "evening",
+      "text": "“Comfortable using AI tools.”",
+      "start": 8.78,
+      "end": 10.84,
+      "index": 4
+    },
+    {
+      "scene": "unsure",
+      "text": "Sam’s never even opened ChatGPT.",
+      "start": 11.44,
+      "end": 13.52,
+      "index": 5
+    },
+    {
+      "scene": "unsure",
+      "text": "Where do you start?",
+      "start": 14.02,
+      "end": 14.92,
+      "index": 6
+    },
+    {
+      "scene": "lesson",
+      "text": "Sam starts with one free Buggle Learn lesson.",
+      "start": 15.42,
+      "end": 17.94,
+      "index": 7
+    },
+    {
+      "scene": "friday",
+      "text": "By Friday, Sam tries a first prompt.",
+      "start": 18.4,
+      "end": 20.62,
+      "index": 8
+    },
+    {
+      "scene": "friday",
+      "text": "“Make my CV summary clearer. Keep it in my voice and stick to what I’ve actually done.”",
+      "start": 21.1,
+      "end": 25.92,
+      "index": 9
+    },
+    {
+      "scene": "friday",
+      "text": "Sam checks the draft, changes a line and hits Apply.",
+      "start": 26.46,
+      "end": 29.44,
+      "index": 10
+    },
+    {
+      "scene": "end",
+      "text": "Feeling left behind by AI?",
+      "start": 29.96,
+      "end": 31.42,
+      "index": 11
+    },
+    {
+      "scene": "end",
+      "text": "You're not the only one.",
+      "start": 31.86,
+      "end": 32.84,
+      "index": 12
+    },
+    {
+      "scene": "end",
+      "text": "And it's not too late.",
+      "start": 33.24,
+      "end": 34.54,
+      "index": 13
+    },
+    {
+      "scene": "end",
+      "text": "Buggle Learn.",
+      "start": 35,
+      "end": 35.6,
+      "index": 14
+    },
+    {
+      "scene": "end",
+      "text": "Short, free AI lessons, for everyone.",
+      "start": 35.98,
+      "end": 38.32,
+      "index": 15
+    },
+    {
+      "scene": "end",
+      "text": "Start with the basics today.",
+      "start": 38.76,
+      "end": 40.02,
+      "index": 16
+    }
+  ]
+}
