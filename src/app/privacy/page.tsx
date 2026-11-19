@@ -11,8 +11,7 @@ export const metadata: Metadata = {
   description: "What Buggle Learn collects while it is in beta, why, who it is shared with, and your choices.",
 };
 
-// TODO: add the privacy email address. Until then the page says it is coming soon.
-const PRIVACY_EMAIL = "";
+const PRIVACY_EMAIL = "buggle.privacy@proton.me";
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
@@ -22,14 +21,14 @@ function Section({ id, title, children }: { id: string; title: string; children:
     </section>
   );
 }
-function H3({ children }: { children: ReactNode }) {
-  return <h3 className="pt-1 font-bold text-navy">{children}</h3>;
+function H3({ id, children }: { id?: string; children: ReactNode }) {
+  return <h3 id={id} className="scroll-mt-24 pt-1 font-bold text-navy">{children}</h3>;
 }
 function List({ children }: { children: ReactNode }) {
   return <ul className="list-disc space-y-1 pl-5">{children}</ul>;
 }
 const email = PRIVACY_EMAIL ? (
-  <span className="font-semibold">{PRIVACY_EMAIL}</span>
+  <a href={`mailto:${PRIVACY_EMAIL}`} className="font-semibold underline">{PRIVACY_EMAIL}</a>
 ) : (
   <span className="font-semibold">our privacy email address (coming soon)</span>
 );
@@ -46,7 +45,7 @@ export default function PrivacyPage() {
             Buggle Learn is in beta testing. This policy explains what information we collect
             while you use it and what we do with it. We collect as little as we can.
           </p>
-          <p className="mt-3 text-sm text-navy">Last updated: 14 November 2026</p>
+          <p className="mt-3 text-sm text-navy">Last updated: 16 November 2026</p>
         </header>
 
         <Section id="who" title="Who we are">
@@ -85,6 +84,18 @@ export default function PrivacyPage() {
             </li>
             <li>The name you choose to show on your certificate.</li>
           </List>
+          <H3 id="waitlist">If you join an early-access list</H3>
+          <List>
+            <li>
+              Your email address and the role you pick, such as &ldquo;Manual tester, no code&rdquo;.
+              We use them only to email you once when that course opens. Joining a list does not
+              create an account.
+            </li>
+            <li>
+              If you join the list for personal AI setup help, we keep your email address and the
+              situation you chose (job, business or home), only to email you when that service opens.
+            </li>
+          </List>
           <H3>What stays on your device</H3>
           <List>
             <li>
@@ -97,7 +108,7 @@ export default function PrivacyPage() {
 
         <Section id="not" title="What we do not collect">
           <List>
-            <li>We do not ask for payment details. Buggle Learn is free.</li>
+            <li>We do not ask for payment details. Buggle Learn&apos;s courses are free.</li>
             <li>We do not show adverts or use advertising trackers. We only collect usage data if you agree (see “Usage data” below).</li>
             <li>No AI tool runs inside Buggle Learn, so nothing you type is sent to an AI company.</li>
           </List>
@@ -107,6 +118,7 @@ export default function PrivacyPage() {
           <List>
             <li>To save your progress and let you continue on another device.</li>
             <li>To mark your knowledge checks fairly and issue your certificate.</li>
+            <li>If you join an early-access list, to email you when that course opens.</li>
           </List>
           <p>We do not sell your information, and we do not use it for advertising.</p>
         </Section>
@@ -137,9 +149,9 @@ export default function PrivacyPage() {
         <Section id="share" title="Who we share it with">
           <p>We share information only with the service providers that run Buggle Learn for us:</p>
           <List>
-            <li>Google, for sign-in.</li>
+            <li>Google, for sign-in, and to keep our early-access list in a Google Sheet.</li>
             <li>Vercel, which hosts the website.</li>
-            <li>Neon, which stores accounts and progress.</li>
+            <li>Neon, which stores accounts, progress and early-access sign-ups.</li>
             <li>PostHog, for anonymous visit counts and error reports, and fuller usage data only if you agree. It stores this data in the European Union.</li>
           </List>
           <p>
@@ -165,7 +177,8 @@ export default function PrivacyPage() {
             straight away. If you ask us to delete it instead, we will do so within 30 days.
             Anonymous results that are never linked to an account are deleted automatically
             after {GUEST_RETENTION_MONTHS} months without any activity. Usage data and recordings
-            are kept by PostHog for no longer than 12 months.
+            are kept by PostHog for no longer than 12 months. Early-access sign-ups are deleted
+            within 12 months of the course opening, or sooner if you ask.
           </p>
         </Section>
 
