@@ -32,10 +32,11 @@ export function SiteHeader() {
   const setOpen = (value: boolean) => setOpenOn(value ? pathname : null);
   // Read the session in the browser so public pages can stay static.
   // Re-checked on every navigation, so the header updates after signing out.
-  const [account, setAccount] = useState<{ name: string } | null>(null);
+  // undefined while checking, so "Log in" does not flash for signed-in learners.
+  const [account, setAccount] = useState<{ name: string } | null | undefined>(undefined);
   useEffect(() => {
     let alive = true;
-    fetch("/api/auth/session", { cache: "no-store" })
+    fetch("/api/auth/get-session", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((session) => {
         if (alive) setAccount(session?.user ? { name: session.user.name ?? "" } : null);
@@ -96,6 +97,22 @@ export function SiteHeader() {
             Your account
           </Link>
         )}
+        {account === null && (
+          <div className="hidden items-center gap-1 md:flex">
+            <Link
+              href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender"
+            >
+              Log in
+            </Link>
+            <Link
+              href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
+              className="inline-flex min-h-11 items-center rounded-full bg-navy px-4 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              Sign up
+            </Link>
+          </div>
+        )}
         {account && (
           <form action={signOutAction} className="hidden md:block">
             <button
@@ -147,6 +164,24 @@ export function SiteHeader() {
             );
           })}
         </ul>
+        {account === null && (
+          <div className="mt-3 grid gap-2 border-t border-line/70 pt-3">
+            <Link
+              href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
+              onClick={() => setOpen(false)}
+              className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
+            >
+              Log in
+            </Link>
+            <Link
+              href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
+              onClick={() => setOpen(false)}
+              className="flex min-h-12 items-center justify-center rounded-2xl bg-navy px-4 text-base font-semibold text-white hover:bg-brand-deep"
+            >
+              Sign up
+            </Link>
+          </div>
+        )}
         {account && (
           <form action={signOutAction} className="mt-3 border-t border-line/70 pt-3">
             {account.name && (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { KnowledgeCheck } from "@/components/assessment/KnowledgeCheck";
 import { Requirements } from "@/components/certificate/Requirements";
 import { JourneyProgress } from "@/components/JourneyProgress";
@@ -9,7 +9,6 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { stepLabel } from "@course";
 import { getModule } from "@course";
-import { googleAuthConfigured } from "@/lib/auth-configured";
 import { passMark } from "@/lib/assessment-scoring";
 import { moduleAssessmentBank } from "@course/assessments";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
@@ -25,7 +24,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   const mod = getModule(slug);
   if (!mod || !hasFinalAssessment(slug)) notFound();
   const returnTo = `/modules/${slug}/final-assessment`;
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   if (!session?.user && !openToGuests(slug)) redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
   const signedIn = Boolean(session?.user?.id);
   const learner = session?.user?.id ?? (await guestId());

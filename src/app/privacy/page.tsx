@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             Buggle Learn is in beta testing. This policy explains what information we collect
             while you use it and what we do with it. We collect as little as we can.
           </p>
-          <p className="mt-3 text-sm text-navy">Last updated: 16 November 2026</p>
+          <p className="mt-3 text-sm text-navy">Last updated: 24 November 2026</p>
         </header>
 
         <Section id="who" title="Who we are">
@@ -61,28 +61,39 @@ export default function PrivacyPage() {
         </Section>
 
         <Section id="collect" title="What we collect">
-          <H3>If you use Buggle Learn without an account</H3>
+          <H3>When you create an account</H3>
           <List>
             <li>
-              An anonymous ID stored in a cookie on your device. It holds no personal details. We
-              use it to record your knowledge check and assessment results, so they count when
-              you sign up.
+              Your name and email address. You give us these when you sign up, or Google shares
+              them, with your profile picture, if you use Google. We use them to run your account,
+              show your name on certificates, and send emails you need, such as confirming your
+              email address or resetting your password.
             </li>
-          </List>
-          <H3>If you create an account</H3>
-          <List>
             <li>
-              Your name, email address and profile picture, which Google shares with us when you
-              sign in with Google. We use your name and email address only to show that you are
-              signed in. They are kept in an encrypted sign-in cookie in your browser, not in our
-              database.
+              Your password, if you choose one. We store it only in scrambled (hashed) form, so
+              nobody, including us, can read it.
             </li>
-            <li>An account number from Google, so we can recognise you on any device.</li>
+            <li>
+              If you link Google, an account number from Google, so you can log in with Google.
+            </li>
+            <li>
+              For each device you are logged in on: a session record with the date, your IP address
+              and your browser type. We use these to keep you logged in, to let you log out, and
+              to protect accounts from repeated guessing.
+            </li>
             <li>
               Your progress: where you are in each lesson, your knowledge check and assessment
               answers and results, and any certificates you earn.
             </li>
             <li>The name you choose to show on your certificate.</li>
+          </List>
+          <H3>If you used Buggle Learn before accounts were needed</H3>
+          <List>
+            <li>
+              An anonymous ID stored in a cookie on your device, with no personal details, linked
+              to the knowledge check and assessment results you earned. They move into your
+              account when you sign up or log in on that device.
+            </li>
           </List>
           <H3 id="waitlist">If you join an early-access list</H3>
           <List>
@@ -102,7 +113,6 @@ export default function PrivacyPage() {
               Notes you write in the “Your turn” activities. These are kept in your browser and
               are never sent to us.
             </li>
-            <li>If you have not signed in, your place in a lesson is also kept only in your browser.</li>
           </List>
         </Section>
 
@@ -149,7 +159,8 @@ export default function PrivacyPage() {
         <Section id="share" title="Who we share it with">
           <p>We share information only with the service providers that run Buggle Learn for us:</p>
           <List>
-            <li>Google, for sign-in, and to keep our early-access list in a Google Sheet.</li>
+            <li>Google, if you choose to log in with Google, and to keep our early-access list in a Google Sheet.</li>
+            <li>Resend, which sends account emails such as email confirmation and password reset.</li>
             <li>Vercel, which hosts the website.</li>
             <li>Neon, which stores accounts, progress and early-access sign-ups.</li>
             <li>PostHog, for anonymous visit counts and error reports, and fuller usage data only if you agree. It stores this data in the European Union.</li>
@@ -163,9 +174,9 @@ export default function PrivacyPage() {
 
         <Section id="cookies" title="Cookies">
           <p>
-            We use only the cookies needed to run the site: the cookies that keep you signed in
-            securely, and one anonymous ID for learners without an account. Signing out removes
-            the anonymous ID from that device. If you agree to share usage data, PostHog also
+            We use only the cookies needed to run the site: the cookies that keep you logged in
+            securely, and, on devices used before accounts were needed, one anonymous ID. Logging
+            in or out removes the anonymous ID from that device. If you agree to share usage data, PostHog also
             stores an ID in your browser to link your visits together.
           </p>
         </Section>
@@ -202,7 +213,7 @@ export default function PrivacyPage() {
 
         <Section id="age" title="Age">
           <p>
-            Buggle Learn is for people aged 16 and over. We ask you to confirm you are 16 or over
+            Buggle Learn is for people aged 15 and over. We ask you to confirm you are 15 or over
             when you create an account, and we do not knowingly collect information from anyone
             younger. If you believe a younger person has created an account, email us
             and we will delete it.

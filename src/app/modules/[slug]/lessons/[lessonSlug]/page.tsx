@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { createHash } from "node:crypto";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { LessonPreview } from "@/components/LessonPreview";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -10,7 +10,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getModule } from "@course";
 import { journeyPosition } from "@course";
 import { getBuiltLesson } from "@course";
-import { googleAuthConfigured } from "@/lib/auth-configured";
 import { db } from "@/server/database";
 import { guestId } from "@/server/guest";
 import { assessmentBank } from "@course/assessments";
@@ -57,22 +56,13 @@ export default async function LessonPage({
 
   const lessonIndex = mod.lessons.findIndex((item) => item.slug === lessonSlug);
   if (lessonIndex < 0) notFound();
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   const returnTo = `/modules/${slug}/lessons/${lessonSlug}`;
 
-  if (lesson && !lesson.preview && !session?.user) {
-    redirect(`/sign-in?callbackUrl=${encodeURIComponent(googleAuthConfigured ? returnTo : `/modules/${slug}`)}`);
-  }
+  // Anyone can browse modules, but learning needs an account (FRD Version 2).
+  if (!session?.user) redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
 
   if (!lesson) {
-    if (!googleAuthConfigured) {
-      redirect(
-        `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}`)}`,
-      );
-    }
-    if (!session?.user) {
-      redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
-    }
     return (
       <>
         <SiteHeader />
@@ -166,9 +156,6 @@ export default async function LessonPage({
               </span>
               <span className="rounded-full bg-white/80 px-3 py-1.5">
                 About {lesson.duration}
-              </span>
-              <span className="rounded-full bg-mint px-3 py-1.5">
-                No account needed
               </span>
             </p>
           </div>

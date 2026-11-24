@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { modules } from "@course";
 import { journey } from "@course";
-import { googleAuthConfigured } from "@/lib/auth-configured";
 import { guestId } from "@/server/guest";
 import { continuePoint } from "@/server/progress";
 
@@ -57,7 +56,7 @@ function Arrow() {
 }
 
 export default async function Home() {
-  const session = googleAuthConfigured ? await auth().catch(() => null) : null;
+  const session = await currentSession();
   const learner = session?.user?.id ?? (await guestId());
   const resume = learner ? await continuePoint(learner).catch(() => null) : null;
   return (
@@ -120,7 +119,7 @@ export default async function Home() {
               </Link>
             </div>
             <p className="mt-3 text-xs text-ink/75">
-              Free. No account needed to start.
+              Free. Create an account to start learning.
             </p>
           </div>
 
@@ -150,8 +149,8 @@ export default async function Home() {
               Start here
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-muted">
-              New to AI? Follow these steps in order. No account is needed to
-              learn. Sign up at the end of a module to get your certificate.
+              New to AI? Follow these steps in order. Create a free account to
+              start, and your progress is saved on any device.
             </p>
           </div>
           <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

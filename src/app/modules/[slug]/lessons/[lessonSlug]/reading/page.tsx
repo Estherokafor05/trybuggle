@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
-import { getBuiltLesson } from "@course";
+import { currentSession } from "@/auth";
 import { getModule } from "@course";
-import { googleAuthConfigured } from "@/lib/auth-configured";
 import { exploreGuides } from "@course";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -16,13 +14,12 @@ export default async function Reading({
   const { slug, lessonSlug } = await params;
   const guide = exploreGuides[lessonSlug];
   if (!getModule(slug)?.lessons.some((l) => l.slug === lessonSlug) || !guide) notFound();
-  if (!getBuiltLesson(lessonSlug)?.preview) {
-    const session = googleAuthConfigured ? await auth() : null;
-    if (!session?.user) {
-      redirect(
-        `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}/reading`)}`,
-      );
-    }
+  // Learning needs an account (FRD Version 2), in every format.
+  const session = await currentSession();
+  if (!session?.user) {
+    redirect(
+      `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}/reading`)}`,
+    );
   }
   return (
     <>
