@@ -46,6 +46,8 @@ export function KnowledgeCheck({
     [answers, setAnswers] = useState<Record<string, string>>({}),
     [result, setResult] = useState<Result | null>(null),
     [everPassed, setEverPassed] = useState(false),
+    // Null means unlimited tries (or already passed).
+    [attemptsLeft, setAttemptsLeft] = useState<number | null>(null),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
   const key = useRef<string>("");
@@ -63,6 +65,7 @@ export function KnowledgeCheck({
       setQuestions(data.questions);
       setResult(data.latest);
       setEverPassed(data.passed);
+      setAttemptsLeft(data.attemptsLeft ?? null);
       setSubmitted(false);
       key.current = crypto.randomUUID();
     } catch (e) {
@@ -92,7 +95,10 @@ export function KnowledgeCheck({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResult(data);
-      if (data.passed) setEverPassed(true);
+      if (data.passed) {
+        setEverPassed(true);
+        setAttemptsLeft(null);
+      } else setAttemptsLeft((left) => (left == null ? null : Math.max(0, left - 1)));
       requestAnimationFrame(() => heading.current?.focus());
     } catch (e) {
       setMessage(
@@ -184,11 +190,25 @@ export function KnowledgeCheck({
                   </li>
                 ))}
               </ol>
-              <button className={button + " mt-5"} onClick={retry}>
-                {result.passed
-                  ? `Practise this ${noun} again`
-                  : "Retry this assessment"}
-              </button>
+              {attemptsLeft === 0 && !everPassed ? (
+                <p className="mt-5 rounded-xl bg-peach p-4 leading-relaxed">
+                  You&apos;ve used all your tries for this {noun}. Contact Buggle Learn
+                  support to ask for another go.
+                </p>
+              ) : (
+                <>
+                  {attemptsLeft != null && !everPassed && (
+                    <p className="mt-5 text-sm font-semibold text-navy">
+                      {attemptsLeft} {attemptsLeft === 1 ? "try" : "tries"} left
+                    </p>
+                  )}
+                  <button className={button + " mt-5"} onClick={retry}>
+                    {result.passed
+                      ? `Practise this ${noun} again`
+                      : "Retry this assessment"}
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             questions.length > 0 && (

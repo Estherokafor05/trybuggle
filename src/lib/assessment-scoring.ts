@@ -5,12 +5,14 @@ export type Question = {
   correct: string;
   explanation: string;
 };
-/** Passing needs at least 70%: 7 of 10, or 6 of 8. */
-export const passMark = (questionCount: number) => Math.ceil((questionCount * 7) / 10);
+/** Right answers needed to pass. The default 70% means 7 of 10, 6 of 8, 4 of 5. */
+export const passMark = (questionCount: number, passPercent = 70) =>
+  Math.ceil((questionCount * passPercent) / 100);
 export function scoreAssessment(
   questions: Question[],
   answers: unknown,
   expectedCount = 10,
+  passPercent = 70,
 ) {
   if (!answers || typeof answers !== "object" || Array.isArray(answers))
     throw new Error("Answer every question.");
@@ -38,7 +40,7 @@ export function scoreAssessment(
   return {
     correct,
     score: Math.round((correct / questions.length) * 100),
-    passed: correct >= passMark(questions.length),
+    passed: correct >= passMark(questions.length, passPercent),
     feedback,
   };
 }

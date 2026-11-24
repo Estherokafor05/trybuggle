@@ -6,7 +6,9 @@ AI literacy for people with no technical background, across everyday life and wo
 
 Lessons 1 and 2 each offer **Watch & Listen** and **Read & Explore**. Lesson 1 has a new six-scene film using the user's supplied recording. Lesson 2 preserves the existing Maya film, voice, illustrations and captions. The old 39-slide Lesson 1 player has been removed.
 
-Both lessons include independent interactive guides, complete reading alternatives that work without JavaScript, locally saved reflections and separate official knowledge checks. Each check has 10 questions, a 70% passing threshold, helpful feedback and unlimited assessment-only retries. Only server-verified results count as a pass; guide activity and playback never do.
+Both lessons include independent interactive guides, complete reading alternatives that work without JavaScript, locally saved reflections and separate official knowledge checks. Each check has helpful feedback and only server-verified results count as a pass; guide activity and playback never do.
+
+**Order and check settings.** Lessons, final assessments and modules open strictly in order: a learner opens a step only after passing every step before it, across modules (`src/server/progression.ts`). Each check's pass mark (default 70%), number of tries (default unlimited) and answer shuffling (default off) are stored in the `assessments` table and read by `src/server/checks.ts`. Every result stores the pass mark it was marked against, so changing a setting never changes an earlier result. Re-importing the course never overwrites these settings.
 
 Visitors can use both previews and resume on the same device. Google sign-in enables learning places and assessment results saved to PostgreSQL across devices. All five Module 1 lessons, the Module 1 final assessment and the Certificate of Completion are live. Buggle Learn is completely free: there are no payments, paid tiers or subscriptions. The first two previews remain open access; their availability is not a claim of completed progression.
 

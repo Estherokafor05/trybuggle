@@ -104,7 +104,8 @@ Workflow on this branch: each build step goes into its own pull request against 
 
 ### Approved
 
-- Minimum passing score: 70%, including the Module 1 final assessment.
+- Minimum passing score: 70% by default, including the Module 1 final assessment. On lms-platform this is a per-check setting in the `assessments` table (with tries and shuffling); see README.
+- On lms-platform, every lesson, final assessment and module opens only after the previous one is passed (strict order).
 - Maximum lesson duration: eight minutes. Module planned content: 30 to 60 minutes, with a one-hour cap.
 - All of Module 1 (lessons, guides, knowledge checks and the final assessment) is open without an account. Learners sign up only to get their certificate. Guest results are still scored on the server against an anonymous cookie ID and move into the account at sign-up; never trust browser-submitted scores.
 - Accessibility target: WCAG 2.2 AA.

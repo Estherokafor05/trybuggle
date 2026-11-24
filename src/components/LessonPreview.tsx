@@ -12,19 +12,19 @@ import { ExploreJourney } from "./explore/ExploreJourney";
 import { Reflection } from "./blocks/Blocks";
 import { useLearningPlace } from "./explore/useLearningPlace";
 import { KnowledgeCheck } from "./assessment/KnowledgeCheck";
-import { passMark } from "@/lib/assessment-scoring";
 
 export function LessonPreview({
   lesson,
   moduleSlug = "ai-foundations",
-  questionCount = 10,
+  checkIntro,
   scope = "guest",
   signedIn = false,
   next,
 }: {
   lesson: PreviewLesson;
   moduleSlug?: string;
-  questionCount?: number;
+  /** How many questions, the pass mark and tries, from the check's settings. */
+  checkIntro?: string;
   scope?: string;
   signedIn?: boolean;
   next?: NextStep;
@@ -151,7 +151,20 @@ export function LessonPreview({
       <KnowledgeCheck
         slug={lesson.slug}
         signedIn={signedIn}
-        intro={`${questionCount} quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get ${passMark(questionCount)} or more right to pass. You can try again as many times as you need.`}
+        intro={
+          checkIntro ??
+          `5 quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get 4 or more right to pass. You can try again as many times as you need.`
+        }
+        afterPass={
+          next?.available ? (
+            <Link
+              href={next.href}
+              className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              {next.label} is open: start it <span aria-hidden="true">→</span>
+            </Link>
+          ) : undefined
+        }
       />
     </>
   );

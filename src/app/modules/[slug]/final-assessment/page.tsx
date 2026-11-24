@@ -10,9 +10,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { stepLabel } from "@course";
 import { getModule } from "@course";
 import { passMark } from "@/lib/assessment-scoring";
-import { moduleAssessmentBank } from "@course/assessments";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
 import { guestId, openToGuests } from "@/server/guest";
+import { LockedStep } from "@/components/LockedStep";
+import { checkIntro, checkSettings, finalCheck } from "@/server/checks";
+import { pathStatus } from "@/server/progression";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const mod = getModule((await params).slug);
@@ -31,9 +33,23 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   const status = learner ? await moduleRequirements(learner, slug).catch(() => null) : null;
   const certificateHref = `/modules/${slug}/certificate`;
   const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(certificateHref)}`;
-  const count = moduleAssessmentBank[slug].length;
+  const check = finalCheck(slug)!;
+  const count = check.questions.length;
   const lastLesson = mod.lessons.at(-1)!;
   const unit = mod.order === 1 ? "lesson" : "episode";
+  const path = await pathStatus(session?.user?.id, slug);
+  if (path.locked["final-assessment"])
+    return (
+      <LockedStep
+        moduleSlug={slug}
+        moduleOrder={mod.order}
+        title={`Module ${mod.order} final assessment`}
+        finishFirst={path.locked["final-assessment"]}
+        done={path.done}
+        locked={Object.keys(path.locked)}
+      />
+    );
+  const settings = await checkSettings(check);
 
   return (
     <>
@@ -60,12 +76,17 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           </p>
           <p className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy">
             <span className="rounded-full bg-white/80 px-3 py-1.5">{count} questions</span>
-            <span className="rounded-full bg-white/80 px-3 py-1.5">{passMark(count)} to pass</span>
+            <span className="rounded-full bg-white/80 px-3 py-1.5">{passMark(count, settings.passPercent)} to pass</span>
             <span className="rounded-full bg-white/80 px-3 py-1.5">No time limit</span>
           </p>
         </header>
         <div className="mt-3 sm:mt-5">
-          <JourneyProgress current="final-assessment" moduleSlug={slug} />
+          <JourneyProgress
+            current="final-assessment"
+            moduleSlug={slug}
+            done={path.done}
+            locked={Object.keys(path.locked)}
+          />
         </div>
         <KnowledgeCheck
           slug={slug}
@@ -73,7 +94,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           endpoint={`/api/modules/${slug}/final-assessment`}
           kicker={`Module ${mod.order} · Final assessment`}
           title="Your refresher"
-          intro={`${count} questions covering every ${unit} in this module. Get ${passMark(count)} or more right to pass. There is no time limit, and you can try again as many times as you need.`}
+          intro={checkIntro(check, settings, unit)}
           noun="final assessment"
           afterPass={
             <Link
