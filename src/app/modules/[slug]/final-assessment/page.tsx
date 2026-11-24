@@ -7,11 +7,11 @@ import { Requirements } from "@/components/certificate/Requirements";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { stepLabel } from "@/content/journey";
-import { getModule } from "@/content/modules";
+import { stepLabel } from "@course";
+import { getModule } from "@course";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { passMark } from "@/lib/assessment-scoring";
-import { moduleAssessmentBank } from "@/server/assessment-bank";
+import { moduleAssessmentBank } from "@course/assessments";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
 import { guestId, openToGuests } from "@/server/guest";
 

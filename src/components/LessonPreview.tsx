@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
-import type { PreviewLesson } from "@/content/preview-lessons";
-import { stories } from "@/content/stories";
-import { exploreGuides } from "@/content/explore-guides";
+import {
+  exploreGuides,
+  reflectionExample,
+  stories,
+  type PreviewLesson,
+} from "@course";
+import { filmChoices } from "@course/ui";
 import { StoryPlayer, type NextStep } from "./story/StoryPlayer";
-import { filmChoices } from "./story/filmChoices";
 import { ExploreJourney } from "./explore/ExploreJourney";
-import { Reflection } from "./explore/Activities";
+import { Reflection } from "./blocks/Blocks";
 import { useLearningPlace } from "./explore/useLearningPlace";
 import { KnowledgeCheck } from "./assessment/KnowledgeCheck";
 import { passMark } from "@/lib/assessment-scoring";
@@ -124,6 +127,7 @@ export function LessonPreview({
                   prompts={guide.reflections}
                   slug={lesson.slug}
                   scope={scope}
+                  example={reflectionExample(lesson.slug)}
                 />
               </div>
             </details>

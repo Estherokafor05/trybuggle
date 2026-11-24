@@ -1,4 +1,4 @@
-import { assessmentBank } from "@/server/assessment-bank";
+import { assessmentBank } from "@course/assessments";
 import { privateHeaders } from "@/server/request";
 import { assessmentLearner, lessonOpenToGuests } from "@/server/guest";
 import { db } from "@/server/database";

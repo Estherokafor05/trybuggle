@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyProgress } from "@/components/JourneyProgress";
-import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
-import { finalQuestionCount } from "@/content/journey";
-import { TRACK_LABELS, getModule, modules } from "@/content/modules";
-import { getBuiltLesson } from "@/content/preview-lessons";
+import { FoundationsIllustration } from "@course/ui";
+import { finalQuestionCount } from "@course";
+import { TRACK_LABELS, getModule, modules } from "@course";
+import { getBuiltLesson } from "@course";
 import { auth } from "@/auth";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 

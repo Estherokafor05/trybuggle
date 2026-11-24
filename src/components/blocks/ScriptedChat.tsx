@@ -2,7 +2,7 @@
 // A scripted "AI chat tool" screen for lessons. No AI runs here: every message
 // is written in advance, so learners can practise safely on example chats.
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "./Activities";
+import { useReducedMotion } from "./Blocks";
 
 export type ChatMessage = { from: "you" | "ai"; text: string };
 

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { WelcomeIntro } from "@/components/welcome/WelcomeIntro";
-import { welcome } from "@/content/welcome";
+import { WelcomeIntro } from "@course/ui";
+import { welcome } from "@course";
 
 export const metadata: Metadata = {
   title: "Welcome | Buggle Learn",

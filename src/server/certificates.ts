@@ -1,9 +1,9 @@
 // Module completion and certificate rules. All checks run on the server
 // from stored assessment results; nothing the browser sends is trusted.
 import { randomInt, randomUUID } from "node:crypto";
-import { stepLabel } from "@/content/journey";
-import { getModule } from "@/content/modules";
-import { moduleAssessmentBank } from "./assessment-bank";
+import { stepLabel } from "@course";
+import { getModule } from "@course";
+import { moduleAssessmentBank } from "@course/assessments";
 import { db } from "./database";
 import { unprintableCharacters } from "./certificate-pdf";
 

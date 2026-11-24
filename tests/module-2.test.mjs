@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { exploreGuides } from "../src/content/explore-guides.ts";
-import { getBuiltLesson } from "../src/content/preview-lessons.ts";
+import { exploreGuides } from "../courses/ai-literacy/content/explore-guides.ts";
+import { getBuiltLesson } from "../courses/ai-literacy/content/preview-lessons.ts";
 import { parseCheckpoint } from "../src/lib/learning-state.ts";
 import { passMark, scoreAssessment } from "../src/lib/assessment-scoring.ts";
 
@@ -66,10 +66,10 @@ test("5-question checks pass with 4 correct", () => {
 });
 
 test("Module 2 final assessment: 6 questions, 5 to pass, one or more per episode", async () => {
-  const { moduleAssessmentBank } = await import("../src/server/assessment-bank.ts");
+  const { moduleAssessmentBank } = await import("../courses/ai-literacy/assessments.ts");
   const questions = moduleAssessmentBank["talking-to-ai"];
   assert.equal(questions.length, 6);
-  const journey = readFileSync(new URL("../src/content/journey.ts", import.meta.url), "utf8");
+  const journey = readFileSync(new URL("../courses/ai-literacy/content/journey.ts", import.meta.url), "utf8");
   assert.match(journey, /"ai-foundations": 8, "talking-to-ai": 6/, "journey question counts match the banks");
   assert.equal(moduleAssessmentBank["ai-foundations"].length, 8);
   assert.equal(passMark(6), 5);

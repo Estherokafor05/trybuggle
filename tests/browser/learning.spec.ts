@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { encode } from "next-auth/jwt";
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
-import { assessmentBank, moduleAssessmentBank } from "../../src/server/assessment-bank";
+import { assessmentBank, moduleAssessmentBank } from "../../courses/ai-literacy/assessments";
 
 process.loadEnvFile(".env.local");
 const base = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";

@@ -1,7 +1,7 @@
 // Where a returning learner should pick up: the first step on the open
 // modules' paths they have not passed yet. Read-only.
-import { journeyFor, type JourneyStep } from "@/content/journey";
-import { getModule } from "@/content/modules";
+import { journeyFor, type JourneyStep } from "@course";
+import { getModule } from "@course";
 import { db } from "./database";
 
 const openPaths = ["ai-foundations", "talking-to-ai"];

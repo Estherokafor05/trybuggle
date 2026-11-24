@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Module, Track } from "@/content/modules";
+import type { Module, Track } from "@course";
 
 const STATUS_LABEL: Record<Module["status"], string> = {
   open: "Out first",

@@ -6,7 +6,7 @@ import {
   smallJSON,
 } from "@/server/request";
 import { parseCheckpoint } from "@/lib/learning-state";
-import { exploreGuides } from "@/content/explore-guides";
+import { exploreGuides } from "@course";
 type Context = { params: Promise<{ slug: string }> };
 export async function GET(_request: Request, { params }: Context) {
   const user = await learnerId();

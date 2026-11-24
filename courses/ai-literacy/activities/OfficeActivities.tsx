@@ -16,7 +16,7 @@ import {
   type Change,
   type Option,
   type Props,
-} from "./Activities";
+} from "./shared";
 
 function DanielFace() {
   return (
