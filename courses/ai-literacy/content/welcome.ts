@@ -2,7 +2,7 @@
 // Audio: the user-supplied recording in public/lessons/welcome/narration.mp3,
 // used unchanged. Cue and scene timings are aligned to the words actually
 // spoken. Provenance and checksum are recorded in animation/assets.json.
-import narration from "../../public/lessons/welcome/narration.json";
+import narration from "../../../public/lessons/welcome/narration.json";
 
 export interface WelcomeItem {
   text: string;

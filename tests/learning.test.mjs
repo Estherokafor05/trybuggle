@@ -4,8 +4,8 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parseCheckpoint, emptyCheckpoint } from "../src/lib/learning-state.ts";
 import { scoreAssessment } from "../src/lib/assessment-scoring.ts";
-import { assessmentBank } from "../src/server/assessment-bank.ts";
-import { exploreGuides } from "../src/content/explore-guides.ts";
+import { assessmentBank } from "../courses/ai-literacy/assessments.ts";
+import { exploreGuides } from "../courses/ai-literacy/content/explore-guides.ts";
 import { learningIdentityCallbacks } from "../src/lib/auth-callbacks.ts";
 test("Google learning identity stays stable across sign-ins and ignores client profile updates", async () => {
   const first = await learningIdentityCallbacks.jwt({

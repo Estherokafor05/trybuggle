@@ -7,13 +7,13 @@ import { JourneyProgress } from "@/components/JourneyProgress";
 import { LessonPreview } from "@/components/LessonPreview";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getModule } from "@/content/modules";
-import { journeyPosition } from "@/content/journey";
-import { getBuiltLesson } from "@/content/preview-lessons";
+import { getModule } from "@course";
+import { journeyPosition } from "@course";
+import { getBuiltLesson } from "@course";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { db } from "@/server/database";
 import { guestId } from "@/server/guest";
-import { assessmentBank } from "@/server/assessment-bank";
+import { assessmentBank } from "@course/assessments";
 
 /** Whether a signed-in learner has passed a lesson's knowledge check. Never blocks: null when unknown. */
 async function passedCheck(learner: string, lessonSlug: string) {

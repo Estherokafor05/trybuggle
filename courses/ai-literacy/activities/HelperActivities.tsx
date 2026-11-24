@@ -15,8 +15,8 @@ import {
   type Change,
   type Option,
   type Props,
-} from "./Activities";
-import { ScriptedChat } from "./ScriptedChat";
+} from "./shared";
+import { ScriptedChat } from "@/components/blocks/ScriptedChat";
 
 function Verdict({ right, children }: { right: boolean; children: React.ReactNode }) {
   return (

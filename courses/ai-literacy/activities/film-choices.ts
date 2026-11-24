@@ -1,12 +1,13 @@
 // The "Your choice" moments in the Module 2 films. The film pauses at the end of
 // its "choice" scene and asks the learner to choose. Unscored practice.
-import type { Option } from "../explore/Activities";
-import { missing } from "../explore/EmailActivities";
-import { nextMessages } from "../explore/FlyerActivities";
-import { checks } from "../explore/GrantActivities";
-import { sendOptions } from "../explore/PagesActivities";
+import type { Option } from "@/components/blocks/Blocks";
+import type { FilmChoice } from "@/components/story/StoryPlayer";
+import { missing } from "./EmailActivities";
+import { nextMessages } from "./FlyerActivities";
+import { checks } from "./GrantActivities";
+import { sendOptions } from "./PagesActivities";
 
-export type FilmChoice = { question: string; options: Option[] };
+export type { FilmChoice };
 
 const confident: Option[] = [
   { id: "yes", text: "Yes. It sounds sure, so it is probably right.", feedback: "Sounding sure is not the same as being right. A chat tool can sound just as confident when it is wrong." },

@@ -25,6 +25,15 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@course": [
+        "./courses/ai-literacy/index.ts"
+      ],
+      "@course/ui": [
+        "./courses/ai-literacy/ui.ts"
+      ],
+      "@course/assessments": [
+        "./courses/ai-literacy/assessments.ts"
       ]
     }
   },

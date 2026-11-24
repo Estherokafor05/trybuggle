@@ -14,9 +14,9 @@ import {
   type Change,
   type Option,
   type Props,
-} from "./Activities";
+} from "./shared";
 import { flyerSort } from "./completion";
-import { ScriptedChat } from "./ScriptedChat";
+import { ScriptedChat } from "@/components/blocks/ScriptedChat";
 
 /* ---------- 1. The first draft: keep or change? ---------- */
 const draftParts = [

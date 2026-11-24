@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { journeyFor } from "@/content/journey";
-import { getModule } from "@/content/modules";
+import { journeyFor } from "@course";
+import { getModule } from "@course";
 
 // Shows the learner where they are on a module's path, and lets them jump
 // to any step that is ready.

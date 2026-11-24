@@ -1,6 +1,6 @@
 import { certificatePdf } from "@/server/certificate-pdf";
 import { getCertificate, hasFinalAssessment } from "@/server/certificates";
-import { getModule } from "@/content/modules";
+import { getModule } from "@course";
 import { learnerId, privateHeaders } from "@/server/request";
 
 // Downloads the signed-in learner's own certificate as a PDF.

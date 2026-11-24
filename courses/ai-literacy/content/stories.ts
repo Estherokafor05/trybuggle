@@ -1,13 +1,13 @@
-import day from "../../public/lessons/maya-day/narration.json";
-import foundations from "../../public/lessons/what-is-ai/narration.json";
-import history from "../../public/lessons/before-chatgpt/narration.json";
-import software from "../../public/lessons/ai-or-software/narration.json";
-import charge from "../../public/lessons/what-ai-can-do/narration.json";
-import helper from "../../public/lessons/a-new-helper/narration.json";
-import email from "../../public/lessons/the-email-that-said-nothing/narration.json";
-import flyer from "../../public/lessons/three-tries-at-the-flyer/narration.json";
-import pages from "../../public/lessons/thirty-pages-by-friday/narration.json";
-import grant from "../../public/lessons/the-grant-that-didnt-exist/narration.json";
+import day from "../../../public/lessons/maya-day/narration.json";
+import foundations from "../../../public/lessons/what-is-ai/narration.json";
+import history from "../../../public/lessons/before-chatgpt/narration.json";
+import software from "../../../public/lessons/ai-or-software/narration.json";
+import charge from "../../../public/lessons/what-ai-can-do/narration.json";
+import helper from "../../../public/lessons/a-new-helper/narration.json";
+import email from "../../../public/lessons/the-email-that-said-nothing/narration.json";
+import flyer from "../../../public/lessons/three-tries-at-the-flyer/narration.json";
+import pages from "../../../public/lessons/thirty-pages-by-friday/narration.json";
+import grant from "../../../public/lessons/the-grant-that-didnt-exist/narration.json";
 export type StoryNarration = {
   duration: number;
   scenes: { id: string; start: number; end: number }[];

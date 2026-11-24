@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { assessmentBank } from "@/server/assessment-bank";
+import { assessmentBank } from "@course/assessments";
 import { assessmentLearner, lessonOpenToGuests } from "@/server/guest";
 import {
   privateHeaders,

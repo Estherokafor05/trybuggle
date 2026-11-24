@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StartUsingAi } from "@/components/use-ai/StartUsingAi";
-import { getModule } from "@/content/modules";
+import { getModule } from "@course";
 import { getStarterPlan } from "@/content/use-ai";
 
 export const metadata: Metadata = {

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getBuiltLesson } from "@/content/preview-lessons";
-import { getModule } from "@/content/modules";
+import { getBuiltLesson } from "@course";
+import { getModule } from "@course";
 import { googleAuthConfigured } from "@/lib/auth-configured";
-import { exploreGuides } from "@/content/explore-guides";
+import { exploreGuides } from "@course";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { RouteMap } from "@/components/explore/Illustrations";
+import { RouteMap } from "@course/ui";
 export default async function Reading({
   params,
 }: {

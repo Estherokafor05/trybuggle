@@ -13,9 +13,9 @@ import {
   type Change,
   type Option,
   type Props,
-} from "./Activities";
+} from "./shared";
 import { pagesCheck } from "./completion";
-import { ScriptedChat } from "./ScriptedChat";
+import { ScriptedChat } from "@/components/blocks/ScriptedChat";
 
 const checklistText = [
   "Open day checklist",

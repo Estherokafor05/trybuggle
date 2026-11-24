@@ -1,35 +1,12 @@
 "use client";
 import { useLayoutEffect, useRef } from "react";
-import type { ExploreGuide } from "@/content/explore-guides";
+import { stepComplete, type ExploreGuide } from "@course";
+import { LessonActivity } from "@course/ui";
 import type { Checkpoint } from "@/lib/learning-state";
-import { Activity, activityButton } from "./Activities";
-import { HistoryActivity } from "./HistoryActivities";
-import { OfficeActivity } from "./OfficeActivities";
-import { HiringActivity } from "./HiringActivities";
-import { HelperActivity } from "./HelperActivities";
-import { EmailActivity } from "./EmailActivities";
-import { FlyerActivity } from "./FlyerActivities";
-import { PagesActivity } from "./PagesActivities";
-import { GrantActivity } from "./GrantActivities";
-import { stepComplete } from "./completion";
+import { activityButton } from "@/components/blocks/Blocks";
 
 const primaryButton =
   "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-3 font-semibold text-white hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-deep";
-
-const activityFor: Record<string, typeof Activity> = {
-  "before-chatgpt": HistoryActivity,
-  "ai-or-software": OfficeActivity,
-  "what-ai-can-do": HiringActivity,
-  "a-new-helper": HelperActivity,
-  "the-email-that-said-nothing": EmailActivity,
-  "three-tries-at-the-flyer": FlyerActivity,
-  "thirty-pages-by-friday": PagesActivity,
-  "the-grant-that-didnt-exist": GrantActivity,
-};
-function StepActivity(props: Parameters<typeof Activity>[0]) {
-  const Component = activityFor[props.slug] ?? Activity;
-  return <Component {...props} />;
-}
 
 export function ExploreJourney({
   guide,
@@ -127,7 +104,7 @@ export function ExploreJourney({
       </h2>
       <p className="mt-2 text-muted">{step.goal}</p>
       <div className="mt-6">
-        <StepActivity
+        <LessonActivity
           key={step.id}
           id={step.id}
           slug={guide.slug}

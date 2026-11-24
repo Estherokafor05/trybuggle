@@ -6,7 +6,7 @@
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { auth } from "@/auth";
-import { getModule } from "@/content/modules";
+import { getModule } from "@course";
 import { db } from "./database";
 
 export const GUEST_COOKIE = "buggle_guest";

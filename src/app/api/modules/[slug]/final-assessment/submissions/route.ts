@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { scoreAssessment } from "@/lib/assessment-scoring";
-import { moduleAssessmentBank } from "@/server/assessment-bank";
+import { moduleAssessmentBank } from "@course/assessments";
 import { hasFinalAssessment } from "@/server/certificates";
 import { db } from "@/server/database";
 import { privateHeaders, sameOrigin, smallJSON } from "@/server/request";

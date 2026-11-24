@@ -47,18 +47,23 @@ The database stores learners, lesson metadata, versioned learning checkpoints an
 
 ## Application structure
 
-- `src/content/`: approved lesson metadata, independent guides and film cue data.
+The platform (`src/`) and the course (`courses/ai-literacy/`) are kept apart. The platform reads the course only through `@course`, `@course/ui` and `@course/assessments`; see `courses/README.md`.
+
+- `courses/ai-literacy/content/`: approved lesson metadata, independent guides and film cue data.
+- `courses/ai-literacy/activities/`: Read & Explore activities written for specific lessons, and their completion rules.
+- `courses/ai-literacy/assessments.ts`: protected question and answer banks (server only).
+- `src/components/blocks/`: reusable learning blocks any course can use.
 - `src/components/story/StoryPlayer.tsx`: reusable responsive film playback, captions and transcript.
-- `src/components/explore/`: purposeful React activities, worked explanations and resumable learning state.
+- `src/components/explore/`: the Read & Explore journey and resumable learning state.
 - `src/components/assessment/`: separate official knowledge checks.
-- `src/server/`: database access, protected answer banks and authenticated request helpers.
+- `src/server/`: database access and authenticated request helpers.
 - `src/app/api/me/learning/[slug]`: GET/POST learning checkpoints.
 - `src/app/api/assessments/[id]`: GET questions without answer keys.
 - `src/app/api/assessments/[id]/submissions`: POST server-graded, idempotent submissions.
 - `src/app/api/me/progress` and `assessment-results`: account-owned verified results.
 - `src/app/modules/[slug]/lessons/[lessonSlug]/reading`: complete server-rendered reading access.
 
-The four classical approaches remain editorial material in `src/content/foundations-walkthrough.ts` and `scripts/narration-scripts.json` for later curriculum approval. They are not part of the current Lesson 1 UI. Reference slide decks remain local source material and are not deployed.
+The four classical approaches remain editorial material in `courses/ai-literacy/content/foundations-walkthrough.ts` and `scripts/narration-scripts.json` for later curriculum approval. They are not part of the current Lesson 1 UI. Reference slide decks remain local source material and are not deployed.
 
 ## Illustrated film production
 

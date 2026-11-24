@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { safeReturnPath } from "@/lib/paths";
-import { getModule } from "@/content/modules";
+import { getModule } from "@course";
 
 export const metadata: Metadata = {
   title: "Create your free account | Buggle Learn",

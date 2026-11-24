@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { firstLessonPath, welcome, welcomeMedia } from "@/content/welcome";
+import { firstLessonPath, welcome, welcomeMedia } from "../content/welcome";
 import { WelcomeVisual } from "./WelcomeVisuals";
 
 const iconControl =
