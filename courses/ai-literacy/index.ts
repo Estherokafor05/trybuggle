@@ -2,6 +2,7 @@
 // Platform code imports course data only from "@course" (this file), course
 // screens from "@course/ui", and the protected question bank from
 // "@course/assessments" (server code only). See courses/README.md.
+export * from "./content/course";
 export * from "./content/modules";
 export * from "./content/journey";
 export * from "./content/preview-lessons";
