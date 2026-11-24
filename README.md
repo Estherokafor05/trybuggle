@@ -56,7 +56,8 @@ The platform (`src/`) and the course (`courses/ai-literacy/`) are kept apart. Th
 - `src/components/story/StoryPlayer.tsx`: reusable responsive film playback, captions and transcript.
 - `src/components/explore/`: the Read & Explore journey and resumable learning state.
 - `src/components/assessment/`: separate official knowledge checks.
-- `src/server/`: database access and authenticated request helpers.
+- `src/server/`: database access, authenticated request helpers and the course importer (`course-import.ts`).
+- `migrations/005_courses.sql`: courses, sections, items, content blocks and assessments stored as data; see `courses/README.md`.
 - `src/app/api/me/learning/[slug]`: GET/POST learning checkpoints.
 - `src/app/api/assessments/[id]`: GET questions without answer keys.
 - `src/app/api/assessments/[id]/submissions`: POST server-graded, idempotent submissions.
