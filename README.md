@@ -31,17 +31,17 @@ npm run test:browser
 npm run build
 ```
 
-Browser integration checks need the app running on localhost:3000, a valid local AUTH_SECRET and a configured test database. `PLAYWRIGHT_BASE_URL` can select another local port. They exercise real authenticated routes using isolated signed test sessions, create uniquely named test learners and remove only their records afterwards. They do not test the external Google consent screen. Do not run these fixtures against a public website. Automated accessibility checks are supported by keyboard, responsive layout and visual review; they do not establish complete WCAG certification.
+Browser integration checks need the app running on localhost:3000 with `AUTH_RATE_LIMIT=off` (they sign in many times a minute), a valid local AUTH_SECRET and a configured test database with the migrations applied. `PLAYWRIGHT_BASE_URL` can select another local port. They sign up and log in through the real sign-in, confirm each test learner's email directly in the test database, and remove only their own records afterwards. `npm test` also runs database tests (`tests/db`) against an in-memory Postgres, including the real sign-in setup. They do not test the external Google consent screen. Do not run these fixtures against a public website. Automated accessibility checks are supported by keyboard, responsive layout and visual review; they do not establish complete WCAG certification.
 
-## Google sign-in and learning storage
+## Sign-in and learning storage
 
-Use `AUTH_SECRET`, `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET`. Local callback: `http://localhost:3000/api/auth/callback/google`.
+Use `AUTH_SECRET`, `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` (Google is optional; email and password always work). Local callback: `http://localhost:3000/api/auth/callback/google`. Account emails need `RESEND_API_KEY`, and `EMAIL_FROM` once a sending domain is verified; without a key, test sites print the email link in the server log, and the live site refuses to send.
 
-For Vercel, configure those credentials as sensitive production settings, set `AUTH_URL` to the production origin, and authorize that origin followed by `/api/auth/callback/google` in Google Cloud. Preview deployments should not receive production secrets.
+For Vercel, configure those credentials as sensitive production settings and authorize each site address followed by `/api/auth/callback/google` in Google Cloud. Sign-in works out the address from the request, so `AUTH_URL` is not needed. Preview deployments should not receive production secrets.
 
-Learning identity uses the verified Google provider account identifier, not a display name, email address or Auth.js's temporary user ID. Sessions created before saved learning was introduced need a fresh Google sign-in before account storage is available.
+Each learner is an account in Better Auth; their progress is stored against the account ID. Accounts are never joined automatically because two emails match: learners link Google from their account page. Progress saved under the old Google sign-in (`google:<Google account ID>`) moves into the account the first time that Google account is used, and results earned as a guest move in on sign-in.
 
-Neon PostgreSQL is connected to Vercel. Use the pooled `DATABASE_URL` for requests and optional `DATABASE_URL_UNPOOLED` for migrations. Never expose these as public browser variables. `npm run db:migrate` applies the additive, repeatable schema in `migrations/001_learning.sql`; it does not delete existing records.
+Neon PostgreSQL is connected to Vercel. Use the pooled `DATABASE_URL` for requests and optional `DATABASE_URL_UNPOOLED` for migrations. Never expose these as public browser variables. `npm run db:migrate` applies the additive, repeatable schema in `migrations/`; it does not delete existing records. On the `lms-platform` branch, a GitHub workflow applies migrations and imports the course into the test database (secret `TEST_DATABASE_URL`) on every push.
 
 The database stores learners, lesson metadata, versioned learning checkpoints and immutable assessment attempts. Account-scoped routes enforce ownership and validate inputs. Optimistic checkpoint revisions reject stale saves from another tab or device. Submission keys make retries idempotent, and the database enforces the 7-of-10 pass rule. Reflection text is kept on the learner's device and is never uploaded.
 
@@ -56,7 +56,11 @@ The platform (`src/`) and the course (`courses/ai-literacy/`) are kept apart. Th
 - `src/components/story/StoryPlayer.tsx`: reusable responsive film playback, captions and transcript.
 - `src/components/explore/`: the Read & Explore journey and resumable learning state.
 - `src/components/assessment/`: separate official knowledge checks.
+- `src/auth.ts`: sign-in with Better Auth (email and password, plus Google). Learning needs an account; anyone can browse.
+- `src/app/sign-in`, `sign-up`, `forgot-password`, `reset-password`: the sign-in pages. They work without JavaScript.
+- `src/server/identity.ts`: moves progress from the old Google sign-in (`google:<id>`) and from guests into an account, so nobody loses anything.
 - `src/server/`: database access, authenticated request helpers and the course importer (`course-import.ts`).
+- `migrations/006_better_auth.sql`: accounts, sessions, sign-in methods and email links (`auth_*` tables).
 - `migrations/005_courses.sql`: courses, sections, items, content blocks and assessments stored as data; see `courses/README.md`.
 - `src/app/api/me/learning/[slug]`: GET/POST learning checkpoints.
 - `src/app/api/assessments/[id]`: GET questions without answer keys.

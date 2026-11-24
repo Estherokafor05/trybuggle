@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { CertificatePanel } from "@/components/certificate/CertificatePanel";
 import { Requirements } from "@/components/certificate/Requirements";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -9,9 +9,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { stepLabel } from "@course";
 import { getModule, modules } from "@course";
 import { getBuiltLesson } from "@course";
-import { googleAuthConfigured } from "@/lib/auth-configured";
 import { getCertificate, hasFinalAssessment, moduleRequirements } from "@/server/certificates";
-import { claimGuest, guestId, openToGuests } from "@/server/guest";
 
 export const metadata: Metadata = { title: "Your certificate | Buggle Learn" };
 
@@ -19,14 +17,12 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const mod = getModule(slug);
   if (!mod || !hasFinalAssessment(slug)) notFound();
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/certificate`)}`;
   const account = session?.user?.id ?? null;
-  const guest = await guestId();
-  if (!account && !openToGuests(slug)) redirect(signUpHref);
-  // Results earned as a guest on this device count once the learner signs up.
-  if (account && guest) await claimGuest(guest, account).catch(() => undefined);
-  const learner = account ?? guest;
+  // Results earned as a guest before accounts were required moved in at sign-in.
+  if (!account) redirect(signUpHref);
+  const learner = account;
   const loaded = learner
     ? await Promise.all([moduleRequirements(learner, slug), account ? getCertificate(account, slug) : null]).catch(() => null)
     : null;

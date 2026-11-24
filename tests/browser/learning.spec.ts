@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { encode } from "next-auth/jwt";
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { assessmentBank, moduleAssessmentBank } from "../../courses/ai-literacy/assessments";
@@ -12,26 +11,39 @@ if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname))
 const lesson = (slug = "what-counts-as-ai") =>
   `/modules/ai-foundations/lessons/${slug}`;
 const users: string[] = [];
-async function signIn(
-  context: import("@playwright/test").BrowserContext,
-  id = `qa-learning-${randomUUID()}`,
-) {
-  if (!users.includes(id)) users.push(id);
-  const cookie = await encode({
-    token: { sub: randomUUID(), learnerId: id, name: "Test learner" },
-    secret: process.env.AUTH_SECRET!,
-    salt: "authjs.session-token",
-    maxAge: 3600,
+const emails = new Map<string, string>();
+const PASSWORD = "a-long-test-password";
+/**
+ * Signs a browser context in through the real sign-in. A new learner is created
+ * unless an existing learner's ID is given (to sign the same learner in elsewhere).
+ * Their email is confirmed directly in the test database: these tests cover
+ * learning, and tests/db/auth.test.ts covers the confirmation email.
+ * Run the app with AUTH_RATE_LIMIT=off so the many quick sign-ins are allowed.
+ */
+async function signIn(context: import("@playwright/test").BrowserContext, id?: string) {
+  let email = id ? emails.get(id) : undefined;
+  if (!id || !email) {
+    email = `qa-learning-${randomUUID()}@example.com`;
+    const signUp = await context.request.post(base + "/api/auth/sign-up/email", {
+      headers: { Origin: base },
+      data: { name: "Test learner", email, password: PASSWORD },
+    });
+    expect(signUp.status()).toBe(200);
+    id = (await signUp.json()).user.id as string;
+    const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+    try {
+      await sql`UPDATE auth_user SET "emailVerified" = true WHERE id = ${id}`;
+    } finally {
+      await sql.end();
+    }
+    emails.set(id, email);
+    users.push(id);
+  }
+  const signInResponse = await context.request.post(base + "/api/auth/sign-in/email", {
+    headers: { Origin: base },
+    data: { email, password: PASSWORD },
   });
-  await context.addCookies([
-    {
-      name: "authjs.session-token",
-      value: cookie,
-      url: base,
-      httpOnly: true,
-      sameSite: "Lax",
-    },
-  ]);
+  expect(signInResponse.status()).toBe(200);
   return id;
 }
 /** Remember a context's anonymous guest ID so its test results are cleaned up. */
@@ -49,6 +61,7 @@ test.afterAll(async () => {
       await tx`DELETE FROM learning_checkpoints WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM assessment_attempts WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM learners WHERE id IN ${tx(users)}`;
+      await tx`DELETE FROM auth_user WHERE id IN ${tx(users)}`;
     });
   } finally {
     await sql.end();
@@ -56,7 +69,9 @@ test.afterAll(async () => {
 });
 test("Lesson 1 supports both routes, all activities and local resume", async ({
   page,
+  context,
 }) => {
+  await signIn(context);
   await page.goto(lesson());
   await expect(
     page.getByRole("heading", { name: "What is AI?", exact: true }).first(),
@@ -150,7 +165,9 @@ test("Lesson 1 supports both routes, all activities and local resume", async ({
 });
 test("Maya guide explores photos, changing predictions, fit and message verification", async ({
   page,
+  context,
 }) => {
+  await signIn(context);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(lesson("ai-in-your-day"));
@@ -199,6 +216,7 @@ test("reading alternative is complete with JavaScript disabled", async ({
     javaScriptEnabled: false,
     viewport: { width: 320, height: 780 },
   });
+  await signIn(context);
   const page = await context.newPage();
   for (const slug of ["what-counts-as-ai", "ai-in-your-day"]) {
     await page.goto(base + lesson(slug) + "/reading");
@@ -376,24 +394,24 @@ test("signed-in learner can submit, review feedback and retry without restarting
   expect(access.violations).toEqual([]);
 });
 
-test("guest progress carries into sign-in and a newer-device save can be restored", async ({
+test("a saved place follows the learner and a newer-device save can be restored", async ({
   page,
   context,
   browser,
 }) => {
+  const id = await signIn(context);
   await page.goto(lesson());
   await page
     .getByRole("button", { name: /^Read & Explore/ })
     .click();
   await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  const id = await signIn(context);
+  await expect(
+    page.getByText("Saved to your account", { exact: true }),
+  ).toBeVisible({ timeout: 10000 });
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Automatic or AI?" }),
   ).toBeVisible();
-  await expect(
-    page.getByText("Saved to your account", { exact: true }),
-  ).toBeVisible({ timeout: 10000 });
   const path = base + "/api/me/learning/what-counts-as-ai";
   const other = await browser.newContext();
   await signIn(other, id);
@@ -480,15 +498,17 @@ test("an interrupted account save resumes from the device and retries safely", a
   expect(saved.checkpoint.step).toBe(1);
 });
 
-test("Lesson 3 is open to guests, then both routes, every activity and the check work", async ({
+test("Lesson 3 needs an account, then both routes, every activity and the check work", async ({
   browser,
 }) => {
   const guest = await browser.newContext();
   const guestPage = await guest.newPage();
-  await guestPage.goto(lesson("before-chatgpt"));
-  await expect(guestPage.getByRole("heading", { name: "AI Did Not Start with ChatGPT", level: 1 })).toBeVisible();
-  await guestPage.goto(lesson("before-chatgpt") + "/reading");
-  await expect(guestPage.getByRole("heading", { name: "The AI Time Machine" })).toBeVisible();
+  for (const path of [lesson("before-chatgpt"), lesson("before-chatgpt") + "/reading"]) {
+    await guestPage.goto(path);
+    await expect(guestPage).toHaveURL(`${base}/sign-in?callbackUrl=${encodeURIComponent(path)}`);
+    await expect(guestPage.getByRole("heading", { name: "Log in", level: 1 })).toBeVisible();
+  }
+  await signIn(guest);
   await guestPage.goto(lesson("ai-in-your-day"));
   await expect(guestPage.getByRole("link", { name: /Start Lesson 3/ })).toHaveAttribute("href", lesson("before-chatgpt"));
   await guest.close();
@@ -795,21 +815,54 @@ test("signing out from the header ends the session on phone and desktop", async 
     if (phone) await page.getByRole("button", { name: "Menu" }).click();
     await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
     await page.goto("/modules/ai-foundations/certificate");
-    await expect(page.getByRole("link", { name: "Sign up to get your certificate" })).toBeVisible();
+    await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Fmodules%2Fai-foundations%2Fcertificate/);
     expect((await context.request.get(base + "/api/me/certificates/ai-foundations")).status()).toBe(401);
     await context.close();
   }
   const guest = await browser.newPage();
   await guest.goto("/");
   await expect(guest.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+  await expect(guest.getByRole("link", { name: "Log in" })).toBeVisible();
   await guest.close();
 });
 
-test("guests take every Module 1 check, then sign up to collect the certificate with their passes", async ({ browser }) => {
+test("learning needs an account; results earned as a guest earlier move in at sign-in", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
 
+  // Without an account, lessons send the learner to log in and the APIs refuse.
+  await page.goto(lesson("ai-or-software"));
+  await expect(page).toHaveURL(`${base}/sign-in?callbackUrl=${encodeURIComponent(lesson("ai-or-software"))}`);
+  const answers = Object.fromEntries(assessmentBank["what-counts-as-ai"].map((q) => [q.id, q.correct]));
+  expect(
+    (await context.request.post(`${base}/api/assessments/what-counts-as-ai/submissions`, {
+      headers: { Origin: base },
+      data: { version: 1, submissionKey: randomUUID(), answers },
+    })).status(),
+  ).toBe(401);
+
+  // Someone who passed everything as a guest, before accounts were required.
+  const guestUuid = randomUUID();
+  const guest = `guest:${guestUuid}`;
+  users.push(guest);
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  try {
+    await sql`INSERT INTO learners(id) VALUES(${guest})`;
+    for (const slug of ["what-counts-as-ai", "ai-in-your-day", "before-chatgpt", "ai-or-software", "what-ai-can-do"]) {
+      const n = assessmentBank[slug].length;
+      await sql`INSERT INTO assessment_attempts(id, learner_id, lesson_slug, assessment_version, submission_key, answers, correct_count, question_count, feedback)
+        VALUES(${randomUUID()}, ${guest}, ${slug}, 1, ${randomUUID()}, ${sql.json({})}, ${n}, ${n}, ${sql.json([])})`;
+    }
+    const finalCount = moduleAssessmentBank["ai-foundations"].length;
+    await sql`INSERT INTO module_assessment_attempts(id, learner_id, module_slug, assessment_version, submission_key, answers, question_count, correct_count, feedback)
+      VALUES(${randomUUID()}, ${guest}, 'ai-foundations', 1, ${randomUUID()}, ${sql.json({})}, ${finalCount}, ${finalCount}, ${sql.json([])})`;
+  } finally {
+    await sql.end();
+  }
+  await context.addCookies([{ name: "buggle_guest", value: guestUuid, url: base, httpOnly: true, sameSite: "Lax" }]);
+
   // Guide steps show done, visited-but-not-finished and not-started distinctly.
+  await signIn(context);
   await page.goto(lesson("ai-or-software"));
   await page.getByRole("button", { name: /^Read & Explore/ }).click();
   await page.getByRole("button", { name: "Continue →" }).click();
@@ -822,47 +875,14 @@ test("guests take every Module 1 check, then sign up to collect the certificate 
     await page.locator(`input[name="guess-${tool}"]`).first().check();
   await expect(page.getByRole("button", { name: /Step 1: Daniel's desk \(done\)/ })).toBeVisible();
 
-  // A guest can open and take a knowledge check without an account.
-  await page.goto(lesson());
-  await expect(page.getByText(/No account needed\. Your results are kept/)).toBeVisible();
-  await page.getByRole("button", { name: "Open the knowledge check" }).click();
-  await expect(page.locator(`input[name="${assessmentBank["what-counts-as-ai"][0].id}"]`).first()).toBeVisible();
-
-  // Pass every lesson check and the final assessment as a guest, through the official API.
-  for (const slug of ["what-counts-as-ai", "ai-in-your-day", "before-chatgpt", "ai-or-software", "what-ai-can-do"]) {
-    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
-    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
-      headers: { Origin: base },
-      data: { version: 1, submissionKey: randomUUID(), answers },
-    });
-    expect(response.status()).toBe(200);
-  }
-  await page.goto("/modules/ai-foundations/final-assessment");
-  await page.getByRole("button", { name: "Open the final assessment" }).click();
-  for (const q of moduleAssessmentBank["ai-foundations"])
-    await page.locator(`input[name="${q.id}"][value="${q.correct}"]`).check();
-  await page.getByRole("button", { name: "Submit final assessment" }).click();
-  await expect(page.getByText("Final assessment passed")).toBeVisible();
-  await expect(page.getByRole("link", { name: /Sign up to get your certificate/ }).first()).toHaveAttribute(
-    "href",
-    /\/sign-in\?callbackUrl=%2Fmodules%2Fai-foundations%2Fcertificate/,
-  );
-
-  // The certificate page asks a guest to sign up, and the API never issues one to a guest.
+  // The guest's passes now belong to the account, and the certificate can be created.
   await page.goto("/modules/ai-foundations/certificate");
-  await expect(page.getByRole("heading", { name: "You've done it! Sign up to get your certificate" })).toBeVisible();
   await expect(page.getByText("6 of 6 done")).toBeVisible();
-  expect((await context.request.post(base + "/api/me/certificates/ai-foundations", { headers: { Origin: base }, data: { name: "Guest" } })).status()).toBe(401);
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-
-  // After signing up, the guest's passes belong to the account and the certificate can be created.
-  await signIn(context);
-  await page.reload();
-  await expect(page.getByText("6 of 6 done")).toBeVisible();
   await page.getByRole("button", { name: "Create my certificate" }).click();
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
-  await trackGuest(context);
+  expect((await context.cookies(base)).some((c) => c.name === "buggle_guest")).toBe(false);
   await context.close();
 });
 
@@ -872,6 +892,7 @@ test("Episode 2.1: Module 2 page, every guide step, a 5-question check and acces
     { width: 1280, height: 900 },
   ]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai");
     await expect(page.getByRole("heading", { name: "Talking to AI", level: 1 })).toBeVisible();
@@ -926,6 +947,7 @@ test("Episode 2.2: every guide step, the request builder, a 5-question check and
     { width: 1280, height: 900 },
   ]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/the-email-that-said-nothing");
     await expect(page.getByRole("heading", { name: "The Email That Said Nothing", level: 1 })).toBeVisible();
@@ -972,6 +994,7 @@ test("Episode 2.3: keep or change, follow-ups in the same chat, a 5-question che
     { width: 1280, height: 900 },
   ]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/three-tries-at-the-flyer");
     await expect(page.getByRole("heading", { name: "Three Tries at the Flyer", level: 1 })).toBeVisible();
@@ -1017,6 +1040,7 @@ test("Episode 2.4: request, send or check, find what is missing, a 5-question ch
     { width: 1280, height: 900 },
   ]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
     await expect(page.getByRole("heading", { name: "Thirty Pages by Friday", level: 1 })).toBeVisible();
@@ -1058,6 +1082,7 @@ test("Episode 2.5: spot what to check, ask without steering, a 5-question check 
     { width: 1280, height: 900 },
   ]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/the-grant-that-didnt-exist");
     await expect(page.getByRole("heading", { name: "The Grant That Didn't Exist", level: 1 })).toBeVisible();
@@ -1157,40 +1182,37 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   await context.close();
 });
 
-test("sign-in asks learners to confirm they are 16 or over", async ({ page }) => {
-  await page.goto("/sign-in");
-  const age = page.getByLabel("I am 16 or over");
+test("sign-up asks learners to confirm they are 15 or over", async ({ page }) => {
+  await page.goto("/sign-up");
+  const age = page.getByLabel("I am 15 or over");
   await expect(age).toBeVisible();
   await expect(age).toHaveAttribute("required", "");
   await expect(page.getByRole("link", { name: "privacy policy" })).toHaveAttribute("href", "/privacy");
-  await page.goto("/sign-in?age=required");
-  await expect(page.getByText(/Buggle Learn is for people aged 16 and over/)).toBeVisible();
+  await page.goto("/sign-up?error=AGE_REQUIRED");
+  await expect(page.getByText(/Buggle Learn is for people aged 15 and over/)).toBeVisible();
   await page.waitForTimeout(600);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  for (const path of ["/sign-in", "/forgot-password", "/sign-up/check-email"]) {
+    await page.goto(path);
+    await page.waitForTimeout(400);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  }
 });
 
-test("a sign-in from before saved learning reaches the sign-in form instead of looping", async ({ browser }) => {
-  // Older session cookies carry no learner ID. The account page sends them to sign-in,
-  // so sign-in must not bounce them straight back.
+test("a cookie from the old sign-in is ignored and reaches the log-in form instead of looping", async ({ browser }) => {
   const context = await browser.newContext();
-  const cookie = await encode({
-    token: { sub: randomUUID(), name: "Older learner" },
-    secret: process.env.AUTH_SECRET!,
-    salt: "authjs.session-token",
-    maxAge: 3600,
-  });
   await context.addCookies([
-    { name: "authjs.session-token", value: cookie, url: base, httpOnly: true, sameSite: "Lax" },
+    { name: "authjs.session-token", value: randomUUID(), url: base, httpOnly: true, sameSite: "Lax" },
   ]);
   const page = await context.newPage();
   await page.goto("/account");
   await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Faccount/);
-  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Log in", level: 1 })).toBeVisible();
   // The same from the privacy page link.
   await page.goto("/privacy");
   await page.getByRole("link", { name: "your account page" }).first().click();
   await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Faccount/);
-  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Log in", level: 1 })).toBeVisible();
   await context.close();
 });
 
@@ -1233,7 +1255,7 @@ test("the guest clean-up refuses requests without the secret", async ({ request 
   expect((await request.get(`${base}/api/cron/guest-cleanup`, { headers: { Authorization: "Bearer wrong" } })).status()).toBe(401);
 });
 
-test("first-time journey: two ways in, then a returning guest is offered to continue", async ({ browser }) => {
+test("first-time journey: two ways in, then a returning learner is offered to continue", async ({ browser }) => {
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const context = await browser.newContext({ viewport });
     const page = await context.newPage();
@@ -1245,11 +1267,11 @@ test("first-time journey: two ways in, then a returning guest is offered to cont
     await page.waitForTimeout(600);
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-    // Pass Lesson 1's check as a guest: the home page now offers Lesson 2.
+    // Sign up and pass Lesson 1's check: the home page now offers Lesson 2.
+    await signIn(context);
     const answers = Object.fromEntries(assessmentBank["what-counts-as-ai"].map((q) => [q.id, q.correct]));
     expect((await context.request.post(`${base}/api/assessments/what-counts-as-ai/submissions`, { headers: { Origin: base }, data: { version: 1, submissionKey: randomUUID(), answers } })).status()).toBe(200);
-    await trackGuest(context);
-    await page.goto("/");
+        await page.goto("/");
     await expect(page.getByRole("heading", { name: "Continue where you left off" })).toBeVisible();
     await expect(page.getByText("Module 1 · Lesson 2: AI Is Already in Your Day")).toBeVisible();
     await expect(page.getByRole("link", { name: /^Continue/ })).toHaveAttribute("href", "/modules/ai-foundations/lessons/ai-in-your-day");
@@ -1259,12 +1281,13 @@ test("first-time journey: two ways in, then a returning guest is offered to cont
   }
 });
 
-test("sign-in and unbuilt modules speak to where the learner is", async ({ page }) => {
+test("sign-in and unbuilt modules speak to where the learner is", async ({ page, context }) => {
   await page.goto("/sign-in?callbackUrl=%2Fmodules%2Ftalking-to-ai%2Fcertificate");
-  await expect(page.getByText(/Get your Module 2 certificate/)).toBeVisible();
   await expect(page.getByRole("link", { name: /Back to Module 2/ })).toHaveAttribute("href", "/modules/talking-to-ai/certificate");
+  await expect(page.getByRole("link", { name: "Create a free account" })).toHaveAttribute("href", "/sign-up?callbackUrl=%2Fmodules%2Ftalking-to-ai%2Fcertificate");
   await page.goto("/sign-in");
   await expect(page.getByRole("link", { name: /Back to Module 1/ })).toBeVisible();
+  await signIn(context);
   await page.goto("/modules/talking-to-ai");
   await expect(page.getByRole("link", { name: /Next module · Staying Safe with AI \(coming soon\)/ })).toBeVisible();
   await page.goto("/modules/staying-safe-with-ai");
@@ -1276,6 +1299,7 @@ test("sign-in and unbuilt modules speak to where the learner is", async ({ page 
 test("Module 2 films stop at the choice and ask, then carry on", async ({ browser }) => {
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const context = await browser.newContext({ viewport });
+    await signIn(context);
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
     const video = page.locator("video");
@@ -1306,17 +1330,20 @@ test("Module 2 films stop at the choice and ask, then carry on", async ({ browse
     await context.close();
   }
   // Module 1 films have no pop-up.
-  const page = await browser.newPage();
+  const learner = await browser.newContext();
+  await signIn(learner);
+  const page = await learner.newPage();
   await page.goto("/modules/ai-foundations/lessons/what-counts-as-ai");
   await page.locator("video").evaluate((v) => {
     Object.defineProperty(v, "currentTime", { configurable: true, get: () => 236.5, set: () => undefined });
     v.dispatchEvent(new Event("timeupdate"));
   });
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await page.close();
+  await learner.close();
 });
 
-test("Episode 2.1's film asks its approved question at 1:15", async ({ page }) => {
+test("Episode 2.1's film asks its approved question at 1:15", async ({ page, context }) => {
+  await signIn(context);
   await page.goto("/modules/talking-to-ai/lessons/a-new-helper");
   const tick = (time: number) =>
     page.locator("video").evaluate((v, t) => {

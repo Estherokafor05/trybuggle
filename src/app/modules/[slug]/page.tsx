@@ -8,8 +8,7 @@ import { FoundationsIllustration } from "@course/ui";
 import { finalQuestionCount } from "@course";
 import { TRACK_LABELS, getModule, modules } from "@course";
 import { getBuiltLesson } from "@course";
-import { auth } from "@/auth";
-import { googleAuthConfigured } from "@/lib/auth-configured";
+import { currentSession } from "@/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +39,7 @@ export default async function ModulePage({
   const mod = getModule(slug);
   if (!mod) notFound();
 
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   const next = modules.find((m) => m.order === mod.order + 1);
   const isFoundations = mod.order === 1;
   const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));

@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 export async function learnerId() {
-  return (await auth())?.user?.id ?? null;
+  return (await currentSession())?.user?.id ?? null;
 }
 export function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");

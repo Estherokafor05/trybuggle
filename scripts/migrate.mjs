@@ -10,9 +10,11 @@ try {
     for (const file of files) await tx.unsafe(await readFile(new URL(file, folder), "utf8"));
   });
   console.log("Applied additive learning tables and lesson records.");
-} catch {
+} catch (error) {
+  // The database's own message helps fix the problem; it never contains the password.
   console.error(
-    "Migration failed. Check database connectivity and permissions; no credentials have been logged.",
+    "Migration failed; nothing was changed. Check database connectivity and permissions.",
+    error instanceof Error ? error.message : "",
   );
   process.exitCode = 1;
 } finally {
