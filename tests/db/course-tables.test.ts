@@ -166,3 +166,37 @@ test("reads lesson times like '4 minutes to watch'", () => {
   assert.equal(minutesFrom("About 12 min"), 12);
   assert.equal(minutesFrom("soon"), 0);
 });
+
+describe("check settings migration (007)", () => {
+  test("keeps every earlier result and turns answer shuffling off once", async () => {
+    const old = new PGlite();
+    const files = (await readdir(migrations)).filter((f) => f.endsWith(".sql")).sort();
+    const before007 = files.filter((f) => f < "007");
+    for (const file of before007) await old.exec(await readFile(new URL(file, migrations), "utf8"));
+    await old.transaction((tx) => writeCourse(runner(tx), planCourse()));
+    // Step 2's import left the schema default: shuffled.
+    await old.exec("UPDATE assessments SET shuffle_options = true");
+    await old.exec(`
+      INSERT INTO learners(id) VALUES ('old');
+      INSERT INTO assessment_attempts(id,learner_id,lesson_slug,assessment_version,submission_key,answers,question_count,correct_count,feedback)
+      VALUES (gen_random_uuid(),'old','what-counts-as-ai',1,gen_random_uuid(),'{}',5,4,'[]'),
+             (gen_random_uuid(),'old','what-counts-as-ai',1,gen_random_uuid(),'{}',5,3,'[]');
+      INSERT INTO module_assessment_attempts(id,learner_id,module_slug,assessment_version,submission_key,answers,question_count,correct_count,feedback)
+      VALUES (gen_random_uuid(),'old','ai-foundations',1,gen_random_uuid(),'{}',8,6,'[]');`);
+    const passes = async () =>
+      (await old.query<{ correct_count: number; passed: boolean }>(
+        "SELECT correct_count, passed FROM assessment_attempts UNION ALL SELECT correct_count, passed FROM module_assessment_attempts ORDER BY 1",
+      )).rows.map((r) => [r.correct_count, r.passed]);
+    const earlier = await passes();
+    assert.equal(await count(old, "SELECT 1 FROM assessments WHERE shuffle_options"), 12, "step 2 rows shuffled by default");
+    for (const file of files) await old.exec(await readFile(new URL(file, migrations), "utf8"));
+    assert.deepEqual(await passes(), earlier);
+    assert.deepEqual(earlier, [[3, false], [4, true], [6, true]]);
+    assert.equal(await count(old, "SELECT 1 FROM assessments WHERE shuffle_options"), 0);
+    // Running again later never undoes an admin's choice.
+    await old.exec("UPDATE assessments SET shuffle_options = true WHERE legacy_key = 'before-chatgpt'");
+    for (const file of files) await old.exec(await readFile(new URL(file, migrations), "utf8"));
+    assert.equal(await count(old, "SELECT 1 FROM assessments WHERE shuffle_options"), 1);
+    await old.close();
+  });
+});

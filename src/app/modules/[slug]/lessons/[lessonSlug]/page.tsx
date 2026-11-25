@@ -10,20 +10,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getModule } from "@course";
 import { journeyPosition } from "@course";
 import { getBuiltLesson } from "@course";
-import { db } from "@/server/database";
-import { guestId } from "@/server/guest";
-import { assessmentBank } from "@course/assessments";
-
-/** Whether a signed-in learner has passed a lesson's knowledge check. Never blocks: null when unknown. */
-async function passedCheck(learner: string, lessonSlug: string) {
-  try {
-    const rows =
-      await db()`SELECT EXISTS(SELECT 1 FROM assessment_attempts WHERE learner_id=${learner} AND lesson_slug=${lessonSlug} AND passed) AS passed`;
-    return Boolean(rows[0]?.passed);
-  } catch {
-    return null;
-  }
-}
+import { LockedStep } from "@/components/LockedStep";
+import { checkIntro, checkSettings, defaultCheckSettings, lessonCheck } from "@/server/checks";
+import { pathStatus } from "@/server/progression";
 
 export async function generateMetadata({
   params,
@@ -92,6 +81,26 @@ export default async function LessonPage({
 
   const position = journeyPosition(lessonSlug, slug);
   const lessonLabel = mod.order === 1 ? `Lesson ${lessonIndex + 1}` : `Episode ${mod.order}.${lessonIndex + 1}`;
+  // Lessons open in order (FRD Version 2). If the database can't be reached,
+  // the lesson still shows; the check itself enforces the order.
+  const status = await pathStatus(session.user.id, slug);
+  if (status.locked[lessonSlug])
+    return (
+      <LockedStep
+        moduleSlug={slug}
+        moduleOrder={mod.order}
+        title={`${lessonLabel}: ${lesson.title}`}
+        finishFirst={status.locked[lessonSlug]}
+        done={status.done}
+        locked={Object.keys(status.locked)}
+      />
+    );
+  const check = lessonCheck(lessonSlug);
+  const settings = check ? await checkSettings(check) : defaultCheckSettings;
+  const intro = check
+    ? checkIntro(check, settings, mod.order === 1 ? "lesson" : "episode")
+    : undefined;
+  const passedThis = status.done.includes(lessonSlug);
   const previous = position.previous;
   const next = position.next;
   const nextStep = next
@@ -106,12 +115,6 @@ export default async function LessonPage({
       }
     : undefined;
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`;
-  // Passing each check is encouraged, but learners can always carry on.
-  const previousLesson = previous && previous.id !== "welcome" ? previous : undefined;
-  // Guests who have started taking checks get the same gentle reminder.
-  const checker = session?.user?.id ?? (await guestId());
-  const previousPassed =
-    previousLesson && checker ? await passedCheck(checker, previousLesson.id) : null;
   // Guests who reach the end of a free lesson sign in on their way to the next one.
   const nextNeedsSignIn = Boolean(next?.available && !next.free && !session?.user);
 
@@ -168,38 +171,14 @@ export default async function LessonPage({
         </header>
 
         <div className="mt-3 sm:mt-5">
-          <JourneyProgress current={lessonSlug} moduleSlug={slug} />
+          <JourneyProgress
+            current={lessonSlug}
+            moduleSlug={slug}
+            done={status.done}
+            locked={Object.keys(status.locked)}
+          />
         </div>
 
-        {previousLesson && previousPassed === false && (
-          <section
-            aria-labelledby="previous-check-title"
-            className="mt-5 rounded-2xl border-l-4 border-brand bg-lavender p-5"
-          >
-            <h2 id="previous-check-title" className="font-bold">
-              You haven&apos;t passed {previousLesson.label}&apos;s knowledge check yet
-            </h2>
-            <p className="mt-1 leading-relaxed text-ink">
-              Passing every knowledge check is part of completing Module {mod.order}. You
-              can take it now, or carry on with this lesson and come back to it
-              later.
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
-              <Link
-                href={`${previousLesson.href}#knowledge-check`}
-                className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
-              >
-                Take {previousLesson.label}&apos;s check
-              </Link>
-              <a
-                href="#lesson-start"
-                className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4"
-              >
-                Continue with this lesson
-              </a>
-            </div>
-          </section>
-        )}
         <span id="lesson-start" className="block scroll-mt-24" />
         {session?.user && !session.user.id && (
           <p className="mt-5 rounded-2xl bg-mint p-5 leading-relaxed">
@@ -213,7 +192,7 @@ export default async function LessonPage({
         <LessonPreview
           key={lesson.slug}
           moduleSlug={slug}
-          questionCount={assessmentBank[lesson.slug]?.length ?? 10}
+          checkIntro={intro}
           next={nextStep}
           lesson={lesson}
           signedIn={Boolean(session?.user?.id)}
@@ -257,9 +236,11 @@ export default async function LessonPage({
                 Up next: {next.label}, {next.title}
               </h2>
               <p className="mt-3 max-w-[64ch] leading-relaxed text-ink">
-                {next.id === "final-assessment"
-                  ? "You've reached the end of the module. When you're ready, take the final assessment: a short refresher with no time limit."
-                  : `When you're ready, carry on to ${next.label}. You can come back to this one at any time.`}
+                {!passedThis && status.known
+                  ? `Pass this ${mod.order === 1 ? "lesson" : "episode"}'s knowledge check above to open ${next.id === "final-assessment" ? "the final assessment" : next.label}. Steps open one at a time, in order.`
+                  : next.id === "final-assessment"
+                    ? "You've reached the end of the module. When you're ready, take the final assessment: a short refresher with no time limit."
+                    : `When you're ready, carry on to ${next.label}. You can come back to this one at any time.`}
               </p>
               <Link
                 href={next.href}

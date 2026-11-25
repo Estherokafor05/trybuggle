@@ -9,6 +9,8 @@ import { finalQuestionCount } from "@course";
 import { TRACK_LABELS, getModule, modules } from "@course";
 import { getBuiltLesson } from "@course";
 import { currentSession } from "@/auth";
+import { LockIcon } from "@/components/LockIcon";
+import { finishFirstText, pathStatus } from "@/server/progression";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +47,11 @@ export default async function ModulePage({
   const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));
   const unit = isFoundations ? "lessons" : "episodes";
   const finalCount = finalQuestionCount[slug];
+  // Signed-in learners see what they've passed and what is still locked.
+  const status = await pathStatus(session?.user?.id, slug);
+  const lockedIds = Object.keys(status.locked);
+  const firstStep = isFoundations ? mod.lessons[0]?.slug : firstBuilt?.slug;
+  const moduleLocked = firstStep ? status.locked[firstStep] : undefined;
 
   return (
     <>
@@ -80,7 +87,27 @@ export default async function ModulePage({
                 ready. In the meantime, you can work through the modules that are already open.
               </p>
             )}
-            {!isFoundations && firstBuilt && (
+            {moduleLocked && (
+              <p className="mt-6 flex max-w-[58ch] items-start gap-2 rounded-2xl bg-white/80 p-4 text-sm leading-relaxed text-ink">
+                <LockIcon className="mt-0.5 size-4 shrink-0 text-navy" />
+                <span>
+                  <b>Not open yet.</b> Modules open in order. Finish Module {moduleLocked.moduleOrder},
+                  including its final assessment, to open this one. Next up for you:{" "}
+                  {moduleLocked.label}.
+                </span>
+              </p>
+            )}
+            {moduleLocked && (
+              <div className="mt-6">
+                <Link
+                  href={moduleLocked.href}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                >
+                  Continue Module {moduleLocked.moduleOrder} <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            )}
+            {!isFoundations && firstBuilt && !moduleLocked && (
               <div className="mt-6">
                 <Link
                   href={`/modules/${slug}/lessons/${firstBuilt.slug}`}
@@ -116,7 +143,7 @@ export default async function ModulePage({
 
         {(isFoundations || firstBuilt) && (
           <div className="mt-5">
-            <JourneyProgress moduleSlug={slug} />
+            <JourneyProgress moduleSlug={slug} done={status.done} locked={lockedIds} />
           </div>
         )}
 
@@ -139,6 +166,19 @@ export default async function ModulePage({
                 const built = getBuiltLesson(lesson.slug);
                 const preview = Boolean(built);
                 const tone = ["bg-lavender", "bg-peach", "bg-mint"][index % 3];
+                const passed = status.done.includes(lesson.slug);
+                const lockedBy = status.locked[lesson.slug];
+                const badge = !built
+                  ? "Coming soon"
+                  : passed
+                    ? "✓ Passed"
+                    : lockedBy
+                      ? "Locked"
+                      : status.known
+                        ? "Open"
+                        : built.preview
+                          ? "Free"
+                          : "Free account";
 
                 return (
                   <li
@@ -149,8 +189,9 @@ export default async function ModulePage({
                       <span className="rounded-full bg-white/80 px-3 py-1.5 font-mono text-xs font-semibold tabular-nums text-navy">
                         {mod.order}.{index + 1}
                       </span>
-                      <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                        {!built ? "Coming soon" : built.preview ? "Free" : "Free account"}
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                        {lockedBy && built && <LockIcon />}
+                        {badge}
                       </span>
                     </div>
                     <h3 className="mt-4 text-lg font-bold text-ink">
@@ -168,7 +209,11 @@ export default async function ModulePage({
                     <p className="mt-2 text-sm leading-relaxed text-muted">{lesson.summary}</p>
                     {preview && (
                       <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                        Start {isFoundations ? "lesson" : "episode"} →
+                        {lockedBy
+                          ? `${finishFirstText(lockedBy, slug)} first`
+                          : passed
+                            ? `Revisit ${isFoundations ? "lesson" : "episode"} →`
+                            : `Start ${isFoundations ? "lesson" : "episode"} →`}
                       </span>
                     )}
                   </li>
@@ -178,8 +223,13 @@ export default async function ModulePage({
             {finalCount && (
               <ol start={mod.lessons.length + 1} className="mt-3 grid gap-3 sm:grid-cols-2">
                 <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-lavender p-5 hover:border-brand/35">
-                  <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                    Then · {finalCount} questions
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                    {status.locked["final-assessment"] && <LockIcon />}
+                    {status.done.includes("final-assessment")
+                      ? "✓ Passed"
+                      : status.locked["final-assessment"]
+                        ? "Locked"
+                        : `Then · ${finalCount} questions`}
                   </span>
                   <h3 className="mt-4 text-lg font-bold text-ink">
                     <Link
@@ -193,7 +243,9 @@ export default async function ModulePage({
                     A short refresher across all {mod.lessons.length} {unit}. No time limit.
                   </p>
                   <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                    Take the refresher →
+                    {status.locked["final-assessment"]
+                      ? "Opens after every knowledge check above"
+                      : "Take the refresher →"}
                   </span>
                 </li>
                 <li className="relative flex flex-col items-start rounded-3xl border border-line bg-white p-5 hover:border-brand/35">

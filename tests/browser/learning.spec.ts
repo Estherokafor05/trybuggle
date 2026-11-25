@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { assessmentBank, moduleAssessmentBank } from "../../courses/ai-literacy/assessments";
+import { modules } from "../../courses/ai-literacy/content/modules";
 
 process.loadEnvFile(".env.local");
 const base = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
@@ -45,6 +46,31 @@ async function signIn(context: import("@playwright/test").BrowserContext, id?: s
   });
   expect(signInResponse.status()).toBe(200);
   return id;
+}
+/**
+ * Lessons open in order. Passes every check before the given step through the
+ * real API, so a test can start at a later lesson.
+ */
+async function passUpTo(context: import("@playwright/test").BrowserContext, moduleSlug: string, stepId: string) {
+  const submit = async (url: string, questions: { id: string; correct: string }[]) => {
+    const answers = Object.fromEntries(questions.map((q) => [q.id, q.correct]));
+    const response = await context.request.post(base + url, {
+      headers: { Origin: base },
+      data: { version: 1, submissionKey: randomUUID(), answers },
+    });
+    expect(response.status(), url).toBe(200);
+  };
+  for (const mod of [...modules].sort((a, b) => a.order - b.order)) {
+    for (const item of mod.lessons) {
+      if (!assessmentBank[item.slug]) continue;
+      if (mod.slug === moduleSlug && item.slug === stepId) return;
+      await submit(`/api/assessments/${item.slug}/submissions`, assessmentBank[item.slug]);
+    }
+    if (moduleAssessmentBank[mod.slug]) {
+      if (mod.slug === moduleSlug && stepId === "final-assessment") return;
+      await submit(`/api/modules/${mod.slug}/final-assessment/submissions`, moduleAssessmentBank[mod.slug]);
+    }
+  }
 }
 /** Remember a context's anonymous guest ID so its test results are cleaned up. */
 async function trackGuest(context: import("@playwright/test").BrowserContext) {
@@ -168,6 +194,7 @@ test("Maya guide explores photos, changing predictions, fit and message verifica
   context,
 }) => {
   await signIn(context);
+  await passUpTo(context, "ai-foundations", "ai-in-your-day");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(lesson("ai-in-your-day"));
@@ -217,6 +244,7 @@ test("reading alternative is complete with JavaScript disabled", async ({
     viewport: { width: 320, height: 780 },
   });
   await signIn(context);
+  await passUpTo(context, "ai-foundations", "ai-in-your-day");
   const page = await context.newPage();
   for (const slug of ["what-counts-as-ai", "ai-in-your-day"]) {
     await page.goto(base + lesson(slug) + "/reading");
@@ -509,6 +537,7 @@ test("Lesson 3 needs an account, then both routes, every activity and the check 
     await expect(guestPage.getByRole("heading", { name: "Log in", level: 1 })).toBeVisible();
   }
   await signIn(guest);
+  await passUpTo(guest, "ai-foundations", "ai-in-your-day");
   await guestPage.goto(lesson("ai-in-your-day"));
   await expect(guestPage.getByRole("link", { name: /Start Lesson 3/ })).toHaveAttribute("href", lesson("before-chatgpt"));
   await guest.close();
@@ -519,6 +548,7 @@ test("Lesson 3 needs an account, then both routes, every activity and the check 
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "ai-foundations", "before-chatgpt");
     const page = await context.newPage();
     await page.goto(lesson("before-chatgpt"));
     await expect(
@@ -596,6 +626,7 @@ test("Lesson 3 needs an account, then both routes, every activity and the check 
 
   const reader = await browser.newContext();
   await signIn(reader);
+  await passUpTo(reader, "ai-foundations", "before-chatgpt");
   const readingPage = await reader.newPage();
   await readingPage.goto(lesson("before-chatgpt") + "/reading");
   await expect(readingPage.getByRole("heading", { name: "The AI Time Machine" })).toBeVisible();
@@ -603,7 +634,7 @@ test("Lesson 3 needs an account, then both routes, every activity and the check 
   await reader.close();
 });
 
-test("Lessons 4 and 5: every activity, the previous-check notice and accessibility", async ({
+test("Lessons 4 and 5: locked until earlier checks pass, every activity and accessibility", async ({
   browser,
 }) => {
   for (const viewport of [
@@ -614,10 +645,21 @@ test("Lessons 4 and 5: every activity, the previous-check notice and accessibili
     await signIn(context);
     const page = await context.newPage();
 
+    // Lessons open in order: Lesson 4 is locked until Lessons 1 to 3 are passed.
+    await page.goto(lesson("ai-or-software"));
+    await expect(page.getByRole("heading", { name: "Lesson 4: AI or Ordinary Software?", level: 1 })).toBeVisible();
+    await expect(page.getByText("Not open yet")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Go to Lesson 1/ })).toHaveAttribute("href", `${lesson()}#knowledge-check`);
+    await expect(page.locator("video")).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    const early = await context.request.get(`${base}/api/assessments/ai-or-software`);
+    expect(early.status()).toBe(403);
+    await passUpTo(context, "ai-foundations", "ai-or-software");
+
     // Lesson 4: Step into Daniel's reception
     await page.goto(lesson("ai-or-software"));
     await expect(page.getByRole("heading", { name: "AI or Ordinary Software?", level: 1 })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /haven't passed Lesson 3's knowledge check/ })).toBeVisible();
     await expect(page.locator("video")).toHaveAttribute("src", /ai-or-software\/story/);
     await page.getByRole("button", { name: /^Read & Explore/ }).click();
     for (const tool of ["Calendar", "Check-in tablet", "Shared inbox", "Badge printer"])
@@ -661,7 +703,8 @@ test("Lessons 4 and 5: every activity, the previous-check notice and accessibili
     await page.waitForTimeout(900);
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-    // Lesson 5: Help Amina hire fairly
+    // Lesson 5: Help Amina hire fairly (opens once Lesson 4's check is passed)
+    await passUpTo(context, "ai-foundations", "what-ai-can-do");
     await page.goto(lesson("what-ai-can-do"));
     await expect(page.getByRole("heading", { name: "What AI Can Do, and Where You Stay in Charge", level: 1 })).toBeVisible();
     await page.getByRole("button", { name: /^Read & Explore/ }).click();
@@ -713,6 +756,24 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   const final = moduleAssessmentBank["ai-foundations"];
   expect(final).toHaveLength(8);
 
+  // Locked until every lesson check is passed.
+  await page.goto("/modules/ai-foundations/final-assessment");
+  await expect(page.getByRole("heading", { name: "Module 1 final assessment", level: 1 })).toBeVisible();
+  await expect(page.getByText("Not open yet")).toBeVisible();
+  expect((await context.request.get(`${base}/api/modules/ai-foundations/final-assessment`)).status()).toBe(403);
+  await passUpTo(context, "ai-foundations", "what-ai-can-do");
+
+  // Still not eligible: the last lesson check isn't passed, and the server refuses to issue.
+  await page.goto("/modules/ai-foundations/certificate");
+  await expect(page.getByText("You're nearly there.")).toBeVisible();
+  await expect(page.getByText("4 of 6 done")).toBeVisible();
+  const refused = await context.request.post(base + "/api/me/certificates/ai-foundations", {
+    headers: { Origin: base },
+    data: { name: "Test learner" },
+  });
+  expect(refused.status()).toBe(403);
+  await passUpTo(context, "ai-foundations", "final-assessment");
+
   // Fail with 5 of 8, then pass with 6 of 8.
   await page.goto("/modules/ai-foundations/final-assessment");
   await expect(page.getByRole("heading", { name: "Final assessment", level: 1 })).toBeVisible();
@@ -732,28 +793,8 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-  // Not eligible yet: no lesson checks passed, and the server refuses to issue.
-  await page.goto("/modules/ai-foundations/certificate");
-  await expect(page.getByText("You're nearly there.")).toBeVisible();
-  await expect(page.getByText("1 of 6 done")).toBeVisible();
-  const refused = await context.request.post(base + "/api/me/certificates/ai-foundations", {
-    headers: { Origin: base },
-    data: { name: "Test learner" },
-  });
-  expect(refused.status()).toBe(403);
-
-  // Pass every lesson check through the official API.
-  for (const slug of ["what-counts-as-ai", "ai-in-your-day", "before-chatgpt", "ai-or-software", "what-ai-can-do"]) {
-    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
-    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
-      headers: { Origin: base },
-      data: { version: 1, submissionKey: randomUUID(), answers },
-    });
-    expect(response.status()).toBe(200);
-  }
-
   // Eligible: the name starts as the profile name and can be changed before creating.
-  await page.reload();
+  await page.goto("/modules/ai-foundations/certificate");
   await expect(page.getByText("6 of 6 done")).toBeVisible();
   const nameField = page.getByLabel("Name on your certificate");
   await expect(nameField).toHaveValue("Test learner");
@@ -893,6 +934,7 @@ test("Episode 2.1: Module 2 page, every guide step, a 5-question check and acces
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "a-new-helper");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai");
     await expect(page.getByRole("heading", { name: "Talking to AI", level: 1 })).toBeVisible();
@@ -948,6 +990,7 @@ test("Episode 2.2: every guide step, the request builder, a 5-question check and
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "the-email-that-said-nothing");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/the-email-that-said-nothing");
     await expect(page.getByRole("heading", { name: "The Email That Said Nothing", level: 1 })).toBeVisible();
@@ -995,6 +1038,7 @@ test("Episode 2.3: keep or change, follow-ups in the same chat, a 5-question che
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "three-tries-at-the-flyer");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/three-tries-at-the-flyer");
     await expect(page.getByRole("heading", { name: "Three Tries at the Flyer", level: 1 })).toBeVisible();
@@ -1041,6 +1085,7 @@ test("Episode 2.4: request, send or check, find what is missing, a 5-question ch
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "thirty-pages-by-friday");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
     await expect(page.getByRole("heading", { name: "Thirty Pages by Friday", level: 1 })).toBeVisible();
@@ -1083,6 +1128,7 @@ test("Episode 2.5: spot what to check, ask without steering, a 5-question check 
   ]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "the-grant-that-didnt-exist");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/the-grant-that-didnt-exist");
     await expect(page.getByRole("heading", { name: "The Grant That Didn't Exist", level: 1 })).toBeVisible();
@@ -1125,6 +1171,7 @@ test("Episode 2.5: spot what to check, ask without steering, a 5-question check 
 test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certificate", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await signIn(context);
+  await passUpTo(context, "talking-to-ai", "final-assessment");
   const page = await context.newPage();
   const final = moduleAssessmentBank["talking-to-ai"];
   expect(final).toHaveLength(6);
@@ -1155,19 +1202,10 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-  // Episodes are listed by their episode numbers; pass them all, then create the certificate.
+  // Episodes are listed by their episode numbers; then create the certificate.
   await page.goto("/modules/talking-to-ai/certificate");
   await expect(page.getByText("Episode 2.3 knowledge check", { exact: true })).toBeVisible();
-  await expect(page.getByText("1 of 6 done")).toBeVisible();
-  for (const slug of ["a-new-helper", "the-email-that-said-nothing", "three-tries-at-the-flyer", "thirty-pages-by-friday", "the-grant-that-didnt-exist"]) {
-    const answers = Object.fromEntries(assessmentBank[slug].map((q) => [q.id, q.correct]));
-    const response = await context.request.post(`${base}/api/assessments/${slug}/submissions`, {
-      headers: { Origin: base },
-      data: { version: 1, submissionKey: randomUUID(), answers },
-    });
-    expect(response.status()).toBe(200);
-  }
-  await page.reload();
+  // Every episode check was passed on the way here: the final opens only after them.
   await expect(page.getByText("6 of 6 done")).toBeVisible();
   await page.getByRole("button", { name: "Create my certificate" }).click();
   await expect(page.getByText("Your certificate is ready.")).toBeVisible();
@@ -1220,6 +1258,7 @@ test("a signed-in learner can delete their account and everything stored for it"
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const context = await browser.newContext({ viewport });
     const id = await signIn(context);
+    await passUpTo(context, "talking-to-ai", "a-new-helper");
     // Store a result and a saved place for this learner.
     const answers = Object.fromEntries(assessmentBank["a-new-helper"].map((q) => [q.id, q.correct]));
     expect((await context.request.post(`${base}/api/assessments/a-new-helper/submissions`, { headers: { Origin: base }, data: { version: 1, submissionKey: randomUUID(), answers } })).status()).toBe(200);
@@ -1288,6 +1327,7 @@ test("sign-in and unbuilt modules speak to where the learner is", async ({ page,
   await page.goto("/sign-in");
   await expect(page.getByRole("link", { name: /Back to Module 1/ })).toBeVisible();
   await signIn(context);
+  await passUpTo(context, "talking-to-ai", "final-assessment");
   await page.goto("/modules/talking-to-ai");
   await expect(page.getByRole("link", { name: /Next module · Staying Safe with AI \(coming soon\)/ })).toBeVisible();
   await page.goto("/modules/staying-safe-with-ai");
@@ -1300,6 +1340,7 @@ test("Module 2 films stop at the choice and ask, then carry on", async ({ browse
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const context = await browser.newContext({ viewport });
     await signIn(context);
+    await passUpTo(context, "talking-to-ai", "thirty-pages-by-friday");
     const page = await context.newPage();
     await page.goto("/modules/talking-to-ai/lessons/thirty-pages-by-friday");
     const video = page.locator("video");
@@ -1344,6 +1385,7 @@ test("Module 2 films stop at the choice and ask, then carry on", async ({ browse
 
 test("Episode 2.1's film asks its approved question at 1:15", async ({ page, context }) => {
   await signIn(context);
+  await passUpTo(context, "talking-to-ai", "a-new-helper");
   await page.goto("/modules/talking-to-ai/lessons/a-new-helper");
   const tick = (time: number) =>
     page.locator("video").evaluate((v, t) => {

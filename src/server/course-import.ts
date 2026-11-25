@@ -23,7 +23,10 @@ export interface BlockPlan {
 export interface AssessmentPlan {
   legacyKey: string;
   questionCount: number;
+  // Starting settings. Once a check exists, admins own these: re-importing never changes them.
   passPercent: number;
+  maxAttempts: number | null;
+  shuffleOptions: boolean;
   questions: Question[];
   status: Status;
 }
@@ -115,6 +118,8 @@ export function planCourse(): CoursePlan {
               legacyKey: lesson.slug,
               questionCount: bank.length,
               passPercent: 70,
+              maxAttempts: null,
+              shuffleOptions: false,
               questions: bank,
               status,
             }
@@ -136,6 +141,8 @@ export function planCourse(): CoursePlan {
             legacyKey: module.slug,
             questionCount: finalQuestionCount[module.slug] ?? finalBank.length,
             passPercent: 70,
+            maxAttempts: null,
+            shuffleOptions: false,
             questions: finalBank,
             status: sectionStatus,
           }
@@ -192,11 +199,12 @@ export async function writeCourse(run: SqlRunner, plan: CoursePlan): Promise<Imp
     ownerId: string,
   ) => {
     const row = await one(
-      `INSERT INTO assessments(course_id, scope, item_id, section_id, legacy_key, question_count, pass_percent, status)
-       VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+      // Pass mark, tries and shuffling are set only when a check is first created.
+      `INSERT INTO assessments(course_id, scope, item_id, section_id, legacy_key, question_count, pass_percent, max_attempts, shuffle_options, status)
+       VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        ON CONFLICT(course_id, legacy_key) WHERE legacy_key IS NOT NULL DO UPDATE SET
          scope = EXCLUDED.scope, item_id = EXCLUDED.item_id, section_id = EXCLUDED.section_id,
-         question_count = EXCLUDED.question_count, pass_percent = EXCLUDED.pass_percent, status = EXCLUDED.status
+         question_count = EXCLUDED.question_count, status = EXCLUDED.status
        RETURNING id`,
       [
         courseId,
@@ -206,6 +214,8 @@ export async function writeCourse(run: SqlRunner, plan: CoursePlan): Promise<Imp
         assessment.legacyKey,
         assessment.questionCount,
         assessment.passPercent,
+        assessment.maxAttempts,
+        assessment.shuffleOptions,
         assessment.status,
       ],
     );
