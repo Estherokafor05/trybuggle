@@ -1,4 +1,5 @@
 "use client";
+import { POINTS } from "@/lib/points";
 import { useRef, useState, type ReactNode } from "react";
 import { AskBuggle } from "./AskBuggle";
 type Question = {
@@ -32,7 +33,10 @@ export function KnowledgeCheck({
   noun = "knowledge check",
   afterPass,
   discuss,
+  points = { firstTry: POINTS.checkFirstTry, later: POINTS.check },
 }: {
+  /** Points for passing the first time (rewards). Shown once, when earned. */
+  points?: { firstTry: number; later: number };
   slug: string;
   signedIn: boolean;
   /** API base for loading questions and posting submissions. */
@@ -53,7 +57,9 @@ export function KnowledgeCheck({
     // Null means unlimited tries (or already passed).
     [attemptsLeft, setAttemptsLeft] = useState<number | null>(null),
     [busy, setBusy] = useState(false),
-    [message, setMessage] = useState("");
+    [message, setMessage] = useState(""),
+    [used, setUsed] = useState(0),
+    [earned, setEarned] = useState<number | null>(null);
   const key = useRef<string>("");
   const [submitted, setSubmitted] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -70,6 +76,7 @@ export function KnowledgeCheck({
       setResult(data.latest);
       setEverPassed(data.passed);
       setAttemptsLeft(data.attemptsLeft ?? null);
+      setUsed(data.attemptsUsed ?? 0);
       setSubmitted(false);
       key.current = crypto.randomUUID();
     } catch (e) {
@@ -99,6 +106,8 @@ export function KnowledgeCheck({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResult(data);
+      if (data.passed && !everPassed) setEarned(used === 0 ? points.firstTry : points.later);
+      setUsed((n) => n + 1);
       if (data.passed) {
         setEverPassed(true);
         setAttemptsLeft(null);
@@ -173,6 +182,17 @@ export function KnowledgeCheck({
                   ? `${noun.charAt(0).toUpperCase()}${noun.slice(1)} passed`
                   : "Review the feedback and try again"}
               </p>
+              {result.passed && earned != null && (
+                <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-lavender px-3 py-1 text-sm font-semibold text-navy">
+                  <span aria-hidden="true" className="inline-block motion-safe:animate-[badge-pop_0.5s_ease-out]">
+                    ⭐
+                  </span>
+                  +{earned} points{earned === points.firstTry && points.firstTry !== points.later ? " for passing on your first try" : ""} ·{" "}
+                  <a href="/leaderboard" className="underline underline-offset-4">
+                    leaderboard
+                  </a>
+                </p>
+              )}
               <p className="mt-2">
                 {result.correct_count} of {result.feedback.length} correct ·{" "}
                 {Math.round((result.correct_count / result.feedback.length) * 100)}%

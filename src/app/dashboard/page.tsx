@@ -7,7 +7,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { formatMinutes, learnerDashboard, type Dashboard, type ModuleSummary } from "@/server/dashboard";
 import { OrgLogo } from "@/components/org/OrgShell";
+import { Badges } from "@/components/rewards/Badges";
 import { visibleCourses } from "@/server/builder-learn";
+import { myRewards } from "@/server/rewards";
 import { canManage, myOrganisations } from "@/server/organisations";
 
 export const metadata: Metadata = { title: "Your dashboard | Buggle Learn" };
@@ -172,9 +174,10 @@ export default async function DashboardPage() {
   } catch {
     data = null;
   }
-  const [orgs, more] = await Promise.all([
+  const [orgs, more, rewards] = await Promise.all([
     myOrganisations(session.user.id).catch(() => []),
     visibleCourses(session.user.id).catch(() => []),
+    myRewards(session.user.id).catch(() => null),
   ]);
 
   return (
@@ -280,6 +283,35 @@ export default async function DashboardPage() {
                     </p>
                   )}
                 </section>
+
+                {rewards && (
+                  <section aria-labelledby="points-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
+                    <h2 id="points-title" className="flex items-center gap-2 text-lg font-bold">
+                      <span aria-hidden="true">⭐</span> Your points
+                    </h2>
+                    <dl className="mt-3 grid grid-cols-2 gap-2">
+                      <div className="rounded-xl bg-lavender p-3">
+                        <dt className="text-xs font-semibold text-muted">This week</dt>
+                        <dd className="text-2xl font-bold text-navy">{rewards.week}</dd>
+                      </div>
+                      <div className="rounded-xl bg-peach p-3">
+                        <dt className="text-xs font-semibold text-ink">Days in a row</dt>
+                        <dd className="flex items-center gap-1 text-2xl font-bold text-navy">
+                          <span aria-hidden="true" className={rewards.streak ? "inline-block motion-safe:animate-[flame-flicker_1.6s_ease-in-out_infinite]" : "grayscale"}>
+                            🔥
+                          </span>
+                          {rewards.streak}
+                        </dd>
+                      </div>
+                    </dl>
+                    <div className="mt-3">
+                      <Badges badges={rewards.badges} compact />
+                    </div>
+                    <Link href="/leaderboard" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
+                      See the leaderboard
+                    </Link>
+                  </section>
+                )}
 
                 {more.length > 0 && (
                   <section aria-labelledby="more-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">

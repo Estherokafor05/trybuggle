@@ -44,6 +44,9 @@ export default async function ForumHome({ searchParams }: { searchParams: Promis
             <Link href="/forum/guidelines" className={forumOutline}>
               Community guidelines
             </Link>
+            <Link href="/leaderboard" className={forumOutline}>
+              <span aria-hidden="true">🏆</span> Leaderboard
+            </Link>
           </div>
         </header>
 

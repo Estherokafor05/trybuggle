@@ -10,6 +10,7 @@ import { db } from "@/server/database";
 import { deleteEmptyOrganisations, soleOwnerOf } from "@/server/organisations";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/locales";
 import { removePhoto, savePhoto } from "@/server/profile-photos";
+import { setLeaderboardHidden } from "@/server/rewards";
 
 async function requireSession() {
   const session = await currentSession();
@@ -144,4 +145,11 @@ export async function removePhotoAction() {
     done("profile", { error: errorCode(error) });
   }
   done("profile", { notice: "PHOTO_REMOVED" });
+}
+
+/** Whether the learner appears on leaderboards. They earn points either way. */
+export async function setLeaderboardAction(formData: FormData) {
+  const session = await requireSession();
+  await setLeaderboardHidden(session.user.id, formData.get("show") !== "on");
+  done("profile", { notice: formData.get("show") === "on" ? "LEADERBOARD_SHOWN" : "LEADERBOARD_HIDDEN" });
 }

@@ -113,7 +113,8 @@ export function ForumNotice({ notice, error }: { notice?: string | null; error?:
 }
 
 export const forumNotices: Record<string, string> = {
-  posted: "Posted. Thanks for starting the conversation.",
+  posted: "Posted. Thanks for starting the conversation. ⭐ Asking and helping earns you points on the leaderboard.",
+  replied: "Reply posted. ⭐ Thanks for helping: it earns you points on the leaderboard.",
   edited: "Saved.",
   deleted: "Deleted.",
   reported: "Thanks for telling us. Our team will look at it.",

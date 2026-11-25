@@ -267,3 +267,14 @@ body > main {
     }
   }
 }
+
+/* Rewards: a badge pops in; the streak flame flickers gently. */
+@keyframes badge-pop {
+  0% { transform: scale(0.6); }
+  70% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes flame-flicker {
+  0%, 100% { transform: rotate(-4deg) scale(1); }
+  50% { transform: rotate(4deg) scale(1.08); }
+}
