@@ -9,6 +9,7 @@ import { forgetGuest } from "@/server/guest";
 import { db } from "@/server/database";
 import { deleteEmptyOrganisations, soleOwnerOf } from "@/server/organisations";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/locales";
+import { removePhoto, savePhoto } from "@/server/profile-photos";
 
 async function requireSession() {
   const session = await currentSession();
@@ -16,8 +17,9 @@ async function requireSession() {
   return session;
 }
 
-function done(section: string, extra: Record<string, string>) {
-  redirect(`/account?${new URLSearchParams(extra).toString()}#${section}`);
+/** Back to Settings, with the message shown in the section that changed. */
+function done(section: string, extra: Record<string, string>): never {
+  redirect(`/account?${new URLSearchParams({ ...extra, s: section }).toString()}#${section}`);
 }
 
 function errorCode(error: unknown) {
@@ -28,13 +30,13 @@ function errorCode(error: unknown) {
 export async function updateNameAction(formData: FormData) {
   await requireSession();
   const name = String(formData.get("name") ?? "").trim().slice(0, 80);
-  if (!name) done("details", { error: "MISSING_FIELDS" });
+  if (!name) done("profile", { error: "MISSING_FIELDS" });
   try {
     await auth.api.updateUser({ body: { name }, headers: await headers() });
   } catch (error) {
-    done("details", { error: errorCode(error) });
+    done("profile", { error: errorCode(error) });
   }
-  done("details", { notice: "NAME_SAVED" });
+  done("profile", { notice: "NAME_SAVED" });
 }
 
 export async function changePasswordAction(formData: FormData) {
@@ -64,8 +66,8 @@ export async function linkGoogleAction() {
     const result = await auth.api.linkSocialAccount({
       body: {
         provider: "google",
-        callbackURL: "/account?notice=GOOGLE_LINKED#sign-in",
-        errorCallbackURL: "/account#sign-in",
+        callbackURL: "/account?notice=GOOGLE_LINKED&s=sign-in#sign-in",
+        errorCallbackURL: "/account?s=sign-in#sign-in",
         disableRedirect: true,
       },
       headers: await headers(),
@@ -112,10 +114,34 @@ export async function setLanguageAction(formData: FormData) {
   const session = await currentSession();
   if (!session?.user?.id) redirect("/sign-in?callbackUrl=%2Faccount");
   const locale = formData.get("locale");
-  if (!isLocale(locale)) redirect("/account?error=LANGUAGE#language");
+  if (!isLocale(locale)) done("language", { error: "LANGUAGE" });
   (await cookies()).set(LOCALE_COOKIE, locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
   await db()`INSERT INTO learners(id) VALUES(${session.user.id}) ON CONFLICT DO NOTHING`;
   await db()`INSERT INTO learner_preferences(learner_id, locale) VALUES(${session.user.id}, ${locale})
     ON CONFLICT (learner_id) DO UPDATE SET locale = EXCLUDED.locale, updated_at = now()`;
-  redirect("/account?notice=language-saved#language");
+  done("language", { notice: "LANGUAGE_SAVED" });
+}
+
+/** Saves a new profile photo. The browser has already made it a small square. */
+export async function savePhotoAction(formData: FormData) {
+  const session = await requireSession();
+  const saved = await savePhoto(session.user.id, formData.get("photo"));
+  if ("error" in saved) done("profile", { error: saved.error });
+  try {
+    await auth.api.updateUser({ body: { image: saved.image }, headers: await headers() });
+  } catch (error) {
+    done("profile", { error: errorCode(error) });
+  }
+  done("profile", { notice: "PHOTO_SAVED" });
+}
+
+export async function removePhotoAction() {
+  const session = await requireSession();
+  await removePhoto(session.user.id);
+  try {
+    await auth.api.updateUser({ body: { image: null }, headers: await headers() });
+  } catch (error) {
+    done("profile", { error: errorCode(error) });
+  }
+  done("profile", { notice: "PHOTO_REMOVED" });
 }

@@ -860,14 +860,14 @@ test("signing out from the bottom of account settings ends the session on phone 
     // The header no longer has a sign-out button, on any screen size.
     if (phone) {
       await page.getByRole("button", { name: "Menu" }).click();
-      await expect(page.getByText("Signed in as Test learner")).toBeVisible();
+      await expect(page.getByText("Signed in as Test L.")).toBeVisible();
     }
     await expect(page.getByRole("banner").getByRole("button", { name: "Sign out" })).toHaveCount(0);
     await page.getByRole("banner").getByRole("link", { name: "Your account" }).first().click();
     await expect(page.getByRole("heading", { name: "Your account", level: 1 })).toBeVisible();
     // It is the last section of the page.
     const lastHeading = await page.locator("main h2").last().textContent();
-    expect(lastHeading).toBe("Sign out");
+    expect(lastHeading).toBe("Sign out or delete");
     await page.getByRole("main").getByRole("button", { name: "Sign out" }).click();
     await expect(page).toHaveURL(base + "/");
     await page.goto("/modules/ai-foundations/certificate");
@@ -1356,7 +1356,8 @@ test("a signed-in learner can delete their account and everything stored for it"
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.waitForTimeout(600);
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-    // The confirmation box is required.
+    // Deleting is folded away until it's opened, and the confirmation box is required.
+    await page.locator("summary", { hasText: "Delete your account" }).click();
     await expect(page.getByLabel(/will be deleted for good/)).toHaveAttribute("required", "");
     await page.getByLabel(/will be deleted for good/).check();
     await page.getByRole("button", { name: "Delete my account" }).click();
@@ -1620,7 +1621,7 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   await expect(page.getByText("Posted. Thanks for starting the conversation.")).toBeVisible();
   await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
   await expect(page.getByRole("link", { name: /About Module 1, Lesson 1: What is AI\?/ })).toBeVisible();
-  await expect(page.getByText("Test L.").first()).toBeVisible();
+  await expect(page.getByRole("main").getByText("Test L.").first()).toBeVisible();
   const threadUrl = page.url().split("?")[0];
 
   // Ben answers and Ada comments; links work, HTML never runs.
@@ -1685,16 +1686,18 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   for (const c of [visitor, ada, ben]) await c.close();
 });
 
-test("learners can choose their language in settings", async ({ browser }) => {
+test("learners can choose their language in settings; languages not ready yet are greyed out", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await signIn(context);
   const page = await context.newPage();
   await page.goto("/account");
   const section = page.getByRole("region", { name: "Language" });
-  await expect(section.getByLabel("Language")).toHaveValue("en");
+  await expect(section.getByRole("radio", { name: "English" })).toBeChecked();
   await expect(section.getByText(/Lessons are in English for now/)).toBeVisible();
+  await expect(section.getByRole("radio", { name: /Français/ })).toBeDisabled();
+  await expect(section.getByText("Not ready yet")).toHaveCount(11);
   await section.getByRole("button", { name: "Save language" }).click();
-  await expect(page.getByText("Language saved.")).toBeVisible();
+  await expect(section.getByText("Language saved.")).toBeVisible();
   expect((await context.cookies(base)).find((c) => c.name === "buggle_lang")?.value).toBe("en");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
@@ -1940,5 +1943,55 @@ test("lesson builder: an organisation builds a course with blocks and a check, a
     await sql`DELETE FROM courses WHERE organization_id IN (SELECT id::text FROM organisations WHERE slug = ${slug})`;
     await sql`DELETE FROM organisations WHERE slug = ${slug}`;
     await sql.end();
+  }
+});
+
+test("the header shows the learner's short name and photo; photos can be added and removed in settings", async ({ browser }) => {
+  for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+    const context = await browser.newContext({ viewport });
+    await signIn(context);
+    const page = await context.newPage();
+    await page.goto("/dashboard");
+    const phone = viewport.width < 1024;
+    if (phone) await page.getByRole("button", { name: "Menu" }).click();
+    const accountLink = page.getByRole("banner").getByRole("link", { name: /Your account/ }).filter({ visible: true });
+    if (!phone) {
+      await expect(accountLink).toContainText("Test L.");
+      await expect(accountLink.getByText("TL", { exact: true })).toBeVisible();
+    } else await expect(page.getByText("Signed in as Test L.")).toBeVisible();
+    await accountLink.click();
+
+    // Settings: sections menu, then add a photo. It's made into a small square in the browser.
+    await expect(page.getByRole("navigation", { name: "Settings sections" }).getByRole("link")).toHaveCount(5);
+    await expect(page.getByRole("img", { name: "Your initials, Test learner" })).toBeVisible();
+    const canvasPng = await page.evaluate(async () => {
+      const c = document.createElement("canvas");
+      c.width = 900;
+      c.height = 600;
+      const x = c.getContext("2d")!;
+      x.fillStyle = "#7155d9";
+      x.fillRect(0, 0, 900, 600);
+      const blob: Blob = await new Promise((r) => c.toBlob((b) => r(b!), "image/png"));
+      return Array.from(new Uint8Array(await blob.arrayBuffer()));
+    });
+    await page.getByLabel("Choose a photo").setInputFiles({ name: "me.png", mimeType: "image/png", buffer: Buffer.from(canvasPng) });
+    await expect(page.getByRole("img", { name: "Your new photo, not saved yet" })).toBeVisible();
+    await page.getByRole("button", { name: "Save photo" }).click();
+    await expect(page.getByText("Your photo has been saved.")).toBeVisible();
+    const photo = page.getByRole("img", { name: "Your profile photo" });
+    await expect(photo).toBeVisible();
+    const src = (await photo.getAttribute("src"))!;
+    expect(src).toMatch(/^\/api\/avatars\/[0-9a-f-]{36}$/);
+    const served = await context.request.get(base + src);
+    expect(served.headers()["content-type"]).toBe("image/jpeg");
+    expect((await served.body()).length).toBeLessThan(60_000);
+    if (!phone) await expect(page.getByRole("link", { name: "Your account: Test L." }).locator(`img[src="${src}"]`)).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Remove photo" }).click();
+    await expect(page.getByText(/Your photo has been removed/)).toBeVisible();
+    expect((await context.request.get(base + src)).status()).toBe(404);
+    await context.close();
   }
 });
