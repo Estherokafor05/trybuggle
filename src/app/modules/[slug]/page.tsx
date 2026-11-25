@@ -4,12 +4,15 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyProgress } from "@/components/JourneyProgress";
-import { FoundationsIllustration } from "@/components/diagrams/FoundationIllustrations";
-import { finalQuestionCount } from "@/content/journey";
-import { TRACK_LABELS, getModule, modules } from "@/content/modules";
-import { getBuiltLesson } from "@/content/preview-lessons";
-import { auth } from "@/auth";
-import { googleAuthConfigured } from "@/lib/auth-configured";
+import { FoundationsIllustration } from "@course/ui";
+import { finalQuestionCount } from "@course";
+import { checkQuestions, finalCheck } from "@/server/checks";
+import { TRACK_LABELS, getModule, modules } from "@course";
+import { getBuiltLesson } from "@course";
+import { currentSession } from "@/auth";
+import { LockIcon } from "@/components/LockIcon";
+import { ForumPeek } from "@/components/forum/ForumPeek";
+import { finishFirstText, pathStatus } from "@/server/progression";
 
 export const dynamic = "force-dynamic";
 
@@ -40,12 +43,18 @@ export default async function ModulePage({
   const mod = getModule(slug);
   if (!mod) notFound();
 
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   const next = modules.find((m) => m.order === mod.order + 1);
   const isFoundations = mod.order === 1;
   const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));
   const unit = isFoundations ? "lessons" : "episodes";
-  const finalCount = finalQuestionCount[slug];
+  const final = finalCheck(slug);
+  const finalCount = final ? (await checkQuestions(final)).length : finalQuestionCount[slug];
+  // Signed-in learners see what they've passed and what is still locked.
+  const status = await pathStatus(session?.user?.id, slug);
+  const lockedIds = Object.keys(status.locked);
+  const firstStep = isFoundations ? mod.lessons[0]?.slug : firstBuilt?.slug;
+  const moduleLocked = firstStep ? status.locked[firstStep] : undefined;
 
   return (
     <>
@@ -81,7 +90,27 @@ export default async function ModulePage({
                 ready. In the meantime, you can work through the modules that are already open.
               </p>
             )}
-            {!isFoundations && firstBuilt && (
+            {moduleLocked && (
+              <p className="mt-6 flex max-w-[58ch] items-start gap-2 rounded-2xl bg-white/80 p-4 text-sm leading-relaxed text-ink">
+                <LockIcon className="mt-0.5 size-4 shrink-0 text-navy" />
+                <span>
+                  <b>Not open yet.</b> Modules open in order. Finish Module {moduleLocked.moduleOrder},
+                  including its final assessment, to open this one. Next up for you:{" "}
+                  {moduleLocked.label}.
+                </span>
+              </p>
+            )}
+            {moduleLocked && (
+              <div className="mt-6">
+                <Link
+                  href={moduleLocked.href}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                >
+                  Continue Module {moduleLocked.moduleOrder} <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            )}
+            {!isFoundations && firstBuilt && !moduleLocked && (
               <div className="mt-6">
                 <Link
                   href={`/modules/${slug}/lessons/${firstBuilt.slug}`}
@@ -117,7 +146,7 @@ export default async function ModulePage({
 
         {(isFoundations || firstBuilt) && (
           <div className="mt-5">
-            <JourneyProgress moduleSlug={slug} />
+            <JourneyProgress moduleSlug={slug} done={status.done} locked={lockedIds} />
           </div>
         )}
 
@@ -140,6 +169,19 @@ export default async function ModulePage({
                 const built = getBuiltLesson(lesson.slug);
                 const preview = Boolean(built);
                 const tone = ["bg-lavender", "bg-peach", "bg-mint"][index % 3];
+                const passed = status.done.includes(lesson.slug);
+                const lockedBy = status.locked[lesson.slug];
+                const badge = !built
+                  ? "Coming soon"
+                  : passed
+                    ? "✓ Passed"
+                    : lockedBy
+                      ? "Locked"
+                      : status.known
+                        ? "Open"
+                        : built.preview
+                          ? "Free"
+                          : "Free account";
 
                 return (
                   <li
@@ -150,8 +192,9 @@ export default async function ModulePage({
                       <span className="rounded-full bg-white/80 px-3 py-1.5 font-mono text-xs font-semibold tabular-nums text-navy">
                         {mod.order}.{index + 1}
                       </span>
-                      <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                        {!built ? "Coming soon" : built.preview ? "Free" : "Free account"}
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                        {lockedBy && built && <LockIcon />}
+                        {badge}
                       </span>
                     </div>
                     <h3 className="mt-4 text-lg font-bold text-ink">
@@ -169,7 +212,11 @@ export default async function ModulePage({
                     <p className="mt-2 text-sm leading-relaxed text-muted">{lesson.summary}</p>
                     {preview && (
                       <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                        Start {isFoundations ? "lesson" : "episode"} →
+                        {lockedBy
+                          ? `${finishFirstText(lockedBy, slug)} first`
+                          : passed
+                            ? `Revisit ${isFoundations ? "lesson" : "episode"} →`
+                            : `Start ${isFoundations ? "lesson" : "episode"} →`}
                       </span>
                     )}
                   </li>
@@ -179,8 +226,13 @@ export default async function ModulePage({
             {finalCount && (
               <ol start={mod.lessons.length + 1} className="mt-3 grid gap-3 sm:grid-cols-2">
                 <li className="relative flex flex-col items-start rounded-3xl border border-transparent bg-lavender p-5 hover:border-brand/35">
-                  <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
-                    Then · {finalCount} questions
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold text-navy">
+                    {status.locked["final-assessment"] && <LockIcon />}
+                    {status.done.includes("final-assessment")
+                      ? "✓ Passed"
+                      : status.locked["final-assessment"]
+                        ? "Locked"
+                        : `Then · ${finalCount} questions`}
                   </span>
                   <h3 className="mt-4 text-lg font-bold text-ink">
                     <Link
@@ -194,23 +246,25 @@ export default async function ModulePage({
                     A short refresher across all {mod.lessons.length} {unit}. No time limit.
                   </p>
                   <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
-                    Take the refresher →
+                    {status.locked["final-assessment"]
+                      ? "Opens after every knowledge check above"
+                      : "Take the refresher →"}
                   </span>
                 </li>
                 <li className="relative flex flex-col items-start rounded-3xl border border-line bg-white p-5 hover:border-brand/35">
                   <span className="rounded-full bg-mint px-3 py-1.5 text-xs font-semibold text-navy">
-                    Your reward
+                    Counts towards
                   </span>
                   <h3 className="mt-4 text-lg font-bold text-ink">
                     <Link
-                      href={`/modules/${slug}/certificate`}
+                      href="/certificate"
                       className="after:absolute after:inset-0 after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
                     >
-                      Certificate of Completion
+                      Your Essentials certificate
                     </Link>
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">
-                    Pass every knowledge check and the final assessment, then download your certificate as a PDF.
+                    Complete every module in the Essentials to earn your free certificate. Download it, share a check link and add it to LinkedIn.
                   </p>
                   <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
                     See your progress →
@@ -246,7 +300,15 @@ export default async function ModulePage({
           </aside>
         </div>
 
-        <nav aria-label="Module navigation" className="mt-9 flex flex-wrap items-center gap-4 border-t border-line pt-6">
+        <div className="mt-9">
+          <ForumPeek
+            moduleSlug={slug}
+            heading={`Talk about Module ${mod.order}`}
+            intro="Questions, tips and ideas from other learners about this module. Learn more from each other."
+          />
+        </div>
+
+        <nav aria-label="Module navigation" className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-6">
           <Link
             href="/curriculum"
             className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"

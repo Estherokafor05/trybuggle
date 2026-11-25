@@ -4,37 +4,13 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parseCheckpoint, emptyCheckpoint } from "../src/lib/learning-state.ts";
 import { scoreAssessment } from "../src/lib/assessment-scoring.ts";
-import { assessmentBank } from "../src/server/assessment-bank.ts";
-import { exploreGuides } from "../src/content/explore-guides.ts";
-import { learningIdentityCallbacks } from "../src/lib/auth-callbacks.ts";
-test("Google learning identity stays stable across sign-ins and ignores client profile updates", async () => {
-  const first = await learningIdentityCallbacks.jwt({
-    token: { sub: "temporary-user-1" },
-    account: {
-      provider: "google",
-      providerAccountId: "verified-google-account",
-    },
-  });
-  const second = await learningIdentityCallbacks.jwt({
-    token: { sub: "temporary-user-2" },
-    account: {
-      provider: "google",
-      providerAccountId: "verified-google-account",
-    },
-  });
-  assert.equal(first.learnerId, second.learnerId);
-  assert.equal(first.learnerId, "google:verified-google-account");
-  const updated = await learningIdentityCallbacks.jwt({
-    token: first,
-    trigger: "update",
-    session: { learnerId: "someone-else" },
-  });
-  assert.equal(updated.learnerId, first.learnerId);
-  const legacy = await learningIdentityCallbacks.session({
-    session: { user: { name: "Existing learner" } },
-    token: { sub: "old-unstable-id" },
-  });
-  assert.equal(legacy.user.id, undefined);
+import { assessmentBank } from "../courses/ai-literacy/assessments.ts";
+import { exploreGuides } from "../courses/ai-literacy/content/explore-guides.ts";
+import { legacyGoogleLearnerId } from "../src/server/identity.ts";
+test("progress saved under the old Google sign-in can still be found", () => {
+  // The old sign-in stored learners as "google:<Google account ID>". The new sign-in
+  // looks for exactly that ID when someone links Google, so their progress moves over.
+  assert.equal(legacyGoogleLearnerId("verified-google-account"), "google:verified-google-account");
 });
 test("knowledge checks pass at 70%: 7 of 10, 4 of 5", () => {
   for (const questions of Object.values(assessmentBank)) {

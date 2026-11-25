@@ -1,15 +1,22 @@
 import Link from "next/link";
-import { journeyFor } from "@/content/journey";
-import { getModule } from "@/content/modules";
+import { journeyFor } from "@course";
+import { getModule } from "@course";
+import { LockIcon } from "@/components/LockIcon";
 
-// Shows the learner where they are on a module's path, and lets them jump
-// to any step that is ready.
+// Shows the learner where they are on a module's path. Steps open in order:
+// passed steps get a tick, steps not open yet get a padlock and no link.
 export function JourneyProgress({
   current,
   moduleSlug = "ai-foundations",
+  done = [],
+  locked = [],
 }: {
   current?: string;
   moduleSlug?: string;
+  /** Step ids the learner has passed. */
+  done?: string[];
+  /** Step ids not open yet for this learner. */
+  locked?: string[];
 }) {
   const journey = journeyFor(moduleSlug);
   const order = getModule(moduleSlug)?.order ?? 1;
@@ -36,17 +43,31 @@ export function JourneyProgress({
       <ol className="mt-3 flex items-start">
         {journey.map((step, i) => {
           const isCurrent = i === index;
-          const isBefore = index >= 0 && i < index;
+          const isDone = done.includes(step.id);
+          const isLocked = !isCurrent && locked.includes(step.id);
+          const isBefore = isDone || (index >= 0 && i < index && !done.length);
           const dot = `relative z-10 grid size-9 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums transition-colors ${
             isCurrent
               ? "bg-navy text-white ring-4 ring-hero-lavender"
               : isBefore
                 ? "bg-brand text-white"
-                : step.available
-                  ? "border-2 border-brand bg-white text-navy"
-                  : "border-2 border-dashed border-line bg-white text-muted"
+                : isLocked
+                  ? "border-2 border-line bg-canvas text-muted"
+                  : step.available
+                    ? "border-2 border-brand bg-white text-navy"
+                    : "border-2 border-dashed border-line bg-white text-muted"
           }`;
-          const symbol = step.id === "welcome" ? "★" : step.id === "final-assessment" ? "⚑" : String(numberOf(i));
+          const symbol = isLocked ? (
+            <LockIcon />
+          ) : isDone && !isCurrent ? (
+            "✓"
+          ) : step.id === "welcome" ? (
+            "★"
+          ) : step.id === "final-assessment" ? (
+            "⚑"
+          ) : (
+            String(numberOf(i))
+          );
           const label = (
             <span
               className={`mt-1.5 block text-center text-[11px] leading-tight sm:text-xs ${
@@ -57,10 +78,13 @@ export function JourneyProgress({
               {!step.available && (
                 <span className="block text-[10px] sm:text-[11px]">Coming soon</span>
               )}
+              {step.available && isLocked && (
+                <span className="block text-[10px] sm:text-[11px]">Locked</span>
+              )}
             </span>
           );
           const description = `${step.label}: ${step.title}${
-            step.available ? "" : " (coming soon)"
+            !step.available ? " (coming soon)" : isLocked ? " (locked)" : isDone ? " (passed)" : ""
           }`;
 
           return (
@@ -76,7 +100,7 @@ export function JourneyProgress({
                   }`}
                 />
               )}
-              {step.available && !isCurrent ? (
+              {step.available && !isCurrent && !isLocked ? (
                 <Link
                   href={step.href}
                   title={description}

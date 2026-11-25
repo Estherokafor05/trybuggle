@@ -1,36 +1,39 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { CertificatePanel } from "@/components/certificate/CertificatePanel";
 import { Requirements } from "@/components/certificate/Requirements";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { stepLabel } from "@/content/journey";
-import { getModule, modules } from "@/content/modules";
-import { getBuiltLesson } from "@/content/preview-lessons";
-import { googleAuthConfigured } from "@/lib/auth-configured";
-import { getCertificate, hasFinalAssessment, moduleRequirements } from "@/server/certificates";
-import { claimGuest, guestId, openToGuests } from "@/server/guest";
+import { getBuiltLesson, getModule, modules } from "@course";
+import {
+  essentialsTitle,
+  getCertificate,
+  hasFinalAssessment,
+  moduleRequirements,
+} from "@/server/certificates";
+import { siteOrigin } from "@/server/site";
 
-export const metadata: Metadata = { title: "Your certificate | Buggle Learn" };
+export const metadata: Metadata = { title: "Module progress | Buggle Learn" };
 
-export default async function CertificatePage({ params }: { params: Promise<{ slug: string }> }) {
+// A module's checklist. Modules no longer have their own certificate: each one
+// counts towards the Essentials certificate (FRD Version 2). A module
+// certificate issued before that change still shows here and still verifies.
+export default async function ModuleCompletePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const mod = getModule(slug);
   if (!mod || !hasFinalAssessment(slug)) notFound();
-  const session = googleAuthConfigured ? await auth() : null;
-  const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/certificate`)}`;
-  const account = session?.user?.id ?? null;
-  const guest = await guestId();
-  if (!account && !openToGuests(slug)) redirect(signUpHref);
-  // Results earned as a guest on this device count once the learner signs up.
-  if (account && guest) await claimGuest(guest, account).catch(() => undefined);
-  const learner = account ?? guest;
-  const loaded = learner
-    ? await Promise.all([moduleRequirements(learner, slug), account ? getCertificate(account, slug) : null]).catch(() => null)
-    : null;
-  const guestRequirements = !learner ? moduleRequirementsPlaceholder(slug) : null;
+  const session = await currentSession();
+  if (!session?.user?.id)
+    redirect(`/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/certificate`)}`);
+  const learner = session.user.id;
+  const [loaded, origin] = await Promise.all([
+    Promise.all([moduleRequirements(learner, slug), getCertificate(learner, slug)]).catch(() => null),
+    siteOrigin(),
+  ]);
+  const complete = Boolean(loaded?.[0].eligible);
+  const legacy = loaded?.[1] ?? null;
 
   return (
     <>
@@ -41,53 +44,52 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
         </Link>
         <header className="mt-2 rounded-[1.75rem] bg-hero-lavender p-5 sm:rounded-[2rem] sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">{mod.title}</p>
-          <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">Certificate of Completion</h1>
+          <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">
+            {complete ? `Module ${mod.order} complete` : `Finish Module ${mod.order}`}
+          </h1>
           <p className="mt-2 max-w-[62ch] leading-relaxed text-ink">
-            Pass every knowledge check in this module and the final assessment to receive your certificate from Buggle Learn.
+            Pass every knowledge check in this module and the final assessment. Each completed module
+            counts towards your free {essentialsTitle} certificate.
           </p>
         </header>
-        {!account && (
-          <section aria-labelledby="sign-up-title" className="mt-6 rounded-[1.75rem] bg-lavender p-5 sm:p-6">
-            <h2 id="sign-up-title" className="text-xl font-bold">
-              {loaded?.[0].eligible ? "You've done it! Sign up to get your certificate" : "Sign up to get your certificate"}
-            </h2>
-            <p className="mt-2 leading-relaxed text-ink">
-              {loaded?.[0].eligible
-                ? `You've passed everything in Module ${mod.order}. Create a free account to collect your certificate. Your results come with you.`
-                : "You don't need an account to learn. When you've passed everything below, create a free account to collect your certificate. Results you earn on this device come with you."}
-            </p>
-            <Link
-              href={signUpHref}
-              className="mt-4 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
-            >
-              Sign up to get your certificate
-            </Link>
-          </section>
-        )}
-        {guestRequirements ? (
-          <div className="mt-7">
-            <Requirements requirements={guestRequirements} />
-          </div>
-        ) : !loaded ? (
+        {!loaded ? (
           <p role="alert" className="mt-6 rounded-xl bg-peach p-4">
-            Your certificate details couldn&apos;t load right now. Please refresh in a moment.
+            Your progress couldn&apos;t load right now. Please refresh in a moment.
           </p>
         ) : (
           <>
-            {!account ? null : loaded[1] || loaded[0].eligible ? (
+            {complete ? (
+              <section aria-labelledby="complete-title" className="mt-6 rounded-[1.75rem] bg-mint p-5 sm:p-6">
+                <h2 id="complete-title" className="text-xl font-bold">
+                  ✓ You&apos;ve passed everything in Module {mod.order}
+                </h2>
+                <p className="mt-2 leading-relaxed text-ink">
+                  This module now counts towards your {essentialsTitle} certificate.
+                </p>
+                <Link
+                  href="/certificate"
+                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+                >
+                  See your Essentials certificate <span aria-hidden="true">→</span>
+                </Link>
+              </section>
+            ) : (
+              <p className="mt-6 rounded-2xl bg-canvas p-5 leading-relaxed">
+                You&apos;re nearly there. This module is complete as soon as everything below is ticked.
+              </p>
+            )}
+            {legacy && (
               <CertificatePanel
                 slug={slug}
                 moduleTitle={mod.title}
-                profileName={session?.user?.name ?? ""}
-                initial={loaded[1]}
+                profileName={session.user.name ?? ""}
+                initial={legacy}
+                origin={origin}
+                canCreate={false}
               />
-            ) : (
-              <p className="mt-6 rounded-2xl bg-canvas p-5 leading-relaxed">
-                You&apos;re nearly there. Your certificate becomes available as soon as everything below is ticked.
-              </p>
             )}
-            {(loaded[1] || loaded[0].eligible) && <StartUsingAiCard slug={slug} />}
-            {account && (loaded[1] || loaded[0].eligible) && <NextModule order={mod.order} />}
+            {complete && <StartUsingAiCard slug={slug} />}
+            {complete && <NextModule order={mod.order} />}
             <div className="mt-7">
               <Requirements requirements={loaded[0].requirements} />
             </div>
@@ -99,28 +101,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ sl
   );
 }
 
-/** The checklist for a visitor who has not taken anything yet. */
-function moduleRequirementsPlaceholder(slug: string) {
-  const mod = getModule(slug)!;
-  return [
-    ...mod.lessons.map((l, i) => ({
-      id: l.slug,
-      label: `${stepLabel(mod.order, i)} knowledge check`,
-      title: l.title,
-      href: `/modules/${slug}/lessons/${l.slug}#knowledge-check`,
-      passedAt: null,
-    })),
-    {
-      id: "final-assessment",
-      label: "Final assessment",
-      title: `Module ${mod.order} refresher`,
-      href: `/modules/${slug}/final-assessment`,
-      passedAt: null,
-    },
-  ];
-}
-
-/** What to do after a certificate: start the next module, or hear that it is on its way. */
+/** What to do after a module: start the next one, or hear that it is on its way. */
 function NextModule({ order }: { order: number }) {
   const next = modules.find((m) => m.order === order + 1);
   if (!next) return null;

@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { currentSession } from "@/auth";
 import { KnowledgeCheck } from "@/components/assessment/KnowledgeCheck";
 import { Requirements } from "@/components/certificate/Requirements";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { stepLabel } from "@/content/journey";
-import { getModule } from "@/content/modules";
-import { googleAuthConfigured } from "@/lib/auth-configured";
+import { stepLabel } from "@course";
+import { getModule } from "@course";
 import { passMark } from "@/lib/assessment-scoring";
-import { moduleAssessmentBank } from "@/server/assessment-bank";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
 import { guestId, openToGuests } from "@/server/guest";
+import { LockedStep } from "@/components/LockedStep";
+import { checkIntro, checkQuestions, checkSettings, finalCheck } from "@/server/checks";
+import { pathStatus } from "@/server/progression";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const mod = getModule((await params).slug);
@@ -25,16 +26,30 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   const mod = getModule(slug);
   if (!mod || !hasFinalAssessment(slug)) notFound();
   const returnTo = `/modules/${slug}/final-assessment`;
-  const session = googleAuthConfigured ? await auth() : null;
+  const session = await currentSession();
   if (!session?.user && !openToGuests(slug)) redirect(`/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`);
   const signedIn = Boolean(session?.user?.id);
   const learner = session?.user?.id ?? (await guestId());
   const status = learner ? await moduleRequirements(learner, slug).catch(() => null) : null;
   const certificateHref = `/modules/${slug}/certificate`;
   const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(certificateHref)}`;
-  const count = moduleAssessmentBank[slug].length;
+  const check = finalCheck(slug)!;
   const lastLesson = mod.lessons.at(-1)!;
   const unit = mod.order === 1 ? "lesson" : "episode";
+  const path = await pathStatus(session?.user?.id, slug);
+  if (path.locked["final-assessment"])
+    return (
+      <LockedStep
+        moduleSlug={slug}
+        moduleOrder={mod.order}
+        title={`Module ${mod.order} final assessment`}
+        finishFirst={path.locked["final-assessment"]}
+        done={path.done}
+        locked={Object.keys(path.locked)}
+      />
+    );
+  const [settings, questions] = await Promise.all([checkSettings(check), checkQuestions(check)]);
+  const count = questions.length;
 
   return (
     <>
@@ -61,12 +76,17 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           </p>
           <p className="mt-3 flex flex-wrap items-center gap-2 text-xs font-semibold text-navy">
             <span className="rounded-full bg-white/80 px-3 py-1.5">{count} questions</span>
-            <span className="rounded-full bg-white/80 px-3 py-1.5">{passMark(count)} to pass</span>
+            <span className="rounded-full bg-white/80 px-3 py-1.5">{passMark(count, settings.passPercent)} to pass</span>
             <span className="rounded-full bg-white/80 px-3 py-1.5">No time limit</span>
           </p>
         </header>
         <div className="mt-3 sm:mt-5">
-          <JourneyProgress current="final-assessment" moduleSlug={slug} />
+          <JourneyProgress
+            current="final-assessment"
+            moduleSlug={slug}
+            done={path.done}
+            locked={Object.keys(path.locked)}
+          />
         </div>
         <KnowledgeCheck
           slug={slug}
@@ -74,14 +94,14 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           endpoint={`/api/modules/${slug}/final-assessment`}
           kicker={`Module ${mod.order} · Final assessment`}
           title="Your refresher"
-          intro={`${count} questions covering every ${unit} in this module. Get ${passMark(count)} or more right to pass. There is no time limit, and you can try again as many times as you need.`}
+          intro={checkIntro(check, settings, unit, questions.length)}
           noun="final assessment"
           afterPass={
             <Link
               href={signedIn ? certificateHref : signUpHref}
               className="mt-3 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              {signedIn ? "Go to your certificate" : "Sign up to get your certificate"}{" "}
+              {signedIn ? `See Module ${mod.order} complete` : "Sign up to save your progress"}{" "}
               <span aria-hidden="true" className="ml-2">→</span>
             </Link>
           }
@@ -90,9 +110,10 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           <div className="mt-7">
             <Requirements requirements={status.requirements} />
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Your Certificate of Completion is ready once every item is ticked.{" "}
-              <Link className="font-semibold text-navy underline underline-offset-4" href={certificateHref}>
-                View your certificate page
+              The module is complete once every item is ticked. Every completed module counts towards your
+              free Essentials certificate.{" "}
+              <Link className="font-semibold text-navy underline underline-offset-4" href="/certificate">
+                See your Essentials certificate
               </Link>
             </p>
           </div>

@@ -1,11 +1,11 @@
 // Module completion and certificate rules. All checks run on the server
 // from stored assessment results; nothing the browser sends is trusted.
 import { randomInt, randomUUID } from "node:crypto";
-import { stepLabel } from "@/content/journey";
-import { getModule } from "@/content/modules";
-import { moduleAssessmentBank } from "./assessment-bank";
+import { course, getModule, modules, stepLabel } from "@course";
+import { moduleAssessmentBank } from "@course/assessments";
 import { db } from "./database";
 import { unprintableCharacters } from "./certificate-pdf";
+import { coursePath, type PathStep } from "./progression";
 
 export type Requirement = {
   id: string;
@@ -20,6 +20,10 @@ export type Certificate = {
   completedOn: string;
   issuedAt: string;
 };
+
+/** The slug the certificate API and pages use for the Essentials certificate. */
+export const ESSENTIALS = "essentials";
+export const essentialsTitle = `${course.title} Essentials`;
 
 export function hasFinalAssessment(moduleSlug: string) {
   return Object.hasOwn(moduleAssessmentBank, moduleSlug) && Boolean(getModule(moduleSlug));
@@ -74,8 +78,8 @@ export async function cleanName(raw: unknown): Promise<{ name: string } | { erro
 }
 
 const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const part = () => Array.from({ length: 4 }, () => alphabet[randomInt(alphabet.length)]).join("");
 function newCode(order: number) {
-  const part = () => Array.from({ length: 4 }, () => alphabet[randomInt(alphabet.length)]).join("");
   return `BL-M${order}-${part()}-${part()}`;
 }
 function toCertificate(row: Record<string, unknown>): Certificate {
@@ -88,11 +92,15 @@ function toCertificate(row: Record<string, unknown>): Certificate {
 }
 
 export async function getCertificate(learner: string, moduleSlug: string) {
-  const rows = await db()`SELECT code,learner_name,completed_on,issued_at FROM certificates WHERE learner_id=${learner} AND module_slug=${moduleSlug}`;
+  const rows = await db()`SELECT code,learner_name,completed_on,issued_at FROM certificates WHERE learner_id=${learner} AND kind='module' AND module_slug=${moduleSlug}`;
   return rows[0] ? toCertificate(rows[0]) : null;
 }
 
-/** Issues once per learner and module, only when every requirement is met. */
+/**
+ * Module certificates are no longer issued: one Essentials certificate comes
+ * after every module (FRD Version 2). Kept for tests and for the record of how
+ * the certificates issued before step 6 were made.
+ */
 export async function issueCertificate(learner: string, moduleSlug: string, name: string) {
   const status = await moduleRequirements(learner, moduleSlug);
   if (!status.eligible) return { error: "Pass every knowledge check and the final assessment first." } as const;
@@ -112,6 +120,159 @@ export async function issueCertificate(learner: string, moduleSlug: string, name
 
 /** Learners can correct the name; the ID and completion date never change. */
 export async function renameCertificate(learner: string, moduleSlug: string, name: string) {
-  const rows = await db()`UPDATE certificates SET learner_name=${name}, updated_at=now() WHERE learner_id=${learner} AND module_slug=${moduleSlug} RETURNING code,learner_name,completed_on,issued_at`;
+  const rows = await db()`UPDATE certificates SET learner_name=${name}, updated_at=now() WHERE learner_id=${learner} AND kind='module' AND module_slug=${moduleSlug} RETURNING code,learner_name,completed_on,issued_at`;
   return rows[0] ? toCertificate(rows[0]) : null;
+}
+
+// ---------------------------------------------------------------------------
+// The Essentials certificate: earned after every Essentials module.
+
+export type EssentialsModule = {
+  slug: string;
+  order: number;
+  title: string;
+  href: string;
+  /** complete, or not yet; beingMade when it can't be finished yet; skipped on test sites. */
+  state: "complete" | "inProgress" | "notStarted" | "beingMade" | "skipped";
+  done: number;
+  total: number;
+};
+
+/**
+ * On the live site every planned module counts, so nobody can earn the
+ * certificate until the whole Essentials is published. Test sites skip modules
+ * that are still being made so testers can try the full flow.
+ */
+export function essentialsSkipsUnbuilt() {
+  if (process.env.ESSENTIALS_REQUIRE_ALL === "on") return false;
+  return process.env.VERCEL_ENV !== "production";
+}
+
+/** The steps a module needs for the Essentials, in path order. */
+function requiredSteps(mod: (typeof modules)[number], path: PathStep[]) {
+  const built = path.filter((s) => s.moduleSlug === mod.slug);
+  const final = Object.hasOwn(moduleAssessmentBank, mod.slug);
+  // Every lesson plus the final assessment, whether or not it is built yet.
+  const planned = mod.lessons.length + 1;
+  const complete = built.length === planned && final;
+  return { built, planned, buildComplete: complete };
+}
+
+/** Where a learner stands on the Essentials certificate. */
+export async function essentialsStatus(learner: string) {
+  const sql = db();
+  const path = coursePath();
+  const [lessonRows, finalRows] = await Promise.all([
+    sql`SELECT lesson_slug, min(created_at) AS passed_at FROM assessment_attempts WHERE learner_id=${learner} AND passed GROUP BY lesson_slug`,
+    sql`SELECT module_slug, min(created_at) AS passed_at FROM module_assessment_attempts WHERE learner_id=${learner} AND passed GROUP BY module_slug`,
+  ]);
+  const lessonPassed = new Map(lessonRows.map((r) => [r.lesson_slug as string, new Date(r.passed_at as Date)]));
+  const finalPassed = new Map(finalRows.map((r) => [r.module_slug as string, new Date(r.passed_at as Date)]));
+  const passedAt = (step: PathStep) =>
+    step.kind === "final" ? finalPassed.get(step.moduleSlug) : lessonPassed.get(step.id);
+  const skipUnbuilt = essentialsSkipsUnbuilt();
+  const dates: Date[] = [];
+  const list: EssentialsModule[] = [...modules]
+    .sort((a, b) => a.order - b.order)
+    .map((mod) => {
+      const { built, planned, buildComplete } = requiredSteps(mod, path);
+      const passed = built.filter((s) => passedAt(s));
+      for (const step of passed) dates.push(passedAt(step)!);
+      const allBuiltPassed = built.length > 0 && passed.length === built.length;
+      const state: EssentialsModule["state"] =
+        !built.length && skipUnbuilt
+          ? "skipped"
+          : allBuiltPassed && (buildComplete || skipUnbuilt)
+            ? "complete"
+            : allBuiltPassed || !built.length
+              ? "beingMade"
+              : passed.length
+                ? "inProgress"
+                : "notStarted";
+      return {
+        slug: mod.slug,
+        order: mod.order,
+        title: mod.title,
+        href: `/modules/${mod.slug}`,
+        state,
+        done: passed.length,
+        total: skipUnbuilt ? built.length : planned,
+      };
+    });
+  const counted = list.filter((m) => m.state !== "skipped");
+  const eligible = counted.length > 0 && counted.every((m) => m.state === "complete");
+  const completedAt = eligible ? new Date(Math.max(...dates.map(Number))).toISOString() : null;
+  return { modules: list, eligible, completedAt, skipUnbuilt };
+}
+
+export async function getEssentialsCertificate(learner: string) {
+  const rows = await db()`SELECT code,learner_name,completed_on,issued_at FROM certificates WHERE learner_id=${learner} AND kind='essentials' AND course_slug=${course.slug}`;
+  return rows[0] ? toCertificate(rows[0]) : null;
+}
+
+/** Issues once per learner, only when every Essentials module is complete. */
+export async function issueEssentialsCertificate(learner: string, name: string) {
+  const status = await essentialsStatus(learner);
+  if (!status.eligible) return { error: "Complete every module in the Essentials first." } as const;
+  const sql = db();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const rows = await sql`
+        INSERT INTO certificates(id,code,learner_id,kind,course_slug,module_slug,learner_name,completed_on,requirements)
+        VALUES(${randomUUID()},${`BL-E-${part()}-${part()}`},${learner},'essentials',${course.slug},NULL,${name},${status.completedAt!.slice(0, 10)},${sql.json(status.modules)})
+        ON CONFLICT(learner_id,course_slug,kind) WHERE kind <> 'module' DO NOTHING
+        RETURNING code,learner_name,completed_on,issued_at`;
+      if (rows[0]) return { certificate: toCertificate(rows[0]) } as const;
+      return { certificate: (await getEssentialsCertificate(learner))! } as const;
+    } catch (error) {
+      if (!(error instanceof Error && /certificates_code_key/.test(error.message))) throw error;
+    }
+  }
+  throw new Error("Could not create a unique certificate ID");
+}
+
+/** Learners can correct the name; the ID and completion date never change. */
+export async function renameEssentialsCertificate(learner: string, name: string) {
+  const rows = await db()`UPDATE certificates SET learner_name=${name}, updated_at=now() WHERE learner_id=${learner} AND kind='essentials' AND course_slug=${course.slug} RETURNING code,learner_name,completed_on,issued_at`;
+  return rows[0] ? toCertificate(rows[0]) : null;
+}
+
+// ---------------------------------------------------------------------------
+// Public verification: anyone with a certificate ID can check it is real.
+
+export type Verification = {
+  code: string;
+  title: string;
+  learnerName: string;
+  completedOn: string;
+  issuedAt: string;
+  status: "valid" | "revoked";
+};
+
+const codeShape = /^BL-(E|D|M\d{1,2})-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/;
+
+/** Upper-cases and tidies a typed ID. Null if it can't be a Buggle Learn ID. */
+export function normaliseCode(raw: string) {
+  const code = raw.normalize("NFKC").toUpperCase().replace(/[\s\u2010-\u2015_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return codeShape.test(code) ? code : null;
+}
+
+/** Only what the certificate itself shows: never an email or account detail. */
+export async function verifyCertificate(raw: string): Promise<Verification | null> {
+  const code = normaliseCode(raw);
+  if (!code) return null;
+  const rows = await db()`SELECT code,kind,module_slug,learner_name,completed_on,issued_at,revoked_at FROM certificates WHERE code=${code}`;
+  const row = rows[0];
+  if (!row) return null;
+  const title =
+    row.kind === "essentials"
+      ? essentialsTitle
+      : row.kind === "deep_dive"
+        ? `${course.title} Deep Dive`
+        : (getModule(row.module_slug as string)?.title ?? "Buggle Learn module");
+  return {
+    ...toCertificate(row),
+    title,
+    status: row.revoked_at ? "revoked" : "valid",
+  };
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StartUsingAi } from "@/components/use-ai/StartUsingAi";
-import { getModule } from "@/content/modules";
+import { getModule } from "@course";
 import { getStarterPlan } from "@/content/use-ai";
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default async function StartUsingAiPage({
             href={`/modules/${mod.slug}/certificate`}
             className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline-offset-4 hover:underline"
           >
-            <span aria-hidden="true">←</span> Module {mod.order} certificate
+            <span aria-hidden="true">←</span> Module {mod.order} complete
           </Link>
         )}
         <header className="mt-2 rounded-[1.75rem] bg-mint p-5 sm:rounded-[2rem] sm:p-8">

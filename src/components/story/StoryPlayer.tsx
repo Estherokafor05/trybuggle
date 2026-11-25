@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import type { StoryNarration } from "@/content/stories";
-import type { FilmChoice } from "./filmChoices";
+import type { StoryNarration } from "@course";
+import type { Option } from "@/components/blocks/Blocks";
+
+/** A "Your choice" moment: the film pauses and asks the learner to choose. Unscored. */
+export type FilmChoice = { question: string; options: Option[] };
 
 function subscribeWidth(callback: () => void) {
   const query = window.matchMedia("(max-width: 600px)");

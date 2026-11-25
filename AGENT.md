@@ -83,11 +83,29 @@ If requirements are missing, ambiguous, or contradictory:
 
 The detailed curriculum and scope of later modules require approval.
 
+## 4A. lms-platform branch (approved 24 Nov 2026)
+
+This branch builds the new learning platform described in the Functional Requirements Document, Version 2 (24 Nov 2026). On this branch, where Version 2 conflicts with section 4 below, Version 2 wins. Key decisions:
+
+- Anyone can browse the site; starting any lesson, check or assessment needs an account. Sign-in returns the learner to the page they were on.
+- Sign-in: a normal login page with email and password, plus Google. Other sign-in methods are linked from Settings; accounts are never merged automatically because emails match.
+- Admin accounts are separate from learner accounts, with their own protected admin area. Admins are invited, never self-registered, and a learner account never gains admin rights.
+- Each course has Essentials (10 modules, free) and Deep Dive (chapters, each with 8 to 12 units, paid at one price for all chapters, price set by admins). Learners must finish each module, chapter and unit before the next opens.
+- Free Essentials certificate after all 10 modules; full standard certificate after the whole Deep Dive. Both get a public verification page and an Add to LinkedIn button.
+- Payments through Stripe, for Deep Dive and organisation plans only. Admins set a general percentage discount on the Deep Dive price and create discount codes. A Deep Dive purchase is refundable until the learner opens Chapter 1 and answers one question.
+- Learners are 15 or over. The forum has no private messages.
+- Organisations choose Platform only, Buggle content only, or Both, each at its own price.
+- Styles, fonts and colours never change: every new screen follows `DESIGN_SYSTEM.md` and is mobile responsive.
+- Course content lives in `courses/`, separate from the platform in `src/`; see `courses/README.md`.
+
+Workflow on this branch: each build step goes into its own pull request against `lms-platform`. Never merge this branch into `main` or deploy it to production without the user's explicit approval. The standing deployment approval in Gate 4 applies to `main` only.
+
 ## 4. Product Decisions
 
 ### Approved
 
-- Minimum passing score: 70%, including the Module 1 final assessment.
+- Minimum passing score: 70% by default, including the Module 1 final assessment. On lms-platform this is a per-check setting in the `assessments` table (with tries and shuffling); see README.
+- On lms-platform, every lesson, final assessment and module opens only after the previous one is passed (strict order).
 - Maximum lesson duration: eight minutes. Module planned content: 30 to 60 minutes, with a one-hour cap.
 - All of Module 1 (lessons, guides, knowledge checks and the final assessment) is open without an account. Learners sign up only to get their certificate. Guest results are still scored on the server against an anonymous cookie ID and move into the account at sign-up; never trust browser-submitted scores.
 - Accessibility target: WCAG 2.2 AA.

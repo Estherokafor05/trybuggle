@@ -1,27 +1,30 @@
 "use client";
 import Link from "next/link";
-import type { PreviewLesson } from "@/content/preview-lessons";
-import { stories } from "@/content/stories";
-import { exploreGuides } from "@/content/explore-guides";
+import {
+  exploreGuides,
+  reflectionExample,
+  stories,
+  type PreviewLesson,
+} from "@course";
+import { filmChoices } from "@course/ui";
 import { StoryPlayer, type NextStep } from "./story/StoryPlayer";
-import { filmChoices } from "./story/filmChoices";
 import { ExploreJourney } from "./explore/ExploreJourney";
-import { Reflection } from "./explore/Activities";
+import { Reflection } from "./blocks/Blocks";
 import { useLearningPlace } from "./explore/useLearningPlace";
 import { KnowledgeCheck } from "./assessment/KnowledgeCheck";
-import { passMark } from "@/lib/assessment-scoring";
 
 export function LessonPreview({
   lesson,
   moduleSlug = "ai-foundations",
-  questionCount = 10,
+  checkIntro,
   scope = "guest",
   signedIn = false,
   next,
 }: {
   lesson: PreviewLesson;
   moduleSlug?: string;
-  questionCount?: number;
+  /** How many questions, the pass mark and tries, from the check's settings. */
+  checkIntro?: string;
   scope?: string;
   signedIn?: boolean;
   next?: NextStep;
@@ -124,6 +127,7 @@ export function LessonPreview({
                   prompts={guide.reflections}
                   slug={lesson.slug}
                   scope={scope}
+                  example={reflectionExample(lesson.slug)}
                 />
               </div>
             </details>
@@ -147,7 +151,28 @@ export function LessonPreview({
       <KnowledgeCheck
         slug={lesson.slug}
         signedIn={signedIn}
-        intro={`${questionCount} quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get ${passMark(questionCount)} or more right to pass. You can try again as many times as you need.`}
+        intro={
+          checkIntro ??
+          `5 quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get 4 or more right to pass. You can try again as many times as you need.`
+        }
+        discuss={
+          <p className="mt-5 rounded-xl bg-canvas p-4 text-sm leading-relaxed">
+            Still curious? See what other learners asked, or ask your own question.{" "}
+            <a href={`/forum/${moduleSlug}?lesson=${lesson.slug}`} className="font-semibold text-navy underline underline-offset-4">
+              View the forum
+            </a>
+          </p>
+        }
+        afterPass={
+          next?.available ? (
+            <Link
+              href={next.href}
+              className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              {next.label} is open: start it <span aria-hidden="true">→</span>
+            </Link>
+          ) : undefined
+        }
       />
     </>
   );

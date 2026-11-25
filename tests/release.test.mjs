@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { safeReturnPath } from "../src/lib/paths.ts";
-import { foundationScenes } from "../src/content/foundations-walkthrough.ts";
-import { exploreGuides } from "../src/content/explore-guides.ts";
+import { foundationScenes } from "../courses/ai-literacy/content/foundations-walkthrough.ts";
+import { exploreGuides } from "../courses/ai-literacy/content/explore-guides.ts";
 import {
   previewLessons,
   getPreviewLesson,
-} from "../src/content/preview-lessons.ts";
+} from "../courses/ai-literacy/content/preview-lessons.ts";
 
 test("sign-in preserves a local lesson destination", () => {
   const path =
@@ -24,7 +24,7 @@ test("sign-in cannot redirect learners to a different site", () => {
     "javascript:alert(1)",
     "https://buggle.example@example.net",
   ]) {
-    assert.equal(safeReturnPath(path), "/modules/ai-foundations");
+    assert.equal(safeReturnPath(path), "/dashboard");
   }
 });
 

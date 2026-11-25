@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
-import { getBuiltLesson } from "@/content/preview-lessons";
-import { getModule } from "@/content/modules";
-import { googleAuthConfigured } from "@/lib/auth-configured";
-import { exploreGuides } from "@/content/explore-guides";
+import { currentSession } from "@/auth";
+import { getModule } from "@course";
+import { exploreGuides } from "@course";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { RouteMap } from "@/components/explore/Illustrations";
+import { RouteMap } from "@course/ui";
+import { LockedStep } from "@/components/LockedStep";
+import { pathStatus } from "@/server/progression";
 export default async function Reading({
   params,
 }: {
@@ -15,15 +15,29 @@ export default async function Reading({
 }) {
   const { slug, lessonSlug } = await params;
   const guide = exploreGuides[lessonSlug];
-  if (!getModule(slug)?.lessons.some((l) => l.slug === lessonSlug) || !guide) notFound();
-  if (!getBuiltLesson(lessonSlug)?.preview) {
-    const session = googleAuthConfigured ? await auth() : null;
-    if (!session?.user) {
-      redirect(
-        `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}/reading`)}`,
-      );
-    }
+  const mod = getModule(slug);
+  const lessonIndex = mod?.lessons.findIndex((l) => l.slug === lessonSlug) ?? -1;
+  if (!mod || lessonIndex < 0 || !guide) notFound();
+  // Learning needs an account (FRD Version 2), in every format.
+  const session = await currentSession();
+  if (!session?.user) {
+    redirect(
+      `/sign-in?callbackUrl=${encodeURIComponent(`/modules/${slug}/lessons/${lessonSlug}/reading`)}`,
+    );
   }
+  // The text version opens in the same order as the lesson.
+  const status = await pathStatus(session.user.id, slug);
+  if (status.locked[lessonSlug])
+    return (
+      <LockedStep
+        moduleSlug={slug}
+        moduleOrder={mod.order}
+        title={`${guide.title} (text version)`}
+        finishFirst={status.locked[lessonSlug]}
+        done={status.done}
+        locked={Object.keys(status.locked)}
+      />
+    );
   return (
     <>
       <SiteHeader />

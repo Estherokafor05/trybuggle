@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { exploreGuides } from "../src/content/explore-guides.ts";
+import { exploreGuides } from "../courses/ai-literacy/content/explore-guides.ts";
 import {
   builtLessons,
   getBuiltLesson,
   getPreviewLesson,
-} from "../src/content/preview-lessons.ts";
+} from "../courses/ai-literacy/content/preview-lessons.ts";
 import { parseCheckpoint } from "../src/lib/learning-state.ts";
 
 const slug = "before-chatgpt";

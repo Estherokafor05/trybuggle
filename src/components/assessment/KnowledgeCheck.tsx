@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, type ReactNode } from "react";
+import { AskBuggle } from "./AskBuggle";
 type Question = {
   id: string;
   prompt: string;
@@ -30,6 +31,7 @@ export function KnowledgeCheck({
   intro = "5 quick questions about this lesson. Get 4 or more right to pass. You can try again as many times as you need.",
   noun = "knowledge check",
   afterPass,
+  discuss,
 }: {
   slug: string;
   signedIn: boolean;
@@ -41,11 +43,15 @@ export function KnowledgeCheck({
   noun?: string;
   /** Shown once the learner has passed, e.g. a link to their certificate. */
   afterPass?: ReactNode;
+  /** Shown after any result, right or wrong: a way into the forum. */
+  discuss?: ReactNode;
 }) {
   const [questions, setQuestions] = useState<Question[]>([]),
     [answers, setAnswers] = useState<Record<string, string>>({}),
     [result, setResult] = useState<Result | null>(null),
     [everPassed, setEverPassed] = useState(false),
+    // Null means unlimited tries (or already passed).
+    [attemptsLeft, setAttemptsLeft] = useState<number | null>(null),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
   const key = useRef<string>("");
@@ -63,6 +69,7 @@ export function KnowledgeCheck({
       setQuestions(data.questions);
       setResult(data.latest);
       setEverPassed(data.passed);
+      setAttemptsLeft(data.attemptsLeft ?? null);
       setSubmitted(false);
       key.current = crypto.randomUUID();
     } catch (e) {
@@ -92,7 +99,10 @@ export function KnowledgeCheck({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResult(data);
-      if (data.passed) setEverPassed(true);
+      if (data.passed) {
+        setEverPassed(true);
+        setAttemptsLeft(null);
+      } else setAttemptsLeft((left) => (left == null ? null : Math.max(0, left - 1)));
       requestAnimationFrame(() => heading.current?.focus());
     } catch (e) {
       setMessage(
@@ -173,22 +183,37 @@ export function KnowledgeCheck({
                     <h3 className="font-semibold">
                       {i + 1}. {f.prompt}
                     </h3>
-                    <p className="mt-2 font-semibold">
-                      {f.correct ? "✓ Correct" : "Review this answer"}
+                    <p className={`mt-2 font-semibold ${f.correct ? "text-teal" : "text-navy"}`}>
+                      {f.correct ? "✓ Right" : "✗ Wrong"}
                     </p>
                     <p className="mt-2">Your answer: {f.answer}</p>
                     {!f.correct && (
                       <p className="mt-2">Expected answer: {f.expected}</p>
                     )}
-                    <p className="mt-2 leading-relaxed">{f.explanation}</p>
+                    <AskBuggle correct={f.correct} explanation={f.explanation} />
                   </li>
                 ))}
               </ol>
-              <button className={button + " mt-5"} onClick={retry}>
-                {result.passed
-                  ? `Practise this ${noun} again`
-                  : "Retry this assessment"}
-              </button>
+              {attemptsLeft === 0 && !everPassed ? (
+                <p className="mt-5 rounded-xl bg-peach p-4 leading-relaxed">
+                  You&apos;ve used all your tries for this {noun}. Contact Buggle Learn
+                  support to ask for another go.
+                </p>
+              ) : (
+                <>
+                  {attemptsLeft != null && !everPassed && (
+                    <p className="mt-5 text-sm font-semibold text-navy">
+                      {attemptsLeft} {attemptsLeft === 1 ? "try" : "tries"} left
+                    </p>
+                  )}
+                  <button className={button + " mt-5"} onClick={retry}>
+                    {result.passed
+                      ? `Practise this ${noun} again`
+                      : "Retry this assessment"}
+                  </button>
+                </>
+              )}
+              {discuss}
             </div>
           ) : (
             questions.length > 0 && (

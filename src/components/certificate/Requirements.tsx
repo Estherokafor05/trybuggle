@@ -1,14 +1,14 @@
 import Link from "next/link";
 import type { Requirement } from "@/server/certificates";
 
-/** What a learner needs for the Module certificate, with what is already done. */
+/** What a learner needs to complete a module, with what is already done. */
 export function Requirements({ requirements }: { requirements: Requirement[] }) {
   const done = requirements.filter((r) => r.passedAt).length;
   return (
     <section aria-labelledby="requirements-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="requirements-title" className="text-lg font-bold">
-          Your path to the certificate
+          Your module checklist
         </h2>
         <p className="text-sm font-semibold text-muted">
           {done} of {requirements.length} done

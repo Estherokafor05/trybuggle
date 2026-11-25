@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ModuleCard } from "@/components/ModuleCard";
-import { TRACK_LABELS, modules, type Track } from "@/content/modules";
+import { TRACK_LABELS, modules, type Track } from "@course";
 
 export const metadata: Metadata = {
   title: "Learning Path | Buggle Learn",
