@@ -10,6 +10,7 @@ import { assessmentBank, moduleAssessmentBank } from "@course/assessments";
 import { planCourse, writeCourse } from "../../src/server/course-import";
 import type * as Checks from "../../src/server/checks";
 import type * as Progression from "../../src/server/progression";
+import type * as DashboardModule from "../../src/server/dashboard";
 
 const migrations = new URL("../../migrations/", import.meta.url);
 const port = 57000 + Math.floor(Math.random() * 1000);
@@ -17,6 +18,7 @@ let db: PGlite;
 let server: PGLiteSocketServer;
 let checks: typeof Checks;
 let progression: typeof Progression;
+let dashboard: typeof DashboardModule;
 
 before(async () => {
   db = await PGlite.create();
@@ -31,6 +33,7 @@ before(async () => {
   process.env.DATABASE_POOL_MAX = "1";
   checks = await import("../../src/server/checks");
   progression = await import("../../src/server/progression");
+  dashboard = await import("../../src/server/dashboard");
 });
 
 after(async () => {
@@ -226,5 +229,56 @@ describe("check settings", () => {
     const keys = new Set(rows.map((r) => r.legacy_key));
     for (const key of [...Object.keys(assessmentBank), ...Object.keys(moduleAssessmentBank)])
       assert.ok(keys.has(key), key);
+  });
+});
+
+describe("learner dashboard", () => {
+  test("a new learner starts at Lesson 1 with Module 2 locked", async () => {
+    const learner = await newLearner();
+    const data = await dashboard.learnerDashboard(learner);
+    assert.equal(data.next?.key, "ai-foundations/what-counts-as-ai");
+    assert.equal(data.current?.slug, "ai-foundations");
+    assert.deepEqual(
+      data.modules.map((m) => m.state),
+      ["notStarted", "locked", "comingSoon", "comingSoon"],
+    );
+    assert.deepEqual(data.overall, {
+      done: 0,
+      total: 12,
+      minutesLeft: data.overall.minutesLeft,
+      openModules: 2,
+      plannedModules: 4,
+    });
+    assert.ok(data.current!.minutesLeft > 30 && data.current!.minutesLeft < 120, "a believable estimate");
+    assert.equal(data.recent.length, 0);
+    assert.equal(data.stats.daysLearning, 0);
+  });
+
+  test("progress, time left and recent results follow what the learner passed", async () => {
+    const learner = await newLearner();
+    const first = checks.lessonCheck("what-counts-as-ai")!;
+    await checks.submitCheck(first, learner, submission(wrongAnswers(first.questions)));
+    const before = await dashboard.learnerDashboard(learner);
+    await passUpTo(learner, "talking-to-ai", "a-new-helper");
+    const data = await dashboard.learnerDashboard(learner);
+    assert.deepEqual(data.modules.map((m) => m.state).slice(0, 2), ["done", "notStarted"]);
+    assert.equal(data.modules[0].minutesLeft, 0);
+    assert.equal(data.next?.key, "talking-to-ai/a-new-helper");
+    assert.equal(data.current?.slug, "talking-to-ai");
+    assert.equal(data.overall.done, 6);
+    assert.equal(data.stats.checksPassed, 6);
+    assert.ok(data.overall.minutesLeft < before.overall.minutesLeft);
+    assert.equal(data.recent.length, 5, "the five latest results");
+    assert.equal(data.recent[0].label, "Module 1 final assessment");
+    assert.equal(data.recent[0].passed, true);
+    assert.equal(data.stats.daysLearning, 1);
+  });
+
+  test("time is shown in plain words", () => {
+    assert.equal(dashboard.formatMinutes(0), "No time");
+    assert.equal(dashboard.formatMinutes(3), "About 5 minutes");
+    assert.equal(dashboard.formatMinutes(42), "About 40 minutes");
+    assert.equal(dashboard.formatMinutes(60), "About 1 hour");
+    assert.equal(dashboard.formatMinutes(128), "About 2 hours 10 minutes");
   });
 });

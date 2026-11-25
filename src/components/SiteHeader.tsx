@@ -67,7 +67,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Main navigation"
-          className="hidden items-center gap-1 rounded-full border border-line/70 bg-white/80 p-1 text-sm font-medium md:flex"
+          className="hidden items-center gap-1 rounded-full border border-line/70 bg-white/80 p-1 text-sm font-medium lg:flex"
         >
           {NAV.map((item) => {
             const current = item.match(pathname);
@@ -89,16 +89,29 @@ export function SiteHeader() {
         </nav>
 
         {account && (
-          <Link
-            href="/account"
-            aria-current={pathname === "/account" ? "page" : undefined}
-            className="hidden min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender md:inline-flex"
-          >
-            Your account
-          </Link>
+          <div className="hidden items-center gap-1 lg:flex">
+            <Link
+              href="/dashboard"
+              aria-current={pathname === "/dashboard" ? "page" : undefined}
+              className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold ${
+                pathname === "/dashboard" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
+              }`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/account"
+              aria-current={pathname === "/account" ? "page" : undefined}
+              className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold ${
+                pathname === "/account" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
+              }`}
+            >
+              Your account
+            </Link>
+          </div>
         )}
         {account === null && (
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             <Link
               href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
               className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender"
@@ -114,7 +127,7 @@ export function SiteHeader() {
           </div>
         )}
         {account && (
-          <form action={signOutAction} className="hidden md:block">
+          <form action={signOutAction} className="hidden lg:block">
             <button
               type="submit"
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
@@ -127,7 +140,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender md:hidden"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender lg:hidden"
           aria-expanded={open}
           aria-controls="phone-menu"
           onClick={() => setOpen(!open)}
@@ -143,7 +156,7 @@ export function SiteHeader() {
         id="phone-menu"
         aria-label="Main navigation"
         hidden={!open}
-        className="border-t border-line/70 bg-white px-4 pb-4 pt-2 md:hidden"
+        className="border-t border-line/70 bg-white px-4 pb-4 pt-2 lg:hidden"
       >
         <ul className="grid gap-1">
           {NAV.map((item) => {
@@ -188,8 +201,17 @@ export function SiteHeader() {
               <p className="ph-mask px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
             )}
             <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+              aria-current={pathname === "/dashboard" ? "page" : undefined}
+              className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
+            >
+              Dashboard
+            </Link>
+            <Link
               href="/account"
               onClick={() => setOpen(false)}
+              aria-current={pathname === "/account" ? "page" : undefined}
               className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
             >
               Your account

@@ -1,5 +1,6 @@
 const SITE_ORIGIN = "https://buggle.example";
-const FALLBACK = "/modules/ai-foundations";
+// Signing in without a page to return to lands on the learner's dashboard.
+const FALLBACK = "/dashboard";
 /** Pages a learner should never be sent back to after signing in (they would loop). */
 const AUTH_PAGES = /^\/(sign-in|sign-up|forgot-password|reset-password)(\/|$)/;
 

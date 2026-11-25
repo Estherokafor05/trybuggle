@@ -24,7 +24,7 @@ test("sign-in cannot redirect learners to a different site", () => {
     "javascript:alert(1)",
     "https://buggle.example@example.net",
   ]) {
-    assert.equal(safeReturnPath(path), "/modules/ai-foundations");
+    assert.equal(safeReturnPath(path), "/dashboard");
   }
 });
 
