@@ -6,7 +6,9 @@
 // Without them, test sites can simulate a plan so testers can try everything.
 import Stripe from "stripe";
 import { db } from "./database";
+import { handleLearnerEvent, couponFor } from "./learner-payments";
 import { listPlans, orgBySubscription, setSubscription, type Organisation, type PlanCode } from "./organisations";
+import { quote } from "./pricing";
 
 let client: Stripe | undefined;
 export const stripeConfigured = () => Boolean(process.env.STRIPE_SECRET_KEY);
@@ -31,10 +33,19 @@ async function planFor(code: unknown) {
   return plan ?? null;
 }
 
-/** Starts Stripe Checkout for a yearly plan. Returns the page to send the buyer to. */
-export async function startCheckout(org: Organisation, input: { plan: unknown; seats: unknown }, buyer: { email: string }, origin: string) {
+/** Starts Stripe Checkout for a monthly or yearly plan. Returns the page to send the buyer to. */
+export async function startCheckout(
+  org: Organisation,
+  input: { plan: unknown; seats: unknown; interval?: unknown; code?: unknown },
+  buyer: { email: string },
+  origin: string,
+) {
   const plan = await planFor(input.plan);
   if (!plan) return { error: "Choose one of the plans shown." } as const;
+  const every = input.interval === "month" && plan.pricePerSeatMonth > 0 ? "month" : "year";
+  const unit = every === "month" ? plan.pricePerSeatMonth : plan.pricePerSeatYear;
+  const q = await quote({ amount: unit, currency: plan.currency }, "org", { org: org.id }, input.code);
+  if ("error" in q) return { error: q.error } as const;
   const seats = parseSeats(input.seats, org.members);
   if ("error" in seats) return { error: seats.error } as const;
   if (org.stripeSubscriptionId && org.status !== "cancelled")
@@ -48,15 +59,16 @@ export async function startCheckout(org: Organisation, input: { plan: unknown; s
         quantity: seats.seats,
         price_data: {
           currency: plan.currency,
-          unit_amount: plan.pricePerSeatYear,
-          recurring: { interval: "year" },
-          product_data: { name: `Buggle Learn: ${plan.name}`, description: "Per learner, per year" },
+          unit_amount: unit,
+          recurring: { interval: every },
+          product_data: { name: `Buggle Learn: ${plan.name}`, description: every === "month" ? "Per learner, per month" : "Per learner, per year" },
         },
       },
     ],
-    metadata: { org_id: org.id, plan: plan.code },
-    subscription_data: { metadata: { org_id: org.id, plan: plan.code } },
-    allow_promotion_codes: true,
+    ...(q.percent ? { discounts: [{ coupon: await couponFor(q.percent) }] } : {}),
+    adaptive_pricing: { enabled: true },
+    metadata: { org_id: org.id, plan: plan.code, interval: every, discount: (q.reason === "code" ? q.code : q.reason) ?? "" },
+    subscription_data: { metadata: { org_id: org.id, plan: plan.code, interval: every } },
     success_url: `${origin}/org/${org.slug}/billing?checkout=done`,
     cancel_url: `${origin}/org/${org.slug}/billing?checkout=cancelled`,
   });
@@ -93,13 +105,15 @@ export async function billingPortal(org: Organisation, origin: string) {
 }
 
 /** On a test site without Stripe: switches a plan on (or off) without payment. */
-export async function simulatePlan(org: Organisation, input: { plan: unknown; seats: unknown }) {
+export async function simulatePlan(org: Organisation, input: { plan: unknown; seats: unknown; interval?: unknown }) {
   if (!canSimulate()) return { error: "Plans can only be simulated on a test site." } as const;
   const plan = await planFor(input.plan);
   if (!plan) return { error: "Choose one of the plans shown." } as const;
   const seats = parseSeats(input.seats, org.members);
   if ("error" in seats) return { error: seats.error } as const;
-  await setSubscription(org.id, { plan: plan.code, seats: seats.seats, status: "test", periodEnd: new Date(Date.now() + 365 * 86400_000) });
+  const month = input.interval === "month" && plan.pricePerSeatMonth > 0;
+  await setSubscription(org.id, { plan: plan.code, seats: seats.seats, status: "test", periodEnd: new Date(Date.now() + (month ? 31 : 365) * 86400_000) });
+  await db()`UPDATE organisations SET billing_interval = ${month ? "month" : "year"} WHERE id = ${org.id}`;
   return { ok: true } as const;
 }
 
@@ -121,6 +135,7 @@ async function applySubscription(subscription: Stripe.Subscription, orgHint?: st
   if (!orgId) return;
   const plan = subscription.metadata?.plan as PlanCode | undefined;
   const status = statusFrom(subscription.status);
+  await db()`UPDATE organisations SET billing_interval = ${subscription.metadata?.interval === "month" ? "month" : "year"} WHERE id = ${orgId}`;
   await setSubscription(orgId, {
     plan: status === "cancelled" ? undefined : (plan ?? undefined),
     seats: subscription.items?.data?.[0]?.quantity ?? undefined,
@@ -144,11 +159,18 @@ export async function handleWebhook(payload: string, signature: string | null) {
   const [fresh] = await db()`INSERT INTO stripe_events(id, type) VALUES(${event.id}, ${event.type}) ON CONFLICT DO NOTHING RETURNING id`;
   if (!fresh) return { status: 200, duplicate: true };
   try {
-    if (event.type === "checkout.session.completed") {
+    if (await handleLearnerEvent(event)) {
+      // A learner's course or all-access payment.
+    } else if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
-      const orgId = session.client_reference_id ?? (session.metadata?.org_id as string | undefined);
+      const orgId = (session.metadata?.org_id as string | undefined) ?? session.client_reference_id;
       if (orgId && session.subscription) {
         const id = typeof session.subscription === "string" ? session.subscription : session.subscription.id;
+        await db()`INSERT INTO purchases(org_id, kind, interval, amount_paid, currency, discount, stripe_session_id, stripe_subscription_id)
+          VALUES(${orgId}, 'org_plan', ${session.metadata?.interval ?? "year"}, ${session.amount_total ?? 0}, ${session.currency ?? "usd"},
+            ${session.metadata?.discount || null}, ${session.id}, ${id}) ON CONFLICT (stripe_session_id) DO NOTHING`;
+        const discount = session.metadata?.discount;
+        if (discount && discount !== "launch" && discount !== "sale") await db()`UPDATE discount_codes SET uses = uses + 1 WHERE code = ${discount}`;
         await applySubscription(await stripe().subscriptions.retrieve(id), orgId);
       }
     } else if (

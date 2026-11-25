@@ -18,7 +18,7 @@ export default async function AdminOrganisationsPage({ searchParams }: { searchP
   return (
     <AdminShell current="/admin/organisations" email={admin.user.email}>
       <AdminNotice notice={adminMessage(adminNotices, notice)} error={message} />
-      <AdminHeading title="Organisations" intro="Set each plan's price per learner per year, switch plans on or off, and see every organisation." />
+      <AdminHeading title="Organisations" intro="Set each plan's price per learner (yearly, and monthly if you offer it), switch plans on or off, and see every organisation. Prices for learners, offers and discount codes are under Pricing." />
       <p className="mb-6 rounded-2xl bg-lavender p-4 text-sm leading-relaxed">
         Payments:{" "}
         <b>{stripeConfigured() ? (testMode() ? "Stripe test mode (no real money)" : "Stripe live mode (real payments)") : "Stripe not set up: test sites can switch plans on without paying"}</b>
@@ -44,10 +44,19 @@ export default async function AdminOrganisationsPage({ searchParams }: { searchP
                     <input name="currency" required maxLength={3} defaultValue={p.currency.toUpperCase()} className={`${input} mt-1 uppercase`} />
                   </label>
                 </div>
+                <label className="text-sm font-semibold">
+                  Price per learner, per month <span className="font-normal text-muted">(0 for yearly only)</span>
+                  <input name="monthly" inputMode="decimal" defaultValue={(p.pricePerSeatMonth / 100).toFixed(2)} className={`${input} mt-1`} />
+                </label>
                 <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
                   <input name="active" type="checkbox" defaultChecked={p.active} className="size-5 accent-brand" /> Offer this plan
                 </label>
-                <p className="text-xs text-muted">Now: {p.active ? `${money(p.pricePerSeatYear, p.currency)} per learner per year` : "not offered"}</p>
+                <p className="text-xs text-muted">
+                  Now:{" "}
+                  {p.active
+                    ? `${money(p.pricePerSeatYear, p.currency)} per learner per year${p.pricePerSeatMonth ? ` or ${money(p.pricePerSeatMonth, p.currency)} per month` : ""}`
+                    : "not offered"}
+                </p>
                 <button type="submit" className={`${button} justify-self-start`}>
                   Save<span className="sr-only"> {p.name}</span>
                 </button>

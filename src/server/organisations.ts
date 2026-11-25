@@ -35,12 +35,14 @@ export type Plan = {
   name: string;
   description: string;
   pricePerSeatYear: number;
+  /** 0 when the plan isn't offered monthly. */
+  pricePerSeatMonth: number;
   currency: string;
   active: boolean;
 };
 
 export async function listPlans({ activeOnly = false } = {}): Promise<Plan[]> {
-  const rows = await db()`SELECT code, name, description, price_per_seat_year, currency, active FROM org_plans
+  const rows = await db()`SELECT code, name, description, price_per_seat_year, price_per_seat_month, currency, active FROM org_plans
     ${activeOnly ? db()`WHERE active AND price_per_seat_year > 0` : db()``}
     ORDER BY array_position(ARRAY['content', 'platform', 'both'], code)`;
   return rows.map((r) => ({
@@ -48,6 +50,7 @@ export async function listPlans({ activeOnly = false } = {}): Promise<Plan[]> {
     name: r.name as string,
     description: r.description as string,
     pricePerSeatYear: r.price_per_seat_year as number,
+    pricePerSeatMonth: r.price_per_seat_month as number,
     currency: r.currency as string,
     active: Boolean(r.active),
   }));
@@ -69,14 +72,17 @@ export function planIncludes(code: PlanCode | null) {
   };
 }
 
-export async function savePlan(code: string, input: { price: unknown; currency: unknown; active: boolean }): Promise<Fail | { code: string }> {
+export async function savePlan(code: string, input: { price: unknown; monthly?: unknown; currency: unknown; active: boolean }): Promise<Fail | { code: string }> {
   const amount = Math.round(Number(String(input.price).replace(/[^0-9.]/g, "")) * 100);
+  const monthly = Math.round(Number(String(input.monthly ?? "0").replace(/[^0-9.]/g, "") || 0) * 100);
+  if (!Number.isFinite(monthly) || monthly < 0 || monthly > 100_000_00) return { error: "Enter a monthly price from 0 to 100,000, or 0 for no monthly option." };
+  if (monthly > 0 && monthly < 50) return { error: "A monthly price needs to be at least 0.50, or 0 for no monthly option." };
   const currency = String(input.currency ?? "").trim().toLowerCase();
   if (!["platform", "content", "both"].includes(code)) return { error: "Unknown plan." };
   if (!Number.isFinite(amount) || amount < 0 || amount > 100_000_00) return { error: "Enter a price from 0 to 100,000." };
   if (!/^[a-z]{3}$/.test(currency)) return { error: "Use a three-letter currency code, such as USD." };
   if (input.active && amount < 50) return { error: "A plan needs a price of at least 0.50 before it can be switched on." };
-  await db()`UPDATE org_plans SET price_per_seat_year = ${amount}, currency = ${currency}, active = ${input.active}, updated_at = now() WHERE code = ${code}`;
+  await db()`UPDATE org_plans SET price_per_seat_year = ${amount}, price_per_seat_month = ${monthly}, currency = ${currency}, active = ${input.active}, updated_at = now() WHERE code = ${code}`;
   return { code };
 }
 
@@ -92,6 +98,7 @@ export type Organisation = {
   seats: number;
   status: "none" | "active" | "past_due" | "cancelled" | "test";
   periodEnd: string | null;
+  billingInterval: "month" | "year";
   stripeCustomerId: string | null;
   stripeSubscriptionId: string | null;
   hasJoinLink: boolean;
@@ -107,6 +114,7 @@ const toOrg = (r: Record<string, unknown>): Organisation => ({
   seats: r.seats as number,
   status: r.status as Organisation["status"],
   periodEnd: r.current_period_end ? new Date(r.current_period_end as Date).toISOString() : null,
+  billingInterval: r.billing_interval === "month" ? "month" : "year",
   stripeCustomerId: (r.stripe_customer_id as string) ?? null,
   stripeSubscriptionId: (r.stripe_subscription_id as string) ?? null,
   hasJoinLink: Boolean(r.join_token_hash),
@@ -114,7 +122,7 @@ const toOrg = (r: Record<string, unknown>): Organisation => ({
 });
 
 const orgColumns = (sql: ReturnType<typeof db>) => sql`
-  o.id, o.slug, o.name, o.logo IS NOT NULL AS has_logo, o.plan, o.seats, o.status, o.current_period_end,
+  o.id, o.slug, o.name, o.logo IS NOT NULL AS has_logo, o.plan, o.seats, o.status, o.current_period_end, o.billing_interval,
   o.stripe_customer_id, o.stripe_subscription_id, o.join_token_hash,
   (SELECT count(*) FROM organisation_members m WHERE m.org_id = o.id)::int AS members`;
 

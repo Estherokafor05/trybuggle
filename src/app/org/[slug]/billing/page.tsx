@@ -49,7 +49,7 @@ export default async function OrgBillingPage({ params, searchParams }: Props) {
         </dl>
         {active && org.periodEnd && (
           <p className="mt-3 text-sm text-muted">
-            Renews on {new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(org.periodEnd))}.
+            Paid {org.billingInterval === "month" ? "monthly" : "yearly"}. Renews on {new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(org.periodEnd))}.
           </p>
         )}
         {active && (
@@ -120,11 +120,29 @@ export default async function OrgBillingPage({ params, searchParams }: Props) {
                       <span className="font-display text-2xl font-bold">
                         {money(p.pricePerSeatYear, p.currency)} <span className="font-sans text-sm font-semibold text-navy">per learner, per year</span>
                       </span>
+                      {p.pricePerSeatMonth > 0 && (
+                        <span className="text-sm font-semibold text-navy">or {money(p.pricePerSeatMonth, p.currency)} per learner, per month</span>
+                      )}
                       <span className="text-sm leading-relaxed text-ink/85">{p.description}</span>
                     </label>
                   ))}
                 </div>
               </fieldset>
+              {plans.some((p) => p.pricePerSeatMonth > 0) && (
+                <fieldset className="grid gap-2">
+                  <legend className="font-semibold">Pay</legend>
+                  <label className="flex min-h-11 items-center gap-2">
+                    <input type="radio" name="interval" value="year" defaultChecked className="size-5 accent-brand" /> Yearly
+                  </label>
+                  <label className="flex min-h-11 items-center gap-2">
+                    <input type="radio" name="interval" value="month" className="size-5 accent-brand" /> Monthly (plans with a monthly price)
+                  </label>
+                </fieldset>
+              )}
+              <label className="grid max-w-xs gap-1 font-semibold">
+                Discount code <span className="text-sm font-normal text-muted">(optional)</span>
+                <input name="code" maxLength={30} autoComplete="off" className={`${orgInput} uppercase`} />
+              </label>
               <label className="grid max-w-xs gap-1 font-semibold">
                 Number of places
                 <input name="seats" type="number" min={Math.max(1, org.members)} max={MAX_SEATS} defaultValue={Math.max(5, org.members)} required className={orgInput} />

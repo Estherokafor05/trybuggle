@@ -22,6 +22,7 @@ import {
 import { sendAccountEmail } from "@/server/email";
 import { resolveReports, saveSection, setForumHidden, setThreadFlags } from "@/server/forum";
 import { savePlan } from "@/server/organisations";
+import { saveCode, saveLearnerPrices, saveOffers, setCodeActive, type PriceCode } from "@/server/pricing";
 import { parseQuestionForm, saveQuestions } from "@/server/question-editor";
 import { siteOrigin } from "@/server/site";
 
@@ -278,9 +279,9 @@ export async function saveSectionAction(form: FormData) {
 export async function savePlanAction(form: FormData) {
   const admin = await requireAdmin();
   const code = text(form, "code");
-  const result = await savePlan(code, { price: form.get("price"), currency: form.get("currency"), active: form.get("active") === "on" });
+  const result = await savePlan(code, { price: form.get("price"), monthly: form.get("monthly"), currency: form.get("currency"), active: form.get("active") === "on" });
   if ("error" in result) redirect(`/admin/organisations?message=${encodeURIComponent(result.error)}#prices`);
-  await audit(admin, "plan.changed", code, { price: text(form, "price"), currency: text(form, "currency"), on: form.get("active") === "on" });
+  await audit(admin, "plan.changed", code, { price: text(form, "price"), monthly: text(form, "monthly"), currency: text(form, "currency"), on: form.get("active") === "on" });
   redirect("/admin/organisations?notice=plan-saved#prices");
 }
 
@@ -297,4 +298,46 @@ export async function saveQuestionsAction(_state: QuestionFormState, form: FormD
   if (!result) return { error: "That check no longer exists." };
   await audit(admin, "check.questions_changed", text(form, "key"), result);
   redirect(`/admin/course/check/${id}?notice=questions-saved`);
+}
+
+// --- Pricing ---------------------------------------------------------------------
+
+const pricingBack = (hash: string, error?: string) =>
+  redirect(error ? `/admin/pricing?message=${encodeURIComponent(error)}#${hash}` : `/admin/pricing?notice=pricing-saved#${hash}`);
+
+export async function saveLearnerPricesAction(form: FormData) {
+  const admin = await requireAdmin();
+  const input = Object.fromEntries(
+    (["course", "all_month", "all_year"] as PriceCode[]).map((code) => [code, { amount: form.get(`${code}.amount`), active: form.get(`${code}.active`) === "on" }]),
+  ) as Record<PriceCode, { amount: unknown; active: boolean }>;
+  const result = await saveLearnerPrices(input);
+  if ("error" in result) pricingBack("learners", result.error);
+  await audit(admin, "pricing.learner_prices", null, Object.fromEntries(Object.entries(input).map(([k, v]) => [k, { amount: String(v.amount), on: v.active }])));
+  pricingBack("learners");
+}
+
+export async function saveOffersAction(form: FormData) {
+  const admin = await requireAdmin();
+  const input = { launchOn: form.get("launchOn") === "on", launchPercent: form.get("launchPercent"), salePercent: form.get("salePercent"), saleEndsAt: form.get("saleEndsAt") };
+  const result = await saveOffers(input);
+  if ("error" in result) pricingBack("offers", result.error);
+  await audit(admin, "pricing.offers", null, { launch: input.launchOn, launchPercent: String(input.launchPercent), sale: String(input.salePercent), until: String(input.saleEndsAt) });
+  pricingBack("offers");
+}
+
+export async function saveCodeAction(form: FormData) {
+  const admin = await requireAdmin();
+  const result = await saveCode({ code: form.get("code"), percent: form.get("percent"), appliesTo: form.get("appliesTo"), expiresAt: form.get("expiresAt"), maxUses: form.get("maxUses") });
+  if ("error" in result) pricingBack("codes", result.error);
+  await audit(admin, "pricing.code_saved", (result as { code: string }).code, { percent: text(form, "percent"), for: text(form, "appliesTo") });
+  pricingBack("codes");
+}
+
+export async function toggleCodeAction(form: FormData) {
+  const admin = await requireAdmin();
+  const code = text(form, "code");
+  const on = form.get("active") === "on";
+  await setCodeActive(code, on);
+  await audit(admin, on ? "pricing.code_on" : "pricing.code_off", code);
+  pricingBack("codes");
 }
