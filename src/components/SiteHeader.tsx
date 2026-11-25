@@ -2,7 +2,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ACCOUNT_CHANGED } from "@/components/account/AccountRefresh";
+import { Avatar } from "@/components/Avatar";
 import { useT } from "@/i18n/client";
+import { shortName } from "@/lib/people";
 import type { MessageKey } from "@/i18n/messages";
 
 const NAV = [
@@ -40,13 +43,13 @@ export function SiteHeader() {
   // Read the session in the browser so public pages can stay static.
   // Re-checked on every navigation, so the header updates after signing out.
   // undefined while checking, so "Log in" does not flash for signed-in learners.
-  const [account, setAccount] = useState<{ name: string } | null | undefined>(undefined);
+  const [account, setAccount] = useState<{ name: string; image: string | null } | null | undefined>(undefined);
   useEffect(() => {
     let alive = true;
     fetch("/api/auth/get-session", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((session) => {
-        if (alive) setAccount(session?.user ? { name: session.user.name ?? "" } : null);
+        if (alive) setAccount(session?.user ? { name: session.user.name ?? "", image: session.user.image ?? null } : null);
       })
       .catch(() => {
         if (alive) setAccount(null);
@@ -55,6 +58,15 @@ export function SiteHeader() {
       alive = false;
     };
   }, [pathname]);
+  // Settings announces a new name or photo straight away.
+  useEffect(() => {
+    const changed = (e: Event) => {
+      const { name, image } = (e as CustomEvent<{ name: string; image: string | null }>).detail;
+      setAccount((a) => (a ? { name, image } : a));
+    };
+    window.addEventListener(ACCOUNT_CHANGED, changed);
+    return () => window.removeEventListener(ACCOUNT_CHANGED, changed);
+  }, []);
 
   return (
     <header className="sticky top-0 z-20 border-b border-line/70 bg-canvas/95 backdrop-blur">
@@ -109,11 +121,13 @@ export function SiteHeader() {
             <Link
               href="/account"
               aria-current={pathname === "/account" ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold ${
+              className={`inline-flex min-h-11 items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold ${
                 pathname === "/account" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
               }`}
             >
-              {t("nav.account")}
+              <Avatar name={account.name} image={account.image} />
+              <span className="sr-only">{t("nav.account")}: </span>
+              <span className="ph-mask max-w-[12rem] truncate">{shortName(account.name) || t("nav.account")}</span>
             </Link>
           </div>
         )}
@@ -193,9 +207,12 @@ export function SiteHeader() {
         )}
         {account && (
           <div className="mt-3 border-t border-line/70 pt-3">
-            {account.name && (
-              <p className="ph-mask px-4 pb-2 text-sm text-muted">{t("nav.signedInAs")} {account.name}</p>
-            )}
+            <p className="ph-mask flex items-center gap-3 px-4 pb-2 text-sm text-muted">
+              <Avatar name={account.name} image={account.image} size="md" />
+              <span>
+                {t("nav.signedInAs")} <span className="font-semibold text-navy">{shortName(account.name)}</span>
+              </span>
+            </p>
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}

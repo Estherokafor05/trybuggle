@@ -155,7 +155,7 @@ export const auth = betterAuth({
   plugins: [nextCookies()],
 });
 
-export type LearnerSession = { user: { id: string; name: string; email: string; emailVerified: boolean } };
+export type LearnerSession = { user: { id: string; name: string; email: string; emailVerified: boolean; image: string | null } };
 
 /** The signed-in learner for this request, or null. Cached per request. */
 export const currentSession = cache(async (): Promise<LearnerSession | null> => {
@@ -164,6 +164,6 @@ export const currentSession = cache(async (): Promise<LearnerSession | null> => 
   if (!process.env.DATABASE_URL) return null;
   const session = await auth.api.getSession({ headers: requestHeaders }).catch(() => null);
   if (!session?.user) return null;
-  const { id, name, email, emailVerified } = session.user;
-  return { user: { id, name, email, emailVerified } };
+  const { id, name, email, emailVerified, image } = session.user;
+  return { user: { id, name, email, emailVerified, image: image ?? null } };
 });

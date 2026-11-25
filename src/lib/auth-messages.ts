@@ -26,6 +26,10 @@ const messages: Record<string, string> = {
   SOCIAL_ACCOUNT_ALREADY_LINKED: "That Google account is already linked to a Buggle Learn account.",
   LINKED_ACCOUNT_ALREADY_EXISTS: "That Google account is already linked to a Buggle Learn account.",
   SESSION_NOT_FRESH: "For your security, log out and log in again, then try once more.",
+  PHOTO_MISSING: "Choose a photo first.",
+  PHOTO_TOO_BIG: "That photo is too big. Try a smaller one.",
+  PHOTO_TYPE: "Use a PNG, JPEG or WebP photo.",
+  LANGUAGE: "Choose one of the languages that's ready.",
   state_mismatch: "Your sign-in took too long or was opened in another browser. Please try again.",
 };
 
@@ -43,4 +47,7 @@ export const notices: Record<string, string> = {
   PASSWORD_SAVED: "Your password has been saved. You're still logged in here; other devices were logged out.",
   GOOGLE_LINKED: "Google is now linked. You can log in with Google or your password.",
   UNLINKED: "That sign-in method has been removed.",
+  LANGUAGE_SAVED: "Language saved.",
+  PHOTO_SAVED: "Your photo has been saved.",
+  PHOTO_REMOVED: "Your photo has been removed. Your initials show instead.",
 };
