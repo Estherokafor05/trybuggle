@@ -40,6 +40,11 @@ export default async function OrgOverviewPage({ params, searchParams }: Props) {
             <Link href="/dashboard" className={orgOutline}>
               Your dashboard
             </Link>
+            {has.ownCourses && (
+              <Link href="/courses" className={orgOutline}>
+                Courses from {org.name}
+              </Link>
+            )}
             <form action={leaveAction}>
               <input type="hidden" name="org" value={org.slug} />
               <button type="submit" className={orgOutline}>

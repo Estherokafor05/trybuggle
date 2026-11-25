@@ -358,9 +358,11 @@ export async function soleOwnerOf(user: string) {
 
 /** Removes organisations the learner owns that have no plan and no other members. */
 export async function deleteEmptyOrganisations(user: string) {
-  await db()`DELETE FROM organisations o WHERE o.status = 'none'
+  const gone = await db()`DELETE FROM organisations o WHERE o.status = 'none'
     AND EXISTS (SELECT 1 FROM organisation_members m WHERE m.org_id = o.id AND m.user_id = ${user} AND m.role = 'owner')
-    AND (SELECT count(*) FROM organisation_members x WHERE x.org_id = o.id) = 1`;
+    AND (SELECT count(*) FROM organisation_members x WHERE x.org_id = o.id) = 1 RETURNING o.id::text AS id`;
+  // Courses the organisation built go with it.
+  if (gone.length) await db()`DELETE FROM courses WHERE organization_id = ANY(${gone.map((g) => g.id as string)}) AND source = 'builder'`;
 }
 
 /**
