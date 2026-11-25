@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             Buggle Learn is in beta testing. This policy explains what information we collect
             while you use it and what we do with it. We collect as little as we can.
           </p>
-          <p className="mt-3 text-sm text-navy">Last updated: 24 November 2026</p>
+          <p className="mt-3 text-sm text-navy">Last updated: 25 November 2026</p>
         </header>
 
         <Section id="who" title="Who we are">
@@ -131,6 +131,12 @@ export default function PrivacyPage() {
             <li>If you join an early-access list, to email you when that course opens.</li>
           </List>
           <p>We do not sell your information, and we do not use it for advertising.</p>
+          <p>
+            Each certificate has an ID and a public check page. Anyone with the ID can see the name
+            on the certificate, what it was for, when it was completed and the ID. They never see
+            your email or anything else about you. You choose who to share the ID with, and
+            deleting your account removes the check page.
+          </p>
         </Section>
 
         <Section id="analytics" title="Usage data">

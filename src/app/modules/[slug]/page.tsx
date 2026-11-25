@@ -250,18 +250,18 @@ export default async function ModulePage({
                 </li>
                 <li className="relative flex flex-col items-start rounded-3xl border border-line bg-white p-5 hover:border-brand/35">
                   <span className="rounded-full bg-mint px-3 py-1.5 text-xs font-semibold text-navy">
-                    Your reward
+                    Counts towards
                   </span>
                   <h3 className="mt-4 text-lg font-bold text-ink">
                     <Link
-                      href={`/modules/${slug}/certificate`}
+                      href="/certificate"
                       className="after:absolute after:inset-0 after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
                     >
-                      Certificate of Completion
+                      Your Essentials certificate
                     </Link>
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">
-                    Pass every knowledge check and the final assessment, then download your certificate as a PDF.
+                    Complete every module in the Essentials to earn your free certificate. Download it, share a check link and add it to LinkedIn.
                   </p>
                   <span aria-hidden="true" className="mt-auto pt-4 text-sm font-semibold text-navy">
                     See your progress →

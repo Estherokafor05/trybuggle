@@ -28,6 +28,8 @@ export type CertificateDetails = {
   moduleTitle: string;
   completedOn: Date;
   code: string;
+  /** The public page where anyone can check the certificate. */
+  verifyUrl?: string;
 };
 
 const navy = rgb(0x17 / 255, 0x24 / 255, 0x3c / 255);
@@ -84,10 +86,12 @@ export async function certificatePdf(details: CertificateDetails) {
     page.drawText(label, { x: x - body.widthOfTextAtSize(label, 10) / 2, y: 128, size: 10, font: body, color: muted });
     page.drawText(value, { x: x - heavy.widthOfTextAtSize(value, 14) / 2, y: 108, size: 14, font: heavy, color: navy });
   }
+  if (details.verifyUrl)
+    centred(page, `Check this certificate at ${details.verifyUrl.replace(/^https?:\/\//, "")}`, 80, body, 10, navy);
   centred(
     page,
     "This is a certificate of completion. It is not an accredited qualification or proof of professional competence.",
-    62,
+    details.verifyUrl ? 60 : 62,
     body,
     9.5,
     muted,

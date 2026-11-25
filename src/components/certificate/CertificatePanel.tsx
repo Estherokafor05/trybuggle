@@ -1,6 +1,7 @@
 "use client";
 import { useId, useState } from "react";
 import type { Certificate } from "@/server/certificates";
+import { linkedInAddUrl, linkedInShareUrl } from "@/lib/certificate-links";
 
 const primary =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep disabled:opacity-50";
@@ -11,17 +12,27 @@ function longDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 }
 
-/** Confirm or edit the name, create the certificate once, preview it and download the PDF. */
+/**
+ * Confirm or edit the name, create the certificate once, preview it, download
+ * the PDF and share it: a public check page and LinkedIn.
+ */
 export function CertificatePanel({
   slug,
   moduleTitle,
   profileName,
   initial,
+  origin,
+  canCreate = true,
 }: {
   slug: string;
+  /** What the certificate is for, e.g. "AI Literacy Essentials". */
   moduleTitle: string;
   profileName: string;
   initial: Certificate | null;
+  /** This site's address, for the public check link. */
+  origin: string;
+  /** False for module certificates, which are no longer created. */
+  canCreate?: boolean;
 }) {
   const inputId = useId();
   const [certificate, setCertificate] = useState(initial);
@@ -30,6 +41,16 @@ export function CertificatePanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState("");
+  const [copied, setCopied] = useState(false);
+  const verifyUrl = certificate ? `${origin}/verify/${encodeURIComponent(certificate.code)}` : "";
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(verifyUrl);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +79,7 @@ export function CertificatePanel({
   return (
     <section aria-labelledby="certificate-title" className="mt-6">
       <h2 id="certificate-title" className="text-2xl font-bold">
-        {certificate ? "Your Certificate of Completion" : "Create your certificate"}
+        {certificate ? "Your certificate" : "Create your certificate"}
       </h2>
       {saved && (
         <p role="status" className="mt-3 rounded-xl bg-mint p-3 font-semibold">
@@ -95,7 +116,10 @@ export function CertificatePanel({
                   <dd className="font-mono font-bold text-navy">{certificate.code}</dd>
                 </div>
               </dl>
-              <p className="mt-6 text-xs text-muted">
+              <p className="mt-5 break-words text-xs font-semibold text-navy">
+                Check this certificate at {verifyUrl.replace(/^https?:\/\//, "")}
+              </p>
+              <p className="mt-2 text-xs text-muted">
                 This is a certificate of completion. It is not an accredited qualification or proof of professional competence.
               </p>
             </div>
@@ -114,10 +138,58 @@ export function CertificatePanel({
               </button>
             )}
           </div>
+
+          <section aria-labelledby="share-title" className="mt-6 rounded-[1.5rem] bg-lavender p-5 sm:p-6">
+            <h3 id="share-title" className="text-lg font-bold">
+              Share it
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-ink">
+              Anyone with this link can check your certificate is real. It shows your name, the
+              certificate and its dates, and nothing else about you.
+            </p>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <input
+                readOnly
+                aria-label="Link to check your certificate"
+                value={verifyUrl}
+                onFocus={(e) => e.currentTarget.select()}
+                className="min-h-11 min-w-0 flex-1 rounded-xl border border-line bg-white px-3 font-mono text-sm text-navy"
+              />
+              <button type="button" className={secondary} onClick={copyLink}>
+                {copied ? "Copied" : "Copy link"}
+              </button>
+            </div>
+            <p role="status" className="sr-only">
+              {copied ? "Link copied" : ""}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href={linkedInAddUrl(certificate, moduleTitle, verifyUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={primary}
+              >
+                Add to LinkedIn profile
+                <span className="sr-only"> (opens LinkedIn in a new tab)</span>
+              </a>
+              <a
+                href={linkedInShareUrl(verifyUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={secondary}
+              >
+                Share in a LinkedIn post
+                <span className="sr-only"> (opens LinkedIn in a new tab)</span>
+              </a>
+              <a href={`/verify/${encodeURIComponent(certificate.code)}`} className={secondary}>
+                See the check page
+              </a>
+            </div>
+          </section>
         </>
       )}
 
-      {editing && (
+      {editing && (certificate || canCreate) && (
         <form onSubmit={save} className="mt-4 rounded-[1.5rem] border border-line bg-white p-5 sm:p-6">
           <label htmlFor={inputId} className="block font-semibold">
             Name on your certificate

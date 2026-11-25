@@ -85,7 +85,7 @@ function ModuleCard({ mod }: { mod: ModuleSummary }) {
       {mod.state === "done" && (
         <p className="relative z-10 mt-3 text-sm font-semibold">
           <Link className="text-navy underline underline-offset-4" href={`${mod.href}/certificate`}>
-            {mod.certificate ? "View your certificate" : "Create your certificate"}
+            {mod.certificate ? "View your module certificate" : "See what you passed"}
           </Link>
         </p>
       )}
@@ -188,12 +188,22 @@ export default async function DashboardPage() {
             <section aria-label="Your numbers" className="mt-5 grid gap-3 sm:grid-cols-3">
               <Stat
                 tone="bg-white border border-line"
-                title="Time to your next certificate"
-                value={data.current ? formatMinutes(data.current.minutesLeft) : "All done"}
+                title="Time to your Essentials certificate"
+                value={
+                  data.essentials.code
+                    ? "Earned"
+                    : data.overall.minutesLeft
+                      ? formatMinutes(data.overall.minutesLeft)
+                      : "Ready to create"
+                }
                 detail={
-                  data.current
-                    ? `${data.current.total - data.current.done} steps left in Module ${data.current.order}, ${data.current.title}.`
-                    : "You've earned every certificate that's open so far."
+                  data.essentials.code
+                    ? "You've earned your Essentials certificate."
+                    : `${data.overall.total - data.overall.done} steps left in the open modules${
+                        data.essentials.beingMade && !data.essentials.skipUnbuilt
+                          ? `, plus ${data.essentials.beingMade} ${data.essentials.beingMade === 1 ? "module" : "modules"} still being made.`
+                          : "."
+                      }`
                 }
               />
               <Stat
@@ -228,7 +238,10 @@ export default async function DashboardPage() {
                   {data.overall.openModules} of {data.overall.plannedModules} modules are open so far
                   {data.overall.minutesLeft > 0
                     ? `, with ${formatMinutes(data.overall.minutesLeft).toLowerCase()} of learning left in them.`
-                    : "."}
+                    : "."}{" "}
+                  <Link href="/certificate" className="font-semibold text-navy underline underline-offset-4">
+                    {data.essentials.code ? "View your certificate" : "See your certificate progress"}
+                  </Link>
                 </p>
               </section>
 

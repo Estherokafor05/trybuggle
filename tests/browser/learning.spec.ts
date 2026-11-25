@@ -749,7 +749,7 @@ test("Lessons 4 and 5: locked until earlier checks pass, every activity and acce
   }
 });
 
-test("final assessment, certificate eligibility, naming and PDF download", async ({ browser }) => {
+test("Module 1 final assessment: locked until the lessons, then the module is complete", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const id = await signIn(context);
   const page = await context.newPage();
@@ -763,15 +763,17 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   expect((await context.request.get(`${base}/api/modules/ai-foundations/final-assessment`)).status()).toBe(403);
   await passUpTo(context, "ai-foundations", "what-ai-can-do");
 
-  // Still not eligible: the last lesson check isn't passed, and the server refuses to issue.
+  // Not complete yet: the last lesson check isn't passed.
   await page.goto("/modules/ai-foundations/certificate");
+  await expect(page.getByRole("heading", { name: "Finish Module 1", level: 1 })).toBeVisible();
   await expect(page.getByText("You're nearly there.")).toBeVisible();
   await expect(page.getByText("4 of 6 done")).toBeVisible();
+  // Modules no longer have their own certificate.
   const refused = await context.request.post(base + "/api/me/certificates/ai-foundations", {
     headers: { Origin: base },
     data: { name: "Test learner" },
   });
-  expect(refused.status()).toBe(403);
+  expect(refused.status()).toBe(410);
   await passUpTo(context, "ai-foundations", "final-assessment");
 
   // Fail with 5 of 8, then pass with 6 of 8.
@@ -793,42 +795,24 @@ test("final assessment, certificate eligibility, naming and PDF download", async
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-  // Eligible: the name starts as the profile name and can be changed before creating.
+  // The module is complete and counts towards the Essentials certificate.
   await page.goto("/modules/ai-foundations/certificate");
+  await expect(page.getByRole("heading", { name: "Module 1 complete", level: 1 })).toBeVisible();
   await expect(page.getByText("6 of 6 done")).toBeVisible();
-  const nameField = page.getByLabel("Name on your certificate");
-  await expect(nameField).toHaveValue("Test learner");
-  await nameField.fill("Ada Testwoman");
-  await page.getByRole("button", { name: "Create my certificate" }).click();
-  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
-  await expect(page.getByText("Ada Testwoman")).toBeVisible();
-  // The certificate points straight on to Module 2.
+  await expect(page.getByRole("link", { name: /See your Essentials certificate/ })).toHaveAttribute("href", "/certificate");
   await expect(page.getByRole("link", { name: "Start Module 2" })).toHaveAttribute("href", "/modules/talking-to-ai/lessons/a-new-helper");
-  const code = (await page.locator("dd.font-mono").textContent())!;
-  expect(code).toMatch(/^BL-M1-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
+  await expect(page.getByLabel("Name on your certificate")).toHaveCount(0);
 
-  // Edit the name: ID stays the same.
-  await page.getByRole("button", { name: "Edit name" }).click();
-  await page.getByLabel("Name on your certificate").fill("Ada T. Learner");
-  await page.getByRole("button", { name: "Save name" }).click();
-  await expect(page.getByText(/Name updated/)).toBeVisible();
-  await expect(page.locator("dd.font-mono")).toHaveText(code);
-  expect(
-    (await (await context.request.post(base + "/api/me/certificates/ai-foundations", { headers: { Origin: base }, data: { name: "Someone Else" } })).json())
-      .certificate.code,
-  ).toBe(code);
-
-  // The PDF downloads for the owner only.
-  const pdf = await context.request.get(base + "/api/me/certificates/ai-foundations/pdf");
-  expect(pdf.status()).toBe(200);
-  expect(pdf.headers()["content-type"]).toBe("application/pdf");
-  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
-  const other = await browser.newContext();
-  await signIn(other);
-  expect((await other.request.get(base + "/api/me/certificates/ai-foundations/pdf")).status()).toBe(404);
-  expect((await (await other.request.get(base + "/api/me/certificates/ai-foundations")).json()).certificate).toBeNull();
-  await other.close();
-
+  // One module is not the whole Essentials.
+  await page.goto("/certificate");
+  await expect(page.getByRole("heading", { name: "AI Literacy Essentials", level: 1 })).toBeVisible();
+  await expect(page.getByText("You're on your way.")).toBeVisible();
+  await expect(page.getByText("1 of 2 modules complete")).toBeVisible();
+  const early = await context.request.post(base + "/api/me/certificates/essentials", {
+    headers: { Origin: base },
+    data: { name: "Test learner" },
+  });
+  expect(early.status()).toBe(403);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
@@ -916,13 +900,12 @@ test("learning needs an account; results earned as a guest earlier move in at si
     await page.locator(`input[name="guess-${tool}"]`).first().check();
   await expect(page.getByRole("button", { name: /Step 1: Daniel's desk \(done\)/ })).toBeVisible();
 
-  // The guest's passes now belong to the account, and the certificate can be created.
+  // The guest's passes now belong to the account, and Module 1 is complete.
   await page.goto("/modules/ai-foundations/certificate");
   await expect(page.getByText("6 of 6 done")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Module 1 complete", level: 1 })).toBeVisible();
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-  await page.getByRole("button", { name: "Create my certificate" }).click();
-  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
   expect((await context.cookies(base)).some((c) => c.name === "buggle_guest")).toBe(false);
   await context.close();
 });
@@ -1168,7 +1151,7 @@ test("Episode 2.5: spot what to check, ask without steering, a 5-question check 
   }
 });
 
-test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certificate", async ({ browser }) => {
+test("Module 2 final assessment, then the Essentials certificate: naming, PDF, check page and LinkedIn", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await signIn(context);
   await passUpTo(context, "talking-to-ai", "final-assessment");
@@ -1176,10 +1159,10 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   const final = moduleAssessmentBank["talking-to-ai"];
   expect(final).toHaveLength(6);
 
-  // The module page offers the final assessment and the certificate.
+  // The module page offers the final assessment and points to the Essentials certificate.
   await page.goto("/modules/talking-to-ai");
   await expect(page.getByText("Then · 6 questions")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Certificate of Completion" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Your Essentials certificate" })).toHaveAttribute("href", "/certificate");
 
   // Fail with 4 of 6, then pass with 5 of 6.
   await page.goto("/modules/talking-to-ai/final-assessment");
@@ -1202,21 +1185,93 @@ test("Module 2 final assessment: 6 questions, 5 to pass, then the Module 2 certi
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-  // Episodes are listed by their episode numbers; then create the certificate.
+  // Episodes are listed by their episode numbers; the module is complete.
   await page.goto("/modules/talking-to-ai/certificate");
   await expect(page.getByText("Episode 2.3 knowledge check", { exact: true })).toBeVisible();
-  // Every episode check was passed on the way here: the final opens only after them.
   await expect(page.getByText("6 of 6 done")).toBeVisible();
-  await page.getByRole("button", { name: "Create my certificate" }).click();
-  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
-  expect(await page.locator("dd.font-mono").textContent()).toMatch(/^BL-M2-[A-Z2-9]{4}-[A-Z2-9]{4}$/);
+  await expect(page.getByRole("heading", { name: "Module 2 complete", level: 1 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Module 3: Staying Safe with AI" })).toBeVisible();
   await expect(page.getByText(/This module is being made/)).toBeVisible();
-  const pdf = await context.request.get(base + "/api/me/certificates/talking-to-ai/pdf");
-  expect(pdf.status()).toBe(200);
-  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+
+  // Every open module complete: the Essentials certificate. Modules still being
+  // made are skipped on test sites only.
+  await page.goto("/certificate");
+  await expect(page.getByText("2 of 2 modules complete")).toBeVisible();
+  await expect(page.getByText(/Test site:.*2 modules are still being made/)).toBeVisible();
+  const nameField = page.getByLabel("Name on your certificate");
+  await expect(nameField).toHaveValue("Test learner");
+  await nameField.fill("Ada Testwoman");
+  await page.getByRole("button", { name: "Create my certificate" }).click();
+  await expect(page.getByText("Your certificate is ready.")).toBeVisible();
+  await expect(page.getByText("Ada Testwoman")).toBeVisible();
+  await expect(page.getByText("AI Literacy Essentials", { exact: true }).first()).toBeVisible();
+  const code = (await page.locator("dd.font-mono").textContent())!;
+  expect(code).toMatch(/^BL-E-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/);
+  const verifyUrl = `${base}/verify/${code}`;
+  await expect(page.getByLabel("Link to check your certificate")).toHaveValue(verifyUrl);
+  const add = new URL((await page.getByRole("link", { name: /Add to LinkedIn profile/ }).getAttribute("href"))!);
+  expect(add.origin + add.pathname).toBe("https://www.linkedin.com/profile/add");
+  expect(Object.fromEntries(add.searchParams)).toMatchObject({
+    startTask: "CERTIFICATION_NAME",
+    name: "AI Literacy Essentials",
+    organizationName: "Buggle Learn",
+    certId: code,
+    certUrl: verifyUrl,
+  });
+  await expect(page.getByRole("link", { name: /Add to LinkedIn profile/ })).toHaveAttribute("target", "_blank");
+  const share = new URL((await page.getByRole("link", { name: /Share in a LinkedIn post/ }).getAttribute("href"))!);
+  expect(share.searchParams.get("url")).toBe(verifyUrl);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.waitForTimeout(800);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // Edit the name: the ID stays the same, and creating again never makes a second one.
+  await page.getByRole("button", { name: "Edit name" }).click();
+  await page.getByLabel("Name on your certificate").fill("Ada T. Learner");
+  await page.getByRole("button", { name: "Save name" }).click();
+  await expect(page.getByText(/Name updated/)).toBeVisible();
+  await expect(page.locator("dd.font-mono")).toHaveText(code);
+  expect(
+    (await (await context.request.post(base + "/api/me/certificates/essentials", { headers: { Origin: base }, data: { name: "Someone Else" } })).json())
+      .certificate.code,
+  ).toBe(code);
+
+  // The PDF downloads for the owner only.
+  const pdf = await context.request.get(base + "/api/me/certificates/essentials/pdf");
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toBe("application/pdf");
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  const other = await browser.newContext();
+  await signIn(other);
+  expect((await other.request.get(base + "/api/me/certificates/essentials/pdf")).status()).toBe(404);
+  expect((await (await other.request.get(base + "/api/me/certificates/essentials")).json()).certificate).toBeNull();
+  await other.close();
+
+  // Anyone can check it, signed out, on a phone. Only what the certificate shows.
+  const stranger = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const check = await stranger.newPage();
+  await check.goto("/verify");
+  await check.getByLabel("Certificate ID").fill(` ${code.toLowerCase().replaceAll("-", " ")} `);
+  await check.getByRole("button", { name: "Check it" }).click();
+  await expect(check).toHaveURL(verifyUrl);
+  await expect(check.getByRole("heading", { name: "✓ This certificate is real", level: 1 })).toBeVisible();
+  await expect(check.getByText("Ada T. Learner")).toBeVisible();
+  await expect(check.getByText("AI Literacy Essentials")).toBeVisible();
+  await expect(check.locator("main")).not.toContainText("@example.com");
+  await expect(check.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(check.locator('meta[property="og:title"]')).toHaveAttribute("content", "Ada T. Learner completed AI Literacy Essentials");
+  expect(await check.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect((await new AxeBuilder({ page: check }).analyze()).violations).toEqual([]);
+  await check.goto("/verify/BL-E-AAAA-AAAA");
+  await expect(check.getByRole("heading", { name: "No certificate found", level: 1 })).toBeVisible();
+  await check.goto("/verify?code=not-a-code");
+  await expect(check.getByText("doesn't look like a Buggle Learn certificate ID")).toBeVisible();
+  await stranger.close();
+
+  // The dashboard shows it as earned.
+  await page.goto("/dashboard");
+  await expect(page.getByText("Time to your Essentials certificate")).toBeVisible();
+  await expect(page.getByText("Earned", { exact: true })).toBeVisible();
   await context.close();
 });
 
@@ -1447,7 +1502,7 @@ test("the dashboard shows where the learner is, time to the next certificate and
     await page.goto("/dashboard");
     await expect(page.getByRole("heading", { name: "Welcome, Test", level: 1 })).toBeVisible();
     await expect(page.getByRole("link", { name: "Start learning" })).toHaveAttribute("href", lesson());
-    await expect(page.getByText("Time to your next certificate")).toBeVisible();
+    await expect(page.getByText("Time to your Essentials certificate")).toBeVisible();
     await expect(page.getByText("0 of 12", { exact: true })).toBeVisible();
     await expect(page.getByText("Your knowledge check results will show here.")).toBeVisible();
     await expect(page.getByRole("link", { name: /Talking to AI/ }).locator("..").locator("..")).toContainText("Locked");

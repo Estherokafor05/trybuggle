@@ -36,8 +36,11 @@ export async function moveLearnerData(sql: Sql, from: string, to: string) {
   );
   await sql.query("DELETE FROM learning_checkpoints WHERE learner_id = $1", [from]);
   await sql.query(
-    `UPDATE certificates SET learner_id = $2 WHERE learner_id = $1
-     AND module_slug NOT IN (SELECT module_slug FROM certificates WHERE learner_id = $2)`,
+    `UPDATE certificates c SET learner_id = $2 WHERE c.learner_id = $1
+     AND NOT EXISTS (
+       SELECT 1 FROM certificates t WHERE t.learner_id = $2 AND t.kind = c.kind
+       AND t.course_slug = c.course_slug AND t.module_slug IS NOT DISTINCT FROM c.module_slug
+     )`,
     [from, to],
   );
   await sql.query("DELETE FROM certificates WHERE learner_id = $1", [from]);

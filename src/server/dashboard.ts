@@ -4,6 +4,7 @@ import { getBuiltLesson, getModule, modules } from "@course";
 import { db } from "./database";
 import { coursePath, passedSteps, type PathStep } from "./progression";
 import { finalCheck, lessonCheck } from "./checks";
+import { essentialsSkipsUnbuilt } from "./certificates";
 
 /** Minutes a step usually takes: the film or guide, plus about a minute per question. */
 export function stepMinutes(step: PathStep) {
@@ -54,7 +55,7 @@ export async function learnerDashboard(learner: string) {
   const path = coursePath();
   const [passed, certificates, recentRows, days] = await Promise.all([
     passedSteps(learner),
-    sql`SELECT module_slug, code FROM certificates WHERE learner_id=${learner}`,
+    sql`SELECT kind, module_slug, code FROM certificates WHERE learner_id=${learner}`,
     sql`
       SELECT 'lesson' AS kind, lesson_slug AS key, correct_count, question_count, passed, created_at
         FROM assessment_attempts WHERE learner_id=${learner}
@@ -69,7 +70,11 @@ export async function learnerDashboard(learner: string) {
         UNION ALL SELECT updated_at FROM learning_checkpoints WHERE learner_id=${learner}
       ) activity`,
   ]);
-  const certificateFor = new Map(certificates.map((r) => [r.module_slug as string, r.code as string]));
+  // Module certificates were issued before step 6 and still show.
+  const certificateFor = new Map(
+    certificates.filter((r) => r.kind === "module").map((r) => [r.module_slug as string, r.code as string]),
+  );
+  const essentialsCode = (certificates.find((r) => r.kind === "essentials")?.code as string) ?? null;
   const next = path.find((step) => !passed.has(step.key)) ?? null;
   const nextIndex = next ? path.indexOf(next) : path.length;
 
@@ -135,9 +140,15 @@ export async function learnerDashboard(learner: string) {
       openModules: summaries.filter((m) => m.state !== "comingSoon").length,
       plannedModules: summaries.length,
     },
+    essentials: {
+      code: essentialsCode,
+      /** Modules with nothing to take yet. On the live site they must be finished too. */
+      beingMade: summaries.filter((m) => m.state === "comingSoon").length,
+      skipUnbuilt: essentialsSkipsUnbuilt(),
+    },
     stats: {
       checksPassed: passed.size,
-      certificates: certificateFor.size,
+      certificates: certificates.length,
       daysLearning: Number(days[0]?.n ?? 0),
     },
     recent,
