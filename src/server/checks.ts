@@ -133,7 +133,7 @@ const noTriesLeft = (max: number): Failure => ({
 export async function loadCheck(ref: CheckRef, learner: string): Promise<Outcome<Record<string, unknown>>> {
   const stop = await blocked(ref, learner);
   if (stop) return { failure: stop };
-  const settings = await checkSettings(ref);
+  const settings = await settingsFor(ref, learner);
   const sql = db();
   const t = table(ref);
   const [latest, totals] = await Promise.all([
@@ -159,6 +159,18 @@ export async function loadCheck(ref: CheckRef, learner: string): Promise<Outcome
   };
 }
 
+/** A check's settings for one learner: an admin may have given them extra tries. */
+async function settingsFor(ref: CheckRef, learner: string): Promise<CheckSettings> {
+  const settings = await checkSettings(ref);
+  if (settings.maxAttempts == null) return settings;
+  try {
+    const [grant] = await db()`SELECT extra FROM assessment_attempt_grants WHERE learner_id=${learner} AND assessment_key=${ref.key}`;
+    return grant ? { ...settings, maxAttempts: settings.maxAttempts + Number(grant.extra) } : settings;
+  } catch {
+    return settings;
+  }
+}
+
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 /** Marks a submission on the server and stores it once per submission key. */
@@ -169,7 +181,7 @@ export async function submitCheck(
 ): Promise<Outcome<Record<string, unknown>>> {
   const stop = await blocked(ref, learner);
   if (stop) return { failure: stop };
-  const settings = await checkSettings(ref);
+  const settings = await settingsFor(ref, learner);
   const questions = ref.questions;
   let submissionKey: string, answers: Record<string, string>, result;
   try {

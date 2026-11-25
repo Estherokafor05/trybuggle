@@ -12,6 +12,14 @@ Both lessons include independent interactive guides, complete reading alternativ
 
 **Certificates.** One free Essentials certificate comes after every Essentials module, including each final assessment (`/certificate`, rules in `src/server/certificates.ts`). Modules no longer have their own certificate. Module certificates issued earlier still show on the module page and still verify. Every certificate has an ID such as `BL-E-7KQ2-M9XD`, and anyone can check it at `/verify`. The check page shows only the name, what it was for, the dates and the ID, and search engines are told not to list it. Learners can download the PDF, copy the check link, add the certificate to their LinkedIn profile or share it in a post. On the live site (`VERCEL_ENV=production`), every planned module must be complete. Test sites skip modules that are still being made, unless `ESSENTIALS_REQUIRE_ALL=on`. Admins can withdraw a certificate by setting `revoked_at`; its check page then says so.
 
+**Admin area (`/admin`).** Admin accounts are separate from learner accounts. They have their own Better Auth setup (`src/admin-auth.ts`), `admin_*` tables, `/api/admin-auth` routes and `buggle-admin` cookie, so a learner login never opens admin pages. There is no admin sign-up.
+- The first admin is created once at `/admin/setup`, using the `ADMIN_SETUP_KEY` setting (20+ characters), and only while no admins exist.
+- Other admins join by a one-time invite link that expires after 7 days. Only a hash of each link is stored.
+- Every admin must set up an authenticator app (TOTP, with 10 backup codes) before any admin page opens. Sessions last 12 hours.
+- Admins can see live numbers, look up learners and their results, give a learner one more try on a check with a tries limit, and change each check's pass mark, tries and shuffling. They can also withdraw or restore certificates and manage the team.
+- Every change goes into an activity log (`admin_audit`).
+- Rules are in `src/server/admin.ts`, and every page and action calls `requireAdmin()`.
+
 Visitors can use both previews and resume on the same device. Google sign-in enables learning places and assessment results saved to PostgreSQL across devices. All five Module 1 lessons, the Module 1 final assessment and the Certificate of Completion are live. Buggle Learn is completely free: there are no payments, paid tiers or subscriptions. The first two previews remain open access; their availability is not a claim of completed progression.
 
 ## Run and check
