@@ -185,8 +185,8 @@ export async function writeCourse(run: SqlRunner, plan: CoursePlan): Promise<Imp
   };
 
   const courseRow = await one(
-    `INSERT INTO courses(slug, title, summary, status) VALUES($1, $2, $3, $4)
-     ON CONFLICT(slug) DO UPDATE SET title = EXCLUDED.title, summary = EXCLUDED.summary, status = EXCLUDED.status
+    `INSERT INTO courses(slug, title, summary, status, source) VALUES($1, $2, $3, $4, 'files')
+     ON CONFLICT(slug) DO UPDATE SET title = EXCLUDED.title, summary = EXCLUDED.summary, status = EXCLUDED.status, source = 'files'
      RETURNING id`,
     [plan.slug, plan.title, plan.summary, plan.status],
   );

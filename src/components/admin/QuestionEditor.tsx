@@ -9,9 +9,23 @@ type Q = { key: string; prompt: string; options: { id: string; text: string }[];
 const SLOTS = 6;
 const blank = (): Q => ({ key: "", prompt: "", options: [], correct: "", explanation: "" });
 
-export function QuestionEditor({ id, checkKey, questions }: { id: string; checkKey: string; questions: Q[] }) {
-  const [rows, setRows] = useState<Q[]>(questions);
-  const [state, dispatch, pending] = useActionState<QuestionFormState, FormData>(saveQuestionsAction, {});
+export function QuestionEditor({
+  id,
+  checkKey,
+  questions,
+  action = saveQuestionsAction,
+  fields = {},
+}: {
+  id: string;
+  checkKey: string;
+  questions: Q[];
+  /** Where the questions are saved. The lesson builder passes its own action. */
+  action?: (state: QuestionFormState, form: FormData) => Promise<QuestionFormState>;
+  /** Extra hidden values the action needs. */
+  fields?: Record<string, string>;
+}) {
+  const [rows, setRows] = useState<Q[]>(questions.length ? questions : [blank()]);
+  const [state, dispatch, pending] = useActionState<QuestionFormState, FormData>(action, {});
   return (
     <form
       onSubmit={(e) => {
@@ -25,6 +39,9 @@ export function QuestionEditor({ id, checkKey, questions }: { id: string; checkK
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="key" value={checkKey} />
       <input type="hidden" name="count" value={rows.length} />
+      {Object.entries(fields).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
       {state.error && (
         <p role="alert" className="rounded-2xl bg-peach p-4 text-sm">
           {state.error}

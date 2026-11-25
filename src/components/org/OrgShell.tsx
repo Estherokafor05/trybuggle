@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { canManage, type Organisation, type Role } from "@/server/organisations";
+import { canManage, planIncludes, type Organisation, type Role } from "@/server/organisations";
 
 export const orgNotices: Record<string, string> = {
   created: "Your organisation is ready. Choose a plan to start adding members.",
@@ -35,6 +35,7 @@ export function OrgLogo({ org, size = "size-14" }: { org: Pick<Organisation, "id
 const TABS = [
   { path: "", label: "Overview" },
   { path: "/members", label: "Members" },
+  { path: "/courses", label: "Courses" },
   { path: "/billing", label: "Plan and billing" },
   { path: "/settings", label: "Settings" },
 ];
@@ -73,7 +74,7 @@ export function OrgShell({
         {manager && (
           <nav aria-label="Organisation" className="mt-5 overflow-x-auto">
             <ul className="flex w-max gap-1 rounded-full border border-line/70 bg-white/80 p-1 text-sm font-medium">
-              {TABS.map((t) => (
+              {TABS.filter((t) => t.path !== "/courses" || planIncludes(org.plan).ownCourses).map((t) => (
                 <li key={t.path}>
                   <Link
                     href={`/org/${org.slug}${t.path}`}

@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { formatMinutes, learnerDashboard, type Dashboard, type ModuleSummary } from "@/server/dashboard";
 import { OrgLogo } from "@/components/org/OrgShell";
+import { visibleCourses } from "@/server/builder-learn";
 import { canManage, myOrganisations } from "@/server/organisations";
 
 export const metadata: Metadata = { title: "Your dashboard | Buggle Learn" };
@@ -171,7 +172,10 @@ export default async function DashboardPage() {
   } catch {
     data = null;
   }
-  const orgs = await myOrganisations(session.user.id).catch(() => []);
+  const [orgs, more] = await Promise.all([
+    myOrganisations(session.user.id).catch(() => []),
+    visibleCourses(session.user.id).catch(() => []),
+  ]);
 
   return (
     <>
@@ -276,6 +280,27 @@ export default async function DashboardPage() {
                     </p>
                   )}
                 </section>
+
+                {more.length > 0 && (
+                  <section aria-labelledby="more-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
+                    <h2 id="more-title" className="text-lg font-bold">
+                      More courses
+                    </h2>
+                    <ul className="mt-3 grid gap-2">
+                      {more.slice(0, 3).map((c) => (
+                        <li key={c.id}>
+                          <Link href={`/learn/${c.slug}`} className="block rounded-xl bg-canvas p-3 hover:bg-lavender">
+                            <span className="block font-semibold text-ink">{c.title}</span>
+                            <span className="block text-sm text-muted">{c.from ? `From ${c.from}` : "From Buggle Learn"}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href="/courses" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
+                      See all courses
+                    </Link>
+                  </section>
+                )}
 
                 <section aria-labelledby="orgs-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
                   <h2 id="orgs-title" className="text-lg font-bold">

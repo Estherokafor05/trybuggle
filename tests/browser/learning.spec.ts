@@ -1785,3 +1785,160 @@ test("organisations: create, test plan, invite, join, team progress, logo, join 
     await sql.end();
   }
 });
+
+test("lesson builder: an organisation builds a course with blocks and a check, and a member takes it in order", async ({ browser }) => {
+  test.setTimeout(150_000);
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  const name = `QA Builders ${randomUUID().slice(0, 6)}`;
+  const slug = `qa-builders-${randomUUID().slice(0, 8)}`;
+  try {
+    const owner = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const ownerId = await signIn(owner);
+    const member = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const memberId = await signIn(member);
+    const [org] = await sql`INSERT INTO organisations(slug, name, plan, seats, status, created_by)
+      VALUES(${slug}, ${name}, 'platform', 3, 'test', ${ownerId}) RETURNING id`;
+    await sql`INSERT INTO organisation_members(org_id, user_id, role) VALUES(${org.id}, ${ownerId}, 'owner'), (${org.id}, ${memberId}, 'member')`;
+
+    // The owner starts a course from the organisation's Courses tab.
+    const page = await owner.newPage();
+    await page.goto(`/org/${slug}`);
+    await page.getByRole("navigation", { name: "Organisation" }).getByRole("link", { name: "Courses" }).click();
+    await page.getByLabel("Course title").fill("Safe AI at work");
+    await page.getByRole("button", { name: "Create course" }).click();
+    await expect(page.getByText(/Course created/)).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    // Publishing an empty course is refused, and nothing typed is lost.
+    await page.getByLabel("What learners will get from it").fill("How we use AI safely here.");
+    await page.getByLabel(/Published: learners can see it/).check();
+    await page.getByRole("button", { name: "Save course" }).click();
+    await expect(page.getByRole("main").getByRole("alert")).toContainText("Add at least one lesson");
+    await expect(page.getByLabel("What learners will get from it")).toHaveValue("How we use AI safely here.");
+
+    // First lesson: text, a video and an image, then a one-question check.
+    await page.getByLabel("New lesson title").fill("What not to paste");
+    await page.getByRole("button", { name: "+ Add lesson" }).click();
+    await expect(page.getByText(/Lesson added/)).toBeVisible();
+    await page.getByLabel("Minutes to complete").fill("5");
+    await page.getByRole("button", { name: "Save lesson details" }).click();
+    await expect(page.getByText("Lesson saved.")).toBeVisible();
+
+    await page.getByRole("button", { name: "+ Add block" }).click();
+    const text = page.getByRole("listitem", { name: "Block 1: Text" });
+    await text.getByLabel("Heading (optional)").fill("Keep it private");
+    await text.getByLabel(/^Text/).fill("Never paste customer names into a chatbot.\n\n<b>Not bold</b>, just text.");
+    await text.getByRole("button", { name: "Save block" }).click();
+    await expect(page.getByText("Block saved.")).toBeVisible();
+
+    await page.getByLabel("Add a block").selectOption("video");
+    await page.getByRole("button", { name: "+ Add block" }).click();
+    const video = page.getByRole("listitem", { name: "Block 2: Video" });
+    await video.getByLabel(/YouTube or Vimeo link/).fill("https://example.com/clip");
+    await video.getByRole("button", { name: "Save block" }).click();
+    await expect(video.getByRole("alert")).toContainText("Use a YouTube or Vimeo link.");
+    await expect(video.getByLabel(/YouTube or Vimeo link/)).toHaveValue("https://example.com/clip");
+    await video.getByLabel(/YouTube or Vimeo link/).fill("https://youtu.be/dQw4w9WgXcQ");
+    await video.getByLabel(/Video title/).fill("Two-minute explainer");
+    await video.getByRole("button", { name: "Save block" }).click();
+    await expect(page.getByText("Block saved.")).toBeVisible();
+
+    await page.getByLabel("Add a block").selectOption("image");
+    await page.getByRole("button", { name: "+ Add block" }).click();
+    const image = page.getByRole("listitem", { name: "Block 3: Image" });
+    const png = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "base64",
+    );
+    await image.getByLabel(/^Image/).setInputFiles({ name: "dot.png", mimeType: "image/png", buffer: png });
+    await image.getByLabel(/Describe the image/).fill("A single purple dot");
+    await image.getByRole("button", { name: "Save block" }).click();
+    await expect(page.getByText("Block saved.")).toBeVisible();
+    await expect(page.getByRole("img", { name: "A single purple dot" })).toBeVisible();
+
+    // The image moves above the video.
+    await page.getByRole("button", { name: "Move block 3 up" }).click();
+    await expect(page.getByRole("listitem", { name: "Block 2: Image" })).toBeVisible();
+
+    const check = page.locator("#check");
+    await check.getByLabel("Question", { exact: true }).fill("Which is safe to paste into a chatbot?");
+    await check.getByLabel("Answer 1", { exact: true }).fill("A public news article");
+    await check.getByLabel("Answer 2", { exact: true }).fill("A customer's name and address");
+    await check.getByLabel("Answer 1 is the right one").check();
+    await check.getByLabel(/^Explanation/).fill("Public text is fine; personal details are not.");
+    await check.getByRole("button", { name: "Save all questions" }).click();
+    await expect(page.getByText("Knowledge check saved.")).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // The preview shows what learners will see, as plain text.
+    await page.getByRole("link", { name: "Preview this lesson" }).click();
+    await expect(page.getByRole("heading", { name: "Keep it private" })).toBeVisible();
+    await expect(page.getByText("<b>Not bold</b>, just text.")).toBeVisible();
+    await expect(page.locator('iframe[title="Two-minute explainer"]')).toHaveAttribute("src", "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ");
+    await expect(page.getByText(/knowledge check with 1 question/)).toBeVisible();
+    expect((await new AxeBuilder({ page }).exclude("iframe").analyze()).violations).toEqual([]);
+
+    // A second lesson with no check, then publish.
+    await page.getByRole("link", { name: "Back to editing" }).click();
+    await page.getByRole("link", { name: "← Back to the course" }).click();
+    await page.getByLabel("New lesson title").fill("Who to ask");
+    await page.getByRole("button", { name: "+ Add lesson" }).click();
+    await page.getByRole("button", { name: "+ Add block" }).click();
+    await page.getByRole("listitem", { name: "Block 1: Text" }).getByLabel(/^Text/).fill("Ask your manager first.");
+    await page.getByRole("button", { name: "Save block" }).click();
+    await expect(page.getByText("Block saved.")).toBeVisible();
+    await page.getByRole("link", { name: "← Back to the course" }).click();
+    await page.getByLabel(/Published: learners can see it/).check();
+    await page.getByRole("button", { name: "Save course" }).click();
+    await expect(page.getByText(/Course published/)).toBeVisible();
+
+    // Someone outside the organisation can't see it, or open the builder.
+    const outsider = await browser.newContext();
+    await signIn(outsider);
+    const outsiderPage = await outsider.newPage();
+    await outsiderPage.goto("/courses");
+    await expect(outsiderPage.getByText("Safe AI at work")).toHaveCount(0);
+    const courseLink = await page.getByRole("link", { name: "Open as a learner" }).getAttribute("href");
+    expect((await outsiderPage.goto(courseLink!))!.status()).toBe(404);
+    expect((await outsiderPage.goto(`/org/${slug}/courses`))!.status()).toBe(404);
+    await outsider.close();
+
+    // The member takes it on a phone, one lesson at a time.
+    const m = await member.newPage();
+    await m.goto("/courses");
+    await expect(m.getByText(`From ${name}`)).toBeVisible();
+    expect((await new AxeBuilder({ page: m }).analyze()).violations).toEqual([]);
+    await m.getByRole("link", { name: /Open course/ }).click();
+    await expect(m.getByRole("heading", { name: "Safe AI at work" })).toBeVisible();
+    await expect(m.getByText("Finish the lesson before first")).toBeVisible();
+    expect((await new AxeBuilder({ page: m }).analyze()).violations).toEqual([]);
+    expect(await m.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await m.getByRole("link", { name: /Start the course/ }).click();
+    await expect(m.getByRole("heading", { name: "What not to paste" })).toBeVisible();
+    await expect(m.getByText("About 5 minutes")).toBeVisible();
+    await m.getByRole("button", { name: "Open the knowledge check" }).click();
+    await m.getByLabel("A customer's name and address").check();
+    await m.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(m.getByText("Review the feedback and try again", { exact: true })).toBeVisible();
+    await m.getByRole("button", { name: "Retry this assessment", exact: true }).click();
+    await m.getByLabel("A public news article").check();
+    await m.getByRole("button", { name: "Submit knowledge check" }).click();
+    await expect(m.getByText("Knowledge check passed", { exact: true })).toBeVisible();
+    expect((await new AxeBuilder({ page: m }).exclude("iframe").analyze()).violations).toEqual([]);
+    expect(await m.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await m.getByRole("link", { name: /Next lesson: Who to ask/ }).click();
+    await expect(m.getByText("Ask your manager first.")).toBeVisible();
+    await m.getByRole("button", { name: "Mark as done" }).click();
+    await expect(m.getByText(/finished every lesson in this course/)).toBeVisible();
+    await expect(m.getByText("2 of 2 lessons done")).toBeVisible();
+
+    // Members can't open the builder.
+    await m.goto(`/org/${slug}/courses`);
+    await expect(m).toHaveURL(`${base}/org/${slug}`);
+    await owner.close();
+    await member.close();
+  } finally {
+    await sql`DELETE FROM courses WHERE organization_id IN (SELECT id::text FROM organisations WHERE slug = ${slug})`;
+    await sql`DELETE FROM organisations WHERE slug = ${slug}`;
+    await sql.end();
+  }
+});
