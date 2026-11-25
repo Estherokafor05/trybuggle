@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { currentSession } from "@/auth";
 import { Avatar } from "@/components/Avatar";
+import { BuggleSays } from "@/components/Buggle";
 import { Badges } from "@/components/rewards/Badges";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -119,9 +120,11 @@ export default async function LeaderboardPage({ searchParams }: Props) {
               )}
             </ol>
           ) : (
-            <p className="mt-5 rounded-2xl bg-canvas p-5 text-ink">
-              No points {period === "week" ? "this week" : ""} yet. Pass a knowledge check or help someone in the forum to be first. 🚀
-            </p>
+            <div className="mt-5">
+              <BuggleSays mood="cheer">
+                No points {period === "week" ? "this week" : ""} yet. Pass a knowledge check or help someone in the forum to be first. 🚀
+              </BuggleSays>
+            </div>
           )}
         </section>
 

@@ -147,7 +147,7 @@ export function StoryPlayer({
         />
       </video>
       {asking && choice && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto bg-navy/85 p-3 sm:p-6">
+        <div className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto bg-deep-bg/85 p-3 sm:p-6">
           <div role="dialog" aria-modal="false" aria-labelledby="film-choice-title" className="welcome-rise my-auto w-full max-w-xl rounded-2xl bg-white p-4 sm:p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-deep">Your choice</p>
             <h3 id="film-choice-title" ref={choiceHeading} tabIndex={-1} className="mt-1 text-lg font-bold leading-snug outline-none sm:text-xl">

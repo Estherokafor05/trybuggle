@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { currentSession } from "@/auth";
+import { Buggle } from "@/components/Buggle";
+import { Sparkles } from "@/components/Sparkles";
 import { LockIcon } from "@/components/LockIcon";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -33,7 +35,8 @@ export default async function LearnCoursePage({ params }: Props) {
             ← More courses
           </Link>
         </p>
-        <header className="rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
+        <header className="relative overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
+          <Sparkles />
           {course.from && <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">From {course.from}</p>}
           <h1 className="mt-2 break-words text-[clamp(2rem,4.5vw,3rem)] font-bold leading-tight">{course.title}</h1>
           {course.summary && <p className="mt-3 max-w-[60ch] whitespace-pre-line leading-relaxed text-ink">{course.summary}</p>}
@@ -50,8 +53,9 @@ export default async function LearnCoursePage({ params }: Props) {
           )}
         </header>
         {finished && (
-          <p role="status" className="mt-6 rounded-2xl bg-mint p-4 font-semibold text-navy">
-            ✓ You&apos;ve finished every lesson in this course. Well done.
+          <p role="status" className="mt-6 flex items-center gap-3 rounded-2xl bg-mint p-4 font-semibold text-navy">
+            <Buggle mood="cheer" size="sm" />
+            🎉 You&apos;ve finished every lesson in this course. Well done.
           </p>
         )}
         {course.sections.map((s, si) => (

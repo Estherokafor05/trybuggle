@@ -24,7 +24,7 @@ export function ModuleCard({ module: mod }: { module: Module }) {
 
   return (
     <article
-      className={`group relative flex h-full min-w-0 flex-col rounded-3xl border border-navy/10 p-5 text-navy transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-brand-deep focus-within:ring-offset-2 sm:p-6 ${colour}`}
+      className={`group relative flex h-full min-w-0 flex-col rounded-3xl border border-navy/10 p-5 text-navy transition duration-200 hover:-translate-y-1 hover:shadow-md focus-within:ring-2 focus-within:ring-brand-deep focus-within:ring-offset-2 sm:p-6 ${colour}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="flex items-center gap-3">

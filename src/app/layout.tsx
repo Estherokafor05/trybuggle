@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Inter } from "next/font/google";
 import { AnalyticsConsent } from "@/components/AnalyticsConsent";
+import { themeScript } from "@/components/theme/theme";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -37,7 +38,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${bricolage.variable} ${inter.variable} ${plexMono.variable}`}
+      // The theme script below may set data-theme before React starts.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-dvh flex-col">
         {children}
         <AnalyticsConsent />

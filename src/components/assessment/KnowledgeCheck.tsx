@@ -1,4 +1,5 @@
 "use client";
+import { Buggle } from "@/components/Buggle";
 import { POINTS } from "@/lib/points";
 import { useRef, useState, type ReactNode } from "react";
 import { AskBuggle } from "./AskBuggle";
@@ -177,11 +178,19 @@ export function KnowledgeCheck({
           )}
           {result ? (
             <div className="mt-5">
-              <p className="text-xl font-bold">
-                {result.passed
-                  ? `${noun.charAt(0).toUpperCase()}${noun.slice(1)} passed`
-                  : "Review the feedback and try again"}
-              </p>
+              <div className="flex items-center gap-3">
+                <Buggle mood={result.passed ? "cheer" : "happy"} size="sm" />
+                <div>
+                  <p className="text-xl font-bold">
+                    {result.passed
+                      ? `${noun.charAt(0).toUpperCase()}${noun.slice(1)} passed`
+                      : "Review the feedback and try again"}
+                  </p>
+                  {!result.passed && (
+                    <p className="text-sm text-muted">Nearly there. Ask Buggle why on any answer, then have another go. 💪</p>
+                  )}
+                </div>
+              </div>
               {result.passed && earned != null && (
                 <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-lavender px-3 py-1 text-sm font-semibold text-navy">
                   <span aria-hidden="true" className="inline-block motion-safe:animate-[badge-pop_0.5s_ease-out]">

@@ -67,7 +67,7 @@ function BlockView({ block }: { block: Block }) {
   if (block.type === "video")
     return (
       <figure>
-        <div className="aspect-video overflow-hidden rounded-3xl border border-line bg-navy">
+        <div className="aspect-video overflow-hidden rounded-3xl border border-line bg-deep-bg">
           <iframe
             src={d.embed}
             title={d.title || "Video"}

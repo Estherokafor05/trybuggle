@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Buggle } from "@/components/Buggle";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -13,6 +14,7 @@ export default function NotFound() {
       <SiteHeader />
       <main className="mx-auto flex min-h-[60vh] max-w-[640px] items-center px-4 py-12 sm:px-6">
         <section className="w-full rounded-[2rem] bg-hero-lavender p-7 sm:p-10">
+          <Buggle mood="thinking" size="md" className="mb-2" />
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">
             Page not found
           </p>
