@@ -11,6 +11,7 @@ import { Buggle } from "@/components/Buggle";
 import { Sparkles } from "@/components/Sparkles";
 import { Badges } from "@/components/rewards/Badges";
 import { visibleCourses } from "@/server/builder-learn";
+import { catalogue } from "@/server/deep-dive";
 import { myRewards } from "@/server/rewards";
 import { canManage, myOrganisations } from "@/server/organisations";
 
@@ -182,11 +183,13 @@ export default async function DashboardPage() {
   } catch {
     data = null;
   }
-  const [orgs, more, rewards] = await Promise.all([
+  const [orgs, more, rewards, deepDive] = await Promise.all([
     myOrganisations(session.user.id).catch(() => []),
     visibleCourses(session.user.id).catch(() => []),
     myRewards(session.user.id).catch(() => null),
+    catalogue(session.user.id).catch(() => []),
   ]);
+  const foundation = deepDive.find((c) => c.isFoundation);
 
   return (
     <>
@@ -317,6 +320,24 @@ export default async function DashboardPage() {
                     </div>
                     <Link href="/leaderboard" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
                       See the leaderboard
+                    </Link>
+                  </section>
+                )}
+
+                {foundation && (
+                  <section aria-labelledby="deep-title" className="rounded-[1.75rem] bg-blush p-5 sm:p-6">
+                    <h2 id="deep-title" className="text-lg font-bold">
+                      <span aria-hidden="true">🚀</span> The Deep Dive
+                    </h2>
+                    <p className="mt-2 text-sm leading-relaxed text-ink">
+                      {foundation.access.gate
+                        ? `Finish the Essentials to open "${foundation.title}", the start of every AI course.`
+                        : foundation.finished
+                          ? `You've finished "${foundation.title}". Every AI course is open to you now.`
+                          : `Next: "${foundation.title}". Chapter 1 is free, and it opens every other AI course.`}
+                    </p>
+                    <Link href="/deep-dive" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
+                      See the Deep Dive courses
                     </Link>
                   </section>
                 )}

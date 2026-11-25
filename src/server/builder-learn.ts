@@ -4,15 +4,17 @@ import { randomUUID } from "node:crypto";
 import { passMark, scoreAssessment, type Question } from "@/lib/assessment-scoring";
 import { orderedOptions, type Outcome } from "./checks";
 import { db } from "./database";
+import { deepDiveAccess, type Access } from "./deep-dive";
 
-export type LessonState = "done" | "open" | "locked";
+/** locked: an earlier lesson (or course) comes first. paid: next up, but needs buying. */
+export type LessonState = "done" | "open" | "locked" | "paid";
 
 /** Published builder courses: Buggle Learn's own, plus any from the learner's organisations. */
 export async function visibleCourses(user: string | null) {
   const rows = await db()`SELECT c.id, c.slug, c.title, c.summary, o.name AS org_name,
       (SELECT count(*) FROM course_items i WHERE i.course_id = c.id)::int AS lessons
     FROM courses c LEFT JOIN organisations o ON o.id::text = c.organization_id
-    WHERE c.source = 'builder' AND c.status = 'published' AND (c.organization_id IS NULL OR EXISTS (
+    WHERE c.source = 'builder' AND c.status = 'published' AND c.kind = 'short' AND (c.organization_id IS NULL OR EXISTS (
       SELECT 1 FROM organisation_members m WHERE m.org_id::text = c.organization_id AND m.user_id = ${user ?? ""}))
     ORDER BY c.organization_id IS NULL, c.title`;
   return rows.map((r) => ({
@@ -29,7 +31,7 @@ export async function visibleCourses(user: string | null) {
 export async function courseForLearner(slug: string, user: string | null) {
   if (!/^[a-z0-9-]{1,80}$/.test(slug)) return null;
   const sql = db();
-  const [c] = await sql`SELECT c.id, c.slug, c.title, c.summary, c.organization_id, o.name AS org_name
+  const [c] = await sql`SELECT c.id, c.slug, c.title, c.summary, c.organization_id, o.name AS org_name, c.kind, c.is_foundation, c.free_chapters
     FROM courses c LEFT JOIN organisations o ON o.id::text = c.organization_id
     WHERE c.slug = ${slug} AND c.source = 'builder' AND c.status = 'published'`;
   if (!c) return null;
@@ -38,6 +40,10 @@ export async function courseForLearner(slug: string, user: string | null) {
     const [m] = await sql`SELECT 1 FROM organisation_members WHERE org_id::text = ${c.organization_id as string} AND user_id = ${user}`;
     if (!m) return null;
   }
+  const deepDive = c.kind === "deep_dive";
+  const access: Access | null = deepDive
+    ? await deepDiveAccess(user, { id: c.id as string, isFoundation: Boolean(c.is_foundation), freeChapters: c.free_chapters as number })
+    : null;
   const [sections, items] = await Promise.all([
     sql`SELECT id, title FROM course_sections WHERE course_id = ${c.id} ORDER BY position`,
     sql`SELECT i.id, i.section_id, i.slug, i.title, i.summary, i.estimated_minutes, a.id AS assessment_id,
@@ -50,13 +56,17 @@ export async function courseForLearner(slug: string, user: string | null) {
         WHERE i.course_id = ${c.id} ORDER BY s.position, i.position`,
   ]);
   // Empty lessons (nothing added yet) are left out; the rest open one at a time.
-  let reachable = true;
+  // In a Deep Dive course, chapters after the free ones need paying for.
+  const chapterOf = new Map(sections.map((s, i) => [s.id as string, i]));
+  let reachable = !access?.gate;
   const lessons = items
     .filter((i) => i.has_blocks || i.questions > 0)
     .map((i) => {
-      const state: LessonState = i.done ? "done" : reachable ? "open" : "locked";
+      const paid = Boolean(access && !access.entitled && (chapterOf.get(i.section_id as string) ?? 0) >= access.freeChapters);
+      const state: LessonState = i.done ? "done" : !reachable ? "locked" : paid ? "paid" : "open";
       if (!i.done) reachable = false;
       return {
+        paid,
         id: i.id as string,
         sectionId: i.section_id as string,
         slug: i.slug as string,
@@ -73,6 +83,9 @@ export async function courseForLearner(slug: string, user: string | null) {
     title: c.title as string,
     summary: c.summary as string,
     from: (c.org_name as string | null) ?? null,
+    deepDive,
+    isFoundation: Boolean(c.is_foundation),
+    access,
     sections: sections
       .map((s) => ({ id: s.id as string, title: s.title as string, lessons: lessons.filter((l) => l.sectionId === s.id) }))
       .filter((s) => s.lessons.length),
@@ -91,7 +104,7 @@ export async function markDone(slug: string, itemId: string, user: string) {
   const course = await courseForLearner(slug, user);
   if (!course || "signInNeeded" in course) return false;
   const lesson = course.lessons.find((l) => l.id === itemId);
-  if (!lesson || lesson.state === "locked" || lesson.assessmentId) return false;
+  if (!lesson || lesson.state !== "open" || lesson.assessmentId) return false;
   const sql = db();
   await sql`INSERT INTO learners(id) VALUES(${user}) ON CONFLICT DO NOTHING`;
   await sql`INSERT INTO builder_completions(learner_id, item_id) VALUES(${user}, ${itemId}) ON CONFLICT DO NOTHING`;
@@ -116,6 +129,7 @@ async function openCheck(assessmentId: string, user: string): Promise<{ failure:
   if (!course || "signInNeeded" in course) return notFound;
   const lesson = course.lessons.find((l) => l.id === a.item_id);
   if (!lesson) return notFound;
+  if (lesson.state === "paid") return { failure: { status: 403, error: "Unlock this course to carry on.", locked: true } };
   if (lesson.state === "locked") return { failure: { status: 403, error: "Finish the lessons before this one first.", locked: true } };
   const rows = await sql`SELECT key, prompt, options, correct_option, explanation FROM assessment_questions WHERE assessment_id = ${assessmentId} ORDER BY position`;
   return {

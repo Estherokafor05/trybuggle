@@ -15,6 +15,7 @@ export const builderNotices: Record<string, string> = {
   "course-saved": "Course saved.",
   "course-published": "Course published. Learners can see it now.",
   "course-deleted": "Course deleted.",
+  "course-type-saved": "Course type saved.",
   "module-added": "Module added.",
   "module-saved": "Module saved.",
   "module-deleted": "Module deleted.",
@@ -103,6 +104,10 @@ type Outline = {
   title: string;
   summary: string;
   status: string;
+  kind: "short" | "deep_dive";
+  isFoundation: boolean;
+  freeChapters: number;
+  position: number;
   sections: { id: string; title: string; items: { id: string; title: string; minutes: number; blocks: number; questions: number }[] }[];
 };
 
@@ -140,9 +145,14 @@ function Confirmed({ summary, fields, children, action }: { summary: string; fie
   );
 }
 
+/** Deep Dive courses have chapters and units; other courses have modules and lessons. */
+export const wordsFor = (kind: "short" | "deep_dive") =>
+  kind === "deep_dive" ? { section: "Chapter", item: "Unit", sections: "Chapters and units" } : { section: "Module", item: "Lesson", sections: "Modules and lessons" };
+
 export function CourseEditorView({ actor, base, course }: { actor: string; base: string; course: Outline }) {
   const c = { actor, course: course.id };
   const published = course.status === "published";
+  const w = wordsFor(course.kind);
   return (
     <div className="grid gap-6">
       <p>
@@ -190,24 +200,68 @@ export function CourseEditorView({ actor, base, course }: { actor: string; base:
         </ActionForm>
       </section>
 
+      {actor === "admin" && (
+        <section aria-labelledby="type-title" className={card}>
+          <h2 id="type-title" className="text-lg font-bold">
+            Course type
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            Deep Dive courses are paid, have chapters and units, and give a certificate. &quot;What is AI&quot; is the one every other Deep Dive course needs first.
+          </p>
+          <ActionForm fields={{ ...c, op: "course.type" }} className="mt-4 grid gap-4">
+            <fieldset className="grid gap-2">
+              <legend className="text-sm font-semibold">Type</legend>
+              <label className="flex min-h-11 items-center gap-2">
+                <input type="radio" name="kind" value="short" defaultChecked={course.kind === "short"} className="size-5 accent-brand" />
+                Short course: free for everyone
+              </label>
+              <label className="flex min-h-11 items-center gap-2">
+                <input type="radio" name="kind" value="deep_dive" defaultChecked={course.kind === "deep_dive"} className="size-5 accent-brand" />
+                Deep Dive course: paid, with a certificate
+              </label>
+            </fieldset>
+            <label className="flex min-h-11 items-start gap-2">
+              <input type="checkbox" name="foundation" defaultChecked={course.isFoundation} className="mt-1 size-5 accent-brand" />
+              <span>
+                <span className="font-semibold">This is &quot;What is AI&quot;</span>
+                <span className="block text-sm text-muted">It opens after the Essentials, and every other Deep Dive course opens after it. Only one course can be this.</span>
+              </span>
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className={label}>
+                Free chapters
+                <input name="freeChapters" type="number" min={0} max={20} defaultValue={course.freeChapters} className={input} />
+              </label>
+              <label className={label}>
+                Order in the Deep Dive list
+                <input name="position" type="number" min={1} max={999} defaultValue={course.position} className={input} />
+              </label>
+            </div>
+            <button type="submit" className={`${outline} justify-self-start`}>
+              Save course type
+            </button>
+          </ActionForm>
+        </section>
+      )}
+
       <section aria-labelledby="modules-title" className="grid gap-4">
         <h2 id="modules-title" className="text-lg font-bold">
-          Modules and lessons
+          {w.sections}
         </h2>
-        <p className="-mt-2 text-sm text-muted">Learners take the lessons in this order, one at a time.</p>
+        <p className="-mt-2 text-sm text-muted">Learners take the {w.item.toLowerCase()}s in this order, one at a time.</p>
         {course.sections.map((s, si) => (
-          <article key={s.id} id={`module-${s.id}`} aria-label={`Module ${si + 1}: ${s.title}`} className={`${card} grid gap-4`}>
+          <article key={s.id} id={`module-${s.id}`} aria-label={`${w.section} ${si + 1}: ${s.title}`} className={`${card} grid gap-4`}>
             <div className="flex flex-wrap items-end gap-3">
               <ActionForm fields={{ ...c, op: "section.rename", section: s.id }} className="flex min-w-0 flex-1 flex-wrap items-end gap-3">
                 <label className={`${label} min-w-0 flex-1`}>
-                  Module {si + 1} title
+                  {w.section} {si + 1} title
                   <input name="title" required maxLength={200} defaultValue={s.title} className={input} />
                 </label>
                 <button type="submit" className={outline}>
                   Save
                 </button>
               </ActionForm>
-              <Move fields={{ ...c, op: "section.move", section: s.id }} what={`module ${si + 1}`} />
+              <Move fields={{ ...c, op: "section.move", section: s.id }} what={`${w.section.toLowerCase()} ${si + 1}`} />
             </div>
             {s.items.length ? (
               <ol className="grid gap-2">
@@ -222,36 +276,38 @@ export function CourseEditorView({ actor, base, course }: { actor: string; base:
                         {i.minutes ? ` · ${i.minutes} min` : ""}
                       </p>
                     </div>
-                    <Move fields={{ ...c, op: "item.move", item: i.id }} what={`lesson ${i.title}`} />
+                    <Move fields={{ ...c, op: "item.move", item: i.id }} what={`${w.item.toLowerCase()} ${i.title}`} />
                   </li>
                 ))}
               </ol>
             ) : (
-              <p className="text-sm text-muted">No lessons in this module yet.</p>
+              <p className="text-sm text-muted">
+                No {w.item.toLowerCase()}s in this {w.section.toLowerCase()} yet.
+              </p>
             )}
             <ActionForm fields={{ ...c, op: "item.add", section: s.id }} className="flex flex-wrap items-end gap-3">
               <label className={`${label} min-w-0 flex-1`}>
-                New lesson title
+                New {w.item.toLowerCase()} title
                 <input name="title" required minLength={3} maxLength={200} className={input} />
               </label>
               <button type="submit" className={outline}>
-                + Add lesson
+                + Add {w.item.toLowerCase()}
               </button>
             </ActionForm>
             {course.sections.length > 1 && (
-              <Confirmed summary="Delete this module" fields={{ ...c, op: "section.delete", section: s.id }} action="Delete module">
-                This deletes the module and every lesson in it, including learners&apos; progress on them.
+              <Confirmed summary={`Delete this ${w.section.toLowerCase()}`} fields={{ ...c, op: "section.delete", section: s.id }} action={`Delete ${w.section.toLowerCase()}`}>
+                This deletes the {w.section.toLowerCase()} and every {w.item.toLowerCase()} in it, including learners&apos; progress on them.
               </Confirmed>
             )}
           </article>
         ))}
         <ActionForm fields={{ ...c, op: "section.add" }} className={`${card} flex flex-wrap items-end gap-3`}>
           <label className={`${label} min-w-0 flex-1`}>
-            New module title
+            New {w.section.toLowerCase()} title
             <input name="title" required maxLength={200} className={input} />
           </label>
           <button type="submit" className={outline}>
-            + Add module
+            + Add {w.section.toLowerCase()}
           </button>
         </ActionForm>
       </section>

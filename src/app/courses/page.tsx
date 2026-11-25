@@ -26,9 +26,14 @@ export default async function CoursesPage() {
           <p className="mt-3 max-w-[60ch] leading-relaxed text-ink">
             Short courses from Buggle Learn{session ? " and your organisation" : ""}. The AI Literacy learning path is still where to start.
           </p>
-          <Link href="/curriculum" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep">
-            AI Literacy learning path <span aria-hidden="true" className="ml-2">→</span>
-          </Link>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/curriculum" className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep">
+              AI Literacy learning path <span aria-hidden="true" className="ml-2">→</span>
+            </Link>
+            <Link href="/deep-dive" className="inline-flex min-h-11 items-center rounded-full border border-line bg-white px-5 text-sm font-semibold text-navy hover:bg-lavender">
+              🚀 The Deep Dive
+            </Link>
+          </div>
         </header>
         {courses.length ? (
           <ul className="mt-8 grid gap-4 sm:grid-cols-2">

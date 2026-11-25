@@ -5,11 +5,13 @@ import { markDoneAction } from "@/app/actions/learn";
 import { currentSession } from "@/auth";
 import { KnowledgeCheck } from "@/components/assessment/KnowledgeCheck";
 import { LessonBlocks } from "@/components/builder/LessonBlocks";
+import { GateNotice, UnlockPanel } from "@/components/deep-dive/Unlock";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { passMark } from "@/lib/assessment-scoring";
 import { blocksFor, courseForLearner } from "@/server/builder-learn";
 import { db } from "@/server/database";
+import { canTestPurchase } from "@/server/deep-dive";
 
 type Props = { params: Promise<{ course: string; lesson: string }> };
 
@@ -31,6 +33,28 @@ export default async function LearnLessonPage({ params }: Props) {
   const afterHref = next ? `/learn/${slug}/${next.slug}` : `/learn/${slug}`;
   const afterLabel = next ? `Next lesson: ${next.title}` : "Back to the course";
 
+  if (lesson.state === "paid" || (lesson.state === "locked" && course.access?.gate)) {
+    return (
+      <>
+        <SiteHeader />
+        <main className="mx-auto grid max-w-[760px] gap-6 px-4 py-10 sm:px-6 sm:py-14">
+          <header className="rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">{course.title}</p>
+            <h1 className="mt-2 break-words text-3xl font-bold">{lesson.title}</h1>
+          </header>
+          {course.access?.gate ? (
+            <GateNotice gate={course.access.gate} />
+          ) : (
+            <UnlockPanel course={course} access={course.access!} testing={canTestPurchase()} signedIn />
+          )}
+          <Link href={`/learn/${slug}`} className="inline-flex min-h-11 items-center text-sm font-semibold underline-offset-4 hover:underline">
+            ← Back to the course
+          </Link>
+        </main>
+        <SiteFooter />
+      </>
+    );
+  }
   if (lesson.state === "locked") {
     const first = course.lessons.find((l) => l.state === "open");
     return (
@@ -67,8 +91,8 @@ export default async function LearnLessonPage({ params }: Props) {
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
             <li>
-              <Link className="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href="/courses">
-                Courses
+              <Link className="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href={course.deepDive ? "/deep-dive" : "/courses"}>
+                {course.deepDive ? "Deep Dive" : "Courses"}
               </Link>
             </li>
             <li aria-hidden="true">›</li>
@@ -79,7 +103,7 @@ export default async function LearnLessonPage({ params }: Props) {
             </li>
             <li aria-hidden="true">›</li>
             <li aria-current="page" className="font-semibold text-navy">
-              Lesson {index + 1} of {course.lessons.length}
+              {course.deepDive ? "Unit" : "Lesson"} {index + 1} of {course.lessons.length}
             </li>
           </ol>
         </nav>

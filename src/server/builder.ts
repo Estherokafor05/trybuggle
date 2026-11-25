@@ -32,9 +32,9 @@ const ownerOf = (b: Builder) => (b.kind === "org" ? b.orgId : null);
 /** The course, if this builder may change it. Never the AI Literacy course from the files. */
 async function ownCourse(b: Builder, courseId: string) {
   if (!/^[0-9a-f-]{36}$/i.test(courseId)) return null;
-  const [row] = await db()`SELECT id, slug FROM courses WHERE id = ${courseId} AND source = 'builder'
+  const [row] = await db()`SELECT id, slug, kind FROM courses WHERE id = ${courseId} AND source = 'builder'
     AND organization_id IS NOT DISTINCT FROM ${ownerOf(b)}`;
-  return row ? { id: row.id as string, slug: row.slug as string } : null;
+  return row ? { id: row.id as string, slug: row.slug as string, kind: row.kind as "short" | "deep_dive" } : null;
 }
 async function courseOfItem(b: Builder, itemId: string) {
   if (!/^[0-9a-f-]{36}$/i.test(itemId)) return null;
@@ -105,6 +105,32 @@ export async function updateCourse(b: Builder, courseId: string, input: { title:
   return { ok: true };
 }
 
+/**
+ * Admins only: whether a course is a free short course or part of the paid
+ * Deep Dive, whether it is "What is AI" (the course every other Deep Dive
+ * course needs first), how many chapters are free, and its catalogue order.
+ */
+export async function updateCourseType(
+  b: Builder,
+  courseId: string,
+  input: { kind: unknown; foundation: unknown; freeChapters: unknown; position: unknown },
+): Promise<Fail | { ok: true }> {
+  if (b.kind !== "admin") return { error: "Only Buggle Learn can put courses in the Deep Dive." };
+  if (!(await ownCourse(b, courseId))) return { error: "That course no longer exists." };
+  const kind = input.kind === "deep_dive" ? "deep_dive" : "short";
+  const foundation = kind === "deep_dive" && input.foundation === true;
+  const free = Number(input.freeChapters);
+  const position = Number(input.position);
+  if (!Number.isInteger(free) || free < 0 || free > 20) return { error: "Free chapters must be a whole number from 0 to 20." };
+  if (!Number.isInteger(position) || position < 1 || position > 999) return { error: "Order in the catalogue must be from 1 to 999." };
+  await db().begin(async (tx) => {
+    if (foundation) await tx`UPDATE courses SET is_foundation = false WHERE is_foundation AND id <> ${courseId}`;
+    await tx`UPDATE courses SET kind = ${kind}, is_foundation = ${foundation}, free_chapters = ${kind === "deep_dive" ? free : 0},
+      catalogue_position = ${position} WHERE id = ${courseId}`;
+  });
+  return { ok: true };
+}
+
 export async function deleteCourse(b: Builder, courseId: string) {
   const course = await ownCourse(b, courseId);
   if (!course) return false;
@@ -117,7 +143,7 @@ export async function courseOutlineFor(b: Builder, courseId: string) {
   const course = await ownCourse(b, courseId);
   if (!course) return null;
   const sql = db();
-  const [c] = await sql`SELECT id, slug, title, summary, status FROM courses WHERE id = ${courseId}`;
+  const [c] = await sql`SELECT id, slug, title, summary, status, kind, is_foundation, free_chapters, catalogue_position FROM courses WHERE id = ${courseId}`;
   const [sections, items] = await Promise.all([
     sql`SELECT id, title, position FROM course_sections WHERE course_id = ${courseId} ORDER BY position`,
     sql`SELECT i.id, i.section_id, i.slug, i.title, i.position, i.estimated_minutes,
@@ -131,6 +157,10 @@ export async function courseOutlineFor(b: Builder, courseId: string) {
     title: c.title as string,
     summary: c.summary as string,
     status: c.status as string,
+    kind: c.kind as "short" | "deep_dive",
+    isFoundation: Boolean(c.is_foundation),
+    freeChapters: c.free_chapters as number,
+    position: c.catalogue_position as number,
     sections: sections.map((s) => ({
       id: s.id as string,
       title: s.title as string,

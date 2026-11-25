@@ -261,18 +261,83 @@ export function normaliseCode(raw: string) {
 export async function verifyCertificate(raw: string): Promise<Verification | null> {
   const code = normaliseCode(raw);
   if (!code) return null;
-  const rows = await db()`SELECT code,kind,module_slug,learner_name,completed_on,issued_at,revoked_at FROM certificates WHERE code=${code}`;
+  const rows = await db()`SELECT code,kind,module_slug,course_slug,learner_name,completed_on,issued_at,revoked_at FROM certificates WHERE code=${code}`;
   const row = rows[0];
   if (!row) return null;
+  const deepDiveTitle =
+    row.kind === "deep_dive" ? ((await db()`SELECT title FROM courses WHERE slug = ${row.course_slug as string}`)[0]?.title as string | undefined) : undefined;
   const title =
     row.kind === "essentials"
       ? essentialsTitle
       : row.kind === "deep_dive"
-        ? `${course.title} Deep Dive`
+        ? (deepDiveTitle ?? `${course.title} Deep Dive`)
         : (getModule(row.module_slug as string)?.title ?? "Buggle Learn module");
   return {
     ...toCertificate(row),
     title,
     status: row.revoked_at ? "revoked" : "valid",
   };
+}
+
+// ---------------------------------------------------------------------------
+// Deep Dive course certificates: one per finished Deep Dive course.
+
+/** A published Deep Dive course, by its address. */
+async function deepDiveCourse(slug: string) {
+  if (!/^[a-z0-9-]{1,80}$/.test(slug)) return null;
+  const [row] = await db()`SELECT id, slug, title FROM courses WHERE slug = ${slug} AND kind = 'deep_dive' AND status = 'published' AND source = 'builder'`;
+  return row ? { id: row.id as string, slug: row.slug as string, title: row.title as string } : null;
+}
+
+/** When the learner finished every unit, or null if they haven't. */
+async function courseFinishedOn(learner: string, courseId: string) {
+  const [row] = await db()`
+    SELECT bool_and(done_at IS NOT NULL) AS all_done, count(*)::int AS n, max(done_at) AS last FROM (
+      SELECT i.id, least(
+        (SELECT min(d.completed_at) FROM builder_completions d WHERE d.item_id = i.id AND d.learner_id = ${learner}),
+        (SELECT min(t.created_at) FROM builder_attempts t JOIN assessments a ON a.id = t.assessment_id
+           WHERE a.item_id = i.id AND t.learner_id = ${learner} AND t.passed)) AS done_at
+      FROM course_items i WHERE i.course_id = ${courseId}
+        AND (EXISTS (SELECT 1 FROM content_blocks k WHERE k.item_id = i.id)
+          OR EXISTS (SELECT 1 FROM assessments a JOIN assessment_questions q ON q.assessment_id = a.id WHERE a.item_id = i.id))
+    ) x`;
+  return row.n > 0 && row.all_done ? new Date(row.last as Date).toISOString() : null;
+}
+
+export async function courseCertificateStatus(learner: string, slug: string) {
+  const found = await deepDiveCourse(slug);
+  if (!found) return null;
+  const [finishedOn, rows] = await Promise.all([
+    courseFinishedOn(learner, found.id),
+    db()`SELECT code,learner_name,completed_on,issued_at FROM certificates WHERE learner_id=${learner} AND kind='deep_dive' AND course_slug=${slug}`,
+  ]);
+  return { course: found, eligible: Boolean(finishedOn), finishedOn, certificate: rows[0] ? toCertificate(rows[0]) : null };
+}
+
+/** Issues once per learner and course, only when every unit is finished. */
+export async function issueCourseCertificate(learner: string, slug: string, name: string) {
+  const status = await courseCertificateStatus(learner, slug);
+  if (!status) return { error: "Not found" } as const;
+  if (status.certificate) return { certificate: status.certificate } as const;
+  if (!status.finishedOn) return { error: "Finish every unit in this course first." } as const;
+  const sql = db();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const rows = await sql`
+        INSERT INTO certificates(id,code,learner_id,kind,course_slug,module_slug,learner_name,completed_on,requirements)
+        VALUES(${randomUUID()},${`BL-D-${part()}-${part()}`},${learner},'deep_dive',${slug},NULL,${name},${status.finishedOn.slice(0, 10)},${sql.json({ course: status.course.title })})
+        ON CONFLICT(learner_id,course_slug,kind) WHERE kind <> 'module' DO NOTHING
+        RETURNING code,learner_name,completed_on,issued_at`;
+      if (rows[0]) return { certificate: toCertificate(rows[0]) } as const;
+      return { certificate: (await courseCertificateStatus(learner, slug))!.certificate! } as const;
+    } catch (error) {
+      if (!(error instanceof Error && /certificates_code_key/.test(error.message))) throw error;
+    }
+  }
+  throw new Error("Could not create a unique certificate ID");
+}
+
+export async function renameCourseCertificate(learner: string, slug: string, name: string) {
+  const rows = await db()`UPDATE certificates SET learner_name=${name}, updated_at=now() WHERE learner_id=${learner} AND kind='deep_dive' AND course_slug=${slug} RETURNING code,learner_name,completed_on,issued_at`;
+  return rows[0] ? toCertificate(rows[0]) : null;
 }
