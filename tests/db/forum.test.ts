@@ -31,12 +31,20 @@ after(async () => {
   setImmediate(() => process.exit(process.exitCode ?? 0));
 });
 
-async function person(name = "Ada Obi") {
+/** A learner who has submitted one knowledge check (wrong), so they can post. */
+async function person(name = "Ada Obi", { checked = true } = {}) {
   const id = randomUUID();
   await db.query(`INSERT INTO auth_user(id, name, email, "emailVerified") VALUES($1, $2, $3, true)`, [id, name, `${id}@example.com`]);
   await db.query(`INSERT INTO learners(id) VALUES($1)`, [id]);
+  if (checked) await submitWrongCheck(id);
   return { id, name };
 }
+const submitWrongCheck = (id: string) =>
+  db.query(
+    `INSERT INTO assessment_attempts(id,learner_id,lesson_slug,assessment_version,submission_key,answers,question_count,correct_count,feedback)
+     VALUES(gen_random_uuid(),$1,'what-counts-as-ai',1,gen_random_uuid(),'{}',5,1,'[]')`,
+    [id],
+  );
 
 const question = (user: { id: string; name: string }, extra: Partial<{ title: string; body: string; kind: string; sectionSlug: string; lesson: string }> = {}) =>
   forum.createThread(user, {
@@ -53,6 +61,24 @@ function ok<T extends object>(value: T | { error: string }): T {
 }
 
 describe("forum", () => {
+  test("reading is open; posting and liking open after a first check, even a wrong one", async () => {
+    const ada = await person();
+    const { id } = ok(await question(ada));
+    const newcomer = await person("New Comer", { checked: false });
+    assert.equal(await forum.canPost(newcomer.id), false);
+    assert.ok(await forum.getThread(id, newcomer.id), "they can read");
+    for (const attempt of [
+      await question(newcomer),
+      await forum.createPost(newcomer, id, { body: "Can I answer?" }),
+      await forum.toggleHelpful(newcomer, "thread", id),
+    ])
+      assert.match((attempt as { error: string }).error, /first knowledge check/);
+    await submitWrongCheck(newcomer.id);
+    assert.equal(await forum.canPost(newcomer.id), true);
+    assert.ok("id" in (await forum.createPost(newcomer, id, { body: "Now I can answer." })));
+    assert.equal(await forum.canPost(null), false);
+  });
+
   test("starting sections exist, in order", async () => {
     const sections = await forum.listSections();
     assert.deepEqual(sections.slice(0, 3).map((s) => s.slug), ["introductions", "ai-foundations", "talking-to-ai"]);

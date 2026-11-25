@@ -1,25 +1,29 @@
+"use client";
 import Link from "next/link";
+import { HtmlLang, useT } from "@/i18n/client";
 
 export function SiteFooter() {
+  const t = useT();
   return (
     <footer className="mt-auto border-t border-line bg-white">
+      <HtmlLang />
       <div className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-4 px-4 py-6 text-sm text-muted sm:px-6">
         <Link href="/" className="font-display font-bold text-navy">
           Buggle Learn
         </Link>
-        <span>Understand AI. Learn how to use it.</span>
-        <nav aria-label="Footer navigation" className="ml-auto flex flex-wrap gap-5">
+        <span>{t("footer.tagline")}</span>
+        <nav aria-label={t("footer.nav")} className="ml-auto flex flex-wrap gap-5">
           <Link href="/curriculum" className="hover:text-brand">
-            All modules
+            {t("footer.modules")}
           </Link>
           <Link href="/#how-it-works" className="hover:text-brand">
-            How it works
+            {t("footer.howItWorks")}
           </Link>
           <Link href="/verify" className="hover:text-brand">
-            Check a certificate
+            {t("footer.verify")}
           </Link>
           <Link href="/privacy" className="hover:text-brand">
-            Privacy
+            {t("footer.privacy")}
           </Link>
         </nav>
       </div>

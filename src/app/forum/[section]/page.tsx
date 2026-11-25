@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getModule } from "@course";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { forumButton, ThreadList } from "@/components/forum/ForumParts";
-import { getSection, listThreads, type ThreadFilter } from "@/server/forum";
+import { getSection, lessonInfo, listThreads, type ThreadFilter } from "@/server/forum";
 
-type Props = { params: Promise<{ section: string }>; searchParams: Promise<{ filter?: string; page?: string }> };
+type Props = { params: Promise<{ section: string }>; searchParams: Promise<{ filter?: string; page?: string; lesson?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const section = await getSection((await params).section).catch(() => null);
@@ -21,14 +22,26 @@ const FILTERS: { id: ThreadFilter; label: string }[] = [
 ];
 
 export default async function ForumSectionPage({ params, searchParams }: Props) {
-  const section = await getSection((await params).section);
-  if (!section) notFound();
+  const slug = (await params).section;
+  const section = await getSection(slug);
+  // A module without its own section yet goes to the forum home.
+  if (!section) {
+    if (getModule(slug)) redirect("/forum");
+    notFound();
+  }
   const query = await searchParams;
+  const lesson = lessonInfo(query.lesson ?? null);
   const filter = FILTERS.some((f) => f.id === query.filter) ? (query.filter as ThreadFilter) : "all";
   const page = Math.max(1, Math.min(1000, Number(query.page) || 1));
-  const { threads, more } = await listThreads({ sectionId: section.id, filter, page });
-  const link = (f: ThreadFilter, p = 1) =>
-    `/forum/${section.slug}${f !== "all" || p > 1 ? `?${new URLSearchParams({ ...(f !== "all" ? { filter: f } : {}), ...(p > 1 ? { page: String(p) } : {}) })}` : ""}`;
+  const { threads, more } = await listThreads({ sectionId: section.id, lessonSlug: lesson?.slug, filter, page });
+  const link = (f: ThreadFilter, p = 1, withLesson = true) => {
+    const q = new URLSearchParams({
+      ...(f !== "all" ? { filter: f } : {}),
+      ...(p > 1 ? { page: String(p) } : {}),
+      ...(withLesson && lesson ? { lesson: lesson.slug } : {}),
+    });
+    return `/forum/${section.slug}${q.size ? `?${q}` : ""}`;
+  };
   return (
     <>
       <SiteHeader />
@@ -44,11 +57,27 @@ export default async function ForumSectionPage({ params, searchParams }: Props) 
           {section.locked ? (
             <p className="rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-navy">Read only</p>
           ) : (
-            <Link href={`/forum/new?section=${section.slug}`} className={forumButton}>
-              Post in this section
+            <Link
+              href={`/forum/new?${new URLSearchParams({ section: section.slug, ...(lesson ? { lesson: lesson.slug } : {}) })}`}
+              className={forumButton}
+            >
+              {lesson ? "Ask about this lesson" : "Post in this section"}
             </Link>
           )}
         </header>
+        {lesson && (
+          <p className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl bg-white p-4 text-sm ring-1 ring-line/70">
+            <span>
+              Showing posts about <b>{lesson.label}</b>
+            </span>
+            <Link href={lesson.href} className="font-semibold text-navy underline underline-offset-4">
+              Back to the lesson
+            </Link>
+            <Link href={link(filter, 1, false)} className="font-semibold text-navy underline underline-offset-4">
+              Show everything in this section
+            </Link>
+          </p>
+        )}
         <nav aria-label="Show" className="mt-6 overflow-x-auto">
           <ul className="flex w-max gap-1 rounded-full border border-line/70 bg-white/80 p-1 text-sm font-medium">
             {FILTERS.map((f) => (

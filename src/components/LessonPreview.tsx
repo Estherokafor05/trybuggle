@@ -155,6 +155,14 @@ export function LessonPreview({
           checkIntro ??
           `5 quick questions about this ${moduleSlug === "ai-foundations" ? "lesson" : "episode"}. Get 4 or more right to pass. You can try again as many times as you need.`
         }
+        discuss={
+          <p className="mt-5 rounded-xl bg-canvas p-4 text-sm leading-relaxed">
+            Still curious? See what other learners asked, or ask your own question.{" "}
+            <a href={`/forum/${moduleSlug}?lesson=${lesson.slug}`} className="font-semibold text-navy underline underline-offset-4">
+              View the forum
+            </a>
+          </p>
+        }
         afterPass={
           next?.available ? (
             <Link

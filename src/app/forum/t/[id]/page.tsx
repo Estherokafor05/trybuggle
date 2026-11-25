@@ -12,10 +12,12 @@ import {
   forumNotices,
   forumOutline,
   ForumText,
+  JoinInCard,
   KindBadge,
   when,
 } from "@/components/forum/ForumParts";
-import { getThread, reportReasons, type ForumPost } from "@/server/forum";
+import { canPost, getThread, reportReasons, type ForumPost } from "@/server/forum";
+import { coursePath } from "@/server/progression";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ notice?: string; error?: string }> };
 
@@ -42,6 +44,7 @@ function Tools({
   type,
   id,
   signedIn,
+  canAct,
   mine,
   helpful,
   voted,
@@ -53,6 +56,8 @@ function Tools({
   type: "thread" | "post";
   id: string;
   signedIn: boolean;
+  /** Has taken a first check, so can like. */
+  canAct: boolean;
   mine: boolean;
   helpful: number;
   voted: boolean;
@@ -62,16 +67,16 @@ function Tools({
 }) {
   return (
     <div className="mt-3 flex flex-wrap items-center gap-1">
-      {signedIn && !mine ? (
+      {canAct && !mine ? (
         <form action={helpfulAction}>
           <Hidden thread={threadId} type={type} id={id} />
           <button type="submit" aria-pressed={voted} className={`${small} ${voted ? "bg-mint" : ""}`}>
-            {voted ? "✓ " : ""}Helpful{helpful > 0 ? ` · ${helpful}` : ""}
+            {voted ? "✓ " : ""}Like{helpful > 0 ? ` · ${helpful}` : ""}
             <span className="sr-only">: {label}</span>
           </button>
         </form>
       ) : (
-        helpful > 0 && <span className="px-3 text-sm text-muted">{helpful} found this helpful</span>
+        helpful > 0 && <span className="px-3 text-sm text-muted">{helpful} {helpful === 1 ? "like" : "likes"}</span>
       )}
       {accept && (
         <form action={acceptAction}>
@@ -163,6 +168,8 @@ export default async function ThreadPage({ params, searchParams }: Props) {
   const thread = await getThread(id, viewer);
   if (!thread) notFound();
   const signedIn = Boolean(viewer);
+  const allowed = await canPost(viewer).catch(() => false);
+  const firstCheck = `${coursePath()[0]?.href ?? "/modules/ai-foundations"}#knowledge-check`;
   const isQuestion = thread.kind === "question";
   const back = `/forum/t/${thread.id}`;
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(back)}`;
@@ -209,6 +216,7 @@ export default async function ThreadPage({ params, searchParams }: Props) {
               type="thread"
               id={thread.id}
               signedIn={signedIn}
+              canAct={allowed}
               mine={thread.mine}
               helpful={thread.helpful}
               voted={thread.votedHelpful}
@@ -244,6 +252,7 @@ export default async function ThreadPage({ params, searchParams }: Props) {
                       type="post"
                       id={answer.id}
                       signedIn={signedIn}
+                      canAct={allowed}
                       mine={answer.mine}
                       helpful={answer.helpful}
                       voted={answer.votedHelpful}
@@ -256,7 +265,7 @@ export default async function ThreadPage({ params, searchParams }: Props) {
                   <Gone post={answer} />
                 )}
 
-                {(answer.comments.length > 0 || (signedIn && !thread.locked && answer.state === "visible")) && (
+                {(answer.comments.length > 0 || (allowed && !thread.locked && answer.state === "visible")) && (
                   <div className="mt-4 border-t border-line/70 pt-3">
                     {answer.comments.length > 0 && (
                       <ul className="grid gap-3" aria-label={`Comments on ${isQuestion ? "answer" : "reply"} ${n + 1}`}>
@@ -276,12 +285,30 @@ export default async function ThreadPage({ params, searchParams }: Props) {
                                   type="post"
                                   id={c.id}
                                   signedIn={signedIn}
+                                  canAct={allowed}
                                   mine={c.mine}
                                   helpful={c.helpful}
                                   voted={c.votedHelpful}
                                   editFields={{ body: c.body! }}
                                   label="comment"
                                 />
+                                {allowed && !thread.locked && answer.state === "visible" && !c.mine && (
+                                  <details>
+                                    <summary className={`${small} cursor-pointer list-none`}>
+                                      Reply<span className="sr-only"> to {c.author}</span>
+                                    </summary>
+                                    <form action={replyAction} className="mt-2 grid gap-2">
+                                      <Hidden thread={thread.id} parent={answer.id} />
+                                      <label className="sr-only" htmlFor={`reply-${c.id}`}>
+                                        Your reply to {c.author}
+                                      </label>
+                                      <textarea id={`reply-${c.id}`} name="body" required maxLength={5000} rows={3} defaultValue={`@${c.author} `} className={forumInput} />
+                                      <button type="submit" className={`${forumOutline} justify-self-start`}>
+                                        Post reply
+                                      </button>
+                                    </form>
+                                  </details>
+                                )}
                               </>
                             ) : (
                               <Gone post={c} />
@@ -290,7 +317,7 @@ export default async function ThreadPage({ params, searchParams }: Props) {
                         ))}
                       </ul>
                     )}
-                    {signedIn && !thread.locked && answer.state === "visible" && (
+                    {allowed && !thread.locked && answer.state === "visible" && (
                       <details className="mt-2">
                         <summary className={`${small} cursor-pointer list-none`}>
                           Add a comment<span className="sr-only"> on {isQuestion ? "answer" : "reply"} {n + 1}</span>
@@ -320,6 +347,10 @@ export default async function ThreadPage({ params, searchParams }: Props) {
           </h2>
           {thread.locked || thread.deleted ? (
             <p className="mt-2 leading-relaxed text-ink">This conversation is closed to new replies.</p>
+          ) : signedIn && !allowed ? (
+            <div className="mt-3">
+              <JoinInCard checkHref={firstCheck} />
+            </div>
           ) : signedIn ? (
             <form action={replyAction} className="mt-3 grid gap-3">
               <Hidden thread={thread.id} />
