@@ -820,7 +820,7 @@ test("Module 1 final assessment: locked until the lessons, then the module is co
   await context.close();
 });
 
-test("signing out from the header ends the session on phone and desktop", async ({ browser }) => {
+test("signing out from the bottom of account settings ends the session on phone and desktop", async ({ browser }) => {
   for (const viewport of [
     { width: 390, height: 844 },
     { width: 1280, height: 900 },
@@ -829,16 +829,20 @@ test("signing out from the header ends the session on phone and desktop", async 
     await signIn(context);
     const page = await context.newPage();
     await page.goto(lesson("before-chatgpt"));
-    await expect(page.getByRole("heading", { name: "AI Did Not Start with ChatGPT", level: 1 })).toBeVisible();
-    const phone = viewport.width < 768;
+    const phone = viewport.width < 1024;
+    // The header no longer has a sign-out button, on any screen size.
     if (phone) {
       await page.getByRole("button", { name: "Menu" }).click();
       await expect(page.getByText("Signed in as Test learner")).toBeVisible();
     }
-    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("banner").getByRole("button", { name: "Sign out" })).toHaveCount(0);
+    await page.getByRole("banner").getByRole("link", { name: "Your account" }).first().click();
+    await expect(page.getByRole("heading", { name: "Your account", level: 1 })).toBeVisible();
+    // It is the last section of the page.
+    const lastHeading = await page.locator("main h2").last().textContent();
+    expect(lastHeading).toBe("Sign out");
+    await page.getByRole("main").getByRole("button", { name: "Sign out" }).click();
     await expect(page).toHaveURL(base + "/");
-    if (phone) await page.getByRole("button", { name: "Menu" }).click();
-    await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
     await page.goto("/modules/ai-foundations/certificate");
     await expect(page).toHaveURL(/\/sign-in\?callbackUrl=%2Fmodules%2Fai-foundations%2Fcertificate/);
     expect((await context.request.get(base + "/api/me/certificates/ai-foundations")).status()).toBe(401);
@@ -847,7 +851,7 @@ test("signing out from the header ends the session on phone and desktop", async 
   const guest = await browser.newPage();
   await guest.goto("/");
   await expect(guest.getByRole("button", { name: "Sign out" })).toHaveCount(0);
-  await expect(guest.getByRole("link", { name: "Log in" })).toBeVisible();
+  await expect(guest.getByRole("link", { name: "Log in" }).first()).toBeVisible();
   await guest.close();
 });
 
@@ -1357,6 +1361,20 @@ test("first-time journey: two ways in, then a returning learner is offered to co
     await expect(page.getByRole("link", { name: /New to AI\?/ })).toHaveAttribute("href", "/welcome");
     await expect(page.getByRole("link", { name: /Already use AI\?/ })).toHaveAttribute("href", "/modules/talking-to-ai");
     await expect(page.getByText("Continue where you left off")).toHaveCount(0);
+    // The home page explains Buggle Learn first; "Start here" is always the last section.
+    expect(await page.locator("main h2").allTextContents()).toEqual([
+      "We teach AI to people who don't work in tech",
+      "AI for everyone, not just experts",
+      "From your first lesson to your certificate",
+      "How each lesson works",
+      "The Essentials: 4 modules",
+      "Finish the Essentials, get a certificate you can share",
+      "Anyone curious about AI",
+      "Good to know",
+      "Start here",
+    ]);
+    await page.getByText("Is it free?").click();
+    await expect(page.getByText(/The Essentials course and its certificate are free/)).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.waitForTimeout(600);
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
