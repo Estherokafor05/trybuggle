@@ -82,6 +82,10 @@ test.afterAll(async () => {
   const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
   try {
     await sql.begin(async (tx) => {
+      await tx`DELETE FROM forum_reports WHERE reporter_id IN ${tx(users)}`;
+      await tx`DELETE FROM forum_votes WHERE user_id IN ${tx(users)}`;
+      await tx`DELETE FROM forum_threads WHERE author_id IN ${tx(users)}`;
+      await tx`DELETE FROM forum_posts WHERE author_id IN ${tx(users)}`;
       await tx`DELETE FROM certificates WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM module_assessment_attempts WHERE learner_id IN ${tx(users)}`;
       await tx`DELETE FROM learning_checkpoints WHERE learner_id IN ${tx(users)}`;
@@ -1551,4 +1555,84 @@ test("the dashboard shows where the learner is, time to the next certificate and
   await guestPage.goto("/dashboard");
   await expect(guestPage).toHaveURL(`${base}/sign-in?callbackUrl=%2Fdashboard`);
   await guest.close();
+});
+
+test("forum: read without an account, ask from a lesson, answer, comment, mark helpful, accept and report", async ({ browser }) => {
+  test.setTimeout(90_000);
+  // Anyone can read; posting asks for a login.
+  const visitor = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const look = await visitor.newPage();
+  await look.goto("/forum");
+  await expect(look.getByRole("heading", { name: "Community forum", level: 1 })).toBeVisible();
+  await expect(look.getByRole("region", { name: "Sections" }).getByRole("link", { name: /Module 1: Foundations of AI/ })).toBeVisible();
+  expect(await look.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect((await new AxeBuilder({ page: look }).analyze()).violations).toEqual([]);
+  await look.getByRole("link", { name: "Ask a question" }).click();
+  await expect(look).toHaveURL(/\/sign-in\?callbackUrl=%2Fforum%2Fnew/);
+
+  // Ada asks from Lesson 1: the section and lesson are already chosen.
+  const ada = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await signIn(ada);
+  const page = await ada.newPage();
+  await page.goto(lesson());
+  await page.getByRole("link", { name: /Ask in the forum/ }).click();
+  await expect(page.getByLabel("Section")).toHaveValue("ai-foundations");
+  await expect(page.getByLabel(/Is it about a lesson/)).toHaveValue("what-counts-as-ai");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  const title = `Is a spam filter AI? ${randomUUID().slice(0, 8)}`;
+  await page.getByLabel(/^Title/).fill("Short");
+  await page.getByLabel(/^Details/).fill("I'm not sure whether my email spam filter counts as AI. What do you think?");
+  await page.getByLabel(/^Title/).evaluate((el: HTMLInputElement) => el.removeAttribute("minlength"));
+  await page.getByRole("button", { name: "Post it" }).click();
+  await expect(page.getByText("Write a title of at least 8 characters.")).toBeVisible();
+  await expect(page.getByLabel(/^Details/)).toHaveValue(/spam filter counts as AI/, { timeout: 5000 });
+  await page.getByLabel(/^Title/).fill(title);
+  await page.getByRole("button", { name: "Post it" }).click();
+  await expect(page.getByText("Posted. Thanks for starting the conversation.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: /About Module 1, Lesson 1: What is AI\?/ })).toBeVisible();
+  await expect(page.getByText("Test L.").first()).toBeVisible();
+  const threadUrl = page.url().split("?")[0];
+
+  // Ben answers and Ada comments; links work, HTML never runs.
+  const ben = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await signIn(ben);
+  const benPage = await ben.newPage();
+  await benPage.goto(threadUrl);
+  await benPage.getByRole("textbox", { name: "Your answer" }).fill("Yes! It learns from examples. <b>not bold</b> See https://example.com/spam for more.");
+  await benPage.getByRole("button", { name: "Post answer" }).click();
+  await expect(benPage.getByRole("heading", { name: "1 answer" })).toBeVisible();
+  await expect(benPage.locator("p", { hasText: "<b>not bold</b>" })).toBeVisible();
+  await expect(benPage.locator("main b")).toHaveCount(0);
+  await expect(benPage.getByRole("link", { name: /https:\/\/example.com\/spam/ })).toHaveAttribute("rel", "nofollow ugc noopener noreferrer");
+  await benPage.getByRole("button", { name: /^Helpful/ }).first().click();
+  await expect(benPage.getByRole("button", { name: /^✓ Helpful · 1/ })).toBeVisible();
+
+  await page.reload();
+  await page.getByText("Add a comment").click();
+  await page.getByLabel("Your comment").fill("Thanks Ben, that makes sense.");
+  await page.getByRole("button", { name: "Post comment" }).click();
+  await expect(page.locator("p", { hasText: "Thanks Ben, that makes sense." })).toBeVisible();
+  await page.getByRole("button", { name: /Mark as the answer that helped/ }).click();
+  await expect(page.getByText("✓ The answer that helped")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // Ben reports the comment; the section list shows the question as answered.
+  await benPage.reload();
+  await benPage.locator("summary", { hasText: "Report comment" }).click();
+  const reportForm = benPage.locator("details[open] form");
+  await reportForm.getByLabel("Unkind or rude").check();
+  await reportForm.getByRole("button", { name: "Send report" }).click();
+  await expect(benPage.getByText("Thanks for telling us.")).toBeVisible();
+  await benPage.goto("/forum/ai-foundations?filter=questions");
+  await expect(benPage.getByRole("link", { name: title })).toContainText("✓ Answered");
+  expect((await new AxeBuilder({ page: benPage }).analyze()).violations).toEqual([]);
+
+  // The visitor can read it all but not reply.
+  await look.goto(threadUrl);
+  await expect(look.getByText("Thanks Ben, that makes sense.")).toBeVisible();
+  await expect(look.getByRole("link", { name: "create a free account" })).toBeVisible();
+  await expect(look.getByRole("textbox", { name: "Your answer" })).toHaveCount(0);
+  for (const c of [visitor, ada, ben]) await c.close();
 });

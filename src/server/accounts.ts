@@ -1,6 +1,7 @@
 // Deleting learners' data: a learner's own account on request, and anonymous
 // guest records that have been inactive for a long time.
 import { db } from "./database";
+import { forgetForumAuthor } from "./forum";
 
 /** How long anonymous results are kept without any activity. Stated in the privacy policy. */
 export const GUEST_RETENTION_MONTHS = 12;
@@ -9,6 +10,7 @@ export const GUEST_RETENTION_MONTHS = 12;
 export async function deleteLearnerData(learner: string) {
   if (!learner) throw new Error("No learner");
   return db().begin(async (tx) => {
+    await forgetForumAuthor(tx, learner);
     const counts = {
       certificates: (await tx`DELETE FROM certificates WHERE learner_id=${learner}`).count,
       finalAssessments: (await tx`DELETE FROM module_assessment_attempts WHERE learner_id=${learner}`).count,

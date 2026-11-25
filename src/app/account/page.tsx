@@ -148,6 +148,7 @@ export default async function AccountPage({
             <li>Your knowledge check and final assessment answers and results</li>
             <li>Where you are in each lesson</li>
             <li>Your certificates and the name shown on them</li>
+            <li>Your forum posts. If you delete your account, your name and words are removed from the forum; other people&apos;s replies stay.</li>
           </ul>
           <p className="mt-3 text-sm leading-relaxed text-muted">
             Read more in our{" "}

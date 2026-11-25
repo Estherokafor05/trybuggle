@@ -20,6 +20,10 @@ export const adminNotices: Record<string, string> = {
   "try-given": "Done. The learner has one more try.",
   "certificate-withdrawn": "Certificate withdrawn. Its check page now says so.",
   "certificate-restored": "Certificate restored. Its check page shows it as real again.",
+  "forum-hidden": "Hidden. Learners now see that the team hid it.",
+  "forum-shown": "Shown again.",
+  "report-kept": "Report closed. The post stays up.",
+  "forum-saved": "Saved.",
 };
 
 export const adminMessage = (map: Record<string, string>, key?: string) =>
