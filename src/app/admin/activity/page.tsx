@@ -15,6 +15,15 @@ const labels: Record<string, string> = {
   "learner.extra_try": "Gave a learner one more try",
   "certificate.withdrawn": "Withdrew a certificate",
   "certificate.restored": "Restored a certificate",
+  "forum.hidden": "Hid a forum post",
+  "forum.shown": "Showed a forum post again",
+  "forum.report_kept": "Kept a reported forum post",
+  "forum.pinned": "Pinned a forum conversation",
+  "forum.unpinned": "Unpinned a forum conversation",
+  "forum.closed": "Closed a forum conversation",
+  "forum.reopened": "Reopened a forum conversation",
+  "forum.section_added": "Added a forum section",
+  "forum.section_changed": "Changed a forum section",
 };
 
 function summary(details: Record<string, unknown>) {

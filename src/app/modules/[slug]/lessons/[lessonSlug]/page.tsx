@@ -287,6 +287,21 @@ export default async function LessonPage({
           )}
         </section>
 
+        <section aria-labelledby="ask-title" className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[1.75rem] border border-line/70 bg-white p-5 sm:p-6">
+          <div>
+            <h2 id="ask-title" className="text-lg font-bold">
+              Questions about this {mod.order === 1 ? "lesson" : "episode"}?
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted">Ask other learners in the community forum, or see what they&apos;ve asked.</p>
+          </div>
+          <Link
+            href={`/forum/new?${new URLSearchParams({ section: slug, lesson: lessonSlug })}`}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
+          >
+            Ask in the forum <span aria-hidden="true">→</span>
+          </Link>
+        </section>
+
         <nav
           aria-label="Lesson navigation"
           className="mt-6 flex flex-wrap items-center justify-between gap-4"

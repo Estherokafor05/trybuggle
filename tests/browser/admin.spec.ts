@@ -124,6 +124,13 @@ test("admins are separate, set up with an authenticator app, and can change chec
   expect(await noOverflow(page)).toBe(true);
   await axe(page);
 
+  // The forum moderation page opens.
+  await page.goto(base + "/admin/forum");
+  await expect(page.getByRole("heading", { name: "Forum", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Reports waiting/ })).toBeVisible();
+  expect(await noOverflow(page)).toBe(true);
+  await axe(page);
+
   // Invite a second admin; the link works once.
   await page.goto(base + "/admin/team");
   const second = `qa-admin-${randomUUID()}@example.com`;

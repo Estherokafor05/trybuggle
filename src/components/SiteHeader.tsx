@@ -20,6 +20,11 @@ const NAV = [
     label: "All modules",
     match: (p: string) => p === "/curriculum",
   },
+  {
+    href: "/forum",
+    label: "Forum",
+    match: (p: string) => p.startsWith("/forum"),
+  },
 ];
 
 export function SiteHeader() {

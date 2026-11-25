@@ -132,6 +132,12 @@ export default function PrivacyPage() {
           </List>
           <p>We do not sell your information, and we do not use it for advertising.</p>
           <p>
+            Forum posts are public. They show your first name and the first letter of your last
+            name, never your email. You can edit or delete your own posts at any time. If you
+            delete your account, your name and words are removed from the forum, and other
+            people&apos;s replies stay.
+          </p>
+          <p>
             Each certificate has an ID and a public check page. Anyone with the ID can see the name
             on the certificate, what it was for, when it was completed and the ID. They never see
             your email or anything else about you. You choose who to share the ID with, and

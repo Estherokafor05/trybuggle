@@ -12,6 +12,14 @@ Both lessons include independent interactive guides, complete reading alternativ
 
 **Certificates.** One free Essentials certificate comes after every Essentials module, including each final assessment (`/certificate`, rules in `src/server/certificates.ts`). Modules no longer have their own certificate. Module certificates issued earlier still show on the module page and still verify. Every certificate has an ID such as `BL-E-7KQ2-M9XD`, and anyone can check it at `/verify`. The check page shows only the name, what it was for, the dates and the ID, and search engines are told not to list it. Learners can download the PDF, copy the check link, add the certificate to their LinkedIn profile or share it in a post. On the live site (`VERCEL_ENV=production`), every planned module must be complete. Test sites skip modules that are still being made, unless `ESSENTIALS_REQUIRE_ALL=on`. Admins can withdraw a certificate by setting `revoked_at`; its check page then says so.
 
+**Community forum (`/forum`).** The forum has sections, questions and discussions, answers, one level of comments on answers, "helpful" votes, accepted answers and reports. There are no private messages.
+- Anyone can read. Posting needs an account, and public names show the first name and last initial only.
+- Text is stored and shown as plain text, never HTML, and links get `rel="nofollow ugc"`.
+- Fast posting is slowed down: at most 5 new conversations an hour and 20 replies per 10 minutes.
+- Authors can edit or delete their own posts. Deleting an account removes the learner's name and words but keeps other people's replies.
+- Admins moderate at `/admin/forum`: deal with reports, hide or show posts, pin or close conversations, and add or edit sections.
+- Rules are in `src/server/forum.ts`. Starting sections are added by migration 010.
+
 **Admin area (`/admin`).** Admin accounts are separate from learner accounts. They have their own Better Auth setup (`src/admin-auth.ts`), `admin_*` tables, `/api/admin-auth` routes and `buggle-admin` cookie, so a learner login never opens admin pages. There is no admin sign-up.
 - The first admin is created once at `/admin/setup`, using the `ADMIN_SETUP_KEY` setting (20+ characters), and only while no admins exist.
 - Other admins join by a one-time invite link that expires after 7 days. Only a hash of each link is stored.

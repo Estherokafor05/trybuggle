@@ -20,6 +20,7 @@ import {
   updateCheckSettings,
 } from "@/server/admin";
 import { sendAccountEmail } from "@/server/email";
+import { resolveReports, saveSection, setForumHidden, setThreadFlags } from "@/server/forum";
 import { siteOrigin } from "@/server/site";
 
 const text = (form: FormData, name: string) => {
@@ -218,4 +219,54 @@ export async function restoreCertificateAction(form: FormData) {
   const to = back(form, "/admin/certificates");
   if (await setCertificateWithdrawn(code, null)) await audit(admin, "certificate.restored", code);
   redirect(withNotice(to, "notice", "certificate-restored"));
+}
+
+// --- Forum moderation ---------------------------------------------------------
+
+const forumType = (form: FormData) => (text(form, "type") === "thread" ? "thread" : "post");
+
+/** Act on a report: hide the post (with a reason), or keep it. Every open report on it closes. */
+export async function resolveReportAction(form: FormData) {
+  const admin = await requireAdmin();
+  const type = forumType(form);
+  const id = text(form, "id");
+  const outcome = text(form, "outcome") === "hidden" ? "hidden" : "kept";
+  if (outcome === "hidden") await setForumHidden(type, id, text(form, "reason").slice(0, 200) || "Breaks the community guidelines");
+  await resolveReports(type, id, admin.user.id, outcome);
+  await audit(admin, outcome === "hidden" ? "forum.hidden" : "forum.report_kept", `${type}:${id}`);
+  redirect(`/admin/forum?notice=${outcome === "hidden" ? "forum-hidden" : "report-kept"}`);
+}
+
+export async function forumVisibilityAction(form: FormData) {
+  const admin = await requireAdmin();
+  const type = forumType(form);
+  const id = text(form, "id");
+  const hide = text(form, "hide") === "yes";
+  await setForumHidden(type, id, hide ? text(form, "reason").slice(0, 200) || "Breaks the community guidelines" : null);
+  await audit(admin, hide ? "forum.hidden" : "forum.shown", `${type}:${id}`);
+  redirect(withNotice(back(form, "/admin/forum"), "notice", hide ? "forum-hidden" : "forum-shown"));
+}
+
+export async function threadFlagsAction(form: FormData) {
+  const admin = await requireAdmin();
+  const flag = text(form, "flag") === "pinned" ? "pinned" : "locked";
+  const value = text(form, "value") === "on";
+  const title = await setThreadFlags(text(form, "id"), { [flag]: value });
+  if (title) await audit(admin, `forum.${flag === "pinned" ? (value ? "pinned" : "unpinned") : value ? "closed" : "reopened"}`, title);
+  redirect(withNotice(back(form, "/admin/forum"), "notice", "forum-saved"));
+}
+
+export async function saveSectionAction(form: FormData) {
+  const admin = await requireAdmin();
+  const result = await saveSection({
+    id: text(form, "id") || undefined,
+    slug: form.get("slug"),
+    title: form.get("title"),
+    description: form.get("description"),
+    position: form.get("position"),
+    locked: form.get("locked") === "on",
+  });
+  if ("error" in result) redirect(`/admin/forum?message=${encodeURIComponent(result.error!)}#sections`);
+  await audit(admin, text(form, "id") ? "forum.section_changed" : "forum.section_added", result.slug!);
+  redirect("/admin/forum?notice=forum-saved#sections");
 }
