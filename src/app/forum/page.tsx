@@ -3,7 +3,10 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { forumButton, forumInput, forumOutline, ThreadList, when } from "@/components/forum/ForumParts";
-import { listSections, listThreads } from "@/server/forum";
+import { currentSession } from "@/auth";
+import { JoinInCard } from "@/components/forum/ForumParts";
+import { canPost, listSections, listThreads } from "@/server/forum";
+import { coursePath } from "@/server/progression";
 
 export const metadata: Metadata = {
   title: "Community forum | Buggle Learn",
@@ -15,6 +18,8 @@ const tones = ["bg-lavender", "bg-mint", "bg-peach", "bg-blush"];
 
 export default async function ForumHome({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = ((await searchParams).q ?? "").slice(0, 100);
+  const session = await currentSession();
+  const newcomer = Boolean(session?.user?.id) && !(await canPost(session?.user?.id).catch(() => true));
   const [sections, latest] = await Promise.all([
     listSections().catch(() => null),
     listThreads({ search: q }).catch(() => null),
@@ -42,6 +47,11 @@ export default async function ForumHome({ searchParams }: { searchParams: Promis
           </div>
         </header>
 
+        {newcomer && (
+          <div className="mt-6">
+            <JoinInCard checkHref={`${coursePath()[0]?.href ?? "/modules/ai-foundations"}#knowledge-check`} />
+          </div>
+        )}
         <form role="search" className="mt-6 flex flex-col gap-2 sm:flex-row">
           <label htmlFor="q" className="sr-only">
             Search the forum

@@ -1,11 +1,13 @@
 "use server";
 // Settings: name, password, linked sign-in methods, and deleting the account.
 import { APIError } from "better-auth/api";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth, currentSession } from "@/auth";
 import { deleteLearnerData } from "@/server/accounts";
 import { forgetGuest } from "@/server/guest";
+import { db } from "@/server/database";
+import { isLocale, LOCALE_COOKIE } from "@/i18n/locales";
 
 async function requireSession() {
   const session = await currentSession();
@@ -99,4 +101,17 @@ export async function deleteAccountAction(formData: FormData) {
   await internalAdapter.deleteUser(learner);
   await forgetGuest();
   redirect("/account/deleted");
+}
+
+/** Saves the learner's language: on this device straight away, and on their account. */
+export async function setLanguageAction(formData: FormData) {
+  const session = await currentSession();
+  if (!session?.user?.id) redirect("/sign-in?callbackUrl=%2Faccount");
+  const locale = formData.get("locale");
+  if (!isLocale(locale)) redirect("/account?error=LANGUAGE#language");
+  (await cookies()).set(LOCALE_COOKIE, locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  await db()`INSERT INTO learners(id) VALUES(${session.user.id}) ON CONFLICT DO NOTHING`;
+  await db()`INSERT INTO learner_preferences(learner_id, locale) VALUES(${session.user.id}, ${locale})
+    ON CONFLICT (learner_id) DO UPDATE SET locale = EXCLUDED.locale, updated_at = now()`;
+  redirect("/account?notice=language-saved#language");
 }

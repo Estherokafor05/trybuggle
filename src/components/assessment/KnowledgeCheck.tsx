@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, type ReactNode } from "react";
+import { AskBuggle } from "./AskBuggle";
 type Question = {
   id: string;
   prompt: string;
@@ -30,6 +31,7 @@ export function KnowledgeCheck({
   intro = "5 quick questions about this lesson. Get 4 or more right to pass. You can try again as many times as you need.",
   noun = "knowledge check",
   afterPass,
+  discuss,
 }: {
   slug: string;
   signedIn: boolean;
@@ -41,6 +43,8 @@ export function KnowledgeCheck({
   noun?: string;
   /** Shown once the learner has passed, e.g. a link to their certificate. */
   afterPass?: ReactNode;
+  /** Shown after any result, right or wrong: a way into the forum. */
+  discuss?: ReactNode;
 }) {
   const [questions, setQuestions] = useState<Question[]>([]),
     [answers, setAnswers] = useState<Record<string, string>>({}),
@@ -179,14 +183,14 @@ export function KnowledgeCheck({
                     <h3 className="font-semibold">
                       {i + 1}. {f.prompt}
                     </h3>
-                    <p className="mt-2 font-semibold">
-                      {f.correct ? "✓ Correct" : "Review this answer"}
+                    <p className={`mt-2 font-semibold ${f.correct ? "text-teal" : "text-navy"}`}>
+                      {f.correct ? "✓ Right" : "✗ Wrong"}
                     </p>
                     <p className="mt-2">Your answer: {f.answer}</p>
                     {!f.correct && (
                       <p className="mt-2">Expected answer: {f.expected}</p>
                     )}
-                    <p className="mt-2 leading-relaxed">{f.explanation}</p>
+                    <AskBuggle correct={f.correct} explanation={f.explanation} />
                   </li>
                 ))}
               </ol>
@@ -209,6 +213,7 @@ export function KnowledgeCheck({
                   </button>
                 </>
               )}
+              {discuss}
             </div>
           ) : (
             questions.length > 0 && (

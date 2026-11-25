@@ -94,7 +94,7 @@ export function ThreadList({ threads, showSection = false, empty }: { threads: T
             {t.lesson && <span className="mt-1 block text-sm text-muted">About {t.lesson.label}</span>}
             <span className="mt-1.5 block text-sm text-muted">
               <span className="ph-mask">{t.author}</span> · {t.replies} {t.kind === "question" ? (t.replies === 1 ? "answer" : "answers") : t.replies === 1 ? "reply" : "replies"}
-              {t.helpful > 0 && ` · ${t.helpful} found this helpful`} · active {when(t.activity)}
+              {t.helpful > 0 && ` · ${t.helpful} ${t.helpful === 1 ? "like" : "likes"}`} · active {when(t.activity)}
             </span>
           </Link>
         </li>
@@ -118,3 +118,19 @@ export const forumNotices: Record<string, string> = {
   deleted: "Deleted.",
   reported: "Thanks for telling us. Our team will look at it.",
 };
+
+/** For signed-in learners who haven't taken a check yet. */
+export function JoinInCard({ checkHref }: { checkHref: string }) {
+  return (
+    <div className="rounded-2xl bg-peach p-4 text-sm leading-relaxed text-ink">
+      <p className="font-bold">Take your first knowledge check to join in</p>
+      <p className="mt-1">
+        You can read everything now. Once you&apos;ve submitted any knowledge check (right or wrong), you can ask,
+        answer, comment and like.
+      </p>
+      <Link href={checkHref} className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-4 font-semibold text-white hover:bg-brand-deep">
+        Go to the knowledge check <span aria-hidden="true">→</span>
+      </Link>
+    </div>
+  );
+}

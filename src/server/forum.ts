@@ -89,18 +89,22 @@ export type ThreadFilter = "all" | "questions" | "unanswered" | "discussions";
 
 export async function listThreads({
   sectionId,
+  lessonSlug,
   filter = "all",
   search = "",
   page = 1,
+  pageSize = PAGE_SIZE,
 }: {
   sectionId?: string;
+  lessonSlug?: string;
   filter?: ThreadFilter;
   search?: string;
   page?: number;
+  pageSize?: number;
 }) {
   const sql = db();
   const term = `%${search.trim().toLowerCase().replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
-  const offset = (Math.max(1, Math.floor(page)) - 1) * PAGE_SIZE;
+  const offset = (Math.max(1, Math.floor(page)) - 1) * pageSize;
   const rows = await sql`
     SELECT t.id, t.kind, t.title, t.pinned, t.locked, t.reply_count, t.helpful_count, t.accepted_post_id,
       t.created_at, t.last_activity_at, t.lesson_slug, s.slug AS section_slug, s.title AS section_title, u.name AS author
@@ -109,15 +113,16 @@ export async function listThreads({
     LEFT JOIN auth_user u ON u.id = t.author_id
     WHERE t.hidden_at IS NULL AND t.deleted_at IS NULL
       ${sectionId ? sql`AND t.section_id = ${sectionId}` : sql``}
+      ${lessonSlug ? sql`AND t.lesson_slug = ${lessonSlug}` : sql``}
       ${filter === "questions" ? sql`AND t.kind = 'question'` : sql``}
       ${filter === "discussions" ? sql`AND t.kind = 'discussion'` : sql``}
       ${filter === "unanswered" ? sql`AND t.kind = 'question' AND t.reply_count = 0` : sql``}
       ${search.trim() ? sql`AND (lower(t.title) LIKE ${term} OR lower(t.body) LIKE ${term})` : sql``}
     ORDER BY ${sectionId ? sql`t.pinned DESC,` : sql``} t.last_activity_at DESC
-    LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}`;
+    LIMIT ${pageSize + 1} OFFSET ${offset}`;
   return {
-    more: rows.length > PAGE_SIZE,
-    threads: rows.slice(0, PAGE_SIZE).map((r) => ({
+    more: rows.length > pageSize,
+    threads: rows.slice(0, pageSize).map((r) => ({
       id: r.id as string,
       kind: r.kind as "question" | "discussion",
       title: r.title as string,
@@ -216,6 +221,18 @@ export async function getThread(id: string, viewer: string | null) {
 // ---------------------------------------------------------------------------
 // Writing
 
+/**
+ * Anyone can read. Asking, answering, commenting and liking open once the
+ * learner has submitted any knowledge check or final assessment, right or wrong.
+ */
+export async function canPost(user: string | null | undefined) {
+  if (!user) return false;
+  const [row] = await db()`SELECT EXISTS (SELECT 1 FROM assessment_attempts WHERE learner_id = ${user})
+    OR EXISTS (SELECT 1 FROM module_assessment_attempts WHERE learner_id = ${user}) AS ok`;
+  return Boolean(row?.ok);
+}
+export const NOT_YET = "Take your first knowledge check to join in. Right or wrong, it unlocks asking, answering, commenting and liking.";
+
 async function tooFast(user: string, kind: "thread" | "post"): Promise<Fail | null> {
   const sql = db();
   if (kind === "thread") {
@@ -232,6 +249,7 @@ export async function createThread(
   user: ForumUser,
   input: { sectionSlug: string; kind: string; title: unknown; body: unknown; lesson?: unknown },
 ): Promise<Fail | { id: string }> {
+  if (!(await canPost(user.id))) return { error: NOT_YET };
   const section = await getSection(input.sectionSlug);
   if (!section) return { error: "Choose a section." };
   if (section.locked) return { error: "This section isn't taking new posts right now." };
@@ -258,6 +276,7 @@ export async function createPost(
   const body = clean(input.body);
   const problem = checkLength(body, LIMITS.postBody, "reply");
   if (problem) return problem;
+  if (!(await canPost(user.id))) return { error: NOT_YET };
   const sql = db();
   const thread = await getThread(threadId, user.id);
   if (!thread || thread.deleted) return { error: "This conversation is no longer available." };
@@ -308,6 +327,7 @@ export async function deleteOwn(user: ForumUser, type: "thread" | "post", id: st
 
 /** Marks or unmarks something as helpful. Never your own. */
 export async function toggleHelpful(user: ForumUser, type: "thread" | "post", id: string) {
+  if (!(await canPost(user.id))) return { error: NOT_YET, threadId: undefined, helpful: undefined };
   const sql = db();
   return sql.begin(async (tx) => {
     const [target] =
@@ -315,7 +335,7 @@ export async function toggleHelpful(user: ForumUser, type: "thread" | "post", id
         ? await tx`SELECT id AS thread_id, author_id FROM forum_threads WHERE id = ${id} AND hidden_at IS NULL AND deleted_at IS NULL`
         : await tx`SELECT thread_id, author_id FROM forum_posts WHERE id = ${id} AND hidden_at IS NULL AND deleted_at IS NULL`;
     if (!target) return { error: "That post is no longer available." } as const;
-    if (target.author_id === user.id) return { error: "You can't mark your own post as helpful." } as const;
+    if (target.author_id === user.id) return { error: "You can't like your own post." } as const;
     const removed = await tx`DELETE FROM forum_votes WHERE target_type = ${type} AND target_id = ${id} AND user_id = ${user.id} RETURNING 1`;
     if (!removed.length) await tx`INSERT INTO forum_votes(target_type, target_id, user_id) VALUES(${type}, ${id}, ${user.id})`;
     const change = removed.length ? -1 : 1;

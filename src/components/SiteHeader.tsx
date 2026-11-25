@@ -2,33 +2,36 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useT } from "@/i18n/client";
+import type { MessageKey } from "@/i18n/messages";
 
 const NAV = [
-  { href: "/", label: "Home", match: (p: string) => p === "/" },
+  { href: "/", label: "nav.home" as MessageKey, match: (p: string) => p === "/" },
   {
     href: "/welcome",
-    label: "Welcome",
+    label: "nav.welcome" as MessageKey,
     match: (p: string) => p === "/welcome",
   },
   {
     href: "/modules/ai-foundations",
-    label: "Module 1",
+    label: "nav.module1" as MessageKey,
     match: (p: string) => p.startsWith("/modules/ai-foundations"),
   },
   {
     href: "/curriculum",
-    label: "All modules",
+    label: "nav.modules" as MessageKey,
     match: (p: string) => p === "/curriculum",
   },
   {
     href: "/forum",
-    label: "Forum",
+    label: "nav.forum" as MessageKey,
     match: (p: string) => p.startsWith("/forum"),
   },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
+  const t = useT();
   // The phone menu is open only on the page where it was opened, so it
   // closes by itself after navigating.
   const [openOn, setOpenOn] = useState<string | null>(null);
@@ -70,7 +73,7 @@ export function SiteHeader() {
         </Link>
 
         <nav
-          aria-label="Main navigation"
+          aria-label={t("nav.main")}
           className="hidden items-center gap-1 rounded-full border border-line/70 bg-white/80 p-1 text-sm font-medium lg:flex"
         >
           {NAV.map((item) => {
@@ -86,7 +89,7 @@ export function SiteHeader() {
                     : "text-muted hover:bg-lavender hover:text-navy"
                 }`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             );
           })}
@@ -101,7 +104,7 @@ export function SiteHeader() {
                 pathname === "/dashboard" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
               }`}
             >
-              Dashboard
+              {t("nav.dashboard")}
             </Link>
             <Link
               href="/account"
@@ -110,7 +113,7 @@ export function SiteHeader() {
                 pathname === "/account" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
               }`}
             >
-              Your account
+              {t("nav.account")}
             </Link>
           </div>
         )}
@@ -120,13 +123,13 @@ export function SiteHeader() {
               href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
               className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender"
             >
-              Log in
+              {t("nav.logIn")}
             </Link>
             <Link
               href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
               className="inline-flex min-h-11 items-center rounded-full bg-navy px-4 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              Sign up
+              {t("nav.signUp")}
             </Link>
           </div>
         )}
@@ -141,13 +144,13 @@ export function SiteHeader() {
           <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             {open ? <path d="m5 5 10 10M15 5 5 15" /> : <path d="M3.5 6h13M3.5 10h13M3.5 14h13" />}
           </svg>
-          Menu
+          {t("nav.menu")}
         </button>
       </div>
 
       <nav
         id="phone-menu"
-        aria-label="Main navigation"
+        aria-label={t("nav.main")}
         hidden={!open}
         className="border-t border-line/70 bg-white px-4 pb-4 pt-2 lg:hidden"
       >
@@ -164,7 +167,7 @@ export function SiteHeader() {
                     current ? "bg-navy text-white" : "text-navy hover:bg-lavender"
                   }`}
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               </li>
             );
@@ -177,21 +180,21 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
             >
-              Log in
+              {t("nav.logIn")}
             </Link>
             <Link
               href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
               onClick={() => setOpen(false)}
               className="flex min-h-12 items-center justify-center rounded-2xl bg-navy px-4 text-base font-semibold text-white hover:bg-brand-deep"
             >
-              Sign up
+              {t("nav.signUp")}
             </Link>
           </div>
         )}
         {account && (
           <div className="mt-3 border-t border-line/70 pt-3">
             {account.name && (
-              <p className="ph-mask px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
+              <p className="ph-mask px-4 pb-2 text-sm text-muted">{t("nav.signedInAs")} {account.name}</p>
             )}
             <Link
               href="/dashboard"
@@ -199,7 +202,7 @@ export function SiteHeader() {
               aria-current={pathname === "/dashboard" ? "page" : undefined}
               className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
             >
-              Dashboard
+              {t("nav.dashboard")}
             </Link>
             <Link
               href="/account"
@@ -207,7 +210,7 @@ export function SiteHeader() {
               aria-current={pathname === "/account" ? "page" : undefined}
               className="flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
             >
-              Your account
+              {t("nav.account")}
             </Link>
           </div>
         )}

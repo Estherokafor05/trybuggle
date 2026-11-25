@@ -72,6 +72,17 @@ async function passUpTo(context: import("@playwright/test").BrowserContext, modu
     }
   }
 }
+/** Submits Lesson 1's knowledge check with every answer wrong (a first check, as the forum needs). */
+async function submitWrongCheck(context: import("@playwright/test").BrowserContext) {
+  const answers = Object.fromEntries(
+    assessmentBank["what-counts-as-ai"].map((q) => [q.id, q.options.find((o) => o.id !== q.correct)!.id]),
+  );
+  const response = await context.request.post(`${base}/api/assessments/what-counts-as-ai/submissions`, {
+    headers: { Origin: base },
+    data: { version: 1, submissionKey: randomUUID(), answers },
+  });
+  expect(response.status()).toBe(200);
+}
 /** Remember a context's anonymous guest ID so its test results are cleaned up. */
 async function trackGuest(context: import("@playwright/test").BrowserContext) {
   const guest = (await context.cookies(base)).find((c) => c.name === "buggle_guest");
@@ -792,6 +803,18 @@ test("Module 1 final assessment: locked until the lessons, then the module is co
   await answer(5);
   await expect(page.getByText("5 of 8 correct")).toBeVisible();
   await expect(page.getByText("Review the feedback and try again")).toBeVisible();
+  // Wrong answers offer "Ask Buggle": the helper thinks, then explains, and says who wrote it.
+  await expect(page.getByText("✗ Wrong")).toHaveCount(3);
+  const ask = page.getByRole("button", { name: "Wrong. Want to know why? Ask Buggle" }).first();
+  await expect(ask).toHaveAttribute("aria-expanded", "false");
+  await ask.click();
+  await expect(page.getByText("Here's why that's not quite right")).toBeVisible();
+  await expect(page.getByText("Written by the Buggle Learn course team, not by AI.")).toBeVisible();
+  await expect(page.getByText(/Ask AI for more: coming soon for premium learners/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Right! Want to know why? Ask Buggle" }).first()).toBeVisible();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.getByRole("button", { name: "Close Buggle's explanation" }).click();
+  await expect(page.getByText("Here's why that's not quite right")).toHaveCount(0);
   await page.getByRole("button", { name: "Retry this assessment" }).click();
   await answer(6);
   await expect(page.getByText("Final assessment passed")).toBeVisible();
@@ -1574,8 +1597,14 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   const ada = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await signIn(ada);
   const page = await ada.newPage();
+  // Reading is open, but posting waits for a first knowledge check.
+  await page.goto("/forum/new?section=ai-foundations");
+  await expect(page.getByText("Take your first knowledge check to join in")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Post it" })).toHaveCount(0);
+  await submitWrongCheck(ada);
   await page.goto(lesson());
-  await page.getByRole("link", { name: /Ask in the forum/ }).click();
+  await expect(page.getByRole("heading", { name: "Questions about this lesson?" })).toBeVisible();
+  await page.getByRole("region", { name: "Questions about this lesson?" }).getByRole("link", { name: "Ask a question" }).click();
   await expect(page.getByLabel("Section")).toHaveValue("ai-foundations");
   await expect(page.getByLabel(/Is it about a lesson/)).toHaveValue("what-counts-as-ai");
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
@@ -1597,6 +1626,7 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   // Ben answers and Ada comments; links work, HTML never runs.
   const ben = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   await signIn(ben);
+  await submitWrongCheck(ben);
   const benPage = await ben.newPage();
   await benPage.goto(threadUrl);
   await benPage.getByRole("textbox", { name: "Your answer" }).fill("Yes! It learns from examples. <b>not bold</b> See https://example.com/spam for more.");
@@ -1605,8 +1635,8 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   await expect(benPage.locator("p", { hasText: "<b>not bold</b>" })).toBeVisible();
   await expect(benPage.locator("main b")).toHaveCount(0);
   await expect(benPage.getByRole("link", { name: /https:\/\/example.com\/spam/ })).toHaveAttribute("rel", "nofollow ugc noopener noreferrer");
-  await benPage.getByRole("button", { name: /^Helpful/ }).first().click();
-  await expect(benPage.getByRole("button", { name: /^✓ Helpful · 1/ })).toBeVisible();
+  await benPage.getByRole("button", { name: /^Like/ }).first().click();
+  await expect(benPage.getByRole("button", { name: /^✓ Like · 1/ })).toBeVisible();
 
   await page.reload();
   await page.getByText("Add a comment").click();
@@ -1629,10 +1659,44 @@ test("forum: read without an account, ask from a lesson, answer, comment, mark h
   await expect(benPage.getByRole("link", { name: title })).toContainText("✓ Answered");
   expect((await new AxeBuilder({ page: benPage }).analyze()).violations).toEqual([]);
 
+  // Ben replies to Ada's comment; the reply starts with her name.
+  await benPage.goto(threadUrl);
+  await benPage.locator("summary", { hasText: "Reply to Test L." }).click();
+  await expect(benPage.getByLabel("Your reply to Test L.")).toHaveValue("@Test L. ");
+  await benPage.getByLabel("Your reply to Test L.").fill("@Test L. Glad it helped!");
+  await benPage.getByRole("button", { name: "Post reply" }).click();
+  await expect(benPage.locator("p", { hasText: "@Test L. Glad it helped!" })).toBeVisible();
+
+  // From the module page and after a check, there's a way into the forum.
+  await benPage.goto("/modules/ai-foundations");
+  await expect(benPage.getByRole("heading", { name: "Talk about Module 1" })).toBeVisible();
+  await expect(benPage.getByRole("region", { name: "Talk about Module 1" }).getByRole("link", { name: title })).toBeVisible();
+  await benPage.getByRole("region", { name: "Talk about Module 1" }).getByRole("link", { name: /View forum/ }).click();
+  await expect(benPage).toHaveURL(`${base}/forum/ai-foundations`);
+  await benPage.goto(`/forum/ai-foundations?lesson=what-counts-as-ai`);
+  await expect(benPage.getByText(/Showing posts about/)).toBeVisible();
+  await expect(benPage.getByRole("link", { name: "Back to the lesson" })).toHaveAttribute("href", lesson());
+
   // The visitor can read it all but not reply.
   await look.goto(threadUrl);
   await expect(look.getByText("Thanks Ben, that makes sense.")).toBeVisible();
   await expect(look.getByRole("link", { name: "create a free account" })).toBeVisible();
   await expect(look.getByRole("textbox", { name: "Your answer" })).toHaveCount(0);
   for (const c of [visitor, ada, ben]) await c.close();
+});
+
+test("learners can choose their language in settings", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await signIn(context);
+  const page = await context.newPage();
+  await page.goto("/account");
+  const section = page.getByRole("region", { name: "Language" });
+  await expect(section.getByLabel("Language")).toHaveValue("en");
+  await expect(section.getByText(/Lessons are in English for now/)).toBeVisible();
+  await section.getByRole("button", { name: "Save language" }).click();
+  await expect(page.getByText("Language saved.")).toBeVisible();
+  expect((await context.cookies(base)).find((c) => c.name === "buggle_lang")?.value).toBe("en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await context.close();
 });

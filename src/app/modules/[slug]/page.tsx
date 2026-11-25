@@ -10,6 +10,7 @@ import { TRACK_LABELS, getModule, modules } from "@course";
 import { getBuiltLesson } from "@course";
 import { currentSession } from "@/auth";
 import { LockIcon } from "@/components/LockIcon";
+import { ForumPeek } from "@/components/forum/ForumPeek";
 import { finishFirstText, pathStatus } from "@/server/progression";
 
 export const dynamic = "force-dynamic";
@@ -297,7 +298,15 @@ export default async function ModulePage({
           </aside>
         </div>
 
-        <nav aria-label="Module navigation" className="mt-9 flex flex-wrap items-center gap-4 border-t border-line pt-6">
+        <div className="mt-9">
+          <ForumPeek
+            moduleSlug={slug}
+            heading={`Talk about Module ${mod.order}`}
+            intro="Questions, tips and ideas from other learners about this module. Learn more from each other."
+          />
+        </div>
+
+        <nav aria-label="Module navigation" className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-6">
           <Link
             href="/curriculum"
             className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"

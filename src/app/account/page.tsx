@@ -10,6 +10,9 @@ import {
   updateNameAction,
 } from "@/app/actions/account";
 import { signOutAction } from "@/app/actions/auth";
+import { setLanguageAction } from "@/app/actions/account";
+import { LOCALES, DEFAULT_LOCALE, isLocale } from "@/i18n/locales";
+import { db } from "@/server/database";
 import { auth, currentSession } from "@/auth";
 import { FormMessage, GoogleIcon, TextField } from "@/components/auth/fields";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -38,6 +41,8 @@ export default async function AccountPage({
   const google = accounts.find((a) => a.providerId === "google");
   const errorMessage = authMessage(error);
   const noticeMessage = notice ? notices[notice] : null;
+  const [pref] = await db()`SELECT locale FROM learner_preferences WHERE learner_id = ${session.user.id}`.catch(() => []);
+  const locale = isLocale(pref?.locale) ? pref.locale : DEFAULT_LOCALE;
   const methods = [password && "email and password", google && "Google"].filter(Boolean).join(" or ");
 
   return (
@@ -140,6 +145,41 @@ export default async function AccountPage({
               )}
             </>
           )}
+        </section>
+
+        <section id="language" aria-labelledby="language-title" className="mt-8 scroll-mt-24 rounded-3xl border border-line bg-white p-5 sm:p-6">
+          <h2 id="language-title" className="text-xl font-bold text-ink">Language</h2>
+          <p className="mt-2 leading-relaxed text-muted">
+            Choose the language for Buggle Learn&apos;s menus and buttons. Lessons are in English for now; more
+            languages are on the way, and they&apos;ll appear here as soon as they&apos;re ready.
+          </p>
+          {notice === "language-saved" && (
+            <p role="status" className="mt-3 rounded-xl bg-mint p-3 text-sm">
+              Language saved.
+            </p>
+          )}
+          <form action={setLanguageAction} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+            <label className="grid flex-1 gap-2 font-semibold">
+              Language
+              <select
+                name="locale"
+                defaultValue={locale}
+                className="min-h-11 w-full rounded-xl border-2 border-navy/30 bg-white px-3 py-2 text-base font-normal text-ink"
+              >
+                {LOCALES.map((l) => (
+                  <option key={l.code} value={l.code} lang={l.code}>
+                    {l.native}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
+            >
+              Save language
+            </button>
+          </form>
         </section>
 
         <section aria-labelledby="data" className="mt-8 rounded-3xl border border-line bg-white p-5 sm:p-6">
