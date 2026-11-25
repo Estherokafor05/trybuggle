@@ -15,8 +15,8 @@ const features = [
   ["members", "Add your people by email or a join link"],
   ["dashboard", "See everyone's progress and certificates"],
   ["branding", "Your name and logo on their dashboard"],
-  ["deepDive", "The Deep Dive for every member, when it launches"],
-  ["ownCourses", "Your own courses in your own space (coming with the course builder)"],
+  ["deepDive", "Every Buggle Learn Deep Dive course for every member"],
+  ["ownCourses", "Build your own courses in your own space"],
 ] as const;
 
 export default async function OrganisationsPage() {
@@ -32,7 +32,7 @@ export default async function OrganisationsPage() {
           </h1>
           <p className="mt-3 max-w-[60ch] leading-relaxed text-ink">
             Add your people, follow their progress, and help everyone understand and use AI safely. Plans are priced per
-            learner, per year.
+            learner, monthly or yearly.
           </p>
           <Link href="/organisations/new" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep">
             Create an organisation <span aria-hidden="true">→</span>
@@ -53,6 +53,9 @@ export default async function OrganisationsPage() {
                       {money(plan.pricePerSeatYear, plan.currency)}
                       <span className="ml-1 font-sans text-sm font-semibold text-navy">per learner, per year</span>
                     </p>
+                    {plan.pricePerSeatMonth > 0 && (
+                      <p className="text-sm font-semibold text-navy">or {money(plan.pricePerSeatMonth, plan.currency)} per learner, per month</p>
+                    )}
                     <p className="mt-2 text-sm leading-relaxed text-ink/85">{plan.description}</p>
                     <ul className="mt-4 grid gap-1.5 text-sm">
                       {features.map(([key, label]) => (

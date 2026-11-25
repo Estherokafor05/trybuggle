@@ -26,6 +26,9 @@ import { DEFAULT_LOCALE, isLocale, LOCALES, UPCOMING_LOCALES } from "@/i18n/loca
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { authMessage, notices } from "@/lib/auth-messages";
 import { db } from "@/server/database";
+import { learnerPortalAction, refundAction } from "@/app/actions/deep-dive";
+import { myPurchases } from "@/server/learner-payments";
+import { money } from "@/server/pricing";
 import { hiddenFromLeaderboard } from "@/server/rewards";
 
 const button =
@@ -41,6 +44,7 @@ const SECTIONS = [
   { id: "sign-in", label: "Logging in", icon: "M6 9V6.5a4 4 0 0 1 8 0V9M5 9h10v7.5H5z" },
   { id: "language", label: "Language", icon: "M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm-7 7h14M10 3c2 2 2.8 4.5 2.8 7S12 15 10 17c-2-2-2.8-4.5-2.8-7S8 5 10 3Z" },
   { id: "appearance", label: "Appearance", icon: "M16 12.3A6.5 6.5 0 0 1 7.7 4a6.5 6.5 0 1 0 8.3 8.3Z" },
+  { id: "purchases", label: "Purchases", icon: "M3 6.5h14v9H3zM3 9h14M6 13h3" },
   { id: "data", label: "Your data", icon: "M4 5.5C4 4.1 6.7 3 10 3s6 1.1 6 2.5S13.3 8 10 8 4 6.9 4 5.5Zm0 0v9C4 15.9 6.7 17 10 17s6-1.1 6-2.5v-9M4 10c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5" },
   { id: "leave", label: "Sign out or delete", icon: "M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8" },
 ];
@@ -74,11 +78,11 @@ function Section({ id, title, intro, children, tone = card }: { id: string; titl
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ confirm?: string; error?: string; notice?: string; s?: string }>;
+  searchParams: Promise<{ confirm?: string; error?: string; notice?: string; s?: string; message?: string }>;
 }) {
   const session = await currentSession();
   if (!session?.user?.id) redirect("/sign-in?callbackUrl=%2Faccount");
-  const { confirm, error, notice, s: changed } = await searchParams;
+  const { confirm, error, notice, s: changed, message: detail } = await searchParams;
   const { name, email } = session.user;
   const image = session.user.image ?? null;
   const accounts = await auth.api.listUserAccounts({ headers: await headers() }).catch(() => []);
@@ -86,7 +90,11 @@ export default async function AccountPage({
   const google = accounts.find((a) => a.providerId === "google");
   const [pref] = await db()`SELECT locale FROM learner_preferences WHERE learner_id = ${session.user.id}`.catch(() => []);
   const locale = isLocale(pref?.locale) ? pref.locale : DEFAULT_LOCALE;
-  const hidden = await hiddenFromLeaderboard(session.user.id).catch(() => false);
+  const [hidden, purchases] = await Promise.all([
+    hiddenFromLeaderboard(session.user.id).catch(() => false),
+    myPurchases(session.user.id).catch(() => []),
+  ]);
+  const subscription = purchases.find((p) => p.kind === "all_access");
   const methods = [password && "email and password", google && "Google"].filter(Boolean).join(" or ");
 
   // Each message shows in the section that changed.
@@ -97,7 +105,12 @@ export default async function AccountPage({
     return (
       <>
         {ok && <FormMessage tone="success">{ok}</FormMessage>}
-        {bad && <FormMessage tone="error">{bad}</FormMessage>}
+        {bad && (
+          <FormMessage tone="error">
+            {bad}
+            {detail && error === "REFUND" ? ` ${detail}` : ""}
+          </FormMessage>
+        )}
       </>
     );
   };
@@ -301,6 +314,63 @@ export default async function AccountPage({
               <div className="mt-5">
                 <ThemeChoice />
               </div>
+            </Section>
+
+            <Section id="purchases" title="Purchases" intro="Courses you've bought and your all-access subscription.">
+              {message("purchases")}
+              {purchases.length ? (
+                <ul className="mt-4 grid gap-2">
+                  {purchases.map((p) => (
+                    <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-canvas p-4">
+                      <span className="min-w-0">
+                        <span className="block font-semibold text-ink">
+                          {p.slug ? (
+                            <Link href={`/learn/${p.slug}`} className="underline-offset-4 hover:underline">
+                              {p.title}
+                            </Link>
+                          ) : (
+                            p.title
+                          )}
+                        </span>
+                        <span className="block text-sm text-muted">
+                          {money(p.amount, p.currency)} · {new Date(p.at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                          {p.status === "refunded" ? " · refunded" : ""}
+                          {p.kind === "all_access" && p.subEnds
+                            ? ` · ${new Date(p.subEnds) > new Date() ? "open until" : "ended"} ${new Date(p.subEnds).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`
+                            : ""}
+                        </span>
+                      </span>
+                      {p.refundable && (
+                        <form action={refundAction}>
+                          <input type="hidden" name="purchase" value={p.id} />
+                          <button type="submit" className={outlineButton}>
+                            Ask for a refund<span className="sr-only">: {p.title}</span>
+                          </button>
+                        </form>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 text-sm text-muted">
+                  Nothing yet. See the{" "}
+                  <Link href="/pricing" className="font-semibold text-navy underline underline-offset-4">
+                    prices
+                  </Link>
+                  .
+                </p>
+              )}
+              {subscription && (
+                <form action={learnerPortalAction} className="mt-3">
+                  <button type="submit" className={outlineButton}>
+                    Manage all-access: card, receipts or cancel
+                  </button>
+                </form>
+              )}
+              <p className="mt-3 text-sm text-muted">
+                A bought course can be refunded until you start its paid chapters. All-access can be cancelled any time; it stays open until the end of the time
+                you&apos;ve paid for.
+              </p>
             </Section>
 
             <Section id="data" title="Your data" intro="What we keep for your account.">

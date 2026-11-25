@@ -10,8 +10,10 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { GateNotice, UnlockPanel } from "@/components/deep-dive/Unlock";
 import { courseForLearner } from "@/server/builder-learn";
 import { canTestPurchase } from "@/server/deep-dive";
+import { buyOptions } from "@/server/learner-payments";
+import { stripeConfigured } from "@/server/payments";
 
-type Props = { params: Promise<{ course: string }>; searchParams: Promise<{ notice?: string }> };
+type Props = { params: Promise<{ course: string }>; searchParams: Promise<{ notice?: string; error?: string; checkout?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { course } = await params;
@@ -26,7 +28,7 @@ const NOTICES: Record<string, string> = {
 };
 
 export default async function LearnCoursePage({ params, searchParams }: Props) {
-  const [{ course: slug }, { notice }] = await Promise.all([params, searchParams]);
+  const [{ course: slug }, { notice, error, checkout }] = await Promise.all([params, searchParams]);
   const session = await currentSession();
   const course = await courseForLearner(slug, session?.user?.id ?? null);
   if (!course) notFound();
@@ -34,6 +36,7 @@ export default async function LearnCoursePage({ params, searchParams }: Props) {
   const next = course.lessons.find((l) => l.state === "open");
   const finished = course.lessons.length > 0 && course.done === course.lessons.length;
   const unit = course.deepDive ? "unit" : "lesson";
+  const buy = course.access && !course.access.entitled && !course.access.gate ? await buyOptions(session?.user?.id ?? null) : undefined;
   const chapter = course.deepDive ? "Chapter" : "Module";
   return (
     <>
@@ -64,6 +67,21 @@ export default async function LearnCoursePage({ params, searchParams }: Props) {
             </Link>
           )}
         </header>
+        {checkout === "done" && (
+          <p role="status" className="mt-6 rounded-2xl bg-mint p-4 text-sm text-ink">
+            🎉 Thank you! {course.access?.entitled ? "Every chapter is open." : "Your payment is being confirmed. Refresh this page in a moment."}
+          </p>
+        )}
+        {checkout === "cancelled" && (
+          <p role="status" className="mt-6 rounded-2xl bg-peach p-4 text-sm text-ink">
+            Checkout was cancelled. Nothing was charged.
+          </p>
+        )}
+        {error && (
+          <p role="alert" className="mt-6 rounded-2xl bg-peach p-4 text-sm text-ink">
+            {error}
+          </p>
+        )}
         {notice && NOTICES[notice] && (
           <p role="status" className="mt-6 rounded-2xl bg-mint p-4 text-sm text-ink">
             {NOTICES[notice]}
@@ -87,7 +105,7 @@ export default async function LearnCoursePage({ params, searchParams }: Props) {
         )}
         {course.access && !course.access.gate && (
           <div className="mt-6">
-            <UnlockPanel course={course} access={course.access} testing={canTestPurchase()} signedIn={Boolean(session)} />
+            <UnlockPanel course={course} access={course.access} testing={canTestPurchase()} signedIn={Boolean(session)} buy={buy} live={stripeConfigured()} />
           </div>
         )}
         {course.sections.map((s, si) => (

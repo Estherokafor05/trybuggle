@@ -11,6 +11,7 @@ export const adminErrors: Record<string, string> = {
 };
 
 export const adminNotices: Record<string, string> = {
+  "pricing-saved": "Saved. New prices and offers apply to the next checkout.",
   "signed-out": "You've signed out of the admin area.",
   joined: "Your admin account is ready. Sign in, then set up your authenticator app.",
   "two-factor-on": "Your authenticator app is set up. You'll need a code each time you sign in.",

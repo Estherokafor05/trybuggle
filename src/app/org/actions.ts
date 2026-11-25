@@ -127,12 +127,17 @@ export async function settingsAction(form: FormData) {
 export async function checkoutAction(form: FormData) {
   const { org, user, back } = await orgAs(form, "owner", "/billing");
   if (!stripeConfigured()) {
-    const result = await simulatePlan(org, { plan: form.get("plan"), seats: form.get("seats") });
+    const result = await simulatePlan(org, { plan: form.get("plan"), seats: form.get("seats"), interval: form.get("interval") });
     redirect(go(back, "error" in result ? "error" : "notice", "error" in result ? result.error! : "simulated"));
   }
   let url: string;
   try {
-    const result = await startCheckout(org, { plan: form.get("plan"), seats: form.get("seats") }, { email: user.email }, await siteOrigin());
+    const result = await startCheckout(
+      org,
+      { plan: form.get("plan"), seats: form.get("seats"), interval: form.get("interval"), code: form.get("code") },
+      { email: user.email },
+      await siteOrigin(),
+    );
     if ("error" in result) redirect(go(back, "error", result.error!));
     url = result.url!;
   } catch (error) {

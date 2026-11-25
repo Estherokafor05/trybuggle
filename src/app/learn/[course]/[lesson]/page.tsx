@@ -12,6 +12,8 @@ import { passMark } from "@/lib/assessment-scoring";
 import { blocksFor, courseForLearner } from "@/server/builder-learn";
 import { db } from "@/server/database";
 import { canTestPurchase } from "@/server/deep-dive";
+import { buyOptions } from "@/server/learner-payments";
+import { stripeConfigured } from "@/server/payments";
 
 type Props = { params: Promise<{ course: string; lesson: string }> };
 
@@ -45,7 +47,7 @@ export default async function LearnLessonPage({ params }: Props) {
           {course.access?.gate ? (
             <GateNotice gate={course.access.gate} />
           ) : (
-            <UnlockPanel course={course} access={course.access!} testing={canTestPurchase()} signedIn />
+            <UnlockPanel course={course} access={course.access!} testing={canTestPurchase()} signedIn buy={await buyOptions(session.user.id)} live={stripeConfigured()} />
           )}
           <Link href={`/learn/${slug}`} className="inline-flex min-h-11 items-center text-sm font-semibold underline-offset-4 hover:underline">
             ← Back to the course

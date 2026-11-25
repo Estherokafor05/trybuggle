@@ -1964,7 +1964,7 @@ test("the header shows the learner's short name and photo; photos can be added a
     await accountLink.click();
 
     // Settings: sections menu, then add a photo. It's made into a small square in the browser.
-    await expect(page.getByRole("navigation", { name: "Settings sections" }).getByRole("link")).toHaveCount(6);
+    await expect(page.getByRole("navigation", { name: "Settings sections" }).getByRole("link")).toHaveCount(7);
     await expect(page.getByRole("img", { name: "Your initials, Test learner" })).toBeVisible();
     const canvasPng = await page.evaluate(async () => {
       const c = document.createElement("canvas");
@@ -2142,6 +2142,37 @@ test("Deep Dive: What is AI opens after the Essentials, Chapter 1 is free, a tes
     await sql`DELETE FROM certificates WHERE course_slug = ${slug}`;
     await sql`DELETE FROM courses WHERE slug = ${slug}`;
     for (const p of previous) await sql`UPDATE courses SET is_foundation = true WHERE id = ${p.id}`;
+    await sql.end();
+  }
+});
+
+test("prices: the public page shows what's free and what's paid, and Settings lists purchases", async ({ browser }) => {
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  try {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    await page.goto("/pricing");
+    await expect(page.getByRole("heading", { name: /Free for everyone/ })).toBeVisible();
+    await expect(page.getByText("Opening soon").first()).toBeVisible();
+    await sql`UPDATE learner_prices SET amount = CASE code WHEN 'course' THEN 2900 WHEN 'all_month' THEN 999 ELSE 7900 END, active = true`;
+    await page.reload();
+    await expect(page.getByText("$29.00")).toBeVisible();
+    await expect(page.getByText("$9.99")).toBeVisible();
+    await expect(page.getByText("$79.00")).toBeVisible();
+    await expect(page.getByText(/20% off your first purchase/)).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    const id = await signIn(context);
+    await sql`INSERT INTO purchases(learner_id, kind, course_title, amount_paid, currency, discount) VALUES(${id}, 'course', 'AI for Frontend', 2320, 'usd', 'launch')`;
+    await page.goto("/account#purchases");
+    const section = page.getByRole("region", { name: "Purchases" });
+    await expect(section.getByText("AI for Frontend")).toBeVisible();
+    await expect(section.getByText(/\$23\.20/)).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await context.close();
+  } finally {
+    await sql`UPDATE learner_prices SET amount = 0, active = false`;
     await sql.end();
   }
 });

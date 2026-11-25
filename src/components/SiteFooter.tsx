@@ -22,6 +22,9 @@ export function SiteFooter() {
           <Link href="/organisations" className="hover:text-brand">
             {t("footer.organisations")}
           </Link>
+          <Link href="/pricing" className="hover:text-brand">
+            {t("footer.pricing")}
+          </Link>
           <Link href="/verify" className="hover:text-brand">
             {t("footer.verify")}
           </Link>

@@ -20,6 +20,7 @@ const en = {
   "footer.howItWorks": "How it works",
   "footer.verify": "Check a certificate",
   "footer.organisations": "For organisations",
+  "footer.pricing": "Prices",
   "footer.privacy": "Privacy",
   "footer.nav": "Footer navigation",
 };
