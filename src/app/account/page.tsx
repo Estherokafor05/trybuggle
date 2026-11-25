@@ -9,6 +9,7 @@ import {
   unlinkAction,
   updateNameAction,
 } from "@/app/actions/account";
+import { signOutAction } from "@/app/actions/auth";
 import { auth, currentSession } from "@/auth";
 import { FormMessage, GoogleIcon, TextField } from "@/components/auth/fields";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -179,6 +180,24 @@ export default async function AccountPage({
               className="mt-4 inline-flex min-h-11 items-center rounded-full bg-red-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800"
             >
               Delete my account
+            </button>
+          </form>
+        </section>
+
+        <section aria-labelledby="sign-out-title" className="mt-6 rounded-3xl border border-line bg-white p-5 sm:p-6">
+          <h2 id="sign-out-title" className="text-xl font-bold text-ink">Sign out</h2>
+          <p className="mt-2 leading-relaxed text-muted">
+            Sign out of Buggle Learn on this device. Your progress stays saved to your account.
+          </p>
+          <form action={signOutAction} className="mt-4">
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-navy hover:bg-lavender"
+            >
+              <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8" />
+              </svg>
+              Sign out
             </button>
           </form>
         </section>

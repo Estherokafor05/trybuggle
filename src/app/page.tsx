@@ -3,8 +3,16 @@ import Link from "next/link";
 import { currentSession } from "@/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { modules } from "@course";
-import { journey } from "@course";
+import { getBuiltLesson, journey, modules } from "@course";
+import {
+  CertificateScene,
+  InitiativeScene,
+  JourneyScene,
+  LessonBadge,
+  Portrait,
+  portraitShirts,
+  WhatWeDoScene,
+} from "@/components/home/HomeScenes";
 import { guestId } from "@/server/guest";
 import { continuePoint } from "@/server/progress";
 
@@ -18,23 +26,108 @@ const comingSoon = journey.length - startSteps.length;
 const learningMethods = [
   {
     number: "01",
+    badge: "learn" as const,
     title: "Learn it",
     body: "Watch a short narrated film, or read an interactive guide. Your choice.",
     accent: "bg-lavender",
   },
   {
     number: "02",
+    badge: "check" as const,
     title: "Check it",
     body: "Answer 5 quick questions. Get 4 right to pass, and retry as often as you need.",
     accent: "bg-peach",
   },
   {
     number: "03",
+    badge: "next" as const,
     title: "Move on",
-    body: "Each lesson ends by pointing you to the next one.",
+    body: "Passing opens the next lesson. Lessons open in order, so each one builds on the last.",
     accent: "bg-mint",
   },
 ];
+
+
+const offers = [
+  {
+    title: "Understand it",
+    body: "What AI is, where it already shows up in your day, and what it can and can't do.",
+    tone: "bg-lavender",
+  },
+  {
+    title: "Use it well",
+    body: "How to talk to AI chat tools so you get useful answers, and how to check what they give you.",
+    tone: "bg-mint",
+  },
+  {
+    title: "Stay safe",
+    body: "What never to share, how to spot AI-made scams and fakes, and how to use AI fairly.",
+    tone: "bg-peach",
+  },
+];
+
+const promises = [
+  { title: "Free to start", body: "The Essentials course and its certificate cost nothing." },
+  { title: "Plain language", body: "No jargon and no coding. If we use a technical word, we explain it." },
+  { title: "Made for everyone, everywhere", body: "Stories and examples work wherever you live and whatever you do." },
+  { title: "Safety first", body: "Every module helps you use AI with care for yourself and other people." },
+];
+
+const route = [
+  { title: "Create a free account", body: "Sign up with your email or Google. You need to be 15 or over." },
+  { title: "Take the lessons in order", body: "Each module is a set of short lessons. The next one opens when you pass the one before." },
+  { title: "Earn your certificate", body: "Finish every Essentials module to get your free certificate, with an ID anyone can check." },
+  { title: "Go deeper", body: "Coming later: the Deep Dive, with in-depth chapters for when you want to go further." },
+];
+
+const audiences = [
+  "Teachers and lecturers",
+  "Nurses and carers",
+  "Office and admin staff",
+  "Students",
+  "Jobseekers",
+  "Small-business owners",
+];
+
+const questions = [
+  {
+    q: "Do I need any technical background?",
+    a: "No. Buggle Learn is made for people who don't work in tech. There is no coding, and every idea is explained with everyday stories.",
+  },
+  {
+    q: "How long does a lesson take?",
+    a: "Lessons are short: a few minutes of film or reading, then 5 quick questions. You can stop at any time and pick up where you left off, on any device.",
+  },
+  {
+    q: "Is it free?",
+    a: "Yes. The Essentials course and its certificate are free. You only need a free account.",
+  },
+  {
+    q: "What happens if I don't pass a check?",
+    a: "You'll see which answers were right and why, then you can try again. The next lesson opens as soon as you pass.",
+  },
+  {
+    q: "What do I get at the end?",
+    a: "A free AI Literacy Essentials certificate. You can download it as a PDF, share a link that anyone can use to check it, and add it to your LinkedIn profile.",
+  },
+  {
+    q: "What do you do with my information?",
+    a: "We use it to save your progress and issue your certificate. We never sell it or use it for advertising.",
+  },
+];
+
+/** A section heading with a small label above it, used down the home page. */
+function SectionTitle({ id, kicker, title, intro }: { id: string; kicker: string; title: string; intro?: string }) {
+  return (
+    <div className="max-w-[60ch]">
+      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-deep">{kicker}</p>
+      <h2 id={id} className="mt-2 text-2xl font-bold sm:text-[1.85rem]">
+        {title}
+      </h2>
+      {intro && <p className="mt-2 leading-relaxed text-ink/85">{intro}</p>}
+    </div>
+  );
+}
 
 function Arrow() {
   return (
@@ -150,9 +243,213 @@ export default async function Home() {
         </section>
 
         <section
+          id="what-we-do"
+          aria-labelledby="what-we-do-title"
+          className="home-reveal mt-8 grid scroll-mt-24 items-center gap-6 rounded-[2rem] border border-line/70 bg-white p-6 sm:mt-10 sm:p-9 md:grid-cols-[1.1fr_0.9fr]"
+        >
+          <div>
+            <SectionTitle
+              id="what-we-do-title"
+              kicker="What we do"
+              title="We teach AI to people who don't work in tech"
+              intro="Buggle Learn uses short story films and hands-on guides to show how AI works, how to use it well in your work and life, and how to stay safe while you do."
+            />
+            <ul className="mt-5 grid gap-2.5 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+              {offers.map((offer) => (
+                <li key={offer.title} className={`rounded-2xl p-4 ${offer.tone}`}>
+                  <h3 className="font-bold">{offer.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/85">{offer.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mx-auto w-full max-w-[26rem] rounded-[1.75rem] bg-hero-lavender p-4">
+            <WhatWeDoScene />
+          </div>
+        </section>
+
+        <section
+          id="our-initiative"
+          aria-labelledby="initiative-title"
+          className="home-reveal mt-6 grid scroll-mt-24 items-center gap-6 rounded-[2rem] bg-mint p-6 sm:p-9 md:grid-cols-[0.9fr_1.1fr]"
+        >
+          <div className="order-last mx-auto w-full max-w-[26rem] md:order-first">
+            <InitiativeScene />
+          </div>
+          <div>
+            <SectionTitle
+              id="initiative-title"
+              kicker="Our initiative"
+              title="AI for everyone, not just experts"
+              intro="AI is already part of how we work, study and live, but most guides assume you know a lot about technology. We believe everyone should be able to understand AI, use it with confidence and notice when something isn't right."
+            />
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {promises.map((p) => (
+                <li key={p.title} className="flex gap-3 rounded-2xl bg-white/80 p-4">
+                  <span aria-hidden="true" className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-teal text-xs font-bold text-white">
+                    ✓
+                  </span>
+                  <span>
+                    <span className="block font-bold">{p.title}</span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-ink/85">{p.body}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section id="how-you-learn" aria-labelledby="how-you-learn-title" className="home-reveal mt-10 scroll-mt-24">
+          <SectionTitle
+            id="how-you-learn-title"
+            kicker="How to learn"
+            title="From your first lesson to your certificate"
+            intro="Everything happens in one place, at your own pace. Your progress is saved to your account, so you can switch devices any time."
+          />
+          <div className="mt-5 grid items-center gap-5 md:grid-cols-[1fr_1.1fr]">
+            <div className="rounded-[1.75rem] bg-peach p-4 sm:p-6">
+              <JourneyScene />
+            </div>
+            <ol className="grid gap-2.5">
+              {route.map((step, index) => (
+                <li key={step.title} className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-2xl border border-line/70 bg-white p-4">
+                  <span aria-hidden="true" className="grid size-9 place-items-center rounded-xl bg-lavender font-display text-sm font-bold text-navy">
+                    {index + 1}
+                  </span>
+                  <span>
+                    <span className="block font-bold">{step.title}</span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-muted">{step.body}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section id="how-it-works" aria-labelledby="learning-methods-title" className="home-reveal mt-10 scroll-mt-24">
+          <SectionTitle id="learning-methods-title" kicker="Inside every lesson" title="How each lesson works" />
+          <ol className="mt-5 grid gap-3 sm:grid-cols-3">
+            {learningMethods.map((method) => (
+              <li key={method.number} className={`flex flex-col gap-3 rounded-3xl p-5 ${method.accent}`}>
+                <span className="flex items-center justify-between">
+                  <LessonBadge kind={method.badge} />
+                  <span aria-hidden="true" className="font-display text-sm font-bold text-navy">
+                    {method.number}
+                  </span>
+                </span>
+                <div>
+                  <h3 className="text-lg font-bold">{method.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/85">{method.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="whats-inside" aria-labelledby="inside-title" className="home-reveal mt-10 scroll-mt-24">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <SectionTitle
+              id="inside-title"
+              kicker="What's inside"
+              title={`The Essentials: ${modules.length} modules`}
+              intro="Each module is a set of short lessons and ends with a final check. New modules open as soon as they're ready."
+            />
+            <Link href="/curriculum" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4">
+              See every lesson <Arrow />
+            </Link>
+          </div>
+          <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[...modules]
+              .sort((a, b) => a.order - b.order)
+              .map((mod, index) => {
+                const open = mod.lessons.some((l) => getBuiltLesson(l.slug));
+                return (
+                  <li key={mod.slug}>
+                    <Link
+                      href={`/modules/${mod.slug}`}
+                      className={`flex h-full flex-col rounded-3xl p-5 transition-shadow hover:shadow-md ${
+                        open ? ["bg-lavender", "bg-mint", "bg-peach", "bg-blush"][index % 4] : "border border-dashed border-line bg-white"
+                      }`}
+                    >
+                      <span className="flex items-center justify-between gap-2">
+                        <span className="rounded-full bg-white/80 px-3 py-1 font-mono text-xs font-semibold text-navy">
+                          Module {String(mod.order).padStart(2, "0")}
+                        </span>
+                        <span className="text-xs font-semibold text-navy">{open ? "Open now" : "Coming soon"}</span>
+                      </span>
+                      <span className="mt-4 block text-lg font-bold leading-snug">{mod.title}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-ink/80">{mod.outcome}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+          </ol>
+        </section>
+
+        <section
+          id="certificate"
+          aria-labelledby="certificate-title"
+          className="home-reveal mt-10 grid scroll-mt-24 items-center gap-6 rounded-[2rem] bg-blush p-6 sm:p-9 md:grid-cols-[1.1fr_0.9fr]"
+        >
+          <div>
+            <SectionTitle
+              id="certificate-title"
+              kicker="Your certificate"
+              title="Finish the Essentials, get a certificate you can share"
+              intro="Complete every Essentials module to earn your free AI Literacy Essentials certificate."
+            />
+            <ul className="mt-4 grid gap-2 text-sm leading-relaxed text-ink">
+              <li className="flex gap-2"><span aria-hidden="true" className="font-bold text-teal">✓</span>Download it as a PDF.</li>
+              <li className="flex gap-2"><span aria-hidden="true" className="font-bold text-teal">✓</span>Share a link that anyone can use to check it&apos;s real.</li>
+              <li className="flex gap-2"><span aria-hidden="true" className="font-bold text-teal">✓</span>Add it to your LinkedIn profile in a couple of clicks.</li>
+            </ul>
+            <Link href="/verify" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4">
+              Check someone&apos;s certificate <Arrow />
+            </Link>
+          </div>
+          <div className="mx-auto w-full max-w-[24rem]">
+            <CertificateScene />
+          </div>
+        </section>
+
+        <section id="who-its-for" aria-labelledby="who-title" className="home-reveal mt-10 scroll-mt-24 rounded-[2rem] border border-line/70 bg-white p-6 sm:p-9">
+          <SectionTitle
+            id="who-title"
+            kicker="Who it's for"
+            title="Anyone curious about AI"
+            intro="You don't need any programming or technical background. If you're 15 or over and want to understand AI, Buggle Learn is for you."
+          />
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {audiences.map((who, i) => (
+              <li key={who} className="flex items-center gap-3 rounded-2xl bg-canvas p-3">
+                <Portrait i={i} shirt={portraitShirts[i % portraitShirts.length]} />
+                <span className="font-semibold">{who}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="questions" aria-labelledby="faq-title" className="home-reveal mt-10 scroll-mt-24">
+          <SectionTitle id="faq-title" kicker="Questions" title="Good to know" />
+          <div className="mt-5 grid gap-2.5 md:grid-cols-2">
+            {questions.map((item) => (
+              <details key={item.q} className="group rounded-2xl border border-line/70 bg-white p-4 open:bg-lavender/60">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 font-bold">
+                  {item.q}
+                  <span aria-hidden="true" className="grid size-7 shrink-0 place-items-center rounded-full bg-lavender text-navy transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-2 text-sm leading-relaxed text-ink/85">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section
           id="start"
           aria-labelledby="start-title"
-          className="mt-8 scroll-mt-24 sm:mt-10"
+          className="mt-10 scroll-mt-24"
         >
           <div className="mb-4 sm:mb-5">
             <h2 id="start-title" className="text-2xl font-bold sm:text-[1.85rem]">
@@ -225,57 +522,6 @@ export default async function Home() {
           </ol>
         </section>
 
-        <section id="how-it-works" aria-labelledby="learning-methods-title" className="mt-10 scroll-mt-24">
-          <h2 id="learning-methods-title" className="mb-4 text-2xl font-bold sm:text-[1.85rem]">
-            How each lesson works
-          </h2>
-          <ol className="grid gap-2.5 sm:grid-cols-3">
-            {learningMethods.map((method) => (
-              <li
-                key={method.number}
-                className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-2xl border border-line/70 bg-white p-3.5"
-              >
-                <span aria-hidden="true" className={"grid size-9 place-items-center rounded-xl font-display text-xs font-bold " + method.accent}>
-                  {method.number}
-                </span>
-                <div>
-                  <h3 className="text-base font-bold">{method.title}</h3>
-                  <p className="mt-0.5 text-sm leading-relaxed text-muted">{method.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section
-          aria-labelledby="who-title"
-          className="mt-10 grid gap-5 rounded-[1.75rem] border border-line/70 bg-white p-6 sm:p-8 md:grid-cols-2 md:gap-10"
-        >
-          <div>
-            <h2 id="who-title" className="text-xl font-bold sm:text-2xl">
-              Who it&apos;s for
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-              Teachers, nurses, administrators, students, jobseekers,
-              small-business owners and anyone curious about AI. You don&apos;t
-              need any programming or technical background.
-            </p>
-          </div>
-          <div>
-            <h2 className="text-xl font-bold sm:text-2xl">Where it leads</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-              Modules 1 and 2 are open now: the foundations of AI, then how to
-              talk to AI chat tools well. There are {modules.length} modules in
-              all, and every one of them is free.
-            </p>
-            <Link
-              href="/curriculum"
-              className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4"
-            >
-              See all {modules.length} modules <Arrow />
-            </Link>
-          </div>
-        </section>
       </main>
       <SiteFooter />
     </>

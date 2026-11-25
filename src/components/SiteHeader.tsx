@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { signOutAction } from "@/app/actions/auth";
 
 const NAV = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
@@ -126,17 +125,6 @@ export function SiteHeader() {
             </Link>
           </div>
         )}
-        {account && (
-          <form action={signOutAction} className="hidden lg:block">
-            <button
-              type="submit"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
-            >
-              <SignOutIcon />
-              Sign out
-            </button>
-          </form>
-        )}
 
         <button
           type="button"
@@ -196,7 +184,7 @@ export function SiteHeader() {
           </div>
         )}
         {account && (
-          <form action={signOutAction} className="mt-3 border-t border-line/70 pt-3">
+          <div className="mt-3 border-t border-line/70 pt-3">
             {account.name && (
               <p className="ph-mask px-4 pb-2 text-sm text-muted">Signed in as {account.name}</p>
             )}
@@ -216,24 +204,10 @@ export function SiteHeader() {
             >
               Your account
             </Link>
-            <button
-              type="submit"
-              className="flex min-h-12 w-full items-center gap-2 rounded-2xl px-4 text-base font-semibold text-navy hover:bg-lavender"
-            >
-              <SignOutIcon />
-              Sign out
-            </button>
-          </form>
+          </div>
         )}
       </nav>
     </header>
   );
 }
 
-function SignOutIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8" />
-    </svg>
-  );
-}
