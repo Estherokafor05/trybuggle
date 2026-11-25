@@ -2016,6 +2016,10 @@ test("rewards: points and badges for passing checks, a leaderboard, and hiding f
   await expect(me).toContainText("15");
   await expect(page.getByRole("listitem").filter({ hasText: "Bullseye (earned)" })).toBeVisible();
   await expect(page.getByRole("listitem").filter({ hasText: "First question (not yet)" })).toBeVisible();
+  // How to earn points is folded away until opened.
+  await expect(page.getByRole("cell", { name: "Ask a question in the forum" })).toBeHidden();
+  await page.getByText("How to earn points").click();
+  await expect(page.getByRole("cell", { name: "Ask a question in the forum" })).toBeVisible();
   await page.getByRole("link", { name: "All time" }).click();
   await expect(page.getByRole("heading", { name: "All time" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

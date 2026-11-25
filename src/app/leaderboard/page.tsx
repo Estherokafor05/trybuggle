@@ -138,10 +138,15 @@ export default async function LeaderboardPage({ searchParams }: Props) {
           </div>
         </section>
 
-        <section aria-labelledby="earn-title" className="mt-6 rounded-3xl bg-mint p-5 sm:p-6">
-          <h2 id="earn-title" className="text-xl font-bold">
-            How to earn points
-          </h2>
+        <details className="group mt-6 rounded-3xl bg-mint p-5 sm:p-6">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+            <h2 className="text-xl font-bold">
+              <span aria-hidden="true">⭐</span> How to earn points
+            </h2>
+            <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-navy transition-transform group-open:rotate-180">
+              ▾
+            </span>
+          </summary>
           <table className="mt-3 w-full text-left">
             <thead className="sr-only">
               <tr>
@@ -169,7 +174,7 @@ export default async function LeaderboardPage({ searchParams }: Props) {
             </Link>
             .
           </p>
-        </section>
+        </details>
       </main>
       <SiteFooter />
     </>
