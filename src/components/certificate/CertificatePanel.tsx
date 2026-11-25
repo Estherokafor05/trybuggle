@@ -23,7 +23,10 @@ export function CertificatePanel({
   initial,
   origin,
   canCreate = true,
+  api = `/api/me/certificates/${slug}`,
 }: {
+  /** Where the certificate is created, renamed and downloaded. */
+  api?: string;
   slug: string;
   /** What the certificate is for, e.g. "AI Literacy Essentials". */
   moduleTitle: string;
@@ -58,7 +61,7 @@ export function CertificatePanel({
     setError("");
     setSaved("");
     try {
-      const response = await fetch(`/api/me/certificates/${slug}`, {
+      const response = await fetch(api, {
         method: certificate ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
@@ -126,7 +129,7 @@ export function CertificatePanel({
             <figcaption className="sr-only">Preview of your certificate</figcaption>
           </figure>
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <a href={`/api/me/certificates/${slug}/pdf`} download className={primary}>
+            <a href={`${api}/pdf`} download className={primary}>
               <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4">
                 <path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 15h12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

@@ -7,9 +7,11 @@ import { Sparkles } from "@/components/Sparkles";
 import { LockIcon } from "@/components/LockIcon";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { GateNotice, UnlockPanel } from "@/components/deep-dive/Unlock";
 import { courseForLearner } from "@/server/builder-learn";
+import { canTestPurchase } from "@/server/deep-dive";
 
-type Props = { params: Promise<{ course: string }> };
+type Props = { params: Promise<{ course: string }>; searchParams: Promise<{ notice?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { course } = await params;
@@ -18,30 +20,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: c && !("signInNeeded" in c) ? `${c.title} | Buggle Learn` : "Course | Buggle Learn" };
 }
 
-export default async function LearnCoursePage({ params }: Props) {
-  const { course: slug } = await params;
+const NOTICES: Record<string, string> = {
+  "test-unlocked": "Test purchase done: no payment was taken. Every chapter is open.",
+  "test-ended": "Test purchase undone. The paid chapters are locked again.",
+};
+
+export default async function LearnCoursePage({ params, searchParams }: Props) {
+  const [{ course: slug }, { notice }] = await Promise.all([params, searchParams]);
   const session = await currentSession();
   const course = await courseForLearner(slug, session?.user?.id ?? null);
   if (!course) notFound();
   if ("signInNeeded" in course) redirect(`/sign-in?callbackUrl=${encodeURIComponent(`/learn/${slug}`)}`);
   const next = course.lessons.find((l) => l.state === "open");
   const finished = course.lessons.length > 0 && course.done === course.lessons.length;
+  const unit = course.deepDive ? "unit" : "lesson";
+  const chapter = course.deepDive ? "Chapter" : "Module";
   return (
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[960px] px-4 pb-12 pt-6 sm:px-6 sm:pt-10">
         <p>
-          <Link href="/courses" className="inline-flex min-h-11 items-center text-sm font-semibold underline-offset-4 hover:underline">
-            ← More courses
+          <Link href={course.deepDive ? "/deep-dive" : "/courses"} className="inline-flex min-h-11 items-center text-sm font-semibold underline-offset-4 hover:underline">
+            ← {course.deepDive ? "The Deep Dive" : "More courses"}
           </Link>
         </p>
         <header className="relative overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
           <Sparkles />
           {course.from && <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">From {course.from}</p>}
+          {course.deepDive && (
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">{course.isFoundation ? "Deep Dive · Start here" : "Deep Dive"}</p>
+          )}
           <h1 className="mt-2 break-words text-[clamp(2rem,4.5vw,3rem)] font-bold leading-tight">{course.title}</h1>
           {course.summary && <p className="mt-3 max-w-[60ch] whitespace-pre-line leading-relaxed text-ink">{course.summary}</p>}
           <p className="mt-4 text-sm font-semibold text-navy">
-            {course.done} of {course.lessons.length} {course.lessons.length === 1 ? "lesson" : "lessons"} done
+            {course.done} of {course.lessons.length} {course.lessons.length === 1 ? unit : `${unit}s`} done
           </p>
           {next && (
             <Link
@@ -52,23 +64,43 @@ export default async function LearnCoursePage({ params }: Props) {
             </Link>
           )}
         </header>
-        {finished && (
-          <p role="status" className="mt-6 flex items-center gap-3 rounded-2xl bg-mint p-4 font-semibold text-navy">
-            <Buggle mood="cheer" size="sm" />
-            🎉 You&apos;ve finished every lesson in this course. Well done.
+        {notice && NOTICES[notice] && (
+          <p role="status" className="mt-6 rounded-2xl bg-mint p-4 text-sm text-ink">
+            {NOTICES[notice]}
           </p>
+        )}
+        {finished && (
+          <div role="status" className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl bg-mint p-4 font-semibold text-navy">
+            <Buggle mood="cheer" size="sm" />
+            <span className="min-w-0 flex-1">🎉 You&apos;ve finished every {unit} in this course. Well done.</span>
+            {course.deepDive && (
+              <Link href={`/learn/${course.slug}/certificate`} className="inline-flex min-h-11 items-center rounded-full bg-navy px-5 text-sm font-semibold text-white hover:bg-brand-deep">
+                🎓 Get your certificate
+              </Link>
+            )}
+          </div>
+        )}
+        {course.access?.gate && (
+          <div className="mt-6">
+            <GateNotice gate={course.access.gate} />
+          </div>
+        )}
+        {course.access && !course.access.gate && (
+          <div className="mt-6">
+            <UnlockPanel course={course} access={course.access} testing={canTestPurchase()} signedIn={Boolean(session)} />
+          </div>
         )}
         {course.sections.map((s, si) => (
           <section key={s.id} aria-labelledby={`m-${s.id}`} className="mt-8">
             <h2 id={`m-${s.id}`} className="text-xl font-bold">
-              {course.sections.length > 1 ? `Module ${si + 1}: ` : ""}
+              {course.sections.length > 1 || course.deepDive ? `${chapter} ${si + 1}: ` : ""}
               {s.title}
             </h2>
             <ol className="mt-3 grid gap-3">
               {s.lessons.map((l) => (
                 <li key={l.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-line bg-white p-5">
                   <div className="min-w-0">
-                    {l.state === "locked" ? (
+                    {l.state === "locked" || l.state === "paid" ? (
                       <p className="break-words font-semibold text-muted">{l.title}</p>
                     ) : (
                       <Link href={`/learn/${course.slug}/${l.slug}`} className="break-words font-semibold underline-offset-4 hover:underline">
@@ -80,12 +112,17 @@ export default async function LearnCoursePage({ params }: Props) {
                   <span className="inline-flex items-center gap-1 text-sm font-semibold text-navy">
                     {l.state === "done" ? (
                       "✓ Done"
+                    ) : l.state === "paid" ? (
+                      <>💳 Unlock to open</>
                     ) : l.state === "locked" ? (
                       <>
-                        <LockIcon /> Finish the lesson before first
+                        <LockIcon /> {course.access?.gate ? "Locked" : `Finish the ${unit} before first`}
                       </>
                     ) : (
                       "Up next"
+                    )}
+                    {course.deepDive && !course.access?.entitled && l.state !== "done" && (
+                      <span className={`ml-1 rounded-full px-2 py-0.5 text-xs ${l.paid ? "bg-lavender" : "bg-mint"}`}>{l.paid ? "Paid" : "Free"}</span>
                     )}
                     {l.minutes ? <span className="font-normal text-muted"> · {l.minutes} min</span> : null}
                   </span>

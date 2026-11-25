@@ -23,6 +23,7 @@ import {
   renameSection,
   updateBlock,
   updateCourse,
+  updateCourseType,
   updateItem,
   type Builder,
 } from "@/server/builder";
@@ -99,6 +100,17 @@ export async function builderAction(_state: BuilderState, form: FormData): Promi
       if ("error" in out) return out;
       await actor.log("builder.course_saved", course, { status });
       go(coursePage, status === "published" ? "course-published" : "course-saved");
+    }
+    case "course.type": {
+      const out = await updateCourseType(b, course, {
+        kind: text(form, "kind"),
+        foundation: form.get("foundation") === "on",
+        freeChapters: text(form, "freeChapters") || "0",
+        position: text(form, "position") || "100",
+      });
+      if ("error" in out) return out;
+      await actor.log("builder.course_type", course, { kind: text(form, "kind"), foundation: form.get("foundation") === "on" });
+      go(coursePage, "course-type-saved");
     }
     case "course.delete": {
       if (text(form, "confirm") !== "on") return { error: "Tick the box to confirm you want to delete this course." };

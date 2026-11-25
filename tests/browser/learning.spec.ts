@@ -2066,3 +2066,82 @@ test("dark mode: follows the device, can be switched and saved, and the main pag
   expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(15, 20, 36)");
   await context.close();
 });
+
+test("Deep Dive: What is AI opens after the Essentials, Chapter 1 is free, a test purchase opens the rest, then a certificate", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  const slug = `what-is-ai-${randomUUID().slice(0, 6)}`;
+  const previous = await sql`SELECT id FROM courses WHERE is_foundation`;
+  await sql`UPDATE courses SET is_foundation = false WHERE is_foundation`;
+  try {
+    // "What is AI": two chapters of one unit each, the first one free.
+    const [c] = await sql`INSERT INTO courses(slug, title, summary, source, kind, is_foundation, free_chapters, status)
+      VALUES(${slug}, 'What is AI', 'The starting point for every AI course.', 'builder', 'deep_dive', true, 1, 'published') RETURNING id`;
+    for (const [i, title] of ["How AI learns", "Where AI goes wrong"].entries()) {
+      const [s] = await sql`INSERT INTO course_sections(course_id, level, position, slug, title, status)
+        VALUES(${c.id}, 'essentials', ${i + 1}, ${`ch-${i + 1}`}, ${title}, 'published') RETURNING id`;
+      const [item] = await sql`INSERT INTO course_items(course_id, section_id, position, slug, title, status)
+        VALUES(${c.id}, ${s.id}, 1, ${`unit-${i + 1}`}, ${`Unit ${i + 1}: ${title}`}, 'published') RETURNING id`;
+      await sql`INSERT INTO content_blocks(item_id, position, type, data) VALUES(${item.id}, 1, 'text', ${sql.json({ body: `Reading for unit ${i + 1}.` })})`;
+    }
+
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const id = await signIn(context);
+    const page = await context.newPage();
+
+    // Before the Essentials: locked, and the page says what to do.
+    await page.goto("/deep-dive");
+    await expect(page.getByRole("heading", { name: "The Deep Dive", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Start here/ })).toBeVisible();
+    await expect(page.getByRole("article").getByText("After the Essentials")).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await page.getByRole("link", { name: /See what's inside/ }).click();
+    await expect(page.getByRole("heading", { name: /Finish the Essentials first/ })).toBeVisible();
+
+    // Finish the Essentials (results put straight into the test database).
+    for (const lessonSlug of Object.keys(assessmentBank)) {
+      await sql`INSERT INTO learning_lessons(slug, title) VALUES(${lessonSlug}, ${lessonSlug}) ON CONFLICT DO NOTHING`;
+      await sql`INSERT INTO assessment_attempts(id, learner_id, lesson_slug, assessment_version, submission_key, answers, correct_count, question_count, feedback, pass_percent)
+        VALUES(${randomUUID()}, ${id}, ${lessonSlug}, 1, ${randomUUID()}, '{}', 5, 5, '[]', 70)`;
+    }
+    for (const moduleSlug of Object.keys(moduleAssessmentBank))
+      await sql`INSERT INTO module_assessment_attempts(id, learner_id, module_slug, assessment_version, submission_key, answers, question_count, correct_count, feedback, pass_percent)
+        VALUES(${randomUUID()}, ${id}, ${moduleSlug}, 1, ${randomUUID()}, '{}', 5, 5, '[]', 70)`;
+
+    // Now it opens: Chapter 1 is free, Chapter 2 is paid.
+    await page.reload();
+    await expect(page.getByRole("heading", { name: /Unlock the whole course/ })).toBeVisible();
+    await expect(page.getByText("The first chapter is free.", { exact: false })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Chapter 1: How AI learns" })).toBeVisible();
+    await expect(page.getByText("💳 Unlock to open")).toHaveCount(0);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.getByRole("link", { name: /Start the course/ }).click();
+    await expect(page.getByText("Reading for unit 1.")).toBeVisible();
+    await page.getByRole("button", { name: "Mark as done" }).click();
+    await expect(page.getByText("💳 Unlock to open")).toBeVisible();
+
+    // The paid unit asks to unlock; the test purchase (test sites only) opens it.
+    await page.goto(`/learn/${slug}/unit-2`);
+    await expect(page.getByRole("heading", { name: /Unlock the whole course/ })).toBeVisible();
+    await page.getByRole("button", { name: "Test purchase: this course" }).click();
+    await expect(page.getByText(/Test purchase done: no payment was taken/)).toBeVisible();
+    await expect(page.getByText(/Unlocked for good/)).toBeVisible();
+    await page.getByRole("link", { name: /Continue: Unit 2/ }).click();
+    await page.getByRole("button", { name: "Mark as done" }).click();
+
+    // Finished: a certificate for this course.
+    await expect(page.getByText(/finished every unit in this course/)).toBeVisible();
+    await page.getByRole("link", { name: /Get your certificate/ }).click();
+    await expect(page.getByRole("heading", { name: "What is AI", level: 1 })).toBeVisible();
+    await page.getByRole("button", { name: /Create my certificate|Create certificate/ }).click();
+    await expect(page.getByText(/BL-D-/).first()).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await context.close();
+  } finally {
+    await sql`DELETE FROM certificates WHERE course_slug = ${slug}`;
+    await sql`DELETE FROM courses WHERE slug = ${slug}`;
+    for (const p of previous) await sql`UPDATE courses SET is_foundation = true WHERE id = ${p.id}`;
+    await sql.end();
+  }
+});
