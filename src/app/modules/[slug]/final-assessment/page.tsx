@@ -1,3 +1,4 @@
+import { POINTS } from "@/lib/points";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -96,6 +97,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           title="Your refresher"
           intro={checkIntro(check, settings, unit, questions.length)}
           noun="final assessment"
+          points={{ firstTry: POINTS.module, later: POINTS.module }}
           afterPass={
             <Link
               href={signedIn ? certificateHref : signUpHref}

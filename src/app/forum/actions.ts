@@ -69,7 +69,7 @@ export async function replyAction(form: FormData) {
   const user = await learner(threadUrl(threadId));
   const result = await createPost(user, threadId, { body: form.get("body"), parentId: form.get("parent") });
   if ("error" in result) redirect(withError(threadUrl(threadId), result.error));
-  redirect(threadUrl(threadId, "", `post-${result.id}`));
+  redirect(threadUrl(threadId, "notice=replied", `post-${result.id}`));
 }
 
 export async function editAction(form: FormData) {

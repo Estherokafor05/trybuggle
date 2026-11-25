@@ -423,6 +423,8 @@ test("signed-in learner can submit, review feedback and retry without restarting
   await expect(
     page.getByText("Knowledge check passed", { exact: true }),
   ).toBeVisible();
+  // Passing on the second try earns the usual points, shown straight away.
+  await expect(page.getByText(/\+10 points/)).toBeVisible();
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Automatic or AI?" }),
@@ -1994,4 +1996,42 @@ test("the header shows the learner's short name and photo; photos can be added a
     expect((await context.request.get(base + src)).status()).toBe(404);
     await context.close();
   }
+});
+
+test("rewards: points and badges for passing checks, a leaderboard, and hiding from it", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await signIn(context);
+  await passUpTo(context, "ai-foundations", "ai-in-your-day");
+  const page = await context.newPage();
+
+  await page.goto("/dashboard");
+  const points = page.getByRole("region", { name: "Your points" });
+  await expect(points.getByText("This week")).toBeVisible();
+  await expect(points.locator("dd").first()).toHaveText("15");
+  await points.getByRole("link", { name: "See the leaderboard" }).click();
+
+  await expect(page.getByRole("heading", { name: "Leaderboard", level: 1 })).toBeVisible();
+  await expect(page.getByText(/never change your scores or certificates/)).toBeVisible();
+  const me = page.locator("li", { hasText: "You" }).filter({ hasText: "Test L." });
+  await expect(me).toContainText("15");
+  await expect(page.getByRole("listitem").filter({ hasText: "Bullseye (earned)" })).toBeVisible();
+  await expect(page.getByRole("listitem").filter({ hasText: "First question (not yet)" })).toBeVisible();
+  // How to earn points is folded away until opened.
+  await expect(page.getByRole("cell", { name: "Ask a question in the forum" })).toBeHidden();
+  await page.getByText("How to earn points").click();
+  await expect(page.getByRole("cell", { name: "Ask a question in the forum" })).toBeVisible();
+  await page.getByRole("link", { name: "All time" }).click();
+  await expect(page.getByRole("heading", { name: "All time" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  // Hiding from leaderboards keeps the points but takes the learner off the list.
+  await page.goto("/account#profile");
+  await page.getByLabel(/Show me on leaderboards/).uncheck();
+  await page.getByRole("region", { name: "Profile" }).getByRole("button", { name: "Save", exact: true }).click();
+  await expect(page.getByText(/You're hidden from leaderboards/)).toBeVisible();
+  await page.goto("/leaderboard");
+  await expect(page.getByText(/You're hidden from leaderboards, so other people/)).toBeVisible();
+  await expect(page.locator("li", { hasText: "Test L." }).filter({ hasText: "You" })).toHaveCount(0);
+  await context.close();
 });

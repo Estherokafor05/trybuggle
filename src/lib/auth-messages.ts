@@ -48,6 +48,8 @@ export const notices: Record<string, string> = {
   GOOGLE_LINKED: "Google is now linked. You can log in with Google or your password.",
   UNLINKED: "That sign-in method has been removed.",
   LANGUAGE_SAVED: "Language saved.",
+  LEADERBOARD_SHOWN: "You're on the leaderboards again.",
+  LEADERBOARD_HIDDEN: "You're hidden from leaderboards. You still earn points and badges.",
   PHOTO_SAVED: "Your photo has been saved.",
   PHOTO_REMOVED: "Your photo has been removed. Your initials show instead.",
 };

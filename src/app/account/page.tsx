@@ -8,6 +8,7 @@ import {
   deleteAccountAction,
   linkGoogleAction,
   setLanguageAction,
+  setLeaderboardAction,
   unlinkAction,
   updateNameAction,
 } from "@/app/actions/account";
@@ -23,6 +24,7 @@ import { DEFAULT_LOCALE, isLocale, LOCALES, UPCOMING_LOCALES } from "@/i18n/loca
 import { googleAuthConfigured } from "@/lib/auth-configured";
 import { authMessage, notices } from "@/lib/auth-messages";
 import { db } from "@/server/database";
+import { hiddenFromLeaderboard } from "@/server/rewards";
 
 const button =
   "inline-flex min-h-11 items-center gap-2 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep";
@@ -81,6 +83,7 @@ export default async function AccountPage({
   const google = accounts.find((a) => a.providerId === "google");
   const [pref] = await db()`SELECT locale FROM learner_preferences WHERE learner_id = ${session.user.id}`.catch(() => []);
   const locale = isLocale(pref?.locale) ? pref.locale : DEFAULT_LOCALE;
+  const hidden = await hiddenFromLeaderboard(session.user.id).catch(() => false);
   const methods = [password && "email and password", google && "Google"].filter(Boolean).join(" or ");
 
   // Each message shows in the section that changed.
@@ -150,6 +153,18 @@ export default async function AccountPage({
               <div className="mt-5">
                 <PhotoPicker name={name ?? ""} image={image} />
               </div>
+              <form action={setLeaderboardAction} className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-canvas p-4">
+                <label className="flex min-h-11 flex-1 cursor-pointer items-start gap-3">
+                  <input type="checkbox" name="show" defaultChecked={!hidden} className="mt-1 size-5 shrink-0 accent-brand" />
+                  <span>
+                    <span className="block font-semibold text-ink">Show me on leaderboards</span>
+                    <span className="block text-sm text-muted">Others see your short name, photo and points. You earn points either way.</span>
+                  </span>
+                </label>
+                <button type="submit" className={outlineButton}>
+                  Save
+                </button>
+              </form>
               <form action={updateNameAction} className="mt-6 grid gap-4 border-t border-line/70 pt-5">
                 <TextField
                   id="name"
