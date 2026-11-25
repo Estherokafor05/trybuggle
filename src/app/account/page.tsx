@@ -43,6 +43,12 @@ export default async function AccountPage({
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[760px] px-4 pb-12 pt-6 sm:px-6 sm:pt-10">
+        <Link
+          href="/dashboard"
+          className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender"
+        >
+          <span aria-hidden="true">←</span> Your dashboard
+        </Link>
         <header className="rounded-[2rem] bg-hero-lavender p-6 sm:p-9">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Account</p>
           <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">Your account</h1>

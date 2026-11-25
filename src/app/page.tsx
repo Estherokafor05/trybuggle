@@ -74,12 +74,22 @@ export default async function Home() {
                 Module {resume.moduleOrder} · {resume.step.label}: {resume.step.title}
               </p>
             </div>
-            <Link
-              href={resume.step.href}
-              className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-brand-deep"
-            >
-              Continue <Arrow />
-            </Link>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {session?.user && (
+                <Link
+                  href="/dashboard"
+                  className="inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4"
+                >
+                  Your dashboard
+                </Link>
+              )}
+              <Link
+                href={resume.step.href}
+                className="inline-flex min-h-11 items-center gap-2.5 rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                Continue <Arrow />
+              </Link>
+            </div>
           </section>
         )}
         <section className="relative isolate grid overflow-hidden rounded-[2rem] bg-hero-lavender sm:rounded-[2.5rem] md:grid-cols-[1.15fr_0.85fr] md:items-center">

@@ -1435,3 +1435,47 @@ test("AI for Testers page shows the programme and saves early-access sign-ups", 
     await sql.end();
   }
 });
+
+test("the dashboard shows where the learner is, time to the next certificate and recent results", async ({ browser }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+    const context = await browser.newContext({ viewport });
+    await signIn(context);
+    const page = await context.newPage();
+
+    // Logging in with no page to return to lands on the dashboard.
+    await page.goto("/sign-in");
+    await page.goto("/dashboard");
+    await expect(page.getByRole("heading", { name: "Welcome, Test", level: 1 })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Start learning" })).toHaveAttribute("href", lesson());
+    await expect(page.getByText("Time to your next certificate")).toBeVisible();
+    await expect(page.getByText("0 of 12", { exact: true })).toBeVisible();
+    await expect(page.getByText("Your knowledge check results will show here.")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Talking to AI/ }).locator("..").locator("..")).toContainText("Locked");
+
+    await passUpTo(context, "ai-foundations", "before-chatgpt");
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Welcome back, Test", level: 1 })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^Continue/ })).toHaveAttribute("href", lesson("before-chatgpt"));
+    await expect(page.getByText("2 of 12", { exact: true })).toBeVisible();
+    await expect(page.getByText("Lesson 2 knowledge check")).toBeVisible();
+    await expect(page.getByRole("progressbar", { name: "Module 1 progress" })).toHaveAttribute("aria-valuetext", "2 of 6 done");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // Settings are one tap away, and lead back.
+    await page.getByRole("link", { name: /Open settings/ }).click();
+    await expect(page.getByRole("heading", { name: "Your account", level: 1 })).toBeVisible();
+    await page.getByRole("link", { name: /Your dashboard/ }).first().click();
+    await expect(page).toHaveURL(`${base}/dashboard`);
+    if (viewport.width < 768) await page.getByRole("button", { name: "Menu" }).click();
+    await expect(page.getByRole("link", { name: "Dashboard" }).first()).toBeVisible();
+    await context.close();
+  }
+
+  // Signed out: the dashboard asks for a login and comes back.
+  const guest = await browser.newContext();
+  const guestPage = await guest.newPage();
+  await guestPage.goto("/dashboard");
+  await expect(guestPage).toHaveURL(`${base}/sign-in?callbackUrl=%2Fdashboard`);
+  await guest.close();
+});
