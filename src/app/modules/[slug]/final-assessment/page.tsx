@@ -101,7 +101,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
               href={signedIn ? certificateHref : signUpHref}
               className="mt-3 inline-flex min-h-11 items-center rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep"
             >
-              {signedIn ? "Go to your certificate" : "Sign up to get your certificate"}{" "}
+              {signedIn ? `See Module ${mod.order} complete` : "Sign up to save your progress"}{" "}
               <span aria-hidden="true" className="ml-2">→</span>
             </Link>
           }
@@ -110,9 +110,10 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           <div className="mt-7">
             <Requirements requirements={status.requirements} />
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Your Certificate of Completion is ready once every item is ticked.{" "}
-              <Link className="font-semibold text-navy underline underline-offset-4" href={certificateHref}>
-                View your certificate page
+              The module is complete once every item is ticked. Every completed module counts towards your
+              free Essentials certificate.{" "}
+              <Link className="font-semibold text-navy underline underline-offset-4" href="/certificate">
+                See your Essentials certificate
               </Link>
             </p>
           </div>

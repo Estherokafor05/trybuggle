@@ -15,6 +15,9 @@ export function SiteFooter() {
           <Link href="/#how-it-works" className="hover:text-brand">
             How it works
           </Link>
+          <Link href="/verify" className="hover:text-brand">
+            Check a certificate
+          </Link>
           <Link href="/privacy" className="hover:text-brand">
             Privacy
           </Link>
