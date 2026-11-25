@@ -12,7 +12,7 @@ import { journeyPosition } from "@course";
 import { getBuiltLesson } from "@course";
 import { LockedStep } from "@/components/LockedStep";
 import { ForumPeek } from "@/components/forum/ForumPeek";
-import { checkIntro, checkSettings, defaultCheckSettings, lessonCheck } from "@/server/checks";
+import { checkIntro, checkQuestions, checkSettings, defaultCheckSettings, lessonCheck } from "@/server/checks";
 import { pathStatus } from "@/server/progression";
 
 export async function generateMetadata({
@@ -97,9 +97,9 @@ export default async function LessonPage({
       />
     );
   const check = lessonCheck(lessonSlug);
-  const settings = check ? await checkSettings(check) : defaultCheckSettings;
+  const [settings, questions] = check ? await Promise.all([checkSettings(check), checkQuestions(check)]) : [defaultCheckSettings, []];
   const intro = check
-    ? checkIntro(check, settings, mod.order === 1 ? "lesson" : "episode")
+    ? checkIntro(check, settings, mod.order === 1 ? "lesson" : "episode", questions.length)
     : undefined;
   const passedThis = status.done.includes(lessonSlug);
   const previous = position.previous;

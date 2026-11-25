@@ -282,3 +282,79 @@ describe("learner dashboard", () => {
     assert.equal(dashboard.formatMinutes(128), "About 2 hours 10 minutes");
   });
 });
+
+describe("editing questions in the admin area", () => {
+  const form = (values: Record<string, string>) => {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(values)) f.set(k, v);
+    return f;
+  };
+  const good = {
+    count: "1",
+    "q0.prompt": "Which of these is an AI tool?",
+    "q0.o0.text": "A chatbot that writes replies",
+    "q0.o1.text": "A light switch",
+    "q0.correct": "0",
+    "q0.explanation": "A chatbot learns patterns from examples; a switch just turns on.",
+  };
+
+  test("the editor's checks catch missing or broken questions", async () => {
+    const { parseQuestionForm } = await import("../../src/server/question-editor");
+    assert.match((parseQuestionForm(form({ count: "0" })) as { error: string }).error, /at least one question/);
+    assert.match((parseQuestionForm(form({ ...good, "q0.o1.text": "" })) as { error: string }).error, /at least 2 answers/);
+    assert.match((parseQuestionForm(form({ ...good, "q0.correct": "4" })) as { error: string }).error, /right answer/);
+    assert.match((parseQuestionForm(form({ ...good, "q0.o1.text": "a chatbot that writes replies" })) as { error: string }).error, /same/);
+    assert.match((parseQuestionForm(form({ ...good, "q0.explanation": "Short" })) as { error: string }).error, /explanation/);
+    const ok = parseQuestionForm(form({ ...good, count: "2" }));
+    assert.ok("questions" in ok && ok.questions.length === 1, "a blank extra question is skipped");
+  });
+
+  test("saved questions are what learners get and are marked against; re-importing keeps them", async () => {
+    const editor = await import("../../src/server/question-editor");
+    const ref = checks.lessonCheck("before-chatgpt")!;
+    const original = await checks.checkQuestions(ref);
+    assert.equal(original.length, 5);
+    const [{ id }] = (await db.query<{ id: string }>(`SELECT id FROM assessments WHERE legacy_key = 'before-chatgpt'`)).rows;
+    // Keep question 1 (with a new right answer), drop the rest, add one.
+    const first = original[0];
+    const values: Record<string, string> = {
+      count: "2",
+      "q0.key": first.id,
+      "q0.prompt": `${first.prompt} (edited)`,
+      "q0.explanation": "Edited explanation for this question.",
+      "q1.prompt": "A brand new question?",
+      "q1.o0.text": "Yes",
+      "q1.o1.text": "No",
+      "q1.correct": "1",
+      "q1.explanation": "Because the course team says so in this test.",
+    };
+    first.options.forEach((o, j) => {
+      values[`q0.o${j}.id`] = o.id;
+      values[`q0.o${j}.text`] = o.text;
+    });
+    const newCorrect = first.options.find((o) => o.id !== first.correct)!;
+    values["q0.correct"] = String(first.options.indexOf(newCorrect));
+    const parsed = editor.parseQuestionForm(form(values));
+    if ("error" in parsed) throw new Error(parsed.error);
+    assert.deepEqual(await editor.saveQuestions(id, "admin@example.com", parsed.questions), { before: 5, after: 2 });
+
+    const now = await checks.checkQuestions(ref);
+    assert.equal(now.length, 2);
+    assert.equal(now[0].id, first.id, "existing questions keep their ids");
+    assert.equal(now[0].correct, newCorrect.id);
+
+    const learner = await newLearner();
+    await passUpTo(learner, "ai-foundations", "before-chatgpt");
+    const answers = Object.fromEntries(now.map((q) => [q.id, q.correct]));
+    const result = await checks.submitCheck(ref, learner, submission(answers));
+    assert.equal(result.data?.passed, true, "marked against the edited questions");
+    const loaded = await checks.loadCheck(ref, learner);
+    assert.equal((loaded.data?.questions as unknown[]).length, 2);
+
+    await db.transaction((tx) =>
+      writeCourse({ query: async (text, params) => (await tx.query<Record<string, unknown>>(text, params)).rows }, planCourse()),
+    );
+    assert.equal((await checks.checkQuestions(ref)).length, 2, "the course files don't overwrite admin edits");
+    assert.equal((await checks.checkQuestions(checks.lessonCheck("ai-in-your-day")!)).length, 5, "unedited checks still follow the files");
+  });
+});

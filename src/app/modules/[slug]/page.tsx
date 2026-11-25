@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyProgress } from "@/components/JourneyProgress";
 import { FoundationsIllustration } from "@course/ui";
 import { finalQuestionCount } from "@course";
+import { checkQuestions, finalCheck } from "@/server/checks";
 import { TRACK_LABELS, getModule, modules } from "@course";
 import { getBuiltLesson } from "@course";
 import { currentSession } from "@/auth";
@@ -47,7 +48,8 @@ export default async function ModulePage({
   const isFoundations = mod.order === 1;
   const firstBuilt = mod.lessons.find((l) => getBuiltLesson(l.slug));
   const unit = isFoundations ? "lessons" : "episodes";
-  const finalCount = finalQuestionCount[slug];
+  const final = finalCheck(slug);
+  const finalCount = final ? (await checkQuestions(final)).length : finalQuestionCount[slug];
   // Signed-in learners see what they've passed and what is still locked.
   const status = await pathStatus(session?.user?.id, slug);
   const lockedIds = Object.keys(status.locked);

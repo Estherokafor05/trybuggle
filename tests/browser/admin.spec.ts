@@ -124,6 +124,34 @@ test("admins are separate, set up with an authenticator app, and can change chec
   expect(await noOverflow(page)).toBe(true);
   await axe(page);
 
+  // Edit Lesson 1's questions: a wrong save keeps what was typed; a good one saves.
+  const [lesson1] = await sql`SELECT id FROM assessments WHERE legacy_key = 'what-counts-as-ai'`;
+  const before = await sql`SELECT key, position, prompt, options, correct_option, explanation FROM assessment_questions WHERE assessment_id = ${lesson1.id} ORDER BY position`;
+  try {
+    await page.goto(base + "/admin/course");
+    await page.locator("#check-what-counts-as-ai summary").click();
+    await page.getByRole("link", { name: /Edit the questions and explanations/ }).first().click();
+    await expect(page.getByRole("group", { name: "Question 1" })).toBeVisible();
+    const q1 = page.getByRole("group", { name: "Question 1" });
+    await q1.getByLabel("Explanation (shown when a learner asks Buggle)").fill("Short");
+    await page.getByRole("button", { name: "Save all questions" }).click();
+    await expect(page.getByText(/Question 1: write an explanation/)).toBeVisible();
+    await expect(q1.getByLabel("Explanation (shown when a learner asks Buggle)")).toHaveValue("Short");
+    await q1.getByLabel("Explanation (shown when a learner asks Buggle)").fill("An edited explanation from the admin test.");
+    await page.getByRole("button", { name: "Save all questions" }).click();
+    await expect(page.getByText(/Questions saved/)).toBeVisible();
+    const [row] = await sql`SELECT explanation FROM assessment_questions WHERE assessment_id = ${lesson1.id} ORDER BY position LIMIT 1`;
+    expect(row.explanation).toBe("An edited explanation from the admin test.");
+    expect(await noOverflow(page)).toBe(true);
+    await axe(page);
+  } finally {
+    await sql`DELETE FROM assessment_questions WHERE assessment_id = ${lesson1.id}`;
+    for (const q of before)
+      await sql`INSERT INTO assessment_questions(assessment_id, key, position, prompt, options, correct_option, explanation)
+        VALUES(${lesson1.id}, ${q.key}, ${q.position}, ${q.prompt}, ${sql.json(q.options)}, ${q.correct_option}, ${q.explanation})`;
+    await sql`UPDATE assessments SET questions_edited_at = NULL, questions_edited_by = NULL, question_count = ${before.length} WHERE id = ${lesson1.id}`;
+  }
+
   // The forum moderation page opens.
   await page.goto(base + "/admin/forum");
   await expect(page.getByRole("heading", { name: "Forum", level: 1 })).toBeVisible();

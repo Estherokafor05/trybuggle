@@ -204,8 +204,9 @@ export async function writeCourse(run: SqlRunner, plan: CoursePlan): Promise<Imp
        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        ON CONFLICT(course_id, legacy_key) WHERE legacy_key IS NOT NULL DO UPDATE SET
          scope = EXCLUDED.scope, item_id = EXCLUDED.item_id, section_id = EXCLUDED.section_id,
-         question_count = EXCLUDED.question_count, status = EXCLUDED.status
-       RETURNING id`,
+         question_count = CASE WHEN assessments.questions_edited_at IS NULL THEN EXCLUDED.question_count ELSE assessments.question_count END,
+         status = EXCLUDED.status
+       RETURNING id, questions_edited_at`,
       [
         courseId,
         scope,
@@ -221,6 +222,8 @@ export async function writeCourse(run: SqlRunner, plan: CoursePlan): Promise<Imp
     );
     const assessmentId = String(row.id);
     summary.assessments++;
+    // Questions an admin has edited belong to the admin area now: leave them alone.
+    if (row.questions_edited_at) return;
     for (const [index, question] of assessment.questions.entries()) {
       await run.query(
         `INSERT INTO assessment_questions(assessment_id, key, position, prompt, options, correct_option, explanation)

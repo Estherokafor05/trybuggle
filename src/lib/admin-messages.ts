@@ -24,6 +24,7 @@ export const adminNotices: Record<string, string> = {
   "forum-shown": "Shown again.",
   "report-kept": "Report closed. The post stays up.",
   "forum-saved": "Saved.",
+  "questions-saved": "Questions saved. Learners get them from their next attempt; earlier results don't change.",
   "plan-saved": "Plan saved. New checkouts use this price; current plans keep theirs until they renew.",
 };
 
