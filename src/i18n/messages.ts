@@ -19,6 +19,7 @@ const en = {
   "footer.modules": "All modules",
   "footer.howItWorks": "How it works",
   "footer.verify": "Check a certificate",
+  "footer.organisations": "For organisations",
   "footer.privacy": "Privacy",
   "footer.nav": "Footer navigation",
 };

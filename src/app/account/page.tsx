@@ -211,6 +211,12 @@ export default async function AccountPage({
               <input type="checkbox" name="confirm" value="yes" required className="mt-1 size-5 shrink-0 accent-red-700" />
               I understand that my progress, results and certificates will be deleted for good.
             </label>
+            {confirm === "owner" && (
+              <p role="alert" className="mt-2 rounded-xl bg-peach/60 p-3 text-sm">
+                You own an organisation with a plan or other members. Contact us to hand it over or close it, then you can
+                delete your account.
+              </p>
+            )}
             {confirm === "required" && (
               <p role="alert" className="mt-2 rounded-xl bg-peach/60 p-3 text-sm">
                 Tick the box to confirm, then press the button again.

@@ -6,6 +6,8 @@ import { LockIcon } from "@/components/LockIcon";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { formatMinutes, learnerDashboard, type Dashboard, type ModuleSummary } from "@/server/dashboard";
+import { OrgLogo } from "@/components/org/OrgShell";
+import { canManage, myOrganisations } from "@/server/organisations";
 
 export const metadata: Metadata = { title: "Your dashboard | Buggle Learn" };
 
@@ -169,6 +171,7 @@ export default async function DashboardPage() {
   } catch {
     data = null;
   }
+  const orgs = await myOrganisations(session.user.id).catch(() => []);
 
   return (
     <>
@@ -272,6 +275,34 @@ export default async function DashboardPage() {
                       Your knowledge check results will show here.
                     </p>
                   )}
+                </section>
+
+                <section aria-labelledby="orgs-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
+                  <h2 id="orgs-title" className="text-lg font-bold">
+                    {orgs.length ? "Your organisations" : "Learning with a team?"}
+                  </h2>
+                  {orgs.length ? (
+                    <ul className="mt-3 grid gap-2">
+                      {orgs.map(({ org, role }) => (
+                        <li key={org.id}>
+                          <Link href={`/org/${org.slug}`} className="flex items-center gap-3 rounded-xl bg-canvas p-3 hover:bg-lavender">
+                            <OrgLogo org={org} size="size-10" />
+                            <span className="min-w-0">
+                              <span className="block font-semibold text-ink">{org.name}</span>
+                              <span className="block text-sm text-muted">{canManage(role) ? "You manage this" : "You're learning with them"}</span>
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                      Bring your company, school or team. Add your people and follow their progress.
+                    </p>
+                  )}
+                  <Link href={orgs.length ? "/organisations/new" : "/organisations"} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-navy underline underline-offset-4">
+                    {orgs.length ? "Create another organisation" : "See plans for organisations"}
+                  </Link>
                 </section>
 
                 <section aria-labelledby="settings-title" className="rounded-[1.75rem] bg-blush p-5 sm:p-6">

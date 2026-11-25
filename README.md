@@ -20,6 +20,13 @@ Both lessons include independent interactive guides, complete reading alternativ
 - Admins moderate at `/admin/forum`: deal with reports, hide or show posts, pin or close conversations, and add or edit sections.
 - Rules are in `src/server/forum.ts`. Starting sections are added by migration 010.
 
+**Organisations (`/organisations`, `/org/<name>`).** Companies, schools and teams create an organisation and choose a plan, priced per learner per year (prices are set by admins at `/admin/organisations`). Owners and managers add members by email invite or a join link, and see everyone's progress and certificates.
+- Members see the organisation's name and logo on their dashboard.
+- The Buggle content plans include the Deep Dive when it launches (`deepDiveThroughOrg`).
+- Payments use Stripe Checkout, Stripe's billing page, and webhooks at `/api/stripe/webhook`. Each webhook event is handled once.
+- Without Stripe keys, test sites can switch a plan on without paying; the live site never can.
+- Rules are in `src/server/organisations.ts` and `src/server/payments.ts`.
+
 **Admin area (`/admin`).** Admin accounts are separate from learner accounts. They have their own Better Auth setup (`src/admin-auth.ts`), `admin_*` tables, `/api/admin-auth` routes and `buggle-admin` cookie, so a learner login never opens admin pages. There is no admin sign-up.
 - The first admin is created once at `/admin/setup`, using the `ADMIN_SETUP_KEY` setting (20+ characters), and only while no admins exist.
 - Other admins join by a one-time invite link that expires after 7 days. Only a hash of each link is stored.

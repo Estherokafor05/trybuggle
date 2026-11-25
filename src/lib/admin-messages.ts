@@ -24,6 +24,7 @@ export const adminNotices: Record<string, string> = {
   "forum-shown": "Shown again.",
   "report-kept": "Report closed. The post stays up.",
   "forum-saved": "Saved.",
+  "plan-saved": "Plan saved. New checkouts use this price; current plans keep theirs until they renew.",
 };
 
 export const adminMessage = (map: Record<string, string>, key?: string) =>

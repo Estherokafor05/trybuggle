@@ -1700,3 +1700,88 @@ test("learners can choose their language in settings", async ({ browser }) => {
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await context.close();
 });
+
+test("organisations: create, test plan, invite, join, team progress, logo, join link and leaving", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const sql = postgres(process.env.DATABASE_URL!, { max: 1 });
+  const name = `QA Org ${randomUUID().slice(0, 6)}`;
+  await sql`UPDATE org_plans SET price_per_seat_year = 2400, currency = 'usd', active = true WHERE code = 'content'`;
+  try {
+    // The public plans page shows the price set by admins.
+    const owner = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    await signIn(owner);
+    const page = await owner.newPage();
+    await page.goto("/organisations");
+    await expect(page.getByRole("heading", { name: "Buggle content" })).toBeVisible();
+    await expect(page.getByText("$24.00")).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // Create it, then switch on a test plan (no Stripe keys on test sites).
+    await page.getByRole("link", { name: /Create an organisation/ }).click();
+    await page.getByLabel("Organisation name").fill(name);
+    await page.getByRole("button", { name: "Create organisation" }).click();
+    await expect(page.getByText(/Your organisation is ready/)).toBeVisible();
+    await expect(page.getByText(/Test site:/)).toBeVisible();
+    await page.getByLabel("Number of places").fill("3");
+    await page.getByRole("button", { name: "Switch on test plan" }).click();
+    await expect(page.getByText(/Test plan switched on/)).toBeVisible();
+    await expect(page.getByText("1 used of 3")).toBeVisible();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    const slug = new URL(page.url()).pathname.split("/")[2];
+
+    // Invite Ben by email; the link is shown once, and never in the address bar.
+    const ben = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const benId = await signIn(ben);
+    const benEmail = emails.get(benId)!;
+    await page.getByRole("navigation", { name: "Organisation" }).getByRole("link", { name: "Members" }).click();
+    await page.getByLabel("Their email").fill(benEmail);
+    await page.getByRole("button", { name: "Create invite" }).click();
+    const link = await page.getByLabel("Invite link").inputValue();
+    expect(link).toMatch(/\/join\/[A-Za-z0-9_-]{40,}$/);
+    expect(page.url()).not.toContain("/join/");
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    const benPage = await ben.newPage();
+    await benPage.goto(link);
+    await expect(benPage.getByRole("heading", { name: `Join ${name}` })).toBeVisible();
+    await benPage.getByRole("button", { name: `Join ${name}` }).click();
+    await expect(benPage.getByText("Welcome! You've joined.")).toBeVisible();
+    await expect(benPage.getByRole("heading", { name: `You're learning with ${name}` })).toBeVisible();
+    await expect(benPage.getByRole("navigation", { name: "Organisation" })).toHaveCount(0);
+    expect(await benPage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    // Members can't open the manager pages.
+    await benPage.goto(`/org/${slug}/members`);
+    await expect(benPage).toHaveURL(`${base}/org/${slug}`);
+
+    // The owner sees Ben's progress after he passes Lesson 1.
+    await passUpTo(ben, "ai-foundations", "ai-in-your-day");
+    await page.goto(`/org/${slug}`);
+    await expect(page.getByRole("progressbar", { name: "Test learner's progress" }).last()).toHaveAttribute("aria-valuetext", "1 of 12 steps");
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+    // A join link, and a logo that members see on their dashboard.
+    await page.goto(`/org/${slug}/members`);
+    await page.getByRole("button", { name: "Make a join link" }).click();
+    await expect(page.getByRole("textbox", { name: "Join link" })).toHaveValue(/\/join\//);
+    await page.goto(`/org/${slug}/settings`);
+    const png = Buffer.from("89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6360000002000154a24f5d0000000049454e44ae426082", "hex");
+    await page.getByLabel(/^Logo/).setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: png });
+    await page.getByRole("button", { name: "Save settings" }).click();
+    await expect(page.getByText("Settings saved.")).toBeVisible();
+    await benPage.goto("/dashboard");
+    await expect(benPage.getByRole("img", { name: `${name} logo` })).toBeVisible();
+
+    // Ben leaves.
+    await benPage.goto(`/org/${slug}`);
+    await benPage.getByRole("button", { name: `Leave ${name}` }).click();
+    await expect(benPage).toHaveURL(/\/dashboard/);
+    await page.goto(`/org/${slug}/billing`);
+    await expect(page.getByText("1 used of 3")).toBeVisible();
+    await owner.close();
+    await ben.close();
+  } finally {
+    await sql`DELETE FROM organisations WHERE name = ${name}`;
+    await sql`UPDATE org_plans SET price_per_seat_year = 0, active = false`;
+    await sql.end();
+  }
+});
