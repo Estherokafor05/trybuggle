@@ -22,6 +22,7 @@ import {
 import { sendAccountEmail } from "@/server/email";
 import { resolveReports, saveSection, setForumHidden, setThreadFlags } from "@/server/forum";
 import { savePlan } from "@/server/organisations";
+import { parseQuestionForm, saveQuestions } from "@/server/question-editor";
 import { siteOrigin } from "@/server/site";
 
 const text = (form: FormData, name: string) => {
@@ -281,4 +282,19 @@ export async function savePlanAction(form: FormData) {
   if ("error" in result) redirect(`/admin/organisations?message=${encodeURIComponent(result.error)}#prices`);
   await audit(admin, "plan.changed", code, { price: text(form, "price"), currency: text(form, "currency"), on: form.get("active") === "on" });
   redirect("/admin/organisations?notice=plan-saved#prices");
+}
+
+// --- Question editor ------------------------------------------------------------
+
+export type QuestionFormState = { error?: string };
+
+export async function saveQuestionsAction(_state: QuestionFormState, form: FormData): Promise<QuestionFormState> {
+  const admin = await requireAdmin();
+  const id = text(form, "id");
+  const parsed = parseQuestionForm(form);
+  if ("error" in parsed) return { error: parsed.error };
+  const result = await saveQuestions(id, admin.user.email, parsed.questions);
+  if (!result) return { error: "That check no longer exists." };
+  await audit(admin, "check.questions_changed", text(form, "key"), result);
+  redirect(`/admin/course/check/${id}?notice=questions-saved`);
 }

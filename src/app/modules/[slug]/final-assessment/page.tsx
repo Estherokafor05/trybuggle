@@ -13,7 +13,7 @@ import { passMark } from "@/lib/assessment-scoring";
 import { hasFinalAssessment, moduleRequirements } from "@/server/certificates";
 import { guestId, openToGuests } from "@/server/guest";
 import { LockedStep } from "@/components/LockedStep";
-import { checkIntro, checkSettings, finalCheck } from "@/server/checks";
+import { checkIntro, checkQuestions, checkSettings, finalCheck } from "@/server/checks";
 import { pathStatus } from "@/server/progression";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -34,7 +34,6 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
   const certificateHref = `/modules/${slug}/certificate`;
   const signUpHref = `/sign-in?callbackUrl=${encodeURIComponent(certificateHref)}`;
   const check = finalCheck(slug)!;
-  const count = check.questions.length;
   const lastLesson = mod.lessons.at(-1)!;
   const unit = mod.order === 1 ? "lesson" : "episode";
   const path = await pathStatus(session?.user?.id, slug);
@@ -49,7 +48,8 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
         locked={Object.keys(path.locked)}
       />
     );
-  const settings = await checkSettings(check);
+  const [settings, questions] = await Promise.all([checkSettings(check), checkQuestions(check)]);
+  const count = questions.length;
 
   return (
     <>
@@ -94,7 +94,7 @@ export default async function FinalAssessmentPage({ params }: { params: Promise<
           endpoint={`/api/modules/${slug}/final-assessment`}
           kicker={`Module ${mod.order} · Final assessment`}
           title="Your refresher"
-          intro={checkIntro(check, settings, unit)}
+          intro={checkIntro(check, settings, unit, questions.length)}
           noun="final assessment"
           afterPass={
             <Link

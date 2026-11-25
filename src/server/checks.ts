@@ -78,6 +78,33 @@ export async function checkSettings(ref: CheckRef): Promise<CheckSettings> {
   return defaultCheckSettings;
 }
 
+/**
+ * A check's questions. The database copy is used when there is one (admins can
+ * edit it); the course files are the starting point.
+ */
+export async function checkQuestions(ref: CheckRef): Promise<Question[]> {
+  try {
+    const rows = await db()`
+      SELECT q.key, q.prompt, q.options, q.correct_option, q.explanation
+      FROM assessment_questions q
+      JOIN assessments a ON a.id = q.assessment_id
+      JOIN courses c ON c.id = a.course_id
+      WHERE c.slug = ${course.slug} AND a.legacy_key = ${ref.key}
+      ORDER BY q.position`;
+    if (rows.length)
+      return rows.map((r) => ({
+        id: r.key as string,
+        prompt: r.prompt as string,
+        options: r.options as Question["options"],
+        correct: r.correct_option as string,
+        explanation: r.explanation as string,
+      }));
+  } catch {
+    // Course tables not set up yet: the course files are used.
+  }
+  return ref.questions;
+}
+
 /** The same answer order every time for one learner, so a reload never reshuffles. */
 export function orderedOptions(questions: Question[], seed: string, shuffle: boolean) {
   return questions.map(({ id, prompt, options }) => ({
@@ -94,8 +121,7 @@ export function orderedOptions(questions: Question[], seed: string, shuffle: boo
 }
 
 /** Plain-English intro for a check, from its settings. */
-export function checkIntro(ref: CheckRef, settings: CheckSettings, unit: string) {
-  const count = ref.questions.length;
+export function checkIntro(ref: CheckRef, settings: CheckSettings, unit: string, count = ref.questions.length) {
   const tries =
     settings.maxAttempts == null
       ? "You can try again as many times as you need."
@@ -133,7 +159,7 @@ const noTriesLeft = (max: number): Failure => ({
 export async function loadCheck(ref: CheckRef, learner: string): Promise<Outcome<Record<string, unknown>>> {
   const stop = await blocked(ref, learner);
   if (stop) return { failure: stop };
-  const settings = await settingsFor(ref, learner);
+  const [settings, questions] = await Promise.all([settingsFor(ref, learner), checkQuestions(ref)]);
   const sql = db();
   const t = table(ref);
   const [latest, totals] = await Promise.all([
@@ -145,11 +171,11 @@ export async function loadCheck(ref: CheckRef, learner: string): Promise<Outcome
   return {
     data: {
       version: 1,
-      questions: orderedOptions(ref.questions, `${learner}:${ref.key}`, settings.shuffleOptions),
+      questions: orderedOptions(questions, `${learner}:${ref.key}`, settings.shuffleOptions),
       latest: latest[0] ?? null,
       passed,
       passPercent: settings.passPercent,
-      passMark: passMark(ref.questions.length, settings.passPercent),
+      passMark: passMark(questions.length, settings.passPercent),
       maxAttempts: settings.maxAttempts,
       attemptsUsed: used,
       // Once passed, extra practice is always allowed.
@@ -182,7 +208,7 @@ export async function submitCheck(
   const stop = await blocked(ref, learner);
   if (stop) return { failure: stop };
   const settings = await settingsFor(ref, learner);
-  const questions = ref.questions;
+  const questions = await checkQuestions(ref);
   let submissionKey: string, answers: Record<string, string>, result;
   try {
     const input = body as Record<string, unknown> | null;

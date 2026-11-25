@@ -171,7 +171,8 @@ describe("check settings migration (007)", () => {
   test("keeps every earlier result and turns answer shuffling off once", async () => {
     const old = new PGlite();
     const files = (await readdir(migrations)).filter((f) => f.endsWith(".sql")).sort();
-    const before007 = files.filter((f) => f < "007");
+    // Every other migration, so today's importer can run; then 007 on its own.
+    const before007 = files.filter((f) => !f.startsWith("007"));
     for (const file of before007) await old.exec(await readFile(new URL(file, migrations), "utf8"));
     await old.transaction((tx) => writeCourse(runner(tx), planCourse()));
     // Step 2's import left the schema default: shuffled.

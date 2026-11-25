@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { updateCheckSettingsAction } from "@/app/admin/actions";
 import { AdminHeading, AdminNotice, AdminShell } from "@/components/admin/AdminShell";
 import { button, card, input } from "@/components/admin/format";
@@ -44,6 +45,11 @@ function CheckSettings({ check, label }: { check: Check; label: string }) {
           </button>
           <p className="mt-2 text-xs text-muted">Changes apply to the next attempt. Earlier results never change.</p>
         </div>
+        <p className="sm:col-span-3">
+          <Link href={`/admin/course/check/${check.id}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4">
+            Edit the questions and explanations<span className="sr-only">: {label}</span> <span aria-hidden="true">→</span>
+          </Link>
+        </p>
       </form>
     </details>
   );
@@ -61,8 +67,9 @@ export default async function AdminCoursePage({ searchParams }: { searchParams: 
         intro="Every module, lesson and check, as stored in the database. Open a check to change its pass mark, tries and answer shuffling."
       />
       <p className="mb-6 rounded-2xl bg-lavender p-4 text-sm leading-relaxed text-ink">
-        <b>Lesson text, films and questions</b> are edited by the course team in the course files for now. Editing them
-        here comes with step 10, when the site reads lessons from the database.
+        <b>Questions and explanations</b> can be edited here: open a check, then choose &ldquo;Edit the questions&rdquo;. Once a
+        check is edited here, the site uses this copy and the course files no longer change it. <b>Lesson films, guides and
+        activities</b> are interactive, so the course team edits them in the course files.
       </p>
       {!outline ? (
         <p className="rounded-2xl bg-peach p-4">The course hasn&apos;t been loaded into the database yet.</p>
