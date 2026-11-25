@@ -4,34 +4,7 @@
 // team and says so: an AI literacy course must never pass people's writing off
 // as AI. Asking a real AI model for more comes later, for premium learners.
 import { useEffect, useId, useRef, useState } from "react";
-
-function Robot({ thinking }: { thinking: boolean }) {
-  return (
-    <svg aria-hidden="true" viewBox="-34 -70 68 100" className="wv-pop size-14 shrink-0">
-      <g className="wv-bob">
-        <line x1="0" y1="-46" x2="0" y2="-58" stroke="#17243c" strokeWidth="3" strokeLinecap="round" />
-        <circle cy="-62" r="5" fill="#f6a0d6" className={thinking ? "wv-ring" : ""} />
-        <rect x="-30" y="-46" width="60" height="46" rx="16" fill="#7155d9" />
-        <rect x="-22" y="-38" width="44" height="28" rx="10" fill="#ffffff" />
-        {thinking ? (
-          <>
-            <circle cx="-9" cy="-24" r="3.5" fill="#17243c" />
-            <circle cx="9" cy="-24" r="3.5" fill="#17243c" />
-            <path d="M-6 -15h12" stroke="#17243c" strokeWidth="2.4" strokeLinecap="round" />
-          </>
-        ) : (
-          <>
-            <circle cx="-9" cy="-25" r="4" fill="#17243c" />
-            <circle cx="9" cy="-25" r="4" fill="#17243c" />
-            <path d="M-7 -16Q0 -11 7 -16" stroke="#17243c" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-          </>
-        )}
-        <rect x="-20" y="4" width="40" height="22" rx="9" fill="#d5c9f7" />
-        <circle cy="15" r="4" fill="#f6a0d6" />
-      </g>
-    </svg>
-  );
-}
+import { Buggle } from "@/components/Buggle";
 
 export function AskBuggle({ correct, explanation }: { correct: boolean; explanation: string }) {
   const [state, setState] = useState<"closed" | "thinking" | "open">("closed");
@@ -68,7 +41,7 @@ export function AskBuggle({ correct, explanation }: { correct: boolean; explanat
       <div id={id} aria-live="polite">
         {state !== "closed" && (
           <div className="mt-3 flex items-start gap-3">
-            <Robot thinking={state === "thinking"} />
+            <Buggle mood={state === "thinking" ? "thinking" : "happy"} size="sm" />
             <div className="wv-pop relative min-w-0 flex-1 rounded-2xl rounded-tl-sm bg-white p-4 shadow-sm ring-1 ring-line">
               {state === "thinking" ? (
                 <p className="text-sm font-semibold text-muted">

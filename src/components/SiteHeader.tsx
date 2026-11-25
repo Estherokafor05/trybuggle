@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ACCOUNT_CHANGED } from "@/components/account/AccountRefresh";
 import { Avatar } from "@/components/Avatar";
+import { ThemeButton } from "@/components/theme/ThemeControls";
 import { useT } from "@/i18n/client";
 import { shortName } from "@/lib/people";
 import type { MessageKey } from "@/i18n/messages";
@@ -107,59 +108,62 @@ export function SiteHeader() {
           })}
         </nav>
 
-        {account && (
-          <div className="hidden items-center gap-1 lg:flex">
-            <Link
-              href="/dashboard"
-              aria-current={pathname === "/dashboard" ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold ${
-                pathname === "/dashboard" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
-              }`}
-            >
-              {t("nav.dashboard")}
-            </Link>
-            <Link
-              href="/account"
-              aria-current={pathname === "/account" ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold ${
-                pathname === "/account" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
-              }`}
-            >
-              <Avatar name={account.name} image={account.image} />
-              <span className="sr-only">{t("nav.account")}: </span>
-              <span className="ph-mask max-w-[12rem] truncate">{shortName(account.name) || t("nav.account")}</span>
-            </Link>
-          </div>
-        )}
-        {account === null && (
-          <div className="hidden items-center gap-1 lg:flex">
-            <Link
-              href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
-              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender"
-            >
-              {t("nav.logIn")}
-            </Link>
-            <Link
-              href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
-              className="inline-flex min-h-11 items-center rounded-full bg-navy px-4 text-sm font-semibold text-white hover:bg-brand-deep"
-            >
-              {t("nav.signUp")}
-            </Link>
-          </div>
-        )}
+        <div className="flex items-center gap-1">
+          <ThemeButton />
+          {account && (
+            <div className="hidden items-center gap-1 lg:flex">
+              <Link
+                href="/dashboard"
+                aria-current={pathname === "/dashboard" ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold ${
+                  pathname === "/dashboard" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
+                }`}
+              >
+                {t("nav.dashboard")}
+              </Link>
+              <Link
+                href="/account"
+                aria-current={pathname === "/account" ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold ${
+                  pathname === "/account" ? "bg-lavender text-navy" : "text-navy hover:bg-lavender"
+                }`}
+              >
+                <Avatar name={account.name} image={account.image} />
+                <span className="sr-only">{t("nav.account")}: </span>
+                <span className="ph-mask max-w-[12rem] truncate">{shortName(account.name) || t("nav.account")}</span>
+              </Link>
+            </div>
+          )}
+          {account === null && (
+            <div className="hidden items-center gap-1 lg:flex">
+              <Link
+                href={`/sign-in?callbackUrl=${encodeURIComponent(pathname)}`}
+                className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-navy hover:bg-lavender"
+              >
+                {t("nav.logIn")}
+              </Link>
+              <Link
+                href={`/sign-up?callbackUrl=${encodeURIComponent(pathname)}`}
+                className="inline-flex min-h-11 items-center rounded-full bg-navy px-4 text-sm font-semibold text-white hover:bg-brand-deep"
+              >
+                {t("nav.signUp")}
+              </Link>
+            </div>
+          )}
 
-        <button
-          type="button"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender lg:hidden"
-          aria-expanded={open}
-          aria-controls="phone-menu"
-          onClick={() => setOpen(!open)}
-        >
-          <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            {open ? <path d="m5 5 10 10M15 5 5 15" /> : <path d="M3.5 6h13M3.5 10h13M3.5 14h13" />}
-          </svg>
-          {t("nav.menu")}
-        </button>
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-navy hover:bg-lavender lg:hidden"
+            aria-expanded={open}
+            aria-controls="phone-menu"
+            onClick={() => setOpen(!open)}
+          >
+            <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              {open ? <path d="m5 5 10 10M15 5 5 15" /> : <path d="M3.5 6h13M3.5 10h13M3.5 14h13" />}
+            </svg>
+            {t("nav.menu")}
+          </button>
+        </div>
       </div>
 
       <nav

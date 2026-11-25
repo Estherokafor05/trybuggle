@@ -7,6 +7,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { formatMinutes, learnerDashboard, type Dashboard, type ModuleSummary } from "@/server/dashboard";
 import { OrgLogo } from "@/components/org/OrgShell";
+import { Buggle } from "@/components/Buggle";
+import { Sparkles } from "@/components/Sparkles";
 import { Badges } from "@/components/rewards/Badges";
 import { visibleCourses } from "@/server/builder-learn";
 import { myRewards } from "@/server/rewards";
@@ -117,13 +119,19 @@ function Overview({ data, name }: { data: Dashboard; name: string }) {
   const firstName = name.trim().split(/\s+/)[0];
   const started = overall.done > 0 || stats.daysLearning > 0;
   return (
-    <header className="grid gap-6 rounded-[2rem] bg-hero-lavender p-6 sm:p-9 md:grid-cols-[1.3fr_1fr] md:items-end">
+    <header className="relative grid gap-6 overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-9 md:grid-cols-[1.3fr_1fr] md:items-end">
+      <Sparkles />
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Your dashboard</p>
-        <h1 className="ph-mask mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">
-          {started ? "Welcome back" : "Welcome"}
-          {firstName ? `, ${firstName}` : ""}
-        </h1>
+        <div className="flex items-center gap-4">
+          <Buggle mood="wave" size="md" className="hidden sm:block" />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Your dashboard</p>
+            <h1 className="ph-mask mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">
+              {started ? "Welcome back" : "Welcome"}
+              {firstName ? `, ${firstName}` : ""} <span aria-hidden="true" className="inline-block origin-[70%_80%] motion-safe:animate-[wv-wave_2.4s_ease-in-out_3]">👋</span>
+            </h1>
+          </div>
+        </div>
         {next ? (
           <>
             <p className="mt-3 max-w-[52ch] leading-relaxed text-ink">
@@ -234,7 +242,7 @@ export default async function DashboardPage() {
               <section aria-labelledby="modules-title">
                 <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
                   <h2 id="modules-title" className="text-2xl font-bold text-ink">
-                    Your modules
+                    <span aria-hidden="true">📚</span> Your modules
                   </h2>
                   <p className="text-sm text-muted">They open in order.</p>
                 </div>
@@ -258,7 +266,7 @@ export default async function DashboardPage() {
               <aside className="flex flex-col gap-5 self-start">
                 <section aria-labelledby="recent-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
                   <h2 id="recent-title" className="text-lg font-bold">
-                    Recent results
+                    <span aria-hidden="true">📝</span> Recent results
                   </h2>
                   {data.recent.length ? (
                     <ol className="mt-4 space-y-2">
@@ -316,7 +324,7 @@ export default async function DashboardPage() {
                 {more.length > 0 && (
                   <section aria-labelledby="more-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
                     <h2 id="more-title" className="text-lg font-bold">
-                      More courses
+                      <span aria-hidden="true">🧭</span> More courses
                     </h2>
                     <ul className="mt-3 grid gap-2">
                       {more.slice(0, 3).map((c) => (
@@ -336,7 +344,7 @@ export default async function DashboardPage() {
 
                 <section aria-labelledby="orgs-title" className="rounded-[1.75rem] border border-line bg-white p-5 sm:p-6">
                   <h2 id="orgs-title" className="text-lg font-bold">
-                    {orgs.length ? "Your organisations" : "Learning with a team?"}
+                    <span aria-hidden="true">👥</span> {orgs.length ? "Your organisations" : "Learning with a team?"}
                   </h2>
                   {orgs.length ? (
                     <ul className="mt-3 grid gap-2">
@@ -364,7 +372,7 @@ export default async function DashboardPage() {
 
                 <section aria-labelledby="settings-title" className="rounded-[1.75rem] bg-blush p-5 sm:p-6">
                   <h2 id="settings-title" className="text-lg font-bold">
-                    Settings
+                    <span aria-hidden="true">⚙️</span> Settings
                   </h2>
                   <p className="mt-2 text-sm leading-relaxed text-ink">
                     Your name, how you log in, and your data.

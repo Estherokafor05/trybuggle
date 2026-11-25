@@ -1,3 +1,4 @@
+import { Sparkles } from "@/components/Sparkles";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -28,7 +29,8 @@ export default async function ForumHome({ searchParams }: { searchParams: Promis
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[1120px] px-4 pb-12 pt-6 sm:px-6 sm:pt-10">
-        <header className="grid gap-5 rounded-[2rem] bg-hero-lavender p-6 sm:p-9 md:grid-cols-[1.4fr_1fr] md:items-end">
+        <header className="relative grid gap-5 overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-9 md:grid-cols-[1.4fr_1fr] md:items-end">
+          <Sparkles />
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Community</p>
             <h1 className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08]">Community forum</h1>

@@ -17,7 +17,9 @@ import { auth, currentSession } from "@/auth";
 import { AccountRefresh } from "@/components/account/AccountRefresh";
 import { PhotoPicker } from "@/components/account/PhotoPicker";
 import { FormMessage, GoogleIcon, TextField } from "@/components/auth/fields";
+import { ThemeChoice } from "@/components/theme/ThemeControls";
 import { Avatar } from "@/components/Avatar";
+import { Sparkles } from "@/components/Sparkles";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DEFAULT_LOCALE, isLocale, LOCALES, UPCOMING_LOCALES } from "@/i18n/locales";
@@ -38,6 +40,7 @@ const SECTIONS = [
   { id: "profile", label: "Profile", icon: "M10 10a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4ZM4 16.5c.8-2.8 3.2-4.3 6-4.3s5.2 1.5 6 4.3" },
   { id: "sign-in", label: "Logging in", icon: "M6 9V6.5a4 4 0 0 1 8 0V9M5 9h10v7.5H5z" },
   { id: "language", label: "Language", icon: "M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm-7 7h14M10 3c2 2 2.8 4.5 2.8 7S12 15 10 17c-2-2-2.8-4.5-2.8-7S8 5 10 3Z" },
+  { id: "appearance", label: "Appearance", icon: "M16 12.3A6.5 6.5 0 0 1 7.7 4a6.5 6.5 0 1 0 8.3 8.3Z" },
   { id: "data", label: "Your data", icon: "M4 5.5C4 4.1 6.7 3 10 3s6 1.1 6 2.5S13.3 8 10 8 4 6.9 4 5.5Zm0 0v9C4 15.9 6.7 17 10 17s6-1.1 6-2.5v-9M4 10c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5" },
   { id: "leave", label: "Sign out or delete", icon: "M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8" },
 ];
@@ -107,7 +110,8 @@ export default async function AccountPage({
         <Link href="/dashboard" className={`${outlineButton} mb-4`}>
           <span aria-hidden="true">←</span> Your dashboard
         </Link>
-        <header className="flex flex-wrap items-center gap-5 rounded-[2rem] bg-hero-lavender p-6 sm:p-9">
+        <header className="relative flex flex-wrap items-center gap-5 overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-9">
+          <Sparkles />
           <Avatar name={name} image={image} size="lg" />
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Settings</p>
@@ -293,6 +297,12 @@ export default async function AccountPage({
               </form>
             </Section>
 
+            <Section id="appearance" title="Appearance" intro="Light or dark. You can also switch with the sun and moon button at the top of every page.">
+              <div className="mt-5">
+                <ThemeChoice />
+              </div>
+            </Section>
+
             <Section id="data" title="Your data" intro="What we keep for your account.">
               <ul className="mt-3 list-disc space-y-1 pl-5 leading-relaxed">
                 <li>Your knowledge check and final assessment answers and results</li>
@@ -341,7 +351,7 @@ export default async function AccountPage({
                       Tick the box to confirm, then press the button again.
                     </p>
                   )}
-                  <button type="submit" className="mt-4 inline-flex min-h-11 items-center rounded-full bg-red-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800">
+                  <button type="submit" className="mt-4 inline-flex min-h-11 items-center rounded-full bg-red-700 px-5 py-2.5 text-sm font-semibold text-red-50 hover:bg-red-800">
                     Delete my account
                   </button>
                 </form>

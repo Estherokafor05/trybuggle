@@ -1964,7 +1964,7 @@ test("the header shows the learner's short name and photo; photos can be added a
     await accountLink.click();
 
     // Settings: sections menu, then add a photo. It's made into a small square in the browser.
-    await expect(page.getByRole("navigation", { name: "Settings sections" }).getByRole("link")).toHaveCount(5);
+    await expect(page.getByRole("navigation", { name: "Settings sections" }).getByRole("link")).toHaveCount(6);
     await expect(page.getByRole("img", { name: "Your initials, Test learner" })).toBeVisible();
     const canvasPng = await page.evaluate(async () => {
       const c = document.createElement("canvas");
@@ -2033,5 +2033,36 @@ test("rewards: points and badges for passing checks, a leaderboard, and hiding f
   await page.goto("/leaderboard");
   await expect(page.getByText(/You're hidden from leaderboards, so other people/)).toBeVisible();
   await expect(page.locator("li", { hasText: "Test L." }).filter({ hasText: "You" })).toHaveCount(0);
+  await context.close();
+});
+
+test("dark mode: follows the device, can be switched and saved, and the main pages stay readable", async ({ browser }) => {
+  test.setTimeout(150_000);
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, colorScheme: "dark" });
+  await signIn(context);
+  const page = await context.newPage();
+  const pages = ["/", "/welcome", "/curriculum", "/modules/ai-foundations", "/forum", "/organisations", "/dashboard", "/account", "/leaderboard", "/courses", "/verify", "/nothing-here"];
+  for (const path of pages) {
+    await page.goto(path);
+    await page.waitForTimeout(700);
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), path).toBe("rgb(15, 20, 36)");
+    const { violations } = await new AxeBuilder({ page }).exclude("iframe").analyze();
+    expect(violations.map((v) => `${path}: ${v.id} ${v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(" | ")}`)).toEqual([]);
+  }
+
+  // The header button switches to light, and the choice is kept on this device.
+  await page.goto("/dashboard");
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(246, 245, 251)");
+
+  // Settings: back to following the device.
+  await page.goto("/account#appearance");
+  await expect(page.getByRole("radio", { name: /^Light/ })).toBeChecked();
+  await page.getByRole("radio", { name: /Same as my device/ }).check();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", /./);
+  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(15, 20, 36)");
   await context.close();
 });

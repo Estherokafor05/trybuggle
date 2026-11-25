@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { currentSession } from "@/auth";
+import { BuggleSays } from "@/components/Buggle";
+import { Sparkles } from "@/components/Sparkles";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { visibleCourses } from "@/server/builder-learn";
@@ -17,7 +19,8 @@ export default async function CoursesPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-[960px] px-4 pb-12 pt-6 sm:px-6 sm:pt-10">
-        <header className="rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
+        <header className="relative overflow-hidden rounded-[2rem] bg-hero-lavender p-6 sm:p-10">
+          <Sparkles />
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-navy">Courses</p>
           <h1 className="mt-2 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-tight">More courses</h1>
           <p className="mt-3 max-w-[60ch] leading-relaxed text-ink">
@@ -47,7 +50,9 @@ export default async function CoursesPage() {
             ))}
           </ul>
         ) : (
-          <p className="mt-8 rounded-3xl border border-line bg-white p-6 text-ink">No other courses yet. New ones will appear here.</p>
+          <div className="mt-8">
+            <BuggleSays mood="sleepy">No other courses yet. New ones will appear here. 🌱</BuggleSays>
+          </div>
         )}
       </main>
       <SiteFooter />

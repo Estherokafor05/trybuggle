@@ -34,6 +34,62 @@ html {
   color-scheme: light;
 }
 
+/* Dark mode. Follows the device unless the learner picks Light or Dark in
+   Settings (saved on this device as data-theme on <html>). Every colour keeps
+   its job: navy is the text and button colour, white is the card colour, so
+   swapping them keeps buttons and text readable. Illustrations keep their
+   own colours, like photos. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-navy: #ece8ff;
+    --color-brand: #a894f5;
+    --color-brand-deep: #c4b6ff;
+    --color-brand-soft: #27234a;
+    --color-teal: #5fd3c3;
+    --color-teal-light: #2f8f83;
+    --color-ivory: #1a2133;
+    --color-lavender: #27234a;
+    --color-hero-lavender: #2e2862;
+    --color-peach: #3d2b1e;
+    --color-blush: #3a2236;
+    --color-mint: #12342f;
+    --color-ink: #ece8ff;
+    --color-muted: #aab4c8;
+    --color-line: #333e5a;
+    --color-surface: #182036;
+    --color-canvas: #0f1424;
+    --color-white: #182036;
+    --color-deep-bg: #0a0e1a;
+    --color-gold: #5fd3c3;
+    --color-gold-ink: #5fd3c3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-navy: #ece8ff;
+  --color-brand: #a894f5;
+  --color-brand-deep: #c4b6ff;
+  --color-brand-soft: #27234a;
+  --color-teal: #5fd3c3;
+  --color-teal-light: #2f8f83;
+  --color-ivory: #1a2133;
+  --color-lavender: #27234a;
+  --color-hero-lavender: #2e2862;
+  --color-peach: #3d2b1e;
+  --color-blush: #3a2236;
+  --color-mint: #12342f;
+  --color-ink: #ece8ff;
+  --color-muted: #aab4c8;
+  --color-line: #333e5a;
+  --color-surface: #182036;
+  --color-canvas: #0f1424;
+  --color-white: #182036;
+  --color-deep-bg: #0a0e1a;
+  --color-gold: #5fd3c3;
+  --color-gold-ink: #5fd3c3;
+  color-scheme: dark;
+}
+
 body {
   background: var(--color-canvas);
   color: var(--color-ink);
