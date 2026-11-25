@@ -7,6 +7,7 @@ import { auth, currentSession } from "@/auth";
 import { deleteLearnerData } from "@/server/accounts";
 import { forgetGuest } from "@/server/guest";
 import { db } from "@/server/database";
+import { deleteEmptyOrganisations, soleOwnerOf } from "@/server/organisations";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/locales";
 
 async function requireSession() {
@@ -94,6 +95,9 @@ export async function deleteAccountAction(formData: FormData) {
   const session = await requireSession();
   if (formData.get("confirm") !== "yes") redirect("/account?confirm=required#delete");
   const learner = session.user.id;
+  // An organisation with a plan or other members needs its owner.
+  if ((await soleOwnerOf(learner)).length) redirect("/account?confirm=owner#delete");
+  await deleteEmptyOrganisations(learner);
   await deleteLearnerData(learner);
   const { internalAdapter } = await auth.$context;
   await internalAdapter.deleteUserSessions(learner);

@@ -24,6 +24,7 @@ const labels: Record<string, string> = {
   "forum.reopened": "Reopened a forum conversation",
   "forum.section_added": "Added a forum section",
   "forum.section_changed": "Changed a forum section",
+  "plan.changed": "Changed an organisation plan's price",
 };
 
 function summary(details: Record<string, unknown>) {

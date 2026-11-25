@@ -132,6 +132,12 @@ export default function PrivacyPage() {
           </List>
           <p>We do not sell your information, and we do not use it for advertising.</p>
           <p>
+            If you join an organisation, such as your employer or school, its managers can see your
+            name, email, progress, results and certificates. You can leave an organisation at any
+            time. When an organisation pays for a plan, the payment is handled by Stripe; we never
+            see or store card details.
+          </p>
+          <p>
             Forum posts are public. They show your first name and the first letter of your last
             name, never your email. You can edit or delete your own posts at any time. If you
             delete your account, your name and words are removed from the forum, and other

@@ -21,6 +21,7 @@ import {
 } from "@/server/admin";
 import { sendAccountEmail } from "@/server/email";
 import { resolveReports, saveSection, setForumHidden, setThreadFlags } from "@/server/forum";
+import { savePlan } from "@/server/organisations";
 import { siteOrigin } from "@/server/site";
 
 const text = (form: FormData, name: string) => {
@@ -269,4 +270,15 @@ export async function saveSectionAction(form: FormData) {
   if ("error" in result) redirect(`/admin/forum?message=${encodeURIComponent(result.error!)}#sections`);
   await audit(admin, text(form, "id") ? "forum.section_changed" : "forum.section_added", result.slug!);
   redirect("/admin/forum?notice=forum-saved#sections");
+}
+
+// --- Organisation plans -------------------------------------------------------
+
+export async function savePlanAction(form: FormData) {
+  const admin = await requireAdmin();
+  const code = text(form, "code");
+  const result = await savePlan(code, { price: form.get("price"), currency: form.get("currency"), active: form.get("active") === "on" });
+  if ("error" in result) redirect(`/admin/organisations?message=${encodeURIComponent(result.error)}#prices`);
+  await audit(admin, "plan.changed", code, { price: text(form, "price"), currency: text(form, "currency"), on: form.get("active") === "on" });
+  redirect("/admin/organisations?notice=plan-saved#prices");
 }

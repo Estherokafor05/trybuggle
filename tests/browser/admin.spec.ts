@@ -131,6 +131,13 @@ test("admins are separate, set up with an authenticator app, and can change chec
   expect(await noOverflow(page)).toBe(true);
   await axe(page);
 
+  // Organisation plan prices.
+  await page.goto(base + "/admin/organisations");
+  await expect(page.getByRole("heading", { name: "Plans and prices" })).toBeVisible();
+  await expect(page.getByText(/Stripe not set up/)).toBeVisible();
+  expect(await noOverflow(page)).toBe(true);
+  await axe(page);
+
   // Invite a second admin; the link works once.
   await page.goto(base + "/admin/team");
   const second = `qa-admin-${randomUUID()}@example.com`;
