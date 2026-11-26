@@ -1,6 +1,7 @@
 "use server";
 // Settings: name, password, linked sign-in methods, and deleting the account.
 import { APIError } from "better-auth/api";
+import { revalidatePath } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth, currentSession } from "@/auth";
@@ -20,6 +21,8 @@ async function requireSession() {
 
 /** Back to Settings, with the message shown in the section that changed. */
 function done(section: string, extra: Record<string, string>): never {
+  // The address may be the same as last time, so refresh the page first.
+  revalidatePath("/account");
   redirect(`/account?${new URLSearchParams({ ...extra, s: section }).toString()}#${section}`);
 }
 

@@ -127,7 +127,10 @@ const orgColumns = (sql: ReturnType<typeof db>) => sql`
   (SELECT count(*) FROM organisation_members m WHERE m.org_id = o.id)::int AS members`;
 
 /** Whether the plan is paid up (or simulated on a test site), so members can be added. */
-export const isActive = (org: Pick<Organisation, "status">) => ACTIVE.includes(org.status);
+export const isActive = (org: Pick<Organisation, "status"> & Partial<Pick<Organisation, "periodEnd" | "stripeSubscriptionId">>) =>
+  ACTIVE.includes(org.status) &&
+  // A plan given by an admin (no Stripe subscription) ends on its end date.
+  (Boolean(org.stripeSubscriptionId) || !org.periodEnd || new Date(org.periodEnd) > new Date());
 
 export async function createOrganisation(user: string, rawName: unknown): Promise<Fail | { slug: string }> {
   const name = typeof rawName === "string" ? rawName.normalize("NFC").replace(/\s+/g, " ").trim() : "";
@@ -379,7 +382,8 @@ export async function deleteEmptyOrganisations(user: string) {
  */
 export async function deepDiveThroughOrg(user: string) {
   const [row] = await db()`SELECT EXISTS (SELECT 1 FROM organisation_members m JOIN organisations o ON o.id = m.org_id
-    WHERE m.user_id = ${user} AND o.plan IN ('content', 'both') AND o.status IN ('active', 'past_due', 'test')) AS ok`;
+    WHERE m.user_id = ${user} AND o.plan IN ('content', 'both') AND o.status IN ('active', 'past_due', 'test')
+      AND (o.stripe_subscription_id IS NOT NULL OR o.current_period_end IS NULL OR o.current_period_end > now())) AS ok`;
   return Boolean(row?.ok);
 }
 

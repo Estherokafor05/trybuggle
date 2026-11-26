@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { savePlanAction } from "@/app/admin/actions";
 import { AdminHeading, AdminNotice, AdminShell } from "@/components/admin/AdminShell";
 import { button, card, input, shortDate } from "@/components/admin/format";
@@ -74,7 +75,9 @@ export default async function AdminOrganisationsPage({ searchParams }: { searchP
             {orgs.map((o) => (
               <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <span className="min-w-0">
-                  <span className="block font-semibold">{o.name}</span>
+                  <Link href={`/admin/organisations/${o.id}`} className="block font-semibold underline-offset-4 hover:underline">
+                    {o.name}
+                  </Link>
                   <span className="ph-mask block break-all text-sm text-muted">
                     Owner {o.owner ?? "none"} · created {shortDate(o.created)}
                   </span>

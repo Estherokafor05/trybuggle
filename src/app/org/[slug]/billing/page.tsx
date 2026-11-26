@@ -151,6 +151,7 @@ export default async function OrgBillingPage({ params, searchParams }: Props) {
               <button type="submit" className={`${orgButton} justify-self-start`}>
                 {simulate ? "Switch on test plan" : "Continue to secure payment"}
               </button>
+              <p className="text-sm text-muted">🎁 Coming soon: buy single courses for your colleagues, to keep for good, without a plan.</p>
             </form>
           )}
         </section>

@@ -181,7 +181,19 @@ export async function overview() {
     sql`SELECT module_slug, count(DISTINCT learner_id)::int AS passed FROM module_assessment_attempts WHERE passed GROUP BY module_slug`,
   ]);
   const started = await sql`SELECT count(DISTINCT learner_id)::int AS n FROM assessment_attempts`;
+  const [more] = await sql`SELECT
+      (SELECT count(*) FROM organisations)::int AS orgs,
+      (SELECT count(DISTINCT learner_id) FROM course_entitlements WHERE ends_at IS NULL OR ends_at > now())::int AS paid_learners,
+      (SELECT coalesce(sum(amount_paid), 0) FROM purchases WHERE status = 'paid' AND currency = 'usd' AND created_at > now() - interval '30 days')::int AS revenue,
+      ((SELECT count(*) FROM forum_threads WHERE created_at > now() - interval '7 days')
+        + (SELECT count(*) FROM forum_posts WHERE created_at > now() - interval '7 days'))::int AS forum_week,
+      (SELECT count(*) FROM forum_reports WHERE resolved_at IS NULL)::int AS reports`;
   return {
+    organisations: more.orgs as number,
+    paidLearners: more.paid_learners as number,
+    revenueMonth: more.revenue as number,
+    forumWeek: more.forum_week as number,
+    openReports: more.reports as number,
     learners: people.learners as number,
     newThisWeek: people.week as number,
     newThisMonth: people.month as number,

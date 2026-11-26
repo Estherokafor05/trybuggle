@@ -23,6 +23,9 @@ test.afterAll(async () => {
   await sql`DELETE FROM admin_invites`;
   await sql`DELETE FROM admin_audit`;
   await sql`UPDATE assessments SET pass_percent = 70, max_attempts = NULL, shuffle_options = false`;
+  await sql`UPDATE learner_prices SET amount = 0, active = false`;
+  await sql`DELETE FROM discount_codes WHERE code = 'FRIENDS50'`;
+  await sql`DELETE FROM organisations WHERE name LIKE 'Admin Test Org%'`;
   await sql.end();
 });
 
@@ -166,6 +169,54 @@ test("admins are separate, set up with an authenticator app, and can change chec
   expect(await noOverflow(page)).toBe(true);
   await axe(page);
 
+  // Pricing: a price, the launch offer, a discount code.
+  await page.goto(base + "/admin/pricing");
+  await expect(page.getByRole("heading", { name: "Pricing", level: 1 })).toBeVisible();
+  const coursePrice = page.getByRole("group", { name: /One course/ });
+  await coursePrice.getByLabel("Price in USD").fill("29");
+  await coursePrice.getByLabel("Offer this").check();
+  await page.getByRole("button", { name: "Save learner prices" }).click();
+  await expect(page.getByText(/New prices and offers apply/)).toBeVisible();
+  await expect(coursePrice.getByText("Now: $29.00")).toBeVisible();
+  await page.getByLabel("Code", { exact: true }).fill("friends50");
+  await page.getByLabel("Percent off").last().fill("50");
+  await page.getByRole("button", { name: "Save code" }).click();
+  await expect(page.getByRole("button", { name: "Switch off FRIENDS50" })).toBeVisible();
+  expect(await noOverflow(page)).toBe(true);
+  await axe(page);
+  await page.goto(base + "/admin/payments");
+  await expect(page.getByRole("heading", { name: "Payments", level: 1 })).toBeVisible();
+  await axe(page);
+
+  // One learner, everything: settings, access, and changes an admin can make.
+  await page.goto(base + `/admin/learners/${encodeURIComponent(user.id)}`);
+  await expect(page.getByRole("heading", { name: "Account and settings" })).toBeVisible();
+  await expect(page.getByText("Email and password")).toBeVisible();
+  await page.getByRole("button", { name: "Give access" }).click();
+  await expect(page.getByText("Access given.")).toBeVisible();
+  await expect(page.getByText(/Given by an admin · for good/)).toBeVisible();
+  await page.getByRole("button", { name: /End access/ }).click();
+  await expect(page.getByText("Access ended.")).toBeVisible();
+  await page.getByRole("button", { name: "Hide from leaderboards" }).click();
+  await expect(page.getByText("Hidden from leaderboards.")).toBeVisible();
+  expect(await noOverflow(page)).toBe(true);
+  await axe(page);
+
+  // One organisation: members, a plan given without payment, and its name.
+  const [org] = await sql`INSERT INTO organisations(slug, name, created_by) VALUES(${`qa-admin-org-${randomUUID().slice(0, 6)}`}, 'Admin Test Org', ${user.id}) RETURNING id`;
+  await sql`INSERT INTO organisation_members(org_id, user_id, role) VALUES(${org.id}, ${user.id}, 'owner')`;
+  await page.goto(base + "/admin/organisations");
+  await page.getByRole("link", { name: "Admin Test Org" }).click();
+  await expect(page.getByRole("heading", { name: "Members (1)" })).toBeVisible();
+  await page.getByRole("button", { name: "Save plan" }).click();
+  await expect(page.getByText("Plan saved.")).toBeVisible();
+  await expect(page.getByText(/given by an admin/)).toBeVisible();
+  await page.getByLabel("Organisation name").fill("Admin Test Org Renamed");
+  await page.getByRole("button", { name: "Save name" }).click();
+  await expect(page.getByRole("heading", { name: "Admin Test Org Renamed", level: 1 })).toBeVisible();
+  expect(await noOverflow(page)).toBe(true);
+  await axe(page);
+
   // Invite a second admin; the link works once.
   await page.goto(base + "/admin/team");
   const second = `qa-admin-${randomUUID()}@example.com`;
@@ -192,7 +243,7 @@ test("admins are separate, set up with an authenticator app, and can change chec
 
   // The activity log records it all.
   await page.goto(base + "/admin/activity");
-  for (const label of ["Changed check settings", "Invited an admin", "Joined the admin team", "Set up their authenticator app"])
+  for (const label of ["Changed check settings", "Invited an admin", "Joined the admin team", "Set up their authenticator app", "Changed learner prices", "Gave a learner Deep Dive access", "Gave or ended an organisation's plan"])
     await expect(page.getByText(label).first()).toBeVisible();
 
   // Sign out, then sign in: password, then a code.
