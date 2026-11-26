@@ -2,6 +2,7 @@
 // Everything an admin does. Each action checks the admin first (requireAdmin),
 // and every change is written to the activity log.
 import { APIError } from "better-auth/api";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import QRCode from "qrcode";
@@ -22,6 +23,18 @@ import {
 import { sendAccountEmail } from "@/server/email";
 import { resolveReports, saveSection, setForumHidden, setThreadFlags } from "@/server/forum";
 import { savePlan } from "@/server/organisations";
+import {
+  adminRemoveMember,
+  adminSetRole,
+  confirmEmail,
+  endAccess,
+  giveAccess,
+  removeLearnerPhoto,
+  renameOrg,
+  setLearnerLeaderboard,
+  setOrgPlanByAdmin,
+  signOutEverywhere,
+} from "@/server/admin-insight";
 import { saveCode, saveLearnerPrices, saveOffers, setCodeActive, type PriceCode } from "@/server/pricing";
 import { parseQuestionForm, saveQuestions } from "@/server/question-editor";
 import { siteOrigin } from "@/server/site";
@@ -302,8 +315,11 @@ export async function saveQuestionsAction(_state: QuestionFormState, form: FormD
 
 // --- Pricing ---------------------------------------------------------------------
 
-const pricingBack = (hash: string, error?: string) =>
-  redirect(error ? `/admin/pricing?message=${encodeURIComponent(error)}#${hash}` : `/admin/pricing?notice=pricing-saved#${hash}`);
+// Same-page redirects only change the #part, so refresh the page first.
+const pricingBack = (hash: string, error?: string) => (
+  revalidatePath("/admin/pricing"),
+  redirect(error ? `/admin/pricing?message=${encodeURIComponent(error)}#${hash}` : `/admin/pricing?notice=pricing-saved#${hash}`)
+);
 
 export async function saveLearnerPricesAction(form: FormData) {
   const admin = await requireAdmin();
@@ -340,4 +356,56 @@ export async function toggleCodeAction(form: FormData) {
   await setCodeActive(code, on);
   await audit(admin, on ? "pricing.code_on" : "pricing.code_off", code);
   pricingBack("codes");
+}
+
+// --- Learners and organisations: the few changes admins can make ----------------
+
+const learnerPage = (id: string, query: string) => (
+  revalidatePath(`/admin/learners/${encodeURIComponent(id)}`),
+  redirect(`/admin/learners/${encodeURIComponent(id)}?${query}`)
+);
+
+export async function giveAccessAction(form: FormData) {
+  const admin = await requireAdmin();
+  const learner = text(form, "learner");
+  const result = await giveAccess(learner, { course: form.get("course"), days: form.get("days") });
+  if ("error" in result) learnerPage(learner, `message=${encodeURIComponent(result.error)}#access`);
+  await audit(admin, "learner.access_given", learner, { course: text(form, "course"), days: text(form, "days") || "for good" });
+  learnerPage(learner, "notice=access-given#access");
+}
+
+export async function endAccessAction(form: FormData) {
+  const admin = await requireAdmin();
+  const learner = text(form, "learner");
+  if (await endAccess(learner, text(form, "entitlement"))) await audit(admin, "learner.access_ended", learner, { entitlement: text(form, "entitlement") });
+  learnerPage(learner, "notice=access-ended#access");
+}
+
+export async function learnerProfileAction(form: FormData) {
+  const admin = await requireAdmin();
+  const learner = text(form, "learner");
+  const what = text(form, "what");
+  if (what === "photo") await removeLearnerPhoto(learner);
+  else if (what === "hide" || what === "show") await setLearnerLeaderboard(learner, what === "hide");
+  else if (what === "sign-out") await signOutEverywhere(learner);
+  else if (what === "confirm-email") await confirmEmail(learner);
+  else learnerPage(learner, "message=Reload%20the%20page%20and%20try%20again.");
+  await audit(admin, `learner.${what}`, learner);
+  learnerPage(learner, `notice=learner-${what}#profile`);
+}
+
+const orgPage = (id: string, query: string) => (revalidatePath(`/admin/organisations/${id}`), redirect(`/admin/organisations/${id}?${query}`));
+
+export async function adminOrgAction(form: FormData) {
+  const admin = await requireAdmin();
+  const org = text(form, "org");
+  const what = text(form, "what");
+  let result: { error: string } | { ok: true } = { error: "Reload the page and try again." };
+  if (what === "plan") result = await setOrgPlanByAdmin(org, { plan: form.get("plan"), seats: form.get("seats"), days: form.get("days") });
+  else if (what === "rename") result = await renameOrg(org, form.get("name"));
+  else if (what === "remove") result = await adminRemoveMember(org, text(form, "user"));
+  else if (what === "role") result = await adminSetRole(org, text(form, "user"), form.get("role"));
+  if ("error" in result) orgPage(org, `message=${encodeURIComponent(result.error)}`);
+  await audit(admin, `organisation.${what}`, org, { plan: text(form, "plan"), seats: text(form, "seats"), days: text(form, "days"), user: text(form, "user"), role: text(form, "role"), name: text(form, "name") });
+  orgPage(org, `notice=org-${what}`);
 }

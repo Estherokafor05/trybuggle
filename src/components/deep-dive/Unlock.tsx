@@ -151,6 +151,7 @@ export function UnlockPanel({
         </ul>
       )}
       <p className="mt-2 text-sm text-muted">Learning with an organisation? Its Buggle content plan includes every course.</p>
+      <p className="mt-1 text-sm text-muted">🎁 Buying for a friend, or for your colleagues? That&apos;s coming soon.</p>
       {canBuy && signedIn ? null : !signedIn ? (
         <Link href={`/sign-in?callbackUrl=${encodeURIComponent(`/learn/${course.slug}`)}`} className={`${primary} mt-4`}>
           Log in to unlock

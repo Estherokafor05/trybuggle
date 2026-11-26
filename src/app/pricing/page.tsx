@@ -102,6 +102,8 @@ export default async function PricingPage() {
           </li>
         </ul>
 
+        <p className="mt-3 rounded-2xl bg-blush p-4 text-sm text-ink">🎁 Coming soon: buy a course or all-access as a gift for a friend.</p>
+
         <h2 className="mt-10 text-2xl font-bold">👥 For organisations</h2>
         <ul className="mt-4 grid gap-4 md:grid-cols-3">
           {[
@@ -121,6 +123,7 @@ export default async function PricingPage() {
             See organisation plans
           </Link>
         </p>
+        <p className="mt-3 rounded-2xl bg-blush p-4 text-sm text-ink">🎁 Coming soon: organisations buying single courses for their colleagues, to keep for good.</p>
       </main>
       <SiteFooter />
     </>

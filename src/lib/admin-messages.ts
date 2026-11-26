@@ -11,6 +11,17 @@ export const adminErrors: Record<string, string> = {
 };
 
 export const adminNotices: Record<string, string> = {
+  "access-given": "Access given.",
+  "access-ended": "Access ended.",
+  "learner-photo": "Photo removed. Their initials show instead.",
+  "learner-hide": "Hidden from leaderboards.",
+  "learner-show": "Shown on leaderboards again.",
+  "learner-sign-out": "Signed out on every device.",
+  "learner-confirm-email": "Email marked as confirmed.",
+  "org-plan": "Plan saved.",
+  "org-rename": "Name saved.",
+  "org-remove": "Member removed.",
+  "org-role": "Role saved.",
   "pricing-saved": "Saved. New prices and offers apply to the next checkout.",
   "signed-out": "You've signed out of the admin area.",
   joined: "Your admin account is ready. Sign in, then set up your authenticator app.",

@@ -5,6 +5,7 @@ import { AdminHeading, AdminNotice, AdminShell } from "@/components/admin/AdminS
 import { card, certificateName, shortDate } from "@/components/admin/format";
 import { adminMessage, adminNotices } from "@/lib/admin-messages";
 import { overview, requireAdmin } from "@/server/admin";
+import { money } from "@/server/pricing";
 
 export const metadata: Metadata = { title: "Overview" };
 
@@ -32,6 +33,26 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
         <Tile label="Active this week" value={data.activeThisWeek} detail="Took at least one check" tone="bg-mint" />
         <Tile label="Checks taken" value={data.checksTaken} detail={`${passRate}% passed`} tone="bg-peach" />
         <Tile label="Essentials certificates" value={data.essentials} detail={`${data.withdrawn} withdrawn`} tone="bg-blush" />
+      </section>
+      <section aria-label="More numbers" className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Link href="/admin/organisations" className="rounded-3xl border border-line bg-white p-5 hover:bg-lavender">
+          <p className="text-sm font-semibold text-navy">👥 Organisations</p>
+          <p className="mt-2 font-display text-3xl font-bold">{data.organisations}</p>
+        </Link>
+        <Link href="/admin/payments" className="rounded-3xl border border-line bg-white p-5 hover:bg-lavender">
+          <p className="text-sm font-semibold text-navy">💳 Paid, last 30 days</p>
+          <p className="mt-2 font-display text-3xl font-bold">{money(data.revenueMonth)}</p>
+          <p className="mt-1 text-sm text-ink">{data.paidLearners} learners with Deep Dive access</p>
+        </Link>
+        <Link href="/admin/forum" className="rounded-3xl border border-line bg-white p-5 hover:bg-lavender">
+          <p className="text-sm font-semibold text-navy">💬 Forum this week</p>
+          <p className="mt-2 font-display text-3xl font-bold">{data.forumWeek}</p>
+          <p className="mt-1 text-sm text-ink">{data.openReports} reports waiting</p>
+        </Link>
+        <Link href="/admin/learners" className="rounded-3xl border border-line bg-white p-5 hover:bg-lavender">
+          <p className="text-sm font-semibold text-navy">🔎 Find a learner</p>
+          <p className="mt-2 text-sm text-ink">Everything about one person: progress, purchases, settings, forum, and changes you can make.</p>
+        </Link>
       </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
